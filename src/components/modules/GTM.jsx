@@ -83,6 +83,7 @@ function GTM() {
     const leads = data.leads || []
     const [activeScript, setActiveScript] = useState('dm')
     const [showAddLead, setShowAddLead] = useState(false)
+    const [isProspecting, setIsProspecting] = useState(false)
     const [form, setForm] = useState({ name: '', company: '', role: '', email: '', linkedin: '', buySignal: '', source: 'LinkedIn', confidence: 60 })
 
     const saveICP = (field, value) => {
@@ -102,6 +103,47 @@ function GTM() {
 
     const removeLead = (id) => {
         updateData(d => ({ ...d, leads: d.leads.filter(l => l.id !== id) }))
+    }
+
+    const autoProspect = async () => {
+        const target = form.company || form.name;
+        if (!target) return toast('ENTER COMPANY OR NAME TO AUTO-PROSPECT', 'warning');
+
+        setIsProspecting(true);
+        toast('CORTEX INITIALIZED. SCANNING PUBLIC API NETWORK...', 'info');
+
+        try {
+            const url = import.meta.env.VITE_SUPABASE_URL + '/functions/v1/agent-cortex';
+            const key = import.meta.env.VITE_SUPABASE_ANON_KEY;
+
+            const res = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${key}` },
+                body: JSON.stringify({
+                    action: 'query_public_data',
+                    query: `Find company information, description, or news for the company: "${target}" using a public Wikipedia or Knowledge Graph API.`
+                })
+            });
+
+            const data = await res.json();
+
+            const summary = data?.output?.summary || data?.summary || '';
+            if (summary) {
+                setForm(f => ({
+                    ...f,
+                    buySignal: (f.buySignal ? f.buySignal + ' | ' : '') + 'CORTEX: ' + summary.slice(0, 100).replace(/\n/g, ' ') + '...',
+                    confidence: 85
+                }));
+                toast('LEAD ENRICHED VIA PUBLIC API CATALOG', 'success');
+            } else {
+                toast('NO PUBLIC SECURE DATA FOUND', 'warning');
+            }
+        } catch (e) {
+            console.error(e);
+            toast('PROSPECTING SECURE CONNECTION FAILED', 'error');
+        } finally {
+            setIsProspecting(false);
+        }
     }
 
     const moveToPipeline = (id) => {
@@ -167,7 +209,17 @@ function GTM() {
                             </div>
                             <div className="input-group"><label>Confianza (0-100)</label><input className="input" type="number" value={form.confidence} onChange={e => setForm({ ...form, confidence: parseInt(e.target.value) || 0 })} min="0" max="100" /></div>
                         </div>
-                        <button className="btn btn-primary mt-4" onClick={addLead}>Guardar Lead</button>
+                        <div style={{ display: 'flex', gap: '12px', marginTop: '24px' }}>
+                            <button className="btn btn-primary mono" style={{ borderRadius: 0, padding: '12px 24px', letterSpacing: '0.1em' }} onClick={addLead}>SAVE LEAD</button>
+                            <button
+                                className="btn mono"
+                                style={{ borderRadius: 0, padding: '12px 24px', letterSpacing: '0.1em', background: 'transparent', border: '1px solid var(--accent-primary)', color: 'var(--accent-primary)' }}
+                                onClick={autoProspect}
+                                disabled={isProspecting}
+                            >
+                                {isProspecting ? 'SCANNING...' : 'AUTO-ENRICH [CORTEX]'}
+                            </button>
+                        </div>
                     </div>
                 )}
 
