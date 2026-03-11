@@ -1,22 +1,48 @@
-# Supabase Edge Functions Deploy
-# Badge: ![Supabase Deploy](https://github.com/yourusername/ANTIGRAVITY-OS/actions/workflows/supabase-deploy.yml/badge.svg)
+# Supabase Deploy — Edge Functions + Migrations
+# Badge: ![Supabase Deploy](https://github.com/rotprods/ANTIGRAVITY-OS/actions/workflows/supabase-deploy.yml/badge.svg)
 
-name: Deploy Supabase Functions
+name: Deploy Supabase
 
 on:
   push:
     branches: [main]
     paths:
       - 'supabase/functions/**'
+      - 'supabase/migrations/**'
 
 concurrency:
   group: supabase-deploy-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  deploy:
+  deploy-migrations:
+    name: Deploy Migrations
+    runs-on: ubuntu-latest
+    if: |
+      contains(toJson(github.event.commits.*.modified), 'supabase/migrations') ||
+      contains(toJson(github.event.commits.*.added), 'supabase/migrations')
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Supabase CLI
+        uses: supabase/setup-cli@v1
+        with:
+          version: latest
+
+      - name: Deploy migrations
+        run: supabase db push --project-ref yxzdafptqtcvpsbqkmkm
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+          SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
+
+  deploy-functions:
     name: Deploy Edge Functions
     runs-on: ubuntu-latest
+    if: |
+      contains(toJson(github.event.commits.*.modified), 'supabase/functions') ||
+      contains(toJson(github.event.commits.*.added), 'supabase/functions')
 
     steps:
       - name: Checkout

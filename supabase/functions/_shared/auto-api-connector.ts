@@ -162,13 +162,13 @@ export async function autoConnectApi(
   const call = await executeCall(target.endpoint);
 
   if (agentName) {
-    await admin.from("agent_logs").insert({
+    admin.from("agent_logs").insert({
       agent_code_name: agentName,
       action: "auto_api_connect",
       input: { intent, candidates_found: candidates.length },
       output: { api: target.api.name, endpoint: target.endpoint, ok: call.ok },
       status: call.ok ? "success" : "error",
-    }).catch(() => {});
+    }).then(() => {}, () => {});
   }
 
   return {

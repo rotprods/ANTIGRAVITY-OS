@@ -11,6 +11,8 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: ['./src/test/setup.js'],
     css: true,
+    include: ['src/test/**/*.test.{js,jsx}'],
+    exclude: ['node_modules', 'oculops-chain', 'tests/e2e'],
   },
   resolve: {
     alias: {

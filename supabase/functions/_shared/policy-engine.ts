@@ -187,11 +187,11 @@ async function writeAuditLog(
   riskLevel: number,
   reason: string,
 ): Promise<void> {
-  await admin.from("audit_logs").insert({
+  admin.from("audit_logs").insert({
     agent,
     event_type: eventType,
     skill,
     payload: { reason },
     risk_level: riskLevel,
-  }).catch(() => {}); // never throw from audit logging
+  }).then(() => {}, () => {}); // never throw from audit logging
 }

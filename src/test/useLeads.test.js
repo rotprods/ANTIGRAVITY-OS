@@ -28,6 +28,7 @@ vi.mock('../lib/supabase', () => ({
     updateRow: mockUpdateRow,
     deleteRow: mockDeleteRow,
     subscribeToTable: mockSubscribeToTable,
+    subscribeDebouncedToTable: mockSubscribeToTable,
     getCurrentUserId: mockGetCurrentUserId,
     scopeUserQuery: mockScopeUserQuery,
 }))

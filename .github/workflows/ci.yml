@@ -1,5 +1,5 @@
 # OCULOPS CI/CD
-# Badge: ![CI](https://github.com/yourusername/ANTIGRAVITY-OS/actions/workflows/ci.yml/badge.svg)
+# Badge: ![CI](https://github.com/rotprods/ANTIGRAVITY-OS/actions/workflows/ci.yml/badge.svg)
 
 name: CI
 
@@ -43,6 +43,8 @@ jobs:
         run: npm run build
         env:
           NODE_OPTIONS: --no-experimental-require-module
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
 
   security:
     name: Security Checks

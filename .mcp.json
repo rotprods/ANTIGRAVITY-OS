@@ -1,8 +1,9 @@
 {
   "mcpServers": {
     "workspace-developer": {
-      "httpUrl": "https://workspace-developer.goog/mcp",
-      "trust": true
+      "type": "stdio",
+      "command": "npx",
+      "args": ["mcp-remote", "https://workspace-developer.goog/mcp"]
     },
     "gitnexus": {
       "type": "stdio",

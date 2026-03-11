@@ -61,87 +61,83 @@ import CRM from '../components/modules/CRM'
 describe('CRM', () => {
     it('renders the CRM header', () => {
         render(<CRM />)
-        expect(screen.getByText('CORTEX CRM VAULT')).toBeInTheDocument()
+        expect(screen.getByText('CRM')).toBeInTheDocument()
     })
 
     it('renders all tab buttons', () => {
         render(<CRM />)
-        expect(screen.getByText('01. PERSONNEL')).toBeInTheDocument()
-        expect(screen.getByText('02. COMPANIES')).toBeInTheDocument()
-        expect(screen.getByText('03. DEAL FLOW')).toBeInTheDocument()
-        expect(screen.getByText('04. ACTIVITY LOG')).toBeInTheDocument()
+        expect(screen.getByText('Contacts')).toBeInTheDocument()
+        expect(screen.getByText('Companies')).toBeInTheDocument()
+        expect(screen.getByText('Deals')).toBeInTheDocument()
+        expect(screen.getByText('Activities')).toBeInTheDocument()
     })
 
-    it('shows contacts table by default with count', () => {
+    it('shows contacts count tab badge', () => {
         render(<CRM />)
-        expect(screen.getByText(/IDENTIFIED PERSONNEL \[2\]/)).toBeInTheDocument()
+        // The tab count badges show the number of records
+        const countBadges = screen.getAllByText('2')
+        expect(countBadges.length).toBeGreaterThanOrEqual(1)
     })
 
     it('renders contact names in table', () => {
         render(<CRM />)
-        expect(screen.getByText('ALICE SMITH')).toBeInTheDocument()
-        expect(screen.getByText('BOB JONES')).toBeInTheDocument()
+        expect(screen.getByText('Alice Smith')).toBeInTheDocument()
+        expect(screen.getByText('Bob Jones')).toBeInTheDocument()
     })
 
     it('renders contact company name', () => {
         render(<CRM />)
-        expect(screen.getByText('ACME CORP')).toBeInTheDocument()
+        expect(screen.getByText('Acme Corp')).toBeInTheDocument()
     })
 
     it('shows contact statuses', () => {
         render(<CRM />)
-        expect(screen.getByText('QUALIFIED')).toBeInTheDocument()
-        expect(screen.getByText('RAW')).toBeInTheDocument()
+        expect(screen.getByText('qualified')).toBeInTheDocument()
+        expect(screen.getByText('raw')).toBeInTheDocument()
     })
 
     it('switches to companies tab', () => {
         render(<CRM />)
-        fireEvent.click(screen.getByText('02. COMPANIES'))
-        expect(screen.getByText(/CORPORATE ENTITIES \[1\]/)).toBeInTheDocument()
+        fireEvent.click(screen.getByText('Companies'))
+        // Company name should now be visible in the table
+        expect(screen.getAllByText('Acme Corp').length).toBeGreaterThanOrEqual(1)
     })
 
     it('switches to deals tab', () => {
         render(<CRM />)
-        fireEvent.click(screen.getByText('03. DEAL FLOW'))
-        expect(screen.getByText(/ONGOING OPERATIONS \[1\]/)).toBeInTheDocument()
-        expect(screen.getByText('PROJECT ALPHA')).toBeInTheDocument()
+        fireEvent.click(screen.getByText('Deals'))
+        expect(screen.getByText('Project Alpha')).toBeInTheDocument()
     })
 
     it('switches to activities tab', () => {
         render(<CRM />)
-        fireEvent.click(screen.getByText('04. ACTIVITY LOG'))
-        expect(screen.getByText(/ACTIVITY LOG ENTRY \[1\]/)).toBeInTheDocument()
-        expect(screen.getByText('FOLLOW UP CALL')).toBeInTheDocument()
+        fireEvent.click(screen.getByText('Activities'))
+        expect(screen.getByText('Follow up call')).toBeInTheDocument()
     })
 
-    it('renders system status as SECURE', () => {
+    it('renders system status as Connected', () => {
         render(<CRM />)
-        expect(screen.getByText(/SECURE/)).toBeInTheDocument()
+        expect(screen.getByText('Connected')).toBeInTheDocument()
     })
 
-    it('renders ATLAS DB as CONNECTED', () => {
+    it('renders Sync button', () => {
         render(<CRM />)
-        expect(screen.getByText(/CONNECTED/)).toBeInTheDocument()
+        expect(screen.getByText(/\bSync\b/)).toBeInTheDocument()
     })
 
-    it('renders + NEW button', () => {
+    it('renders New button', () => {
         render(<CRM />)
-        expect(screen.getByText('+ NEW')).toBeInTheDocument()
-    })
-
-    it('renders FORCE DB SYNC button', () => {
-        render(<CRM />)
-        expect(screen.getByText('FORCE DB SYNC')).toBeInTheDocument()
+        expect(screen.getByText(/\bNew\b/)).toBeInTheDocument()
     })
 
     it('has a search input for contacts', () => {
         render(<CRM />)
-        expect(screen.getByPlaceholderText('SEARCH PERSONNEL BY NAME, EMAIL, COMPANY...')).toBeInTheDocument()
+        expect(screen.getByPlaceholderText('Search by name, email, company...')).toBeInTheDocument()
     })
 
     it('search placeholder changes when switching to companies tab', () => {
         render(<CRM />)
-        fireEvent.click(screen.getByText('02. COMPANIES'))
-        expect(screen.getByPlaceholderText('SEARCH ENTITIES BY NAME, INDUSTRY, LOCATION...')).toBeInTheDocument()
+        fireEvent.click(screen.getByText('Companies'))
+        expect(screen.getByPlaceholderText('Search by name, industry, location...')).toBeInTheDocument()
     })
 })

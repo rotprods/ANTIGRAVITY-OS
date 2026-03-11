@@ -170,13 +170,17 @@ export function useOrg() {
 
     // ─── ACTIONS ────────────────────────────────────────────────
 
-    const createOrganization = useCallback(async (name) => {
+    const createOrganization = useCallback(async (name, settings = {}) => {
         store.setLoading(true)
         try {
             // Try RPC first
             const { data: newOrg, error } = await supabase.rpc('create_new_organization', { org_name: name })
 
             if (!error && newOrg) {
+                // Patch settings if provided
+                if (settings && (settings.industry || settings.team_size)) {
+                    await supabase.from('organizations').update({ settings }).eq('id', newOrg.id)
+                }
                 if (!store.organizations.some(org => org.id === newOrg.id)) {
                     store.addOrganization(newOrg)
                 }
@@ -190,7 +194,7 @@ export function useOrg() {
 
             const { data: inserted, error: insertErr } = await supabase
                 .from('organizations')
-                .insert({ name })
+                .insert({ name, settings: settings || {} })
                 .select()
                 .single()
 

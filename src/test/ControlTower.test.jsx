@@ -51,65 +51,69 @@ vi.mock('../hooks/useSignals', () => ({
 vi.mock('../hooks/useAgents', () => ({
     default: () => ({ agents: mockAgents, stats: mockAgentStats }),
 }))
+vi.mock('../hooks/usePipelineRuns', () => ({
+    usePipelineRuns: () => ({ runs: [], stats: { total: 0, running: 0, completed: 0, failed: 0 }, loading: false }),
+    default: () => ({ runs: [], stats: { total: 0, running: 0, completed: 0, failed: 0 }, loading: false }),
+}))
 
 import ControlTower from '../components/modules/ControlTower'
 
 describe('ControlTower', () => {
     it('renders the main header', () => {
         render(<ControlTower />)
-        expect(screen.getByText('SYSTEM INTELLIGENCE PANEL')).toBeInTheDocument()
+        expect(screen.getByText('Control Tower')).toBeInTheDocument()
     })
 
-    it('shows OPERATIONAL status when not loading', () => {
+    it('shows Operational status when not loading', () => {
         render(<ControlTower />)
-        expect(screen.getByText('OPERATIONAL')).toBeInTheDocument()
+        expect(screen.getByText('Operational')).toBeInTheDocument()
     })
 
     it('renders KPI labels', () => {
         render(<ControlTower />)
-        expect(screen.getByText('CONTACTS')).toBeInTheDocument()
-        expect(screen.getByText('COMPANIES')).toBeInTheDocument()
-        expect(screen.getByText('PIPELINE VALUATION')).toBeInTheDocument()
-        expect(screen.getByText('WEIGHTED PIPELINE')).toBeInTheDocument()
-        expect(screen.getByText('ACTIVITIES (7D)')).toBeInTheDocument()
-        expect(screen.getByText('SIGNAL INTERCEPTS')).toBeInTheDocument()
+        expect(screen.getByText('Contacts')).toBeInTheDocument()
+        expect(screen.getByText('Companies')).toBeInTheDocument()
+        expect(screen.getByText('Pipeline')).toBeInTheDocument()
+        expect(screen.getByText('Weighted')).toBeInTheDocument()
+        expect(screen.getByText('Activities (7d)')).toBeInTheDocument()
+        expect(screen.getByText('Active signals')).toBeInTheDocument()
     })
 
-    it('renders pipeline valuation from totalValue', () => {
+    it('renders pipeline value from totalValue', () => {
         render(<ControlTower />)
-        // jsdom toLocaleString may or may not add commas
+        // Rendered as €15,000 (toLocaleString in jsdom may use . or , as thousands sep)
         expect(screen.getByText(/15.?000/)).toBeInTheDocument()
     })
 
     it('renders agent network nodes', () => {
         render(<ControlTower />)
-        // ATLAS appears in both cortex network bar and health matrix
+        // ATLAS appears in agent bar and agent matrix
         expect(screen.getAllByText('ATLAS').length).toBeGreaterThanOrEqual(1)
         expect(screen.getAllByText('HUNTER').length).toBeGreaterThanOrEqual(1)
     })
 
-    it('renders agent stats in health matrix header', () => {
+    it('renders agent stats in agent network section', () => {
         render(<ControlTower />)
-        expect(screen.getByText('1 ONLINE')).toBeInTheDocument()
-        expect(screen.getByText('1 RUNNING')).toBeInTheDocument()
-        expect(screen.getByText('0 ERROR')).toBeInTheDocument()
+        // Stats appear as "1 online", "1 running", "0 error"
+        expect(screen.getAllByText(/1 online/i).length).toBeGreaterThanOrEqual(1)
+        expect(screen.getAllByText(/1 running/i).length).toBeGreaterThanOrEqual(1)
+        expect(screen.getAllByText(/0 error/i).length).toBeGreaterThanOrEqual(1)
     })
 
-    it('renders critical signals', () => {
+    it('renders signals in latest signals section', () => {
         render(<ControlTower />)
-        expect(screen.getByText('AI COST DROP')).toBeInTheDocument()
-        expect(screen.getByText('TIKTOK EU')).toBeInTheDocument()
+        expect(screen.getByText('AI Cost Drop')).toBeInTheDocument()
+        expect(screen.getByText('TikTok EU')).toBeInTheDocument()
     })
 
-    it('renders cortex network label', () => {
+    it('renders agents bar label', () => {
         render(<ControlTower />)
-        expect(screen.getByText('CORTEX NETWORK:')).toBeInTheDocument()
+        expect(screen.getByText('Agents')).toBeInTheDocument()
     })
 
-    it('renders health telemetry section', () => {
+    it('renders system health section', () => {
         render(<ControlTower />)
-        expect(screen.getByText('/// HEALTH TELEMETRY')).toBeInTheDocument()
-        expect(screen.getByText('AGGREGATE HEALTH SCORE')).toBeInTheDocument()
+        expect(screen.getByText('System health')).toBeInTheDocument()
     })
 
     it('renders health score number', () => {
@@ -117,5 +121,15 @@ describe('ControlTower', () => {
         // healthScore = round((min(15000/500,100)*0.5) + ((1/2)*100*0.3) + (min(2*10,100)*0.2))
         // = round(30*0.5 + 50*0.3 + 20*0.2) = round(15 + 15 + 4) = 34
         expect(screen.getByText('34')).toBeInTheDocument()
+    })
+
+    it('renders latest signals section header', () => {
+        render(<ControlTower />)
+        expect(screen.getByText('Latest signals')).toBeInTheDocument()
+    })
+
+    it('renders agent network section header', () => {
+        render(<ControlTower />)
+        expect(screen.getByText('Agent network')).toBeInTheDocument()
     })
 })

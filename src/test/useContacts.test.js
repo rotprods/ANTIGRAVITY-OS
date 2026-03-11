@@ -30,6 +30,7 @@ vi.mock('../lib/supabase', () => ({
     updateRow: mockUpdateRow,
     deleteRow: mockDeleteRow,
     subscribeToTable: mockSubscribeToTable,
+    subscribeDebouncedToTable: mockSubscribeToTable,
     getCurrentUserId: vi.fn(async () => 'test-user-id'),
     scopeUserQuery: vi.fn((q) => q),
 }))

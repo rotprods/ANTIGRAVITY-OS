@@ -123,6 +123,7 @@ export const updateRow = vi.fn(async (table, id, updates) => ({ id, ...updates }
 export const deleteRow = vi.fn(async () => true)
 export const fetchOne = vi.fn(async () => _mockSingleData ?? _mockData[0] ?? null)
 export const subscribeToTable = vi.fn(() => createChannelMock())
+export const subscribeDebouncedToTable = vi.fn(() => createChannelMock())
 export const getCurrentUserId = vi.fn(async () => 'test-user-id')
 export const getCurrentUser = vi.fn(async () => ({ id: 'test-user-id', email: 'test@oculops.com' }))
 export const scopeUserQuery = vi.fn((query) => query)

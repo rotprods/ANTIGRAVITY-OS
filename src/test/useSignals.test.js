@@ -4,7 +4,7 @@ import { renderHook, act, waitFor } from '@testing-library/react'
 vi.mock('../lib/supabase', () => import('./__mocks__/supabase'))
 
 import { useSignals } from '../hooks/useSignals'
-import { fetchAll, insertRow, updateRow, deleteRow, subscribeToTable } from '../lib/supabase'
+import { fetchAll, insertRow, updateRow, deleteRow, subscribeDebouncedToTable } from '../lib/supabase'
 
 const mockSignals = [
     { id: '1', title: 'Meta API Change', category: 'tech', status: 'active', created_at: '2026-01-01' },
@@ -86,6 +86,6 @@ describe('useSignals', () => {
 
     it('subscribes to realtime on mount', async () => {
         renderHook(() => useSignals())
-        await waitFor(() => expect(subscribeToTable).toHaveBeenCalledWith('signals', expect.any(Function)))
+        await waitFor(() => expect(subscribeDebouncedToTable).toHaveBeenCalledWith('signals', expect.any(Function)))
     })
 })

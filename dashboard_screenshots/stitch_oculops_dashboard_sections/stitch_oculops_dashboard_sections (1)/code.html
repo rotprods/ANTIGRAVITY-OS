@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>OculOps Control Tower Sidebar</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@300;400;500;600;700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#FFB800",
+                        "background-light": "#ECE8DC",
+                        "background-dark": "#ECE8DC",
+                        "sidebar-bg": "#F5F3ED",
+                        "border-muted": "rgba(0, 0, 0, 0.08)",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .glass-effect {
+            backdrop-filter: blur(12px);
+            background: rgba(245, 243, 237, 0.8);
+        }
+        .active-glow {
+            box-shadow: 0 0 15px rgba(255, 184, 0, 0.4);
+        }
+        .nav-gradient {
+            background: linear-gradient(180deg, rgba(245, 243, 237, 1) 0%, rgba(236, 232, 220, 1) 100%);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-display bg-background-light text-slate-900 antialiased h-screen overflow-hidden flex">
+<aside class="w-[280px] h-full bg-sidebar-bg border-r border-border-muted flex flex-col relative z-50">
+<div class="p-6 flex items-center gap-3">
+<div class="size-10 bg-primary rounded-lg flex items-center justify-center active-glow">
+<span class="material-symbols-outlined text-slate-900 font-bold text-2xl">radar</span>
+</div>
+<div>
+<h1 class="text-xl font-bold tracking-tight text-slate-900">OculOps</h1>
+<p class="text-[10px] uppercase tracking-[0.2em] text-primary font-semibold">Control Tower</p>
+</div>
+</div>
+<nav class="flex-1 overflow-y-auto px-4 py-2 space-y-8">
+<section>
+<h3 class="px-3 text-[11px] font-bold text-slate-500 uppercase tracking-widest mb-3">Intelligence</h3>
+<div class="space-y-1">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary/10 text-primary border border-primary/40 transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">analytics</span>
+<span class="text-sm font-medium">Signal Monitor</span>
+<span class="ml-auto size-2 bg-primary rounded-full animate-pulse"></span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-black/5 hover:text-slate-900 transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">explore</span>
+<span class="text-sm font-medium">Threat Map</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-black/5 hover:text-slate-900 transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">layers</span>
+<span class="text-sm font-medium">Pattern Analysis</span>
+</a>
+</div>
+</section>
+<section>
+<h3 class="px-3 text-[11px] font-bold text-slate-500 uppercase tracking-widest mb-3">Operations</h3>
+<div class="space-y-1">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-black/5 hover:text-slate-900 transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">terminal</span>
+<span class="text-sm font-medium">Command Center</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-black/5 hover:text-slate-900 transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">task_alt</span>
+<span class="text-sm font-medium">Active Missions</span>
+<span class="ml-auto text-[10px] bg-black/10 px-2 py-0.5 rounded-full text-slate-900">12</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-black/5 hover:text-slate-900 transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">history</span>
+<span class="text-sm font-medium">Archived Logs</span>
+</a>
+</div>
+</section>
+<section>
+<h3 class="px-3 text-[11px] font-bold text-slate-500 uppercase tracking-widest mb-3">Fleet</h3>
+<div class="space-y-1">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-black/5 hover:text-slate-900 transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">precision_manufacturing</span>
+<span class="text-sm font-medium">Unit Registry</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-black/5 hover:text-slate-900 transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">sensors</span>
+<span class="text-sm font-medium">Sensor Network</span>
+</a>
+</div>
+</section>
+</nav>
+<div class="p-4 border-t border-border-muted bg-sidebar-bg/50 backdrop-blur-sm">
+<div class="flex items-center gap-3 p-2 rounded-xl border border-black/5 bg-black/5">
+<div class="relative">
+<img alt="User profile" class="size-10 rounded-lg object-cover" data-alt="Professional male user avatar profile picture" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDlu6W0NnyQD3V6W5qvBfizWUs87FZmNCIP5t8of_p7NpK5iu6uR_iauPQuyAKRw6K3WFLfD1UykdlJjFVZv1KQVc1ZhQqX_ywJ8YvLHYrKG8syG8yIuogxgPqgITDg5VwEOa3bR37_yoWDs0r3YeG_edEXnEGu45mGSMyqg5Mo870elP-xy7uIlyD1Y8oXD1eorN4xL2DyH_8cPq0ricUWigfj5NjaFyiqyq8LO6xpJ_tac6TCdS3FjEuDLpgFxwXFpPznnINgkLmJ"/>
+<div class="absolute -bottom-1 -right-1 size-3 bg-green-500 rounded-full border-2 border-sidebar-bg"></div>
+</div>
+<div class="flex-1 min-w-0">
+<p class="text-sm font-semibold text-slate-900 truncate">Commander Vance</p>
+<p class="text-[10px] text-slate-500 truncate">vance@oculops.io</p>
+</div>
+<button class="text-slate-600 hover:text-primary">
+<span class="material-symbols-outlined text-[20px]">settings</span>
+</button>
+</div>
+</div>
+</aside>
+<main class="flex-1 bg-background-light flex flex-col">
+<header class="h-16 border-b border-border-muted flex items-center px-6 justify-between lg:hidden">
+<button class="text-slate-900">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<span class="font-bold text-primary">OCULOPS</span>
+<button class="text-slate-900">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+</header>
+<div class="flex-1 p-6 flex flex-col gap-6 overflow-y-auto">
+<div class="relative h-48 rounded-2xl overflow-hidden border border-primary/30 group">
+<div class="absolute inset-0 bg-gradient-to-br from-primary/30 via-transparent to-transparent z-10"></div>
+<img alt="Satellite Earth View" class="absolute inset-0 w-full h-full object-cover grayscale opacity-40 group-hover:scale-105 transition-transform duration-700" data-alt="Futuristic satellite view of earth at night with data lines" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCRjLh2nulpFAlnAuU-C8g2A7IJNAkBNamMQYwe5DyMFZOVrb-R_QmRQ4YDIcLu0qxPKez4cffLuFnPzlCx3bWgq3OdhdO4tR8S3cyWS_UQoKMNG0XPRwz2DWlaCSvfxsX1CuXaFxH3Ci2lvOUrUrcZEmeiFMu0uPscAtu2pbYQoGZVldDboLTpJM2NgwxCIhQfmSYR0Pa_i02RIChkAqbckV5v2HEZKmHmMDacg_Dgke9hh9rBzm0Oq5PoQt0GmcR8kGB5CP4qWeig"/>
+<div class="relative z-20 p-6 h-full flex flex-col justify-end">
+<div class="flex items-center gap-2 mb-2">
+<span class="size-2 bg-primary rounded-full animate-ping"></span>
+<span class="text-xs font-bold text-primary tracking-widest uppercase">Live Signal</span>
+</div>
+<h2 class="text-2xl font-bold text-slate-900 mb-1">Global Threat Level: Low</h2>
+<p class="text-slate-600 text-sm">No anomalous patterns detected in Sector 7-G.</p>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="p-4 rounded-xl border border-black/5 bg-black/5 backdrop-blur-md">
+<p class="text-slate-500 text-xs font-medium mb-1">Fleet Health</p>
+<p class="text-2xl font-bold text-slate-900">98.4%</p>
+<div class="w-full bg-black/10 h-1 mt-3 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[98%]"></div>
+</div>
+</div>
+<div class="p-4 rounded-xl border border-black/5 bg-black/5 backdrop-blur-md">
+<p class="text-slate-500 text-xs font-medium mb-1">Active Pings</p>
+<p class="text-2xl font-bold text-slate-900">1,204</p>
+<div class="flex items-center gap-1 mt-3 text-[10px] text-primary">
+<span class="material-symbols-outlined text-[12px]">trending_up</span>
+<span class="text-slate-700 font-medium">+12% from last hour</span>
+</div>
+</div>
+</div>
+<div class="flex-1 min-h-[200px] rounded-2xl border border-black/5 bg-black/5 overflow-hidden relative">
+<img alt="World Map" class="absolute inset-0 w-full h-full object-cover opacity-20" data-alt="Digital world map with glowing connection nodes" data-location="Global" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD0ShI9ivDiTAdOBkLKQS2AOGvulggBN10ZoFNAxMRyqwJSWypHe_4ojSqY1ak8YXkVXX4kG_j1c6I_z8PgTvU9sEp9kjq-4Awgd_nMBFFoHgeGLgurlC4qc0KE0omlwptX3LTQPb_Sgtyo4mJwxaJnBs-x7B17GydIFKmyYKbbwOWJd_hOPie2-z-cC6sCY_8HpBKY8iqrYg4V-RnbqsdBaA23_F4ejXPQZiYQepn-sremkfzCVc0hncA82mU_VCGobbvgtfP7Nae3"/>
+<div class="absolute inset-0 flex items-center justify-center">
+<div class="relative">
+<div class="absolute -inset-8 bg-primary/20 rounded-full animate-pulse blur-xl"></div>
+<div class="relative size-4 bg-primary rounded-full ring-4 ring-primary/50"></div>
+</div>
+</div>
+<div class="absolute bottom-4 left-4 p-3 glass-effect rounded-lg border border-black/10">
+<p class="text-[10px] text-slate-600 uppercase font-bold tracking-tighter">Current Focus</p>
+<p class="text-xs font-bold text-slate-900">North Pacific Grid</p>
+</div>
+</div>
+</div>
+<div class="lg:hidden flex gap-2 border-t border-border-muted bg-sidebar-bg px-4 pb-3 pt-2">
+<a class="flex flex-1 flex-col items-center justify-end gap-1 rounded-full text-primary" href="#">
+<span class="material-symbols-outlined text-[24px]">home</span>
+<p class="text-xs font-medium leading-normal tracking-[0.015em]">Home</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-slate-500 hover:text-slate-900" href="#">
+<span class="material-symbols-outlined text-[24px]">target</span>
+<p class="text-xs font-medium leading-normal tracking-[0.015em]">Intelligence</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-slate-500 hover:text-slate-900" href="#">
+<span class="material-symbols-outlined text-[24px]">memory</span>
+<p class="text-xs font-medium leading-normal tracking-[0.015em]">Fleet</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-slate-500 hover:text-slate-900" href="#">
+<span class="material-symbols-outlined text-[24px]">person</span>
+<p class="text-xs font-medium leading-normal tracking-[0.015em]">Profile</p>
+</a>
+</div>
+</main>
+</body></html>

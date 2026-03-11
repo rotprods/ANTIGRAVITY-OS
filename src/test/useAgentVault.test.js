@@ -1,52 +1,78 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { renderHook, act, waitFor } from '@testing-library/react'
+
+const { mockAgentDefs, mockSupabase } = vi.hoisted(() => {
+    const mockAgentDefs = [
+        { id: '1', code_name: 'atlas-scraper', display_name: 'Atlas Scraper', namespace: 'research', description: 'Research scraper', is_active: true, total_runs: 10, tags: [] },
+        { id: '2', code_name: 'data-pipeline', display_name: 'Data Pipeline', namespace: 'data', description: 'Data processing', is_active: true, total_runs: 5, tags: [] },
+        { id: '3', code_name: 'product-owl', display_name: 'Product Owl', namespace: 'product', description: 'Product strategy', is_active: true, total_runs: 3, tags: [] },
+        { id: '4', code_name: 'sentinel-guard', display_name: 'Sentinel Guard', namespace: 'security', description: 'Security auditor', is_active: false, total_runs: 1, tags: [] },
+    ]
+
+    function createQueryBuilder(data) {
+        const builder = {
+            select: vi.fn(() => builder),
+            order: vi.fn(() => builder),
+            eq: vi.fn(() => builder),
+            update: vi.fn(() => builder),
+            then: (resolve, reject) => Promise.resolve({ data, error: null }).then(resolve, reject),
+        }
+        return builder
+    }
+
+    const mockSupabase = {
+        from: vi.fn(() => createQueryBuilder(mockAgentDefs)),
+        functions: { invoke: vi.fn(async () => ({ data: { success: true }, error: null })) },
+    }
+
+    return { mockAgentDefs, mockSupabase }
+})
+
+vi.mock('../lib/supabase', () => ({
+    supabase: mockSupabase,
+    isSupabaseConfigured: true,
+}))
+
 import { useAgentVault, ROLE_CAPABILITY_MAP } from '../hooks/useAgentVault'
 
-const mockManifest = {
-    total_agents: 5,
-    canonical_count: 4,
-    namespaces: ['research', 'product', 'data'],
-    agents: [
-        { name: 'atlas-scraper', namespace: 'research', capabilities: ['research', 'web-scraping'], is_alias: false },
-        { name: 'data-pipeline', namespace: 'data', capabilities: ['data-engineering', 'ml-ai'], is_alias: false },
-        { name: 'product-owl', namespace: 'product', capabilities: ['product', 'orchestration'], is_alias: false },
-        { name: 'sentinel-guard', namespace: 'research', capabilities: ['security', 'code-review'], is_alias: false },
-        { name: 'alias-agent', namespace: 'research', capabilities: ['research'], is_alias: true },
-    ],
+function createQueryBuilder(data) {
+    const builder = {
+        select: vi.fn(() => builder),
+        order: vi.fn(() => builder),
+        eq: vi.fn(() => builder),
+        update: vi.fn(() => builder),
+        then: (resolve, reject) => Promise.resolve({ data, error: null }).then(resolve, reject),
+    }
+    return builder
 }
 
 describe('useAgentVault', () => {
     beforeEach(() => {
-        // Mock fetch to return manifest
-        vi.stubGlobal('fetch', vi.fn(() =>
-            Promise.resolve({ ok: true, json: () => Promise.resolve(mockManifest) })
-        ))
-        // Ensure no Electron API
-        delete window.electronAPI
+        vi.clearAllMocks()
+        mockSupabase.from.mockImplementation(() => createQueryBuilder(mockAgentDefs))
     })
 
     afterEach(() => {
-        vi.unstubAllGlobals()
+        vi.clearAllMocks()
     })
 
-    it('loads manifest from fetch', async () => {
+    it('loads agents from Supabase agent_definitions', async () => {
         const { result } = renderHook(() => useAgentVault())
 
         expect(result.current.loading).toBe(true)
 
         await waitFor(() => expect(result.current.loading).toBe(false))
 
-        expect(result.current.manifest).toEqual(mockManifest)
-        expect(result.current.totalAgents).toBe(5)
+        expect(result.current.allAgents).toHaveLength(4)
+        expect(result.current.totalAgents).toBe(4)
         expect(result.current.canonicalCount).toBe(4)
     })
 
-    it('filters out aliases from agents list', async () => {
+    it('returns all agents when no filters applied', async () => {
         const { result } = renderHook(() => useAgentVault())
         await waitFor(() => expect(result.current.loading).toBe(false))
 
-        expect(result.current.agents).toHaveLength(4)
-        expect(result.current.agents.find(a => a.is_alias)).toBeUndefined()
+        expect(result.current.filteredAgents).toHaveLength(4)
     })
 
     it('filters by namespace', async () => {
@@ -55,65 +81,73 @@ describe('useAgentVault', () => {
 
         act(() => result.current.setNamespace('research'))
 
-        expect(result.current.filteredAgents).toHaveLength(2)
-        expect(result.current.filteredAgents.every(a => a.namespace === 'research')).toBe(true)
+        expect(result.current.filteredAgents).toHaveLength(1)
+        expect(result.current.filteredAgents[0].namespace).toBe('research')
     })
 
-    it('filters by search text', async () => {
+    it('filters by search text against code_name', async () => {
         const { result } = renderHook(() => useAgentVault())
         await waitFor(() => expect(result.current.loading).toBe(false))
 
         act(() => result.current.setSearch('atlas'))
 
         expect(result.current.filteredAgents).toHaveLength(1)
-        expect(result.current.filteredAgents[0].name).toBe('atlas-scraper')
+        expect(result.current.filteredAgents[0].code_name).toBe('atlas-scraper')
     })
 
-    it('filters by role using capability mapping', async () => {
+    it('filters by role using ROLE_CAPABILITY_MAP namespaces', async () => {
         const { result } = renderHook(() => useAgentVault())
         await waitFor(() => expect(result.current.loading).toBe(false))
 
         act(() => result.current.setRole('sentinel'))
 
-        // sentinel maps to ['security', 'research', 'code-review']
-        // sentinel-guard has ['security', 'code-review'] — matches
-        // atlas-scraper has ['research', 'web-scraping'] — matches ('research')
-        const names = result.current.filteredAgents.map(a => a.name)
+        // sentinel maps to ['security', 'testing', 'infra']
+        // sentinel-guard has namespace 'security' — matches
+        const names = result.current.filteredAgents.map(a => a.code_name)
         expect(names).toContain('sentinel-guard')
-        expect(names).toContain('atlas-scraper')
     })
 
-    it('suggestRole returns best matching role', async () => {
+    it('suggestRole returns best matching role for agent namespace', async () => {
         const { result } = renderHook(() => useAgentVault())
         await waitFor(() => expect(result.current.loading).toBe(false))
 
-        const role = result.current.suggestRole({ capabilities: ['security', 'code-review', 'research'] })
+        const role = result.current.suggestRole({ namespace: 'security' })
         expect(role).toBe('sentinel')
     })
 
-    it('suggestRole returns null for agent with no matching capabilities', async () => {
+    it('suggestRole returns null for unrecognized namespace', async () => {
         const { result } = renderHook(() => useAgentVault())
         await waitFor(() => expect(result.current.loading).toBe(false))
 
-        const role = result.current.suggestRole({ capabilities: ['unknown-cap'] })
+        const role = result.current.suggestRole({ namespace: 'unknown-namespace-xyz' })
         expect(role).toBeNull()
     })
 
-    it('handles fetch failure gracefully', async () => {
-        vi.stubGlobal('fetch', vi.fn(() => Promise.resolve({ ok: false })))
+    it('handles Supabase error gracefully', async () => {
+        mockSupabase.from.mockImplementation(() => {
+            const builder = {
+                select: vi.fn(() => builder),
+                order: vi.fn(() => builder),
+                then: (resolve, reject) => Promise.resolve({ data: null, error: { message: 'DB error' } }).then(resolve, reject),
+            }
+            return builder
+        })
 
         const { result } = renderHook(() => useAgentVault())
         await waitFor(() => expect(result.current.loading).toBe(false))
 
         expect(result.current.error).toBeTruthy()
-        expect(result.current.agents).toHaveLength(0)
+        expect(result.current.allAgents).toHaveLength(0)
     })
 
-    it('returns namespaces from manifest', async () => {
+    it('returns namespaces derived from loaded agents', async () => {
         const { result } = renderHook(() => useAgentVault())
         await waitFor(() => expect(result.current.loading).toBe(false))
 
-        expect(result.current.namespaces).toEqual(['research', 'product', 'data'])
+        expect(result.current.namespaces).toContain('research')
+        expect(result.current.namespaces).toContain('data')
+        expect(result.current.namespaces).toContain('product')
+        expect(result.current.namespaces).toContain('security')
     })
 })
 
@@ -126,10 +160,10 @@ describe('ROLE_CAPABILITY_MAP', () => {
         expect(ROLE_CAPABILITY_MAP).toHaveProperty('cortex')
     })
 
-    it('each role has array of capabilities', () => {
-        Object.values(ROLE_CAPABILITY_MAP).forEach(caps => {
-            expect(Array.isArray(caps)).toBe(true)
-            expect(caps.length).toBeGreaterThan(0)
+    it('each role has array of namespaces', () => {
+        Object.values(ROLE_CAPABILITY_MAP).forEach(namespaces => {
+            expect(Array.isArray(namespaces)).toBe(true)
+            expect(namespaces.length).toBeGreaterThan(0)
         })
     })
 })

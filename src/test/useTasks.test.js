@@ -15,6 +15,7 @@ vi.mock('../lib/supabase', () => ({
     updateRow: mockUpdateRow,
     deleteRow: mockDeleteRow,
     subscribeToTable: mockSubscribeToTable,
+    subscribeDebouncedToTable: mockSubscribeToTable,
 }))
 
 import { useTasks } from '../hooks/useTasks'

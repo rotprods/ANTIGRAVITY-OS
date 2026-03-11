@@ -19,6 +19,10 @@ vi.mock('../hooks/useDeals', () => ({
         pipelineView: {
             lead: mockDeals.filter(d => d.stage === 'lead'),
             proposal: mockDeals.filter(d => d.stage === 'proposal'),
+            contacted: [],
+            meeting: [],
+            closed_won: [],
+            closed_lost: [],
         },
         totalValue: 18000,
         weightedValue: 8700,
@@ -70,40 +74,39 @@ import Pipeline from '../components/modules/Pipeline'
 describe('Pipeline', () => {
     it('renders the pipeline header', () => {
         render(<Pipeline />)
-        expect(screen.getByText('PIPELINE ORCHESTRATION')).toBeInTheDocument()
+        expect(screen.getByText('Pipeline')).toBeInTheDocument()
     })
 
     it('shows deal count in subtitle', () => {
         render(<Pipeline />)
-        expect(screen.getByText(/ACTIVE NODES: 3/)).toBeInTheDocument()
+        expect(screen.getByText(/3 deals/)).toBeInTheDocument()
     })
 
     it('renders KPI card labels', () => {
         render(<Pipeline />)
-        expect(screen.getByText('[ GLOBAL ENTITIES ]')).toBeInTheDocument()
-        expect(screen.getByText('[ PIPELINE VOLUME ]')).toBeInTheDocument()
-        expect(screen.getByText('[ WEIGHTED INDEX ]')).toBeInTheDocument()
+        expect(screen.getByText('Total deals')).toBeInTheDocument()
+        expect(screen.getByText('Pipeline value')).toBeInTheDocument()
+        expect(screen.getByText('Weighted value')).toBeInTheDocument()
     })
 
     it('renders pipeline volume value', () => {
         render(<Pipeline />)
-        // Value appears in subtitle + KPI card; jsdom locale may use . or , as separator
-        const matches = screen.getAllByText(/EUR 18.?000/)
+        // Value appears as €18,000 (jsdom locale may use . or , as thousands sep)
+        const matches = screen.getAllByText(/€18.?000/)
         expect(matches.length).toBeGreaterThanOrEqual(1)
     })
 
     it('renders kanban columns for visible stages', () => {
         render(<Pipeline />)
-        expect(screen.getByText(/^LEAD/)).toBeInTheDocument()
-        expect(screen.getByText(/^CONTACTED/)).toBeInTheDocument()
-        expect(screen.getByText(/^MEETING/)).toBeInTheDocument()
-        expect(screen.getByText(/^PROPOSAL/)).toBeInTheDocument()
-        expect(screen.getByText(/^CLOSED WON/)).toBeInTheDocument()
+        expect(screen.getByText('Lead')).toBeInTheDocument()
+        expect(screen.getByText('Contacted')).toBeInTheDocument()
+        expect(screen.getByText('Meeting')).toBeInTheDocument()
+        expect(screen.getByText('Proposal')).toBeInTheDocument()
+        expect(screen.getByText('Closed won')).toBeInTheDocument()
     })
 
     it('renders deal cards with titles', () => {
         render(<Pipeline />)
-        // CSS textTransform: uppercase — DOM text stays as-is
         expect(screen.getByText('Alpha Project')).toBeInTheDocument()
         expect(screen.getByText('Beta Project')).toBeInTheDocument()
         expect(screen.getByText('Gamma Project')).toBeInTheDocument()
@@ -111,40 +114,41 @@ describe('Pipeline', () => {
 
     it('shows deal values on cards', () => {
         render(<Pipeline />)
-        // Multiple elements may match (subtitle + KPI + card)
-        expect(screen.getAllByText(/EUR 5.?000/).length).toBeGreaterThanOrEqual(1)
-        expect(screen.getAllByText(/EUR 10.?000/).length).toBeGreaterThanOrEqual(1)
+        // Values rendered as €5,000 and €10,000
+        expect(screen.getAllByText(/€5.?000/).length).toBeGreaterThanOrEqual(1)
+        expect(screen.getAllByText(/€10.?000/).length).toBeGreaterThanOrEqual(1)
     })
 
-    it('renders INTEL CAPTURE button', () => {
+    it('renders New deal button', () => {
         render(<Pipeline />)
-        expect(screen.getByText('[ INTEL CAPTURE ]')).toBeInTheDocument()
+        expect(screen.getByText(/New deal/)).toBeInTheDocument()
     })
 
-    it('toggles new deal form when INTEL CAPTURE is clicked', () => {
+    it('toggles new deal form when New deal is clicked', () => {
         render(<Pipeline />)
-        fireEvent.click(screen.getByText('[ INTEL CAPTURE ]'))
-        expect(screen.getByText('/// NEW DEAL DIRECTIVE')).toBeInTheDocument()
+        fireEvent.click(screen.getByText(/New deal/))
+        // The quick-add form has a submit button "Create deal"
+        expect(screen.getByText('Create deal')).toBeInTheDocument()
     })
 
-    it('renders SHOW LOST toggle button', () => {
+    it('renders Show lost toggle button', () => {
         render(<Pipeline />)
-        expect(screen.getByText('[ SHOW LOST ]')).toBeInTheDocument()
+        expect(screen.getByText(/Show lost/)).toBeInTheDocument()
     })
 
-    it('renders kanban matrix header', () => {
+    it('renders kanban board section header', () => {
         render(<Pipeline />)
-        expect(screen.getByText('/// KANBAN MATRIX')).toBeInTheDocument()
+        expect(screen.getByText('Kanban board')).toBeInTheDocument()
     })
 
-    it('renders conversion flow section', () => {
+    it('renders conversion funnel section', () => {
         render(<Pipeline />)
-        expect(screen.getByText('/// CONVERSION FLOW')).toBeInTheDocument()
+        expect(screen.getByText('Conversion funnel')).toBeInTheDocument()
     })
 
-    it('shows PURGE buttons on deal cards', () => {
+    it('shows Delete buttons on deal cards', () => {
         render(<Pipeline />)
-        const purgeButtons = screen.getAllByText('[ PURGE ]')
-        expect(purgeButtons.length).toBe(3)
+        const deleteButtons = screen.getAllByText(/Delete/)
+        expect(deleteButtons.length).toBe(3)
     })
 })

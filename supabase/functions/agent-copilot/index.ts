@@ -751,12 +751,13 @@ async function executeTool(
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "apikey": SERVICE_KEY,
         Authorization: `Bearer ${SERVICE_KEY}`,
       },
       body: JSON.stringify(payload()),
     });
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.error || `${fn} failed: ${res.status}`);
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) return { _debug_error: true, status: res.status, body: data, key_defined: !!SERVICE_KEY, key_len: SERVICE_KEY?.length ?? 0 };
     return data;
   }
 

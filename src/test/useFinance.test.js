@@ -13,6 +13,7 @@ vi.mock('../lib/supabase', () => ({
     insertRow: mockInsertRow,
     deleteRow: mockDeleteRow,
     subscribeToTable: mockSubscribeToTable,
+    subscribeDebouncedToTable: mockSubscribeToTable,
 }))
 
 import { useFinance } from '../hooks/useFinance'

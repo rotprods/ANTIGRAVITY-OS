@@ -110,14 +110,17 @@ export async function runBrain(input: BrainInput): Promise<BrainOutput> {
   // Resolve org_id: use provided value, or fall back to first org (cron/background runs)
   let org_id: string | null = inputOrgId || null;
   if (!org_id) {
-    const { data: firstOrg } = await admin
-      .from("organizations")
-      .select("id")
-      .order("created_at")
-      .limit(1)
-      .single()
-      .catch(() => ({ data: null }));
-    org_id = firstOrg?.id || null;
+    let firstOrgId: string | null = null;
+    try {
+      const { data: firstOrg } = await admin
+        .from("organizations")
+        .select("id")
+        .order("created_at")
+        .limit(1)
+        .single();
+      firstOrgId = firstOrg?.id || null;
+    } catch { firstOrgId = null; }
+    org_id = firstOrgId;
   }
 
   const startMs = Date.now();
@@ -131,14 +134,18 @@ export async function runBrain(input: BrainInput): Promise<BrainOutput> {
   let traceId: string | undefined;
 
   // ── 1. Create reasoning trace (open) ──────────────────────────────────────
-  const { data: traceRow } = await admin.from("reasoning_traces").insert({
-    agent,
-    goal,
-    status: "running",
-    session_id: sessionId || null,
-    org_id,
-  }).select("id").single().catch(() => ({ data: null }));
-  traceId = traceRow?.id;
+  try {
+    const { data: traceRow } = await admin.from("reasoning_traces").insert({
+      agent,
+      goal,
+      status: "running",
+      session_id: sessionId || null,
+      org_id,
+    }).select("id").single();
+    traceId = traceRow?.id;
+  } catch {
+    traceId = undefined;
+  }
 
   // ── 2. Planning phase ─────────────────────────────────────────────────────
   const plan = await generatePlan(agent, goal, context, model);
@@ -224,13 +231,13 @@ ${systemPromptExtra}`;
       if (detectLoop(skillCallHistory, skillName)) {
         loopDetected = true;
         // Create incident and break
-        await admin.from("incidents").insert({
+        admin.from("incidents").insert({
           severity: "medium",
           agent,
           description: `Loop detected: skill '${skillName}' called ${skillCallHistory[skillName]} times`,
           trace_id: traceId || null,
           org_id,
-        }).catch(() => {});
+        }).then(() => {}, () => {});
 
         messages.push({
           role: "tool",

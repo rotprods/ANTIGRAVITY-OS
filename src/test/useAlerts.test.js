@@ -13,6 +13,7 @@ vi.mock('../lib/supabase', () => ({
     insertRow: mockInsertRow,
     updateRow: mockUpdateRow,
     subscribeToTable: mockSubscribeToTable,
+    subscribeDebouncedToTable: mockSubscribeToTable,
 }))
 
 import { useAlerts } from '../hooks/useAlerts'

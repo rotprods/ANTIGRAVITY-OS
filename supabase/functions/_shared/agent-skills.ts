@@ -336,7 +336,7 @@ export async function executeSkill(
 
     const riskLevel = getRiskLevel(name);
     if (riskLevel >= 2) {
-      await admin.from("audit_logs").insert({
+      admin.from("audit_logs").insert({
         agent: agentCode,
         event_type: "skill_executed",
         skill: name,
@@ -344,7 +344,7 @@ export async function executeSkill(
         risk_level: riskLevel,
         trace_id: traceId || null,
         org_id: orgId || null,
-      }).catch(() => {});
+      }).then(() => {}, () => {});
     }
 
     return result;
