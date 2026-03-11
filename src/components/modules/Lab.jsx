@@ -4,13 +4,12 @@
 // ═══════════════════════════════════════════════════
 
 import { useCallback, useEffect, useState } from 'react'
-import { supabase } from '../../lib/supabase'
+import { callSupabaseFunction, supabase } from '../../lib/supabase'
 import { useCredits } from '../../hooks/useCredits'
 import { ArrowPathIcon, LinkIcon } from '@heroicons/react/24/outline'
 import ModulePage from '../ui/ModulePage'
 import './Lab.css'
 
-const CHAIN_BRIDGE_URL = `${import.meta.env.VITE_SUPABASE_URL || 'https://yxzdafptqtcvpsbqkmkm.supabase.co'}/functions/v1/chain-bridge`
 const EXPLORER_URL = 'https://explorer.testnet.xrplevm.org'
 
 function hexToDecimal(hex) {
@@ -50,11 +49,8 @@ function Lab() {
 
   const fetchChainStatus = useCallback(async () => {
     try {
-      const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl4emRhZnB0cXRjdnBzYnFrbWttIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI3NjUwNjIsImV4cCI6MjA4ODM0MTA2Mn0.-Kg8u3DVUq5T8JiJNJMPknzPgDBJVJusRatk_WkTxyU'
-      const res = await fetch(`${CHAIN_BRIDGE_URL}?action=status`, {
-        headers: { 'Authorization': `Bearer ${anonKey}`, 'Content-Type': 'application/json' }
-      })
-      setChainStatus(await res.json())
+      const data = await callSupabaseFunction('chain-bridge?action=status', { method: 'GET' })
+      setChainStatus(data)
     } catch (e) {
       setChainStatus({ status: 'offline', error: e.message })
     }

@@ -5,6 +5,8 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { supabase, getCurrentUserId } from '../../lib/supabase'
+import { useOrg } from '../../hooks/useOrg'
+import { useAppStore } from '../../stores/useAppStore'
 import { Cog6ToothIcon } from '@heroicons/react/24/outline'
 import ModulePage from '../ui/ModulePage'
 import './Settings.css'
@@ -31,6 +33,13 @@ function Settings() {
   const [profileSaved, setProfileSaved] = useState(false)
   const [passwordFields, setPasswordFields] = useState({ current: '', new: '', confirm: '' })
   const [passwordMsg, setPasswordMsg] = useState(null)
+  
+  const { currentOrg } = useOrg()
+  const { toast } = useAppStore()
+  const [billingMode, setBillingMode] = useState('managed')
+  const [credits, setCredits] = useState(0)
+  const [customKeyOpenAI, setCustomKeyOpenAI] = useState('')
+  const [savingCredits, setSavingCredits] = useState(false)
 
   useEffect(() => {
     async function loadSettings() {
@@ -46,6 +55,46 @@ function Settings() {
     }
     loadSettings()
   }, [])
+
+  useEffect(() => {
+    async function loadBilling() {
+      if (!currentOrg?.id) return
+      
+      const { data: bal } = await supabase.from('credit_balances').select('available_credits, billing_mode').eq('org_id', currentOrg.id).single()
+      if (bal) {
+        setCredits(bal.available_credits)
+        setBillingMode(bal.billing_mode)
+      }
+      
+      const { data: k } = await supabase.from('custom_api_keys').select('encrypted_key').eq('org_id', currentOrg.id).eq('provider', 'openai').eq('is_active', true).maybeSingle()
+      if (k) setCustomKeyOpenAI(k.encrypted_key)
+    }
+    loadBilling()
+  }, [currentOrg?.id])
+
+  const saveBillingSettings = async () => {
+    if (!currentOrg?.id) return
+    setSavingCredits(true)
+    try {
+      await supabase.from('credit_balances').update({ billing_mode: billingMode }).eq('org_id', currentOrg.id)
+      
+      if (customKeyOpenAI) {
+        const { data: existing } = await supabase.from('custom_api_keys').select('id').eq('org_id', currentOrg.id).eq('provider', 'openai').maybeSingle()
+        if (existing) {
+          await supabase.from('custom_api_keys').update({ encrypted_key: customKeyOpenAI, is_active: true, key_hint: maskKey(customKeyOpenAI) }).eq('id', existing.id)
+        } else {
+          await supabase.from('custom_api_keys').insert({ org_id: currentOrg.id, provider: 'openai', encrypted_key: customKeyOpenAI, is_active: true, key_hint: maskKey(customKeyOpenAI) })
+        }
+      } else {
+        await supabase.from('custom_api_keys').update({ is_active: false }).eq('org_id', currentOrg.id).eq('provider', 'openai')
+      }
+      toast('Billing & API settings saved', 'success')
+    } catch(e) {
+      console.error(e)
+      toast('Failed to save settings', 'error')
+    }
+    setSavingCredits(false)
+  }
 
   const publicEnvKeys = [
     { label: 'Supabase URL', key: 'VITE_SUPABASE_URL' },
@@ -98,6 +147,7 @@ function Settings() {
     { id: 'account', label: 'Account' },
     { id: 'agency', label: 'Agency profile' },
     { id: 'integrations', label: 'Integrations' },
+    { id: 'credits', label: 'Credits & API Keys' },
     { id: 'system', label: 'System' },
   ]
 
@@ -202,6 +252,70 @@ function Settings() {
                   </tbody>
                 </table>
               </div>
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'credits' && (
+          <div className="lab-col-layout">
+            <div className="lab-panel">
+              <div className="lab-panel-header">Platform Credits</div>
+              <div className="ct-section-body">
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-6)' }}>
+                  <div>
+                    <div className="mono text-2xl font-bold" style={{ color: credits > 0 ? 'var(--color-success)' : 'var(--color-danger)' }}>{credits.toFixed(2)}</div>
+                    <div className="mono text-xs text-tertiary">Available OCUL Credits (1 cr = $0.01)</div>
+                  </div>
+                  <button className="btn btn-ghost" onClick={() => toast('Top-up integration coming soon', 'info')}>Add Credits</button>
+                </div>
+                
+                <h4 className="form-label" style={{ marginBottom: 'var(--space-3)' }}>Billing Mode</h4>
+                <div style={{ display: 'flex', gap: 'var(--space-3)', marginBottom: 'var(--space-6)' }}>
+                  <button 
+                    className={`btn ${billingMode === 'managed' ? 'btn-primary' : 'btn-ghost'}`} 
+                    onClick={() => setBillingMode('managed')}
+                    style={{ flex: 1, padding: 'var(--space-4)', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', height: 'auto', gap: 4 }}
+                  >
+                    <div className="font-bold">Managed Mode</div>
+                    <div className="text-xs" style={{ opacity: 0.8 }}>OCULOPS provides models. Costs deducted from your credits.</div>
+                  </button>
+                  <button 
+                    className={`btn ${billingMode === 'developer' ? 'btn-primary' : 'btn-ghost'}`} 
+                    onClick={() => setBillingMode('developer')}
+                    style={{ flex: 1, padding: 'var(--space-4)', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', height: 'auto', gap: 4 }}
+                  >
+                    <div className="font-bold">Developer Mode</div>
+                    <div className="text-xs" style={{ opacity: 0.8 }}>Provide your own API keys. 0.1 cr orchestration fee per request.</div>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {billingMode === 'developer' && (
+              <div className="lab-panel" style={{ border: '1px solid var(--accent-primary)' }}>
+                <div className="lab-panel-header" style={{ color: 'var(--accent-primary)' }}>Developer API Keys</div>
+                <div className="ct-section-body">
+                  <p className="mono text-xs text-secondary" style={{ marginBottom: 'var(--space-4)', lineHeight: 1.4 }}>Keys are encrypted via Supabase Vault AES-256-GCM and only used by your organization's sub-agents.</p>
+                  <div className="form-grid">
+                    <div className="form-field" style={{ gridColumn: '1 / -1' }}>
+                      <label className="form-label">OpenAI API Key (sk-proj-...)</label>
+                      <input 
+                        className="form-input" 
+                        type="password"
+                        placeholder="sk-proj-..." 
+                        value={customKeyOpenAI} 
+                        onChange={e => setCustomKeyOpenAI(e.target.value)} 
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+            
+            <div style={{ borderTop: '1px solid var(--border-subtle)', paddingTop: 'var(--space-4)', marginTop: 'var(--space-2)' }}>
+              <button className="btn btn-primary" onClick={saveBillingSettings} disabled={savingCredits}>
+                {savingCredits ? 'Saving...' : 'Save Settings'}
+              </button>
             </div>
           </div>
         )}

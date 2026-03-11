@@ -122,12 +122,11 @@ export function useOrg() {
 
     const fetchMembers = useCallback(async (orgId) => {
         try {
-            const { data, error } = await supabase
+            const { data: membershipRows, error } = await supabase
                 .from('organization_members')
                 .select(`
                     user_id,
-                    roles ( name ),
-                    user:user_id ( id, email, raw_user_meta_data )
+                    roles ( name )
                 `)
                 .eq('org_id', orgId)
 
@@ -135,13 +134,32 @@ export function useOrg() {
                 console.error('Error fetching members:', error)
                 store.setMembers([])
             } else {
-                const members = (data || []).map(m => ({
-                    id: m.user?.id,
-                    email: m.user?.email,
-                    full_name: m.user?.raw_user_meta_data?.full_name,
-                    avatar_url: m.user?.raw_user_meta_data?.avatar_url,
-                    role: m.roles?.name,
-                })).filter(m => m.id)
+                const userIds = [...new Set((membershipRows || []).map(member => member.user_id).filter(Boolean))]
+                let profilesById = new Map()
+
+                if (userIds.length > 0) {
+                    const { data: profiles, error: profilesError } = await supabase
+                        .from('profiles')
+                        .select('id, email, full_name, avatar_url')
+                        .in('id', userIds)
+
+                    if (profilesError) {
+                        console.error('Error fetching org member profiles:', profilesError)
+                    } else {
+                        profilesById = new Map((profiles || []).map(profile => [profile.id, profile]))
+                    }
+                }
+
+                const members = (membershipRows || []).map(member => {
+                    const profile = profilesById.get(member.user_id)
+                    return {
+                        id: member.user_id,
+                        email: profile?.email || null,
+                        full_name: profile?.full_name || null,
+                        avatar_url: profile?.avatar_url || null,
+                        role: member.roles?.name,
+                    }
+                }).filter(member => member.id)
                 store.setMembers(members)
             }
         } catch (err) {

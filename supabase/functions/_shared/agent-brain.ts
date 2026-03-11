@@ -27,6 +27,7 @@
 
 import { admin } from "./supabase.ts";
 import { autoConnectApi } from "./auto-api-connector.ts";
+import { billing } from "./billing-engine.ts";
 
 const OPENAI_KEY = () => Deno.env.get("OPENAI_API_KEY") || "";
 const SUPABASE_URL = () => Deno.env.get("SUPABASE_URL") || "";
@@ -448,6 +449,8 @@ async function executeSkill(name: string, args: Record<string, unknown>, agentCo
 export interface BrainInput {
   agent: string;
   goal: string;
+  orgId?: string;
+  userId?: string;
   context?: Record<string, unknown>;
   systemPromptExtra?: string;
   maxRounds?: number;
@@ -461,12 +464,37 @@ export interface BrainOutput {
   answer: string;
   skills_used: Array<{ name: string; args: Record<string, unknown>; result: unknown }>;
   rounds: number;
+  credits_used: number;
 }
 
 export async function runBrain(input: BrainInput): Promise<BrainOutput> {
-  const { agent, goal, context = {}, systemPromptExtra = "", maxRounds = 6, model = "gpt-4o" } = input;
-  const key = OPENAI_KEY();
-  if (!key) throw new Error("OPENAI_API_KEY not set");
+  const { agent, goal, orgId, userId, context = {}, systemPromptExtra = "", maxRounds = 6, model = "gpt-4o" } = input;
+
+  // ─── Credit check ───────────────────────────────────────────────────────
+  let usedCustomKey = false;
+  let apiKey = OPENAI_KEY();
+  let totalCreditsUsed = 0;
+
+  if (orgId) {
+    const budget = await billing.checkBudget(orgId, "openai");
+    if (!budget.canProceed) {
+      return {
+        ok: false, agent, goal,
+        answer: "⚠️ Sin créditos disponibles. Añade créditos para continuar usando los agentes.",
+        skills_used: [], rounds: 0, credits_used: 0,
+      };
+    }
+    // Developer mode: use custom key if available
+    if (budget.customKeyAvailable) {
+      const customKey = await billing.getCustomKey(orgId, "openai");
+      if (customKey) {
+        apiKey = customKey;
+        usedCustomKey = true;
+      }
+    }
+  }
+
+  if (!apiKey) throw new Error("OPENAI_API_KEY not set");
 
   const systemPrompt = `You are ${agent.toUpperCase()}, an autonomous AI agent inside OCULOPS — a Growth Operating System for a Spanish AI agency.
 
@@ -496,13 +524,14 @@ ${systemPromptExtra}`;
   const skillsUsed: BrainOutput["skills_used"] = [];
   let rounds = 0;
   let finalAnswer = "";
+  const provider = model.startsWith("claude") ? "anthropic" : "openai";
 
   while (rounds < maxRounds) {
     rounds++;
 
     const res = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
-      headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
+      headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
       body: JSON.stringify({
         model,
         messages,
@@ -515,6 +544,20 @@ ${systemPromptExtra}`;
     if (!res.ok) throw new Error(`OpenAI error: ${res.status}`);
     const data = await res.json();
     const msg = data.choices?.[0]?.message;
+    const usage = data.usage || {};
+
+    // ─── Record usage & deduct credits ────────────────────────────────────
+    if (orgId && usage.prompt_tokens) {
+      const { creditsCharged } = await billing.recordUsage({
+        orgId, userId, agentCode: agent,
+        provider, model,
+        inputTokens: usage.prompt_tokens || 0,
+        outputTokens: usage.completion_tokens || 0,
+        usedCustomKey,
+        metadata: { goal, round: rounds },
+      });
+      totalCreditsUsed += creditsCharged;
+    }
     if (!msg) break;
 
     messages.push({ role: "assistant", content: msg.content || null, tool_calls: msg.tool_calls });
@@ -541,5 +584,5 @@ ${systemPromptExtra}`;
     }
   }
 
-  return { ok: true, agent, goal, answer: finalAnswer, skills_used: skillsUsed, rounds };
+  return { ok: true, agent, goal, answer: finalAnswer, skills_used: skillsUsed, rounds, credits_used: totalCreditsUsed };
 }

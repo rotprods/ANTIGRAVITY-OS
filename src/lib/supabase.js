@@ -331,4 +331,67 @@ export function onAuthStateChange(callback) {
     return supabase.auth.onAuthStateChange(callback);
 }
 
+export function getSupabaseFunctionUrl(path = '') {
+    if (!supabaseUrl) return null;
+    const normalizedPath = String(path).replace(/^\/+/, '');
+    return `${supabaseUrl}/functions/v1/${normalizedPath}`;
+}
+
+export async function getSupabaseAccessToken({ allowAnonFallback = true } = {}) {
+    if (isSupabaseConfigured) {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (session?.access_token) return session.access_token;
+    }
+
+    return allowAnonFallback ? supabaseAnonKey || null : null;
+}
+
+export async function callSupabaseFunction(path, options = {}) {
+    const {
+        method = 'POST',
+        body,
+        headers = {},
+        allowAnonFallback = true,
+    } = options;
+
+    const url = getSupabaseFunctionUrl(path);
+    if (!url) throw new Error('Supabase URL not configured');
+
+    const token = await getSupabaseAccessToken({ allowAnonFallback });
+    const requestHeaders = { ...headers };
+
+    if (body !== undefined && !requestHeaders['Content-Type']) {
+        requestHeaders['Content-Type'] = 'application/json';
+    }
+    if (token && !requestHeaders.Authorization) {
+        requestHeaders.Authorization = `Bearer ${token}`;
+    }
+
+    const response = await fetch(url, {
+        method,
+        headers: requestHeaders,
+        body: body === undefined ? undefined : typeof body === 'string' ? body : JSON.stringify(body),
+    });
+
+    const raw = await response.text();
+    let data = null;
+
+    if (raw) {
+        try {
+            data = JSON.parse(raw);
+        } catch {
+            data = raw;
+        }
+    }
+
+    if (!response.ok) {
+        const message = typeof data === 'object' && data
+            ? data.error || data.message || `HTTP ${response.status}`
+            : raw || `HTTP ${response.status}`;
+        throw new Error(message);
+    }
+
+    return data;
+}
+
 export default supabase;

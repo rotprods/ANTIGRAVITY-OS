@@ -1,19 +1,16 @@
-import React, { useState, useEffect } from 'react'
-import { supabase } from '../lib/supabase'
+import React, { useState } from 'react'
+import { signOut } from '../lib/supabase'
+import { useAuth } from '../hooks/useAuth'
 import { useOrg } from '../hooks/useOrg'
 import './UserMenu.css'
 
 export default function UserMenu() {
     const { setOrganizations, setCurrentOrg } = useOrg()
-    const [user, setUser] = useState(null)
+    const { user } = useAuth()
     const [isOpen, setIsOpen] = useState(false)
 
-    useEffect(() => {
-        supabase.auth.getUser().then(({ data: { user } }) => setUser(user))
-    }, [])
-
     const handleLogout = async () => {
-        await supabase.auth.signOut()
+        await signOut()
         setOrganizations([])
         setCurrentOrg(null)
     }

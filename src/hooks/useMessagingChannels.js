@@ -1,14 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { subscribeDebouncedToTable, supabase } from '../lib/supabase'
-
-const BASE = import.meta.env.VITE_SUPABASE_URL
-const ANON = import.meta.env.VITE_SUPABASE_ANON_KEY
-
-async function getToken() {
-    if (!supabase) return ANON || null
-    const { data: { session } } = await supabase.auth.getSession()
-    return session?.access_token || ANON || null
-}
+import { callSupabaseFunction, subscribeDebouncedToTable, supabase } from '../lib/supabase'
 
 export function useMessagingChannels() {
     const [channels, setChannels] = useState([])
@@ -68,19 +59,7 @@ export function useMessagingChannels() {
     }, [loadChannels])
 
     const callFunction = useCallback(async (endpoint, body) => {
-        if (!BASE) throw new Error('Supabase URL not configured')
-        const token = await getToken()
-        const headers = { 'Content-Type': 'application/json' }
-        if (token) headers.Authorization = `Bearer ${token}`
-
-        const response = await fetch(`${BASE}/functions/v1/${endpoint}`, {
-            method: 'POST',
-            headers,
-            body: JSON.stringify(body),
-        })
-        const data = await response.json()
-        if (!response.ok) throw new Error(data?.error || `HTTP ${response.status}`)
-        return data
+        return callSupabaseFunction(endpoint, { body })
     }, [])
 
     const connectGmail = useCallback(async () => {

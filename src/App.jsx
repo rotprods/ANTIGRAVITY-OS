@@ -1,6 +1,6 @@
-import React, { useState, useEffect, Suspense, lazy } from 'react'
+import React, { useState, useEffect, useCallback, Suspense, lazy } from 'react'
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
-import { supabase } from './lib/supabase'
+import { useAuth } from './hooks/useAuth'
 import { useOrg } from './hooks/useOrg'
 import Sidebar from './components/Sidebar'
 import OnboardingSetup from './components/OnboardingSetup'
@@ -8,6 +8,7 @@ import Auth from './components/Auth'
 import { ErrorBoundary } from './components/ui/ErrorBoundary'
 import ModuleSkeleton, { RouteAwareSkeleton } from './components/ui/ModuleSkeleton'
 import { Toaster } from 'react-hot-toast'
+import CopilotPanel from './components/ui/CopilotPanel'
 
 // Full ParticleField (with data hooks) — only loaded when authenticated
 const ParticleField = lazy(() => import('./components/ui/ParticleField'))
@@ -23,9 +24,9 @@ function AmbientBackground() {
 }
 
 // ─── Module guard — wraps each route element in an ErrorBoundary ─────────────
-const guard = (Component) => (
+const guard = (component) => (
   <ErrorBoundary>
-    <Component />
+    {React.createElement(component)}
   </ErrorBoundary>
 )
 
@@ -85,22 +86,23 @@ function LoadingOS() {
 
 // ─── Inner app (needs Router context) ────────────────────────────────────────
 function AppContent() {
-  const [session, setSession] = useState(null)
-  const [authLoading, setAuthLoading] = useState(true)
   const [onboardingDone, setOnboardingDone] = useState(false)
+  const { session, loading: authLoading } = useAuth()
   const { currentOrg, loading: orgLoading } = useOrg()
+  const [copilotOpen, setCopilotOpen] = useState(false)
+
+  // Cmd+K / Ctrl+K to toggle Copilot
+  const handleGlobalKey = useCallback((e) => {
+    if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+      e.preventDefault()
+      setCopilotOpen(prev => !prev)
+    }
+  }, [])
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session)
-      setAuthLoading(false)
-    })
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session)
-      setAuthLoading(false)
-    })
-    return () => subscription.unsubscribe()
-  }, [])
+    window.addEventListener('keydown', handleGlobalKey)
+    return () => window.removeEventListener('keydown', handleGlobalKey)
+  }, [handleGlobalKey])
 
   // If user already has an org on first load, skip onboarding
   const needsOnboarding = session && !orgLoading && !currentOrg && !onboardingDone
@@ -147,6 +149,28 @@ function AppContent() {
       </Suspense>
 
       <Sidebar />
+
+      {/* Copilot Floating Button */}
+      <button
+        onClick={() => setCopilotOpen(true)}
+        title="Open Copilot (⌘K)"
+        style={{
+          position: 'fixed', bottom: 24, right: 24, zIndex: 900,
+          width: 48, height: 48, borderRadius: '50%',
+          background: 'var(--accent-primary)', border: 'none',
+          color: '#000', fontSize: 20, fontWeight: 700,
+          cursor: 'pointer', display: 'flex', alignItems: 'center',
+          justifyContent: 'center', boxShadow: '0 4px 20px rgba(255,212,0,0.3)',
+          transition: 'transform 0.2s, box-shadow 0.2s',
+        }}
+        onMouseEnter={e => { e.target.style.transform = 'scale(1.1)'; e.target.style.boxShadow = '0 6px 28px rgba(255,212,0,0.5)' }}
+        onMouseLeave={e => { e.target.style.transform = 'scale(1)'; e.target.style.boxShadow = '0 4px 20px rgba(255,212,0,0.3)' }}
+      >
+        ⚡
+      </button>
+
+      {/* Copilot Panel */}
+      <CopilotPanel open={copilotOpen} onClose={() => setCopilotOpen(false)} />
 
       <main style={{
         flex: 1, marginLeft: 240, height: '100%', overflow: 'hidden',

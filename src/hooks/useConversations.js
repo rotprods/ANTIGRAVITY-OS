@@ -4,16 +4,7 @@
 // ═══════════════════════════════════════════════════
 
 import { useState, useEffect, useCallback } from 'react'
-import { supabase, insertRow, updateRow, subscribeDebouncedToTable } from '../lib/supabase'
-
-const BASE = import.meta.env.VITE_SUPABASE_URL
-const ANON = import.meta.env.VITE_SUPABASE_ANON_KEY
-
-async function getToken() {
-    if (!supabase) return ANON || null
-    const { data: { session } } = await supabase.auth.getSession()
-    return session?.access_token || ANON || null
-}
+import { callSupabaseFunction, supabase, insertRow, updateRow, subscribeDebouncedToTable } from '../lib/supabase'
 
 export function useConversations() {
     const [conversations, setConversations] = useState([])
@@ -124,27 +115,17 @@ export function useConversations() {
     }
 
     const dispatchMessage = async ({ messageId, conversationId, channel, subject, body, metadata = {} }) => {
-        if (!BASE) return { error: 'Supabase URL not configured' }
-
         try {
-            const token = await getToken()
-            const headers = { 'Content-Type': 'application/json' }
-            if (token) headers.Authorization = `Bearer ${token}`
-
-            const response = await fetch(`${BASE}/functions/v1/messaging-dispatch`, {
-                method: 'POST',
-                headers,
-                body: JSON.stringify({
+            const data = await callSupabaseFunction('messaging-dispatch', {
+                body: {
                     message_id: messageId,
                     conversation_id: conversationId,
                     channel,
                     subject,
                     body,
                     metadata,
-                }),
+                },
             })
-            const data = await response.json()
-            if (!response.ok) throw new Error(data?.error || `HTTP ${response.status}`)
 
             await loadConversations()
             if (conversationId || data?.message?.conversation_id) {

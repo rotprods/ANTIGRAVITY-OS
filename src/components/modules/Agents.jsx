@@ -8,6 +8,7 @@ import { useAppStore } from '../../stores/useAppStore'
 import { useAgents } from '../../hooks/useAgents'
 import { useAgentStudies } from '../../hooks/useAgentStudies'
 import { useAgentVault, ROLE_CAPABILITY_MAP } from '../../hooks/useAgentVault'
+import { useAgentState } from '../../hooks/useAgentState'
 import { AGENT_AUTOMATION_PACKS } from '../../data/agentAutomationPacks'
 import {
   CpuChipIcon,
@@ -60,6 +61,7 @@ function Agents() {
   const { agents, tasks, logs, stats, triggerAgent, runCortexCycle } = useAgents()
   const { studies, telegramTarget, loading: studiesLoading, busy: studiesBusy, postStudy, resendStudy, saveTelegramTarget } = useAgentStudies()
   const { filteredAgents: vaultAgents, namespaces: vaultNamespaces, loading: vaultLoading, error: vaultError, filters: vaultFilters, setNamespace: setVaultNamespace, setSearch: setVaultSearch, setRole: setVaultRole, suggestRole, totalAgents: vaultTotal, canonicalCount: vaultCanonical } = useAgentVault()
+  const { agentHealth, runningAgents } = useAgentState()
 
   const [triggering, setTriggering] = useState(null)
   const [activeTab, setActiveTab] = useState('network')
@@ -134,7 +136,7 @@ function Agents() {
       <div className="module-page-header">
         <div>
           <h1 className="module-page-title">Agents</h1>
-          <p className="module-page-subtitle">Multi-agent orchestration · {stats.online} online</p>
+          <p className="module-page-subtitle">Multi-agent orchestration · {stats.online} online · {runningAgents.length} executing</p>
         </div>
         <button className="btn btn-primary btn-sm" onClick={handleCortexCycle} disabled={triggering === 'cortex'}>
           <PlayIcon width={14} height={14} /> {triggering === 'cortex' ? 'Running...' : 'Run Cortex cycle'}
@@ -157,7 +159,7 @@ function Agents() {
       {/* KPI Strip */}
       <div className="kpi-strip kpi-strip-4" style={{ marginBottom: 'var(--space-4)' }}>
         <div className="kpi-strip-cell"><div className="kpi-strip-cell-header"><span className="kpi-label">Agents</span></div><div className="kpi-value">{stats.total}</div></div>
-        <div className="kpi-strip-cell"><div className="kpi-strip-cell-header"><span className="kpi-label">Running</span></div><div className="kpi-value" style={{ color: 'var(--color-warning)' }}>{stats.running}</div></div>
+        <div className="kpi-strip-cell"><div className="kpi-strip-cell-header"><span className="kpi-label">Running now</span></div><div className="kpi-value" style={{ color: runningAgents.length > 0 ? 'var(--color-warning)' : 'var(--text-tertiary)' }}>{runningAgents.length}</div></div>
         <div className="kpi-strip-cell"><div className="kpi-strip-cell-header"><span className="kpi-label">Total cycles</span></div><div className="kpi-value">{stats.totalRuns}</div></div>
         <div className="kpi-strip-cell"><div className="kpi-strip-cell-header"><span className="kpi-label">Studies sent</span></div><div className="kpi-value" style={{ color: 'var(--color-success)' }}>{deliveryStats.sent}</div></div>
       </div>
@@ -207,6 +209,16 @@ function Agents() {
                     <div className="ag-card-footer">
                       <span>{ag.total_runs || 0} cycles</span>
                       <span>Last: {formatTime(ag.last_run_at)}</span>
+                      {agentHealth[ag.code_name] && (
+                        <span style={{
+                          color: agentHealth[ag.code_name].isRunning ? 'var(--color-warning)'
+                            : agentHealth[ag.code_name].healthScore >= 80 ? 'var(--color-success)'
+                            : 'var(--color-danger)',
+                          fontWeight: 'var(--weight-semibold)',
+                        }}>
+                          {agentHealth[ag.code_name].isRunning ? '● RUNNING' : `♥ ${agentHealth[ag.code_name].healthScore}%`}
+                        </span>
+                      )}
                     </div>
                   </div>
                 </div>

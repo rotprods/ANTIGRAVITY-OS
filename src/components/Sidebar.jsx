@@ -1,5 +1,7 @@
-import React, { memo } from 'react'
+import React, { memo, useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
+import { supabase } from '../lib/supabase'
+import { useOrg } from '../hooks/useOrg'
 import OrgSelector from './OrgSelector'
 import UserMenu from './UserMenu'
 import ActivityFeed from './ui/ActivityFeed'
@@ -107,6 +109,35 @@ const NAV_GROUPS = [
 function Sidebar() {
   const navigate = useNavigate()
   const location = useLocation()
+  const { currentOrg } = useOrg()
+  const [credits, setCredits] = useState(null)
+
+  useEffect(() => {
+    if (!currentOrg?.id) return
+    let isMounted = true
+    
+    // Initial fetch
+    supabase.from('credit_balances')
+      .select('available_credits')
+      .eq('org_id', currentOrg.id)
+      .single()
+      .then(({ data }) => {
+        if (isMounted && data) setCredits(data.available_credits)
+      })
+
+    // Realtime subscription
+    const sub = supabase.channel(`credits-${currentOrg.id}`)
+      .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'credit_balances', filter: `org_id=eq.${currentOrg.id}` }, 
+        (payload) => {
+          if (isMounted) setCredits(payload.new.available_credits)
+        })
+      .subscribe()
+
+    return () => {
+      isMounted = false
+      supabase.removeChannel(sub)
+    }
+  }, [currentOrg?.id])
 
   return (
     <aside className="os-sidebar">
@@ -152,6 +183,23 @@ function Sidebar() {
       <div className="os-sidebar-feed">
         <ActivityFeed collapsed maxItems={15} />
       </div>
+
+      {/* Credit Balance */}
+      {credits !== null && (
+        <div 
+          onClick={() => navigate('/settings')} 
+          style={{ padding: 'var(--space-2) var(--space-4)', margin: '0 var(--space-2) var(--space-2)', borderRadius: 'var(--radius)', background: 'var(--bg-elevated)', border: '1px solid var(--border-subtle)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', cursor: 'pointer', transition: 'all 0.2s ease' }}
+          className="sidebar-credit-pill hover-glow-gold"
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}>
+            <BanknotesIcon style={{ width: 14, height: 14, color: 'var(--color-warning)' }} />
+            <span className="mono text-xs text-secondary">Credits</span>
+          </div>
+          <span className="mono text-xs font-bold" style={{ color: credits > 0 ? 'var(--color-success)' : 'var(--color-danger)' }}>
+            {credits.toFixed(2)}
+          </span>
+        </div>
+      )}
 
       {/* User Menu */}
       <div className="os-sidebar-footer">

@@ -4,10 +4,7 @@
 // ═══════════════════════════════════════════════════
 
 import { useState, useCallback } from 'react'
-import { supabase } from '../lib/supabase'
-
-const BASE = import.meta.env.VITE_SUPABASE_URL
-const ANON = import.meta.env.VITE_SUPABASE_ANON_KEY
+import { callSupabaseFunction } from '../lib/supabase'
 
 function normalizePlace(place, index = 0) {
     const website = place.website || place.website_url || null
@@ -35,12 +32,6 @@ function normalizePlace(place, index = 0) {
     }
 }
 
-async function getToken() {
-    if (!supabase) return ANON || null
-    const { data: { session } } = await supabase.auth.getSession()
-    return session?.access_token || ANON || null
-}
-
 export function useGeoSearch() {
     const [results, setResults] = useState([])
     const [scanning, setScanning] = useState(false)
@@ -53,21 +44,8 @@ export function useGeoSearch() {
         setScanning(true)
         setError(null)
         try {
-            if (!BASE) throw new Error('Supabase URL not configured')
-            const token = await getToken()
             const resolveOnly = Boolean(params.resolve_only || params.resolveOnly)
-
-            const headers = { 'Content-Type': 'application/json' }
-            if (token) headers.Authorization = `Bearer ${token}`
-
-            const res = await fetch(`${BASE}/functions/v1/google-maps-search`, {
-                method: 'POST',
-                headers,
-                body: JSON.stringify(params),
-            })
-
-            if (!res.ok) throw new Error(`HTTP ${res.status}`)
-            const data = await res.json()
+            const data = await callSupabaseFunction('google-maps-search', { body: params })
             const normalized = [...(data.places || []), ...(data.leads || []), ...(data.with_website || [])]
                 .reduce((acc, place, index) => {
                     const normalizedPlace = normalizePlace(place, index)
@@ -88,17 +66,9 @@ export function useGeoSearch() {
     const analyzeWebsite = useCallback(async (website, leadId) => {
         setAnalyzing(leadId)
         try {
-            if (!BASE) throw new Error('Supabase URL not configured')
-            const token = await getToken()
-            const headers = { 'Content-Type': 'application/json' }
-            if (token) headers.Authorization = `Bearer ${token}`
-            const res = await fetch(`${BASE}/functions/v1/web-analyzer`, {
-                method: 'POST',
-                headers,
-                body: JSON.stringify({ website, lead_id: leadId }),
+            return await callSupabaseFunction('web-analyzer', {
+                body: { website, lead_id: leadId }
             })
-            if (!res.ok) throw new Error(`HTTP ${res.status}`)
-            return await res.json()
         } catch (err) {
             return { error: err.message }
         } finally {
@@ -110,17 +80,9 @@ export function useGeoSearch() {
     const qualifyLead = useCallback(async (leadId) => {
         setQualifying(leadId)
         try {
-            if (!BASE) throw new Error('Supabase URL not configured')
-            const token = await getToken()
-            const headers = { 'Content-Type': 'application/json' }
-            if (token) headers.Authorization = `Bearer ${token}`
-            const res = await fetch(`${BASE}/functions/v1/ai-qualifier`, {
-                method: 'POST',
-                headers,
-                body: JSON.stringify({ lead_id: leadId }),
+            return await callSupabaseFunction('ai-qualifier', {
+                body: { lead_id: leadId }
             })
-            if (!res.ok) throw new Error(`HTTP ${res.status}`)
-            return await res.json()
         } catch (err) {
             return { error: err.message }
         } finally {

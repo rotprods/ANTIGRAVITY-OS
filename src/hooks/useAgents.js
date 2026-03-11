@@ -4,13 +4,7 @@
 // ═══════════════════════════════════════════════════
 
 import { useState, useEffect, useCallback } from 'react'
-import { supabase, fetchAll, subscribeDebouncedToTable } from '../lib/supabase'
-
-async function getAccessToken() {
-    if (!supabase) return import.meta.env.VITE_SUPABASE_ANON_KEY || null
-    const { data: { session } } = await supabase.auth.getSession()
-    return session?.access_token || import.meta.env.VITE_SUPABASE_ANON_KEY || null
-}
+import { callSupabaseFunction, supabase, fetchAll, subscribeDebouncedToTable } from '../lib/supabase'
 
 export function useAgents() {
     const [agents, setAgents] = useState([])
@@ -23,8 +17,6 @@ export function useAgents() {
     const [eventDeliveries, setEventDeliveries] = useState([])
     const [recentEvents, setRecentEvents] = useState([])
     const [loading, setLoading] = useState(true)
-
-    const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL
 
     // ── Fetch all data ──
     const refresh = useCallback(async () => {
@@ -80,106 +72,67 @@ export function useAgents() {
 
     // ── Trigger an agent ──
     const triggerAgent = useCallback(async (codeName, action = 'cycle', payload = {}) => {
-        if (!SUPABASE_URL) return { error: 'No Supabase URL' }
-
         try {
-            const token = await getAccessToken()
-            const url = `${SUPABASE_URL}/functions/v1/agent-${codeName}`
-            const res = await fetch(url, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    ...(token ? { Authorization: `Bearer ${token}` } : {}),
-                },
-                body: JSON.stringify({ action, ...payload })
+            const data = await callSupabaseFunction(`agent-${codeName}`, {
+                body: { action, ...payload }
             })
-            const data = await res.json()
             await refresh()
             return data
         } catch (err) {
             if (import.meta.env.DEV) console.error(`Error triggering ${codeName}:`, err)
             return { error: err.message }
         }
-    }, [SUPABASE_URL, refresh])
+    }, [refresh])
 
     // ── Trigger all agents (CORTEX orchestration) ──
     const runCortexCycle = useCallback(() => triggerAgent('cortex', 'orchestrate'), [triggerAgent])
 
     // ── Query Public APIs via Harness ──
     const queryPublicApi = useCallback(async (apiName, endpoint, method = 'GET', params = {}, body = null) => {
-        if (!SUPABASE_URL) return { error: 'No Supabase URL' }
-
         try {
-            const token = await getAccessToken()
-            const url = `${SUPABASE_URL}/functions/v1/public_api_harness`
-            const res = await fetch(url, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    ...(token ? { Authorization: `Bearer ${token}` } : {}),
-                },
-                body: JSON.stringify({ api: apiName, endpoint, method, params, body })
+            return await callSupabaseFunction('public_api_harness', {
+                body: { api: apiName, endpoint, method, params, body }
             })
-            const data = await res.json()
-            return data
         } catch (err) {
             if (import.meta.env.DEV) console.error(`Error querying public API ${apiName}:`, err)
             return { error: err.message, success: false }
         }
-    }, [SUPABASE_URL])
+    }, [])
 
     // ── Launch orchestration pipeline ──
     const launchPipeline = useCallback(async (templateCodeName, context = {}, goal = '') => {
-        if (!SUPABASE_URL) return { error: 'No Supabase URL' }
-
         try {
-            const token = await getAccessToken()
-            const res = await fetch(`${SUPABASE_URL}/functions/v1/orchestration-engine`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    ...(token ? { Authorization: `Bearer ${token}` } : {}),
-                },
-                body: JSON.stringify({
+            const data = await callSupabaseFunction('orchestration-engine', {
+                body: {
                     action: 'create_run',
                     template_code_name: templateCodeName,
                     goal,
                     context,
                     auto_execute: true,
                     source: 'agents_hook',
-                })
+                }
             })
-            const data = await res.json()
             await refresh()
             return data
         } catch (err) {
             if (import.meta.env.DEV) console.error(`Error launching pipeline ${templateCodeName}:`, err)
             return { error: err.message }
         }
-    }, [SUPABASE_URL, refresh])
+    }, [refresh])
 
     const getPipelineStatus = useCallback(async (pipelineRunId) => {
-        if (!SUPABASE_URL) return { error: 'No Supabase URL' }
-
         try {
-            const token = await getAccessToken()
-            const res = await fetch(`${SUPABASE_URL}/functions/v1/orchestration-engine`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    ...(token ? { Authorization: `Bearer ${token}` } : {}),
-                },
-                body: JSON.stringify({
+            return await callSupabaseFunction('orchestration-engine', {
+                body: {
                     action: 'get_run',
                     pipeline_run_id: pipelineRunId,
-                })
+                }
             })
-            return await res.json()
         } catch (err) {
             if (import.meta.env.DEV) console.error(`Error getting pipeline ${pipelineRunId}:`, err)
             return { error: err.message }
         }
-    }, [SUPABASE_URL])
+    }, [])
 
     // ── Get stats ──
     const stats = {

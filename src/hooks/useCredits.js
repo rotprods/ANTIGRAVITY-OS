@@ -1,21 +1,17 @@
 import { useCallback, useEffect, useState } from 'react'
-import { supabase } from '../lib/supabase'
-
-const CREDIT_ENGINE_URL = `${import.meta.env.VITE_SUPABASE_URL || 'https://yxzdafptqtcvpsbqkmkm.supabase.co'}/functions/v1/credit-engine`
+import { callSupabaseFunction, supabase } from '../lib/supabase'
+import { useAuth } from './useAuth'
 
 async function callEngine(action, body = {}) {
-  const { data: { session } } = await supabase.auth.getSession()
-  const token = session?.access_token || import.meta.env.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl4emRhZnB0cXRjdnBzYnFrbWttIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI3NjUwNjIsImV4cCI6MjA4ODM0MTA2Mn0.-Kg8u3DVUq5T8JiJNJMPknzPgDBJVJusRatk_WkTxyU'
-
-  const res = await fetch(`${CREDIT_ENGINE_URL}?action=${action}`, {
-    method: 'POST',
-    headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify(body),
-  })
-  return res.json()
+  try {
+    return await callSupabaseFunction(`credit-engine?action=${encodeURIComponent(action)}`, { body })
+  } catch (error) {
+    return { error: error.message }
+  }
 }
 
 export function useCredits() {
+  const { user } = useAuth()
   const [balance, setBalance] = useState(0)
   const [tier, setTier] = useState('free')
   const [stakedAmount, setStakedAmount] = useState(0)
@@ -23,13 +19,7 @@ export function useCredits() {
   const [history, setHistory] = useState([])
   const [deflation, setDeflation] = useState(null)
   const [loading, setLoading] = useState(true)
-  const [userId, setUserId] = useState(null)
-
-  useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => setUserId(data.session?.user?.id || null))
-    const { data: listener } = supabase.auth.onAuthStateChange((_, session) => setUserId(session?.user?.id || null))
-    return () => listener?.subscription?.unsubscribe()
-  }, [])
+  const userId = user?.id || null
 
   useEffect(() => {
     if (!userId) { setLoading(false); return }

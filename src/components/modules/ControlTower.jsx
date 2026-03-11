@@ -10,6 +10,7 @@ import { useDeals } from '../../hooks/useDeals'
 import { useActivities } from '../../hooks/useActivities'
 import { useSignals } from '../../hooks/useSignals'
 import useAgents from '../../hooks/useAgents'
+import { usePipelineRuns } from '../../hooks/usePipelineRuns'
 import {
     UserGroupIcon,
     BuildingOfficeIcon,
@@ -20,6 +21,7 @@ import {
     CpuChipIcon,
     ExclamationTriangleIcon,
     CheckCircleIcon,
+    RocketLaunchIcon,
 } from '@heroicons/react/24/outline'
 import './ControlTower.css'
 
@@ -69,6 +71,7 @@ function ControlTower() {
     const { activities, loading: activitiesLoading } = useActivities()
     const { signals, activeSignals, loading: signalsLoading } = useSignals()
     const { agents, stats: agentStats } = useAgents()
+    const { runs: pipelineRuns, stats: pipelineStats } = usePipelineRuns()
 
     const loading = contactsLoading || companiesLoading || dealsLoading || activitiesLoading || signalsLoading
 
@@ -135,6 +138,11 @@ function ControlTower() {
                     </div>
                 ))}
                 <span className="ct-agents-bar-summary">{agentStats?.online || 0} online</span>
+                {pipelineStats.running > 0 && (
+                    <span className="ct-agents-bar-summary" style={{ color: 'var(--color-warning)' }}>
+                        <RocketLaunchIcon width={12} height={12} style={{ display: 'inline', verticalAlign: 'middle'}} /> {pipelineStats.running} pipeline{pipelineStats.running > 1 ? 's' : ''} running
+                    </span>
+                )}
             </div>
 
             {/* ── KPI Grid ── */}
@@ -238,6 +246,55 @@ function ControlTower() {
                         </div>
                     )}
                 </div>
+
+                {/* Pipeline Runs */}
+                {pipelineRuns.length > 0 && (
+                    <div className="ct-section">
+                        <div className="ct-section-header">
+                            <span className="ct-section-title">Pipeline activity</span>
+                            <div className="ct-section-meta">
+                                <span style={{ color: 'var(--color-success)' }}>{pipelineStats.completed} completed</span>
+                                <span style={{ color: 'var(--color-warning)' }}>{pipelineStats.running} running</span>
+                                {pipelineStats.failed > 0 && <span style={{ color: 'var(--color-danger)' }}>{pipelineStats.failed} failed</span>}
+                            </div>
+                        </div>
+                        <div className="ct-section-body stagger-children">
+                            {pipelineRuns.slice(0, 8).map(run => {
+                                const template = run.pipeline_templates
+                                const isActive = run.status === 'running'
+                                return (
+                                    <div key={run.id} className={`ct-agent-row${isActive ? ' ct-pipeline-active' : ''}`}>
+                                        <div className="ct-agent-status-icon" style={{
+                                            background: isActive
+                                                ? 'color-mix(in srgb, var(--color-warning) 12%, transparent)'
+                                                : run.status === 'completed'
+                                                    ? 'color-mix(in srgb, var(--color-success) 12%, transparent)'
+                                                    : 'color-mix(in srgb, var(--color-danger) 12%, transparent)'
+                                        }}>
+                                            <RocketLaunchIcon width={18} height={18} style={{
+                                                color: isActive ? 'var(--color-warning)'
+                                                    : run.status === 'completed' ? 'var(--color-success)'
+                                                    : 'var(--color-danger)'
+                                            }} />
+                                        </div>
+                                        <div className="ct-agent-info">
+                                            <div className="ct-agent-name">{template?.name || template?.code_name || 'Pipeline'}</div>
+                                            <div className="ct-agent-desc">
+                                                {run.goal || 'No goal specified'}
+                                                {isActive && run.current_step_number > 0 && ` — step ${run.current_step_number}`}
+                                            </div>
+                                        </div>
+                                        <div className="ct-agent-badges">
+                                            <span className={`badge ${run.status === 'completed' ? 'badge-success' : run.status === 'running' ? 'badge-primary' : 'badge-danger'}`}>
+                                                {run.status}
+                                            </span>
+                                        </div>
+                                    </div>
+                                )
+                            })}
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
     )

@@ -4,9 +4,7 @@
 // ═══════════════════════════════════════════════════
 
 import { useState, useCallback, useRef } from 'react'
-import { supabase } from '../lib/supabase'
-
-const BASE = import.meta.env.VITE_SUPABASE_URL
+import { callSupabaseFunction } from '../lib/supabase'
 
 /**
  * Generic hook to call any Supabase Edge Function.
@@ -45,33 +43,7 @@ export function useEdgeFunction(functionName, options = {}) {
         }
 
         try {
-            // Get auth token (user JWT or fallback to anon key)
-            let token = null
-            if (supabase) {
-                const { data: { session } } = await supabase.auth.getSession()
-                token = session?.access_token
-            }
-            if (!token) {
-                token = import.meta.env.VITE_SUPABASE_ANON_KEY
-            }
-
-            if (!BASE) throw new Error('Supabase URL not configured')
-
-            const res = await fetch(`${BASE}/functions/v1/${functionName}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`,
-                },
-                body: JSON.stringify(payload),
-            })
-
-            if (!res.ok) {
-                const errText = await res.text().catch(() => `HTTP ${res.status}`)
-                throw new Error(errText)
-            }
-
-            const result = await res.json()
+            const result = await callSupabaseFunction(functionName, { body: payload })
             setData(result)
 
             // Cache result
