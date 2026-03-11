@@ -35,9 +35,10 @@ Deno.serve(async (req: Request) => {
       context?: Record<string, unknown>;
       task_id?: string;
       action?: string;
+      org_id?: string;
     }>(req);
 
-    const { agent: agentCode, goal, context = {}, task_id, action } = body;
+    const { agent: agentCode, goal, context = {}, task_id, action, org_id } = body;
 
     if (!agentCode) {
       return errorResponse("Missing 'agent' — specify the agent code_name to run", 400);
@@ -83,6 +84,7 @@ Deno.serve(async (req: Request) => {
       systemPromptExtra: agentDef.system_prompt,
       maxRounds: agentDef.max_rounds || 4,
       model: agentDef.model || "gpt-4o",
+      org_id,
     });
 
     const duration = Date.now() - startTime;
@@ -124,6 +126,7 @@ Deno.serve(async (req: Request) => {
         trace_id: brainResult.trace_id,
       },
       duration_ms: duration,
+      org_id: org_id ?? null,
     });
 
     return jsonResponse({

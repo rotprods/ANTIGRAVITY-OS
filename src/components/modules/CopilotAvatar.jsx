@@ -1,29 +1,53 @@
-import { useMemo } from 'react'
+import { useState, useMemo } from 'react'
 import './CopilotChat.css'
 
-export default function CopilotAvatar({ listening, energy, phoneConnected }) {
-  const rings = useMemo(() => Array.from({ length: 3 }, (_, i) => i), [])
+export default function MasterIntelligence({ state = 'idle', energy = 75, phoneConnected = false }) {
+  const [hovered, setHovered] = useState(false)
+  const rings = useMemo(() => [0, 1, 2], [])
+
+  // External state wins over hover (don't interrupt processing/responding)
+  const effectiveState = (state === 'processing' || state === 'responding')
+    ? state
+    : hovered ? 'listening' : state
+
+  // Energy fill via conic-gradient from bottom (270deg start)
+  const energyAngle = Math.round((energy / 100) * 360)
+
   return (
-    <div className="copilot-avatar-shell">
-      <div className="copilot-avatar-glow" aria-hidden />
-      <div className={`copilot-figure ${listening ? 'listening' : ''}`}>
-        <div className="copilot-figure-head" />
-        <div className="copilot-figure-torso">
-          <span className="copilot-figure-core" />
-        </div>
-        <div className="copilot-figure-limb left" />
-        <div className="copilot-figure-limb right" />
-        <div className="copilot-figure-base" />
-      </div>
-      <div className="copilot-avatar-targets">
-        {rings.map((ring, idx) => (
-          <span key={ring} className="copilot-avatar-ring" style={{ animationDelay: `${idx * 0.2}s` }} />
+    <div
+      className={`master-intelligence master-intelligence--${effectiveState}`}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      onTouchStart={() => setHovered(true)}
+      onTouchEnd={() => setHovered(false)}
+      role="img"
+      aria-label={`Master Intelligence — ${effectiveState}, energy ${energy}%`}
+    >
+      <div className="mi-glow" aria-hidden="true" />
+      <div className="mi-rings" aria-hidden="true">
+        {rings.map((_, idx) => (
+          <span key={idx} className="mi-ring" style={{ animationDelay: `${idx * 0.35}s` }} />
         ))}
       </div>
-      <div className="copilot-avatar-metric">
-        <span className="mono">ENERGY</span>
+      <div className="mi-orb">
+        <div
+          className="mi-energy-fill"
+          style={{ '--energy-angle': `${energyAngle}deg` }}
+          aria-hidden="true"
+        />
+        <div className="mi-core" aria-hidden="true" />
+        {(effectiveState === 'processing' || effectiveState === 'responding') && (
+          <div className="mi-particles" aria-hidden="true">
+            {[0, 1, 2, 3].map(i => (
+              <span key={i} className="mi-particle" style={{ animationDelay: `${-(i * 0.35)}s` }} />
+            ))}
+          </div>
+        )}
+      </div>
+      <div className="mi-metric">
+        <span>ENERGY</span>
         <strong>{energy}%</strong>
-        <small>{phoneConnected ? 'PHONE LINKED' : 'PHONE STANDBY'}</small>
+        <small>{phoneConnected ? 'LINKED' : 'STANDBY'}</small>
       </div>
     </div>
   )

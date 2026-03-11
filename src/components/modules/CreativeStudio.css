@@ -345,6 +345,20 @@
     filter: brightness(1);
 }
 
+.cs-asset-copy-preview {
+    width: 100%;
+    height: 100%;
+    padding: 12px;
+    overflow-y: auto;
+    font-size: 10px;
+    line-height: 1.5;
+    color: var(--color-text-2);
+    white-space: pre-wrap;
+    word-break: break-word;
+    text-align: left;
+    align-self: flex-start;
+}
+
 .cs-asset-error {
     color: var(--color-danger);
     font-family: var(--font-mono);

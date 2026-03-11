@@ -185,3 +185,46 @@ All 10 phases deployed to Supabase remote. ~15 ALTER operations across 8 existin
 - [ ] Phase 4: Bridge Agent-OS ↔ OCULOPS
 - [ ] Phase 5: SaaS + Production (Stripe, testing, CI/CD)
 - [ ] Set WhatsApp/Meta/TikTok/ManyChat secrets when activating channels
+
+---
+
+## 2026-03-11 — Session: audit/2026-02-23 (RLS + Full Deploy)
+
+**Terminal**: Claude Code (branch: audit/2026-02-23 → main)
+
+### Trabajo realizado
+
+#### 1. Multi-tenancy RLS — Cierre de gaps
+- Inventario real de tablas: 150+ tablas (no 47 como indicaba la memoria)
+- Identificados 12 tablas sin cobertura RLS completa de org_id
+- Escrita y aplicada `supabase/migrations/20260322000000_rls_gap_closure.sql` (706 líneas)
+  - Group A (4 tablas): ADD COLUMN org_id NOT NULL, backfill, 4-policy pattern + service_role
+  - Group B (3 tablas): mismo patrón, nuevas policies antes de eliminar las antiguas
+  - Group C (5 tablas): nullable org_id, SELECT-only authenticated, ALL service_role
+  - Hardening: user_org_ids() search_path, set_default_org_id() rechaza multi-org ambiguity
+  - Eliminados: anon USING(true), OR org_id IS NULL, WITH CHECK faltantes
+
+#### 2. org_id threading en agent brain
+- `_shared/agent-brain-v2.ts`: BrainInput.org_id + resolución temprana + threading a reasoning_traces, incidents, audit_logs, executeSkill()
+- `_shared/agent-skills.ts`: executeSkill() + _exec() reciben orgId → audit_logs, incidents, approval_requests
+- `supabase/functions/agent-runner/index.ts`: extrae org_id del body, pasa a runBrain() y agent_logs INSERT
+
+#### 3. Deploy completo de todas las edge functions
+- 54 funciones ACTIVE en Supabase remote (todas redeployadas con _shared/ actualizados)
+
+#### 4. Git sync
+- 11 commits locales pusheados a GitHub (no se habían pusheado en sesiones anteriores)
+- Committeada la migración RLS: `f7ab8c9`
+- Estado final: local = remote = Supabase DB = edge functions
+
+### Archivos modificados
+- `supabase/migrations/20260322000000_rls_gap_closure.sql` (NUEVO)
+- `supabase/functions/_shared/agent-brain-v2.ts`
+- `supabase/functions/_shared/agent-skills.ts`
+- `supabase/functions/agent-runner/index.ts`
+
+### Deploy status
+- Git: ✅ pushed (main @ f7ab8c9)
+- Supabase DB: ✅ migrations aplicadas (última: 20260322100000)
+- Supabase Functions: ✅ 54/54 ACTIVE
+- Vercel: ✅ sin cambios frontend (no rebuild necesario)

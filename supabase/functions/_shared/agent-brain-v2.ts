@@ -33,6 +33,7 @@ export interface BrainInput {
   model?: string;
   sessionId?: string;
   skipPolicyCheck?: boolean;
+  org_id?: string;
 }
 
 export interface BrainOutput {
@@ -100,10 +101,24 @@ export async function runBrain(input: BrainInput): Promise<BrainOutput> {
     model = "gpt-4o",
     sessionId,
     skipPolicyCheck = false,
+    org_id: inputOrgId,
   } = input;
 
   const key = OPENAI_KEY();
   if (!key) throw new Error("OPENAI_API_KEY not set");
+
+  // Resolve org_id: use provided value, or fall back to first org (cron/background runs)
+  let org_id: string | null = inputOrgId || null;
+  if (!org_id) {
+    const { data: firstOrg } = await admin
+      .from("organizations")
+      .select("id")
+      .order("created_at")
+      .limit(1)
+      .single()
+      .catch(() => ({ data: null }));
+    org_id = firstOrg?.id || null;
+  }
 
   const startMs = Date.now();
   const skillsUsed: BrainOutput["skills_used"] = [];
@@ -121,6 +136,7 @@ export async function runBrain(input: BrainInput): Promise<BrainOutput> {
     goal,
     status: "running",
     session_id: sessionId || null,
+    org_id,
   }).select("id").single().catch(() => ({ data: null }));
   traceId = traceRow?.id;
 
@@ -213,6 +229,7 @@ ${systemPromptExtra}`;
           agent,
           description: `Loop detected: skill '${skillName}' called ${skillCallHistory[skillName]} times`,
           trace_id: traceId || null,
+          org_id,
         }).catch(() => {});
 
         messages.push({
@@ -244,7 +261,7 @@ ${systemPromptExtra}`;
             description: `Agent ${agent} wants to execute ${skillName}`,
             payload: args,
             urgency: "medium",
-          }, agent, traceId);
+          }, agent, traceId, org_id);
 
           messages.push({
             role: "tool",
@@ -257,7 +274,7 @@ ${systemPromptExtra}`;
       }
 
       // ── Execute skill ────────────────────────────────────────────────────
-      const result = await executeSkill(skillName, args, agent, traceId).catch((e) => ({ error: String(e) }));
+      const result = await executeSkill(skillName, args, agent, traceId, org_id).catch((e) => ({ error: String(e) }));
       skillsUsed.push({ name: skillName, args, result });
 
       messages.push({
@@ -305,6 +322,7 @@ ${systemPromptExtra}`;
       loop_detected: loopDetected,
     },
     trace_id: traceId || null,
+    org_id,
   });
   } catch (e) {
     console.error("Audit log failed:", e);

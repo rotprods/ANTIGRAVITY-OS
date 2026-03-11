@@ -5,7 +5,7 @@
 
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { useEdgeFunction } from '../../hooks/useEdgeFunction'
-import CopilotAvatar from '../modules/CopilotAvatar'
+import MasterIntelligence from '../modules/CopilotAvatar'
 import './CopilotPanel.css'
 
 const TOOL_ICONS = {
@@ -109,9 +109,9 @@ function CopilotPanel({ open, onClose }) {
         {/* Header */}
         <div className="copilot-panel__header">
           <div className="copilot-panel__title">
-            <CopilotAvatar listening={sending} energy={sending ? 75 : 45} phoneConnected={false} />
+            <MasterIntelligence state={sending ? 'processing' : 'idle'} energy={sending ? 75 : 45} />
             <div>
-              <h2 className="copilot-panel__name">COPILOT</h2>
+              <h2 className="copilot-panel__name">MASTER INTELLIGENCE</h2>
               <span className="copilot-panel__status mono">
                 {sending ? '[ EXECUTING ]' : '[ ARMED ]'}
               </span>
@@ -140,7 +140,7 @@ function CopilotPanel({ open, onClose }) {
             <div key={i}>
               {msg.role === 'thinking' ? (
                 <div className="copilot-panel__msg copilot-panel__msg--system" style={{ opacity: 0.5 }}>
-                  <span className="copilot-panel__thinking-pulse">COPILOT IS EXECUTING TOOLS...</span>
+                  <span className="copilot-panel__thinking-pulse">EXECUTING...</span>
                 </div>
               ) : (
                 <div className={`copilot-panel__msg copilot-panel__msg--${msg.role === 'assistant' ? 'ai' : msg.role}`}>

@@ -327,11 +327,12 @@ export async function executeSkill(
   args: Record<string, unknown>,
   agentCode: string,
   traceId?: string,
+  orgId?: string | null,
 ): Promise<unknown> {
   const startMs = Date.now();
 
   try {
-    const result = await _exec(name, args, agentCode, traceId);
+    const result = await _exec(name, args, agentCode, traceId, orgId);
 
     const riskLevel = getRiskLevel(name);
     if (riskLevel >= 2) {
@@ -342,6 +343,7 @@ export async function executeSkill(
         payload: { args, duration_ms: Date.now() - startMs },
         risk_level: riskLevel,
         trace_id: traceId || null,
+        org_id: orgId || null,
       }).catch(() => {});
     }
 
@@ -356,6 +358,7 @@ async function _exec(
   args: Record<string, unknown>,
   agentCode: string,
   traceId?: string,
+  orgId?: string | null,
 ): Promise<unknown> {
   switch (name) {
 
@@ -557,6 +560,7 @@ async function _exec(
         description: args.description,
         context: args.context || {},
         trace_id: traceId || null,
+        org_id: orgId || null,
       }).select().single();
       return error ? { error: error.message } : { incident_id: data?.id };
     }
@@ -571,6 +575,7 @@ async function _exec(
         status: "pending",
         expires_at: expiresAt,
         trace_id: traceId || null,
+        org_id: orgId || null,
       }).select().single();
 
       if (error) return { error: error.message };
