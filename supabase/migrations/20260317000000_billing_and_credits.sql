@@ -128,8 +128,9 @@ CREATE POLICY "usage_logs_org_read" ON usage_logs
 CREATE POLICY "custom_api_keys_org_admin_all" ON custom_api_keys
   FOR ALL USING (
     org_id IN (
-      SELECT org_id FROM organization_members
-      WHERE user_id = auth.uid() AND role IN ('owner', 'admin')
+      SELECT om.org_id FROM organization_members om
+      JOIN roles r ON om.role_id = r.id
+      WHERE om.user_id = auth.uid() AND r.name IN ('owner', 'admin')
     )
   );
 
