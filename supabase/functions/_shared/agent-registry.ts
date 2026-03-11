@@ -170,12 +170,12 @@ export const AGENT_REGISTRY: Record<string, AgentRegistryEntry> = {
     goal_template: "Analyze market conditions, competition, and generate actionable intelligence",
     allowed_skills: [
       "web_search", "fetch_external_data", "fetch_url", "store_memory",
-      "recall_memory", "create_signal", "generate_content", "audit_log_write",
-      "reasoning_trace_store", "crm_query", "metrics_query",
+      "recall_memory", "create_signal", "create_alert", "generate_content",
+      "audit_log_write", "reasoning_trace_store", "crm_query", "metrics_query",
     ],
     restricted_skills: [
       "crm_write_contact", "crm_write_deal", "send_notification",
-      "create_alert", "rollback_action",
+      "rollback_action",
     ],
     requires_approval_for: [],
     policy_set: {

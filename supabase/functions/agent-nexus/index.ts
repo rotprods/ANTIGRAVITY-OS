@@ -1,7 +1,7 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { runBrain } from "../_shared/agent-brain-v2.ts";
 import { errorResponse, handleCors, jsonResponse, readJson } from "../_shared/http.ts";
+import { admin } from "../_shared/supabase.ts";
 
 const AGENT_CODE = "nexus";
 
@@ -25,10 +25,6 @@ Deno.serve(async (req: Request) => {
     return errorResponse("Method not allowed", 405);
   }
 
-  const supabase = createClient(
-    Deno.env.get("SUPABASE_URL")!,
-    Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
-  );
   const startTime = Date.now();
 
   try {
@@ -44,20 +40,20 @@ Deno.serve(async (req: Request) => {
     const { task_id } = body;
 
     // ── Agent lifecycle: start ──
-    const { data: agent } = await supabase
+    const { data: agent } = await admin
       .from("agent_registry")
       .select("*")
       .eq("code_name", AGENT_CODE)
       .single();
     if (!agent) throw new Error("Agent not found in registry");
 
-    await supabase
+    await admin
       .from("agent_registry")
       .update({ status: "running", last_run_at: new Date().toISOString() })
       .eq("id", agent.id);
 
     if (task_id)
-      await supabase
+      await admin
         .from("agent_tasks")
         .update({ status: "running", started_at: new Date().toISOString() })
         .eq("id", task_id);
@@ -70,9 +66,9 @@ Deno.serve(async (req: Request) => {
 
       // ── 1. Gather system state for context ──
       const [metricsRes, agentsRes, recentPlansRes] = await Promise.all([
-        supabase.rpc("get_daily_briefing_data").catch(() => ({ data: null })),
-        supabase.from("agent_registry").select("code_name, status, total_runs, last_run_at").order("code_name"),
-        supabase.from("knowledge_entries")
+        admin.rpc("get_daily_briefing_data").catch(() => ({ data: null })),
+        admin.from("agent_registry").select("code_name, status, total_runs, last_run_at").order("code_name"),
+        admin.from("knowledge_entries")
           .select("title, content, created_at")
           .eq("category", "plan")
           .order("created_at", { ascending: false })
@@ -144,24 +140,24 @@ Write your final summary in Spanish for the CEO.`,
       };
     } else if (action === "status") {
       // Return current system state without running brain
-      const { data: agents } = await supabase
+      const { data: agents } = await admin
         .from("agent_registry")
         .select("code_name, display_name, status, total_runs, last_run_at")
         .order("code_name");
 
-      const { data: recentTraces } = await supabase
+      const { data: recentTraces } = await admin
         .from("reasoning_traces")
         .select("id, agent, goal, status, rounds, duration_ms, created_at")
         .order("created_at", { ascending: false })
         .limit(10);
 
-      const { data: openIncidents } = await supabase
+      const { data: openIncidents } = await admin
         .from("incidents")
         .select("id, severity, agent, description, status")
         .eq("status", "open")
         .order("created_at", { ascending: false });
 
-      const { data: pendingApprovals } = await supabase
+      const { data: pendingApprovals } = await admin
         .from("approval_requests")
         .select("id, agent, skill, urgency, status, expires_at")
         .eq("status", "pending")
@@ -177,7 +173,7 @@ Write your final summary in Spanish for the CEO.`,
 
     // ── Agent lifecycle: close ──
     const duration = Date.now() - startTime;
-    await supabase
+    await admin
       .from("agent_registry")
       .update({
         status: "online",
@@ -190,12 +186,12 @@ Write your final summary in Spanish for the CEO.`,
       .eq("id", agent.id);
 
     if (task_id)
-      await supabase
+      await admin
         .from("agent_tasks")
         .update({ status: "completed", result, completed_at: new Date().toISOString() })
         .eq("id", task_id);
 
-    await supabase.from("agent_logs").insert({
+    await admin.from("agent_logs").insert({
       agent_id: agent.id,
       agent_code_name: AGENT_CODE,
       task_id,
@@ -212,7 +208,7 @@ Write your final summary in Spanish for the CEO.`,
       duration_ms: duration,
     });
   } catch (error) {
-    await supabase
+    await admin
       .from("agent_registry")
       .update({ status: "error" })
       .eq("code_name", AGENT_CODE);

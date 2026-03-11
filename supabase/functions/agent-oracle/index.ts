@@ -1,13 +1,9 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { runBrain } from "../_shared/agent-brain-v2.ts";
 import { autoConnectApiBatch } from "../_shared/auto-api-connector.ts";
+import { errorResponse, handleCors, jsonResponse, readJson } from "../_shared/http.ts";
+import { admin } from "../_shared/supabase.ts";
 
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type",
-};
 const AGENT_CODE = "oracle";
 
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -20,30 +16,33 @@ const AGENT_CODE = "oracle";
 // ═══════════════════════════════════════════════════════════════════════════════
 
 Deno.serve(async (req: Request) => {
-  if (req.method === "OPTIONS")
-    return new Response("ok", { headers: corsHeaders });
+  const cors = handleCors(req);
+  if (cors) return cors;
 
-  const supabase = createClient(
-    Deno.env.get("SUPABASE_URL")!,
-    Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
-  );
   const startTime = Date.now();
 
   try {
-    const body = await req.json().catch(() => ({}));
+    const body = await readJson<{
+      action?: string;
+      task_id?: string;
+    }>(req);
     const { action = "analyze", task_id } = body;
-    const { data: agent } = await supabase
+
+    // ── Agent lifecycle: start ──
+    const { data: agent } = await admin
       .from("agent_registry")
       .select("*")
       .eq("code_name", AGENT_CODE)
       .single();
     if (!agent) throw new Error("Agent not found");
-    await supabase
+
+    await admin
       .from("agent_registry")
       .update({ status: "running", last_run_at: new Date().toISOString() })
       .eq("id", agent.id);
+
     if (task_id)
-      await supabase
+      await admin
         .from("agent_tasks")
         .update({ status: "running", started_at: new Date().toISOString() })
         .eq("id", task_id);
@@ -57,14 +56,14 @@ Deno.serve(async (req: Request) => {
         contactsRes, dealsRes, campaignsRes, signalsRes,
         financeRes, tasksRes, alertsRes, logsRes,
       ] = await Promise.all([
-        supabase.from("contacts").select("id, status, score, created_at").limit(500),
-        supabase.from("deals").select("id, stage, value, probability, created_at").limit(200),
-        supabase.from("campaigns").select("id, status, budget, spent, channel").limit(50),
-        supabase.from("signals").select("id, category, impact, confidence, status").limit(50),
-        supabase.from("finance_entries").select("id, type, amount, category").limit(100),
-        supabase.from("tasks").select("id, status, priority").limit(100),
-        supabase.from("alerts").select("id, severity, status").limit(50),
-        supabase.from("agent_logs").select("agent_code_name, duration_ms, tokens_used").gte("created_at", `${today}T00:00:00`),
+        admin.from("contacts").select("id, status, score, created_at").limit(500),
+        admin.from("deals").select("id, stage, value, probability, created_at").limit(200),
+        admin.from("campaigns").select("id, status, budget, spent, channel").limit(50),
+        admin.from("signals").select("id, category, impact, confidence, status").limit(50),
+        admin.from("finance_entries").select("id, type, amount, category").limit(100),
+        admin.from("tasks").select("id, status, priority").limit(100),
+        admin.from("alerts").select("id, severity, status").limit(50),
+        admin.from("agent_logs").select("agent_code_name, duration_ms, tokens_used").gte("created_at", `${today}T00:00:00`),
       ]);
 
       const contacts = contactsRes.data || [];
@@ -123,8 +122,8 @@ Deno.serve(async (req: Request) => {
         .filter((r) => r.ok)
         .map((r) => ({ intent: r.intent, api: r.api_used, data: r.data }));
 
-      // ── 4. Deterministic health score (always available, even without AI) ──
-      const healthScore = Math.min(100, Math.max(0,
+      // ── 4. Deterministic health score (fallback if brain fails) ──
+      const healthScoreFallback = Math.min(100, Math.max(0,
         100 - activeAlerts * 10 - tasksPending * 2));
 
       // ── 5. Brain-v2: autonomous reasoning + actions ──
@@ -139,12 +138,12 @@ Deno.serve(async (req: Request) => {
 2. Detect bottlenecks: stale deals, low conversion, high alert count, underperforming agents.
 3. If you find a significant market signal in the external data, create_signal for it.
 4. Store your executive analysis in memory (store_memory) so other agents can recall it.
-5. If anything is critical (health score <40, pipeline <5000, >5 active alerts), create an alert.
+5. If anything is critical (health score <40, pipeline <5000, >5 active alerts), create_alert for it.
 6. Provide a clear executive summary with health_score, key_insights, bottlenecks, and recommendations.`,
           context: {
             snapshot,
             external_data: externalData,
-            health_score_deterministic: healthScore,
+            health_score_fallback: healthScoreFallback,
             date: today,
           },
           systemPromptExtra: `You are ORACLE: the analytical brain of OCULOPS. You see patterns others miss.
@@ -152,7 +151,7 @@ Be specific with numbers. Reference actual data from the snapshot.
 Your executive summary should be in Spanish (the team operates in Spain).
 Format your final answer as JSON: {"health_score": N, "key_insights": [...], "bottlenecks": [...], "recommendations": [...], "mrr_estimate": N, "market_context": "..."}`,
           maxRounds: 4,
-        }).catch((e) => ({ ok: false, answer: `Brain error: ${e.message}`, skills_used: [], rounds: 0, trace_id: undefined }));
+        }).catch((e) => ({ ok: false, answer: `Brain error: ${e.message}`, skills_used: [], rounds: 0, trace_id: undefined, status: "failed" as const }));
       }
 
       // ── 6. Parse brain insights or use fallback ──
@@ -165,7 +164,7 @@ Format your final answer as JSON: {"health_score": N, "key_insights": [...], "bo
         }
       }
 
-      const finalHealthScore = aiInsights?.health_score || healthScore;
+      const finalHealthScore = aiInsights?.health_score ?? healthScoreFallback;
 
       // ── 7. Upsert daily snapshot ──
       const snapshotRow = {
@@ -180,20 +179,20 @@ Format your final answer as JSON: {"health_score": N, "key_insights": [...], "bo
         data: { snapshot, ai_analysis: aiInsights },
       };
 
-      const { data: existing } = await supabase
+      const { data: existing } = await admin
         .from("daily_snapshots")
         .select("id")
         .eq("date", today)
         .limit(1);
 
       if (existing && existing.length > 0) {
-        await supabase.from("daily_snapshots").update(snapshotRow).eq("id", existing[0].id);
+        await admin.from("daily_snapshots").update(snapshotRow).eq("id", existing[0].id);
       } else {
-        await supabase.from("daily_snapshots").insert(snapshotRow);
+        await admin.from("daily_snapshots").insert(snapshotRow);
       }
 
       // ── 8. Knowledge entry (persists analysis for recall_memory) ──
-      await supabase.from("knowledge_entries").insert({
+      await admin.from("knowledge_entries").insert({
         title: `ORACLE Analysis — ${today}`,
         content: JSON.stringify({ snapshot, ai_analysis: aiInsights }, null, 2),
         category: "analytics",
@@ -216,8 +215,9 @@ Format your final answer as JSON: {"health_score": N, "key_insights": [...], "bo
       };
     }
 
+    // ── Agent lifecycle: close ──
     const duration = Date.now() - startTime;
-    await supabase
+    await admin
       .from("agent_registry")
       .update({
         status: "online",
@@ -230,12 +230,12 @@ Format your final answer as JSON: {"health_score": N, "key_insights": [...], "bo
       .eq("id", agent.id);
 
     if (task_id)
-      await supabase
+      await admin
         .from("agent_tasks")
         .update({ status: "completed", result, completed_at: new Date().toISOString() })
         .eq("id", task_id);
 
-    await supabase.from("agent_logs").insert({
+    await admin.from("agent_logs").insert({
       agent_id: agent.id,
       agent_code_name: AGENT_CODE,
       task_id,
@@ -245,18 +245,17 @@ Format your final answer as JSON: {"health_score": N, "key_insights": [...], "bo
       duration_ms: duration,
     });
 
-    return new Response(
-      JSON.stringify({ success: true, agent: AGENT_CODE, result, duration_ms: duration }),
-      { headers: { ...corsHeaders, "Content-Type": "application/json" } },
-    );
+    return jsonResponse({
+      success: true,
+      agent: AGENT_CODE,
+      result,
+      duration_ms: duration,
+    });
   } catch (error) {
-    await supabase
+    await admin
       .from("agent_registry")
       .update({ status: "error" })
       .eq("code_name", AGENT_CODE);
-    return new Response(
-      JSON.stringify({ success: false, error: (error as Error).message }),
-      { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } },
-    );
+    return errorResponse(error instanceof Error ? error.message : "ORACLE failed", 500);
   }
 });
