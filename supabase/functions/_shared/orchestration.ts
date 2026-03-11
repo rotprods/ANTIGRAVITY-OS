@@ -516,11 +516,19 @@ export async function executePipelineRun(input: ExecutePipelineRunInput) {
 
       runContext = mergeContextWithOutput(runContext, compact(step.step_key), output);
 
+      // Trim output for DB storage — keep summary, not full lead arrays
+      const trimmedOutput = { ...output };
+      if (Array.isArray(trimmedOutput.leads) && trimmedOutput.leads.length > 5) {
+        trimmedOutput.leads_count = trimmedOutput.leads.length;
+        trimmedOutput.leads = trimmedOutput.leads.slice(0, 5);
+        trimmedOutput._truncated = true;
+      }
+
       await admin
         .from("pipeline_step_runs")
         .update({
           status: "completed",
-          output,
+          output: trimmedOutput,
           completed_at: nowIso(),
           updated_at: nowIso(),
         })
@@ -546,42 +554,34 @@ export async function executePipelineRun(input: ExecutePipelineRunInput) {
         },
       });
 
-      await recordMemoryEntry({
-        orgId: resolvedOrgId,
-        userId,
-        agentCodeName: compact(step.agent_code_name) || "cortex",
-        scope: "shared_ops",
-        namespace: `pipeline:${compact(template.code_name) || "runtime"}`,
-        entityType: "pipeline_run",
-        entityId: String(pipelineRun.id),
-        pipelineRunId: String(pipelineRun.id),
-        stepRunId: String(stepRun.id),
-        correlationId: compact(pipelineRun.correlation_id) || null,
-        summary: pickSummary(unwrapStepOutput(output)),
-        content: unwrapStepOutput(output),
-        importance: 60,
-      });
+      // Memory + Events — non-critical, don't kill the pipeline on failure
+      try {
+        await recordMemoryEntry({
+          orgId: resolvedOrgId,
+          userId,
+          agentCodeName: compact(step.agent_code_name) || "cortex",
+          scope: "shared_ops",
+          namespace: `pipeline:${compact(template.code_name) || "runtime"}`,
+          entityType: "pipeline_run",
+          entityId: String(pipelineRun.id),
+          pipelineRunId: String(pipelineRun.id),
+          stepRunId: String(stepRun.id),
+          correlationId: compact(pipelineRun.correlation_id) || null,
+          summary: pickSummary(unwrapStepOutput(output)),
+          content: { summary: pickSummary(unwrapStepOutput(output)) },
+          importance: 60,
+        });
+      } catch (_memErr) { /* non-critical */ }
 
-      await emitSystemEvent({
-        eventType: "pipeline.step.completed",
-        payload: {
-          step_key: step.step_key,
-          step_number: step.step_number,
-          agent_code_name: step.agent_code_name || null,
-          result_summary: pickSummary(unwrapStepOutput(output)),
-        },
-        userId,
-        orgId: resolvedOrgId,
-        sourceAgent: compact(step.agent_code_name) || "cortex",
-        pipelineRunId: String(pipelineRun.id),
-        stepRunId: String(stepRun.id),
-        correlationId: compact(pipelineRun.correlation_id) || null,
-      });
-
-      if (compact(step.emits_event)) {
+      try {
         await emitSystemEvent({
-          eventType: compact(step.emits_event),
-          payload: unwrapStepOutput(output),
+          eventType: "pipeline.step.completed",
+          payload: {
+            step_key: step.step_key,
+            step_number: step.step_number,
+            agent_code_name: step.agent_code_name || null,
+            result_summary: pickSummary(unwrapStepOutput(output)),
+          },
           userId,
           orgId: resolvedOrgId,
           sourceAgent: compact(step.agent_code_name) || "cortex",
@@ -589,9 +589,29 @@ export async function executePipelineRun(input: ExecutePipelineRunInput) {
           stepRunId: String(stepRun.id),
           correlationId: compact(pipelineRun.correlation_id) || null,
         });
-      }
+
+        if (compact(step.emits_event)) {
+          await emitSystemEvent({
+            eventType: compact(step.emits_event),
+            payload: {
+              step_key: step.step_key,
+              summary: pickSummary(unwrapStepOutput(output)),
+            },
+            userId,
+            orgId: resolvedOrgId,
+            sourceAgent: compact(step.agent_code_name) || "cortex",
+            pipelineRunId: String(pipelineRun.id),
+            stepRunId: String(stepRun.id),
+            correlationId: compact(pipelineRun.correlation_id) || null,
+          });
+        }
+      } catch (_evtErr) { /* non-critical */ }
     } catch (error) {
-      const message = error instanceof Error ? error.message : "Pipeline step failed";
+      const message = error instanceof Error
+        ? error.message
+        : typeof error === "string"
+          ? error
+          : JSON.stringify(error) || "Pipeline step failed";
 
       await admin
         .from("pipeline_step_runs")

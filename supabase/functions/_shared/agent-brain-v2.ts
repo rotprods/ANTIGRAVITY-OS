@@ -278,16 +278,21 @@ ${systemPromptExtra}`;
 
   // ── 5. Close reasoning trace ──────────────────────────────────────────────
   if (traceId) {
-    await admin.from("reasoning_traces").update({
-      plan: plan || null,
-      steps: skillsUsed,
-      status: outputStatus,
-      rounds,
-      duration_ms: durationMs,
-    }).eq("id", traceId).catch(() => {});
+    try {
+      await admin.from("reasoning_traces").update({
+        plan: plan || null,
+        steps: skillsUsed,
+        status: outputStatus,
+        rounds,
+        duration_ms: durationMs,
+      }).eq("id", traceId);
+    } catch (e) {
+      console.error("Trace update failed:", e);
+    }
   }
 
   // ── 6. Audit log — final entry ────────────────────────────────────────────
+  try {
   await admin.from("audit_logs").insert({
     agent,
     event_type: `brain_${outputStatus}`,
@@ -300,7 +305,10 @@ ${systemPromptExtra}`;
       loop_detected: loopDetected,
     },
     trace_id: traceId || null,
-  }).catch(() => {});
+  });
+  } catch (e) {
+    console.error("Audit log failed:", e);
+  }
 
   return {
     ok: outputStatus === "completed" || outputStatus === "awaiting_approval",

@@ -19,6 +19,7 @@
  *   send_notification    → Telegram message
  *   call_agent           → invoke another OCULOPS agent
  *   generate_content     → GPT writes text/email/post
+ *   trigger_n8n_workflow → invoke an n8n workflow for complex tasks
  *
  * Usage:
  *   import { runBrain } from "../_shared/agent-brain.ts";
@@ -191,6 +192,21 @@ const SKILLS = [
           category: { type: "string" },
         },
         required: ["title", "severity"],
+      },
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "trigger_n8n_workflow",
+      description: "Trigger a high-level automation workflow in n8n for registration, lead management, or complex processing. USE THIS for stateful business processes.",
+      parameters: {
+        type: "object",
+        properties: {
+          workflow_id: { type: "string", description: "The n8n workflow slug or identifier" },
+          payload: { type: "object", description: "The data to send to n8n (leads, contact info, etc.)" },
+        },
+        required: ["workflow_id", "payload"],
       },
     },
   },
@@ -437,6 +453,23 @@ async function executeSkill(name: string, args: Record<string, unknown>, agentCo
       });
       const d = await res.json();
       return { content: d.choices?.[0]?.message?.content || "", type: args.type };
+    }
+
+    case "trigger_n8n_workflow": {
+      const webhook = Deno.env.get("N8N_WEBHOOK_URL");
+      if (!webhook) return { error: "n8n Webhook not configured in environment" };
+      const res = await fetch(`${webhook}/oculops-bridge`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          agent: agentCode,
+          workflow: args.workflow_id,
+          data: args.payload,
+          org_id: orgId,
+          user_id: userId,
+        }),
+      });
+      return res.ok ? { status: "Workflow triggered", workflow: args.workflow_id } : { error: "n8n trigger failed" };
     }
 
     default:
