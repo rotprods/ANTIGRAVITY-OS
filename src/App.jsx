@@ -5,6 +5,7 @@ import { useOrg } from './hooks/useOrg'
 import Sidebar from './components/Sidebar'
 import OnboardingSetup from './components/OnboardingSetup'
 import Auth from './components/Auth'
+import { ErrorBoundary } from './components/ui/ErrorBoundary'
 import { Toaster } from 'react-hot-toast'
 
 // Full ParticleField (with data hooks) — only loaded when authenticated
@@ -19,6 +20,13 @@ function AmbientBackground() {
     }} />
   )
 }
+
+// ─── Module guard — wraps each route element in an ErrorBoundary ─────────────
+const guard = (Component) => (
+  <ErrorBoundary>
+    <Component />
+  </ErrorBoundary>
+)
 
 // ─── Lazy Load — ALL modules ──────────────────────────────────────────────────
 const ControlTower   = lazy(() => import('./components/modules/ControlTower'))
@@ -152,48 +160,48 @@ function AppContent() {
               <Route path="/" element={<Navigate to="/control-tower" replace />} />
 
               {/* Core */}
-              <Route path="/control-tower"  element={<ControlTower />} />
-              <Route path="/pipeline"       element={<Pipeline />} />
-              <Route path="/crm"            element={<CRM />} />
-              <Route path="/intelligence"   element={<Intelligence />} />
-              <Route path="/execution"      element={<Execution />} />
-              <Route path="/finance"        element={<Finance />} />
+              <Route path="/control-tower"  element={guard(ControlTower)} />
+              <Route path="/pipeline"       element={guard(Pipeline)} />
+              <Route path="/crm"            element={guard(CRM)} />
+              <Route path="/intelligence"   element={guard(Intelligence)} />
+              <Route path="/execution"      element={guard(Execution)} />
+              <Route path="/finance"        element={guard(Finance)} />
 
               {/* Intelligence */}
-              <Route path="/markets"        element={<Markets />} />
-              <Route path="/analytics"      element={<Analytics />} />
-              <Route path="/opportunities"  element={<Opportunities />} />
-              <Route path="/reports"        element={<Reports />} />
+              <Route path="/markets"        element={guard(Markets)} />
+              <Route path="/analytics"      element={guard(Analytics)} />
+              <Route path="/opportunities"  element={guard(Opportunities)} />
+              <Route path="/reports"        element={guard(Reports)} />
 
               {/* Agents */}
-              <Route path="/agents"         element={<Agents />} />
-              <Route path="/herald"         element={<HeraldAgent />} />
-              <Route path="/prospector"     element={<ProspectorHub />} />
-              <Route path="/automation"     element={<Automation />} />
-              <Route path="/flight-deck"    element={<FlightDeck />} />
+              <Route path="/agents"         element={guard(Agents)} />
+              <Route path="/herald"         element={guard(HeraldAgent)} />
+              <Route path="/prospector"     element={guard(ProspectorHub)} />
+              <Route path="/automation"     element={guard(Automation)} />
+              <Route path="/flight-deck"    element={guard(FlightDeck)} />
 
               {/* Growth */}
-              <Route path="/gtm"            element={<GTM />} />
-              <Route path="/messaging"      element={<Messaging />} />
-              <Route path="/creative"       element={<CreativeStudio />} />
-              <Route path="/niches"         element={<Niches />} />
+              <Route path="/gtm"            element={guard(GTM)} />
+              <Route path="/messaging"      element={guard(Messaging)} />
+              <Route path="/creative"       element={guard(CreativeStudio)} />
+              <Route path="/niches"         element={guard(Niches)} />
 
               {/* Ops */}
-              <Route path="/knowledge"      element={<Knowledge />} />
-              <Route path="/decisions"      element={<Decisions />} />
-              <Route path="/experiments"    element={<Experiments />} />
-              <Route path="/simulation"     element={<Simulation />} />
-              <Route path="/studies"        element={<StudyHub />} />
+              <Route path="/knowledge"      element={guard(Knowledge)} />
+              <Route path="/decisions"      element={guard(Decisions)} />
+              <Route path="/experiments"    element={guard(Experiments)} />
+              <Route path="/simulation"     element={guard(Simulation)} />
+              <Route path="/studies"        element={guard(StudyHub)} />
 
               {/* System */}
-              <Route path="/command-center" element={<CommandCenter />} />
-              <Route path="/watchtower"     element={<Watchtower />} />
-              <Route path="/world-monitor"  element={<WorldMonitor />} />
-              <Route path="/portfolio"      element={<Portfolio />} />
-              <Route path="/lab"            element={<Lab />} />
-              <Route path="/billing"        element={<Billing />} />
-              <Route path="/team-settings"  element={<TeamSettings />} />
-              <Route path="/settings"       element={<Settings />} />
+              <Route path="/command-center" element={guard(CommandCenter)} />
+              <Route path="/watchtower"     element={guard(Watchtower)} />
+              <Route path="/world-monitor"  element={guard(WorldMonitor)} />
+              <Route path="/portfolio"      element={guard(Portfolio)} />
+              <Route path="/lab"            element={guard(Lab)} />
+              <Route path="/billing"        element={guard(Billing)} />
+              <Route path="/team-settings"  element={guard(TeamSettings)} />
+              <Route path="/settings"       element={guard(Settings)} />
 
               <Route path="*" element={
                 <div style={{
