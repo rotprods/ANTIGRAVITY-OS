@@ -5,8 +5,20 @@ import { useOrg } from './hooks/useOrg'
 import Sidebar from './components/Sidebar'
 import OnboardingSetup from './components/OnboardingSetup'
 import Auth from './components/Auth'
-import ParticleField from './components/ui/ParticleField'
 import { Toaster } from 'react-hot-toast'
+
+// Full ParticleField (with data hooks) — only loaded when authenticated
+const ParticleField = lazy(() => import('./components/ui/ParticleField'))
+
+// Lightweight ambient background — no data hooks, no Supabase queries
+function AmbientBackground() {
+  return (
+    <div style={{
+      position: 'fixed', inset: 0, zIndex: 0, pointerEvents: 'none',
+      background: 'radial-gradient(ellipse at 50% 50%, rgba(255,212,0,0.03) 0%, transparent 70%)',
+    }} />
+  )
+}
 
 // ─── Lazy Load — ALL modules ──────────────────────────────────────────────────
 const ControlTower   = lazy(() => import('./components/modules/ControlTower'))
@@ -90,7 +102,7 @@ function AppContent() {
   if (content) {
     return (
       <>
-        <ParticleField />
+        <AmbientBackground />
         {content}
       </>
     )
@@ -116,7 +128,9 @@ function AppContent() {
         }}
       />
 
-      <ParticleField />
+      <Suspense fallback={<AmbientBackground />}>
+        <ParticleField />
+      </Suspense>
 
       <Sidebar />
 
