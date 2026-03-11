@@ -28,7 +28,7 @@ function Settings() {
   const [agency, setAgency] = useState(AGENCY_DEFAULTS)
   const [saved, setSaved] = useState(false)
   const [activeTab, setActiveTab] = useState('account')
-  const [loadingProfile, setLoadingProfile] = useState(true)
+  const [_loadingProfile, setLoadingProfile] = useState(true)
   const [profile, setProfile] = useState({ full_name: '', email: '', phone: '', company: '', role_title: '' })
   const [profileSaved, setProfileSaved] = useState(false)
   const [passwordFields, setPasswordFields] = useState({ current: '', new: '', confirm: '' })

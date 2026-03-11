@@ -20,6 +20,33 @@ const CHANNELS = [
     { key: 'linkedin', label: 'LinkedIn', color: '#0077B5' },
 ]
 
+function ChannelCard({ type, label, channel, connectFn, disconnectFn, syncFn, channelBusy }) {
+    return (
+        <div className="msg-channel-card">
+            <div className="msg-channel-card-header">
+                <div>
+                    <div className="mono text-xs font-bold" style={{ marginBottom: 6 }}>{label}</div>
+                    <div className="mono text-xs text-tertiary">{channel?.status === 'active' ? (channel.email_address || channel.phone_number || 'API connected') : 'Not connected'}</div>
+                </div>
+                <span className={`badge ${channel?.status === 'active' ? 'badge-success' : ''}`}>{channel?.status === 'active' ? 'Active' : 'Offline'}</span>
+            </div>
+            <div className="msg-channel-card-actions">
+                <button className="btn btn-sm btn-ghost" onClick={connectFn} disabled={channelBusy === type}>
+                    {channelBusy === type ? 'Connecting...' : channel?.status === 'active' ? 'Reconnect' : 'Connect'}
+                </button>
+                {channel?.status === 'active' && syncFn && (
+                    <button className="btn btn-sm btn-ghost" onClick={() => syncFn(channel.id)} disabled={channelBusy === `sync:${channel.id}`}>
+                        {channelBusy === `sync:${channel.id}` ? 'Syncing...' : 'Sync'}
+                    </button>
+                )}
+                {channel?.status === 'active' && (
+                    <button className="btn btn-sm btn-ghost" style={{ color: 'var(--color-danger)' }} onClick={() => disconnectFn(channel.id)} disabled={channelBusy === channel.id}>Disconnect</button>
+                )}
+            </div>
+        </div>
+    )
+}
+
 const TEMPLATES = [
     { name: 'Intro', content: 'Hola, he estado analizando vuestra captación y veo dos automatizaciones claras que os podrían ahorrar mucho trabajo comercial.' },
     { name: 'Follow-up', content: 'Te escribo por si te cuadra que te comparta 2 ideas concretas para automatizar captación y seguimiento.' },
@@ -93,38 +120,13 @@ function Messaging() {
         toast(`${getChannelLabel(selectedChannel)} message sent`, 'success')
     }
 
-    const ChannelCard = ({ type, label, channel, connectFn, disconnectFn, syncFn }) => (
-        <div className="msg-channel-card">
-            <div className="msg-channel-card-header">
-                <div>
-                    <div className="mono text-xs font-bold" style={{ marginBottom: 6 }}>{label}</div>
-                    <div className="mono text-xs text-tertiary">{channel?.status === 'active' ? (channel.email_address || channel.phone_number || 'API connected') : 'Not connected'}</div>
-                </div>
-                <span className={`badge ${channel?.status === 'active' ? 'badge-success' : ''}`}>{channel?.status === 'active' ? 'Active' : 'Offline'}</span>
-            </div>
-            <div className="msg-channel-card-actions">
-                <button className="btn btn-sm btn-ghost" onClick={connectFn} disabled={channelBusy === type}>
-                    {channelBusy === type ? 'Connecting...' : channel?.status === 'active' ? 'Reconnect' : 'Connect'}
-                </button>
-                {channel?.status === 'active' && syncFn && (
-                    <button className="btn btn-sm btn-ghost" onClick={() => syncFn(channel.id)} disabled={channelBusy === `sync:${channel.id}`}>
-                        {channelBusy === `sync:${channel.id}` ? 'Syncing...' : 'Sync'}
-                    </button>
-                )}
-                {channel?.status === 'active' && (
-                    <button className="btn btn-sm btn-ghost" style={{ color: 'var(--color-danger)' }} onClick={() => disconnectFn(channel.id)} disabled={channelBusy === channel.id}>Disconnect</button>
-                )}
-            </div>
-        </div>
-    )
-
     return (
         <ModulePage title="Messaging" subtitle={`Unified inbox · Gmail, WhatsApp & social drafts · ${totalUnread} unread`}>
             <div className="lab-content">
                 {/* Channel cards */}
                 <div className="msg-channel-grid">
-                    <ChannelCard type="gmail" label="Email" channel={channelsByType.email} connectFn={connectGmail} disconnectFn={disconnectChannel} syncFn={syncGmail} />
-                    <ChannelCard type="whatsapp" label="WhatsApp" channel={channelsByType.whatsapp} connectFn={connectWhatsApp} disconnectFn={disconnectChannel} />
+                    <ChannelCard type="gmail" label="Email" channel={channelsByType.email} connectFn={connectGmail} disconnectFn={disconnectChannel} syncFn={syncGmail} channelBusy={channelBusy} />
+                    <ChannelCard type="whatsapp" label="WhatsApp" channel={channelsByType.whatsapp} connectFn={connectWhatsApp} disconnectFn={disconnectChannel} channelBusy={channelBusy} />
                     <div className="msg-channel-card">
                         <div className="mono text-xs font-bold" style={{ marginBottom: 'var(--space-2)' }}>Social channels</div>
                         <div className="mono text-xs text-tertiary">LinkedIn and Instagram operate as local drafts injected into the inbox.</div>

@@ -1,5 +1,6 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useGenerativeMedia } from '../../hooks/useGenerativeMedia'
+import { useCreativeAssets } from '../../hooks/useCreativeAssets'
 import './CreativeStudio.css'
 
 // ── Existing Brief Content (Retained as Secondary Data) ──
@@ -60,9 +61,23 @@ function CreativeStudio() {
 
   // Media State
   const { generateImage, generateVideo, isGeneratingImage, isGeneratingVFX, error } = useGenerativeMedia()
+  const { assets: dbAssets, loading: assetsLoading, persistGeneration } = useCreativeAssets()
   const [prompt, setPrompt] = useState('')
   const [modelTarget, setModelTarget] = useState('banana') // 'banana' | 'veo3'
   const [gallery, setGallery] = useState([])
+
+  // Seed gallery from DB on first load
+  useEffect(() => {
+    if (!assetsLoading && gallery.length === 0 && dbAssets.length > 0) {
+      setGallery(dbAssets.map(a => ({
+        id: a.id,
+        type: a.asset_type,
+        prompt: a.prompt_used || '',
+        url: a.public_url,
+        status: a.status === 'ready' ? 'ready' : 'error'
+      })))
+    }
+  }, [assetsLoading, dbAssets, gallery.length])
 
   // Briefs State
   const [activeTemplate, setActiveTemplate] = useState(null)
@@ -73,32 +88,31 @@ function CreativeStudio() {
   const handleDeploy = async () => {
     if (!prompt.trim()) return
 
-    const newAsset = {
-      id: crypto.randomUUID(),
-      type: modelTarget === 'banana' ? 'image' : 'video',
-      prompt,
-      status: 'generating', // generating | ready | error
-      url: null
-    }
+    const localId = crypto.randomUUID()
+    const type = modelTarget === 'banana' ? 'image' : 'video'
+    const capturedPrompt = prompt
 
-    setGallery(prev => [newAsset, ...prev])
+    setGallery(prev => [{ id: localId, type, prompt: capturedPrompt, status: 'generating', url: null }, ...prev])
     setPrompt('')
 
-    try {
-      if (modelTarget === 'banana') {
-        const result = await generateImage(newAsset.prompt)
-        updateGalleryItem(newAsset.id, { status: 'ready', url: result?.url || result?.output || 'https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?w=800&q=80' })
-      } else {
-        const result = await generateVideo(newAsset.prompt)
-        updateGalleryItem(newAsset.id, { status: 'ready', url: result?.url || result?.output || 'https://raw.githubusercontent.com/intel-isl/MiDaS/master/teaser.gif' })
-      }
-    } catch (err) {
-      updateGalleryItem(newAsset.id, { status: 'error', error: err.message || 'API Payload Reject' })
-    }
-  }
+    const generatorFn = type === 'image'
+      ? () => generateImage(capturedPrompt)
+      : () => generateVideo(capturedPrompt)
 
-  const updateGalleryItem = (id, updates) => {
-    setGallery(prev => prev.map(item => item.id === id ? { ...item, ...updates } : item))
+    try {
+      const asset = await persistGeneration(capturedPrompt, type, generatorFn)
+      setGallery(prev => prev.map(item =>
+        item.id === localId
+          ? { id: asset.id, type: asset.asset_type, prompt: asset.prompt_used, status: 'ready', url: asset.public_url }
+          : item
+      ))
+    } catch (err) {
+      setGallery(prev => prev.map(item =>
+        item.id === localId
+          ? { ...item, status: 'error', error: err.message || 'API Payload Reject' }
+          : item
+      ))
+    }
   }
 
   const isWorking = isGeneratingImage || isGeneratingVFX

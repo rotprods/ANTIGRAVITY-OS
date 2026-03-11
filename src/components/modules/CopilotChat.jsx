@@ -143,7 +143,7 @@ function CopilotChat() {
         }
 
         tick()
-      } catch (err) {
+      } catch {
         startFallback()
       }
     }
@@ -255,15 +255,6 @@ function CopilotChat() {
   ]
 
   const skillPreview = skills.slice(0, 6)
-
-  const handleNavigation = useCallback((path) => {
-    if (!path) return
-    setMessages(prev => [...prev, {
-      role: 'system',
-      content: `NAVIGATING TO ${path.replace('/', '').toUpperCase()}`
-    }])
-    navigate(path)
-  }, [navigate])
 
   const togglePhone = () => setPhoneConnected(state => !state)
 

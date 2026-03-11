@@ -3,7 +3,7 @@ import { persist } from 'zustand/middleware'
 
 export const useOrgStore = create(
     persist(
-        (set, get) => ({
+        (set) => ({
             organizations: [],
             currentOrg: null,
             members: [],

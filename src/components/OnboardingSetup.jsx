@@ -39,20 +39,16 @@ export default function OnboardingSetup({ onComplete }) {
     setSaving(true)
     setError(null)
 
-    const { error: err } = await supabase.auth.updateUser({
+    // Save profile metadata — non-blocking, advance regardless
+    supabase.auth.updateUser({
       data: {
         full_name: fullName.trim(),
         phone: phone.trim() || null,
         company: company.trim() || null,
         role_title: roleTitle.trim() || null,
       },
-    })
+    }).catch(err => console.warn('[Onboarding] profile update warning:', err))
 
-    if (err) {
-      setError('Error guardando perfil')
-      setSaving(false)
-      return
-    }
     setSaving(false)
     setStep(1)
   }

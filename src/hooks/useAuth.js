@@ -79,7 +79,7 @@ function ensureAuthBootstrap() {
         })
 
     const { data: { subscription } } = onAuthStateChange((event, session) => {
-        if (event === 'TOKEN_REFRESHED') {
+        if (event === 'TOKEN_REFRESHED' || event === 'USER_UPDATED') {
             setSnapshot({
                 ...authSnapshot,
                 session,

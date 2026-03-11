@@ -132,7 +132,7 @@ function Billing() {
           <div className="lab-panel">
             <div className="lab-panel-header">Client MRR portfolio</div>
             {clientsMRR.length === 0 ? <div className="lab-panel-empty">No recurring clients</div> : (
-              <div>{clientsMRR.map((c, i) => {
+              <div>{clientsMRR.map((c) => {
                 const maxVal = Math.max(...clientsMRR.map(x => x.value))
                 const barPct = Math.round((c.value / maxVal) * 100)
                 const mrrPct = mrr > 0 ? Math.round((c.value / mrr) * 100) : 0

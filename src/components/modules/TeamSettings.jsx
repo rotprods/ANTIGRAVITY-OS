@@ -11,7 +11,6 @@ export default function TeamSettings() {
     const {
         currentOrg,
         members,
-        pendingInvites,
         fetchMembers,
         fetchPendingInvites,
         inviteMember,

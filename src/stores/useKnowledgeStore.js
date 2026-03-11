@@ -3,7 +3,7 @@ import { persist } from 'zustand/middleware'
 
 export const useKnowledgeStore = create(
   persist(
-    (set, get) => ({
+    (set) => ({
       entries: [],
       searchResults: [],
       isSearching: false,

@@ -53,7 +53,7 @@ export default function CommandCenter() {
     const [systemSnapshot, setSystemSnapshot] = useState(null)
     const [commandLog, setCommandLog] = useState([])
     const [eventStream, setEventStream] = useState([])
-    const [loading, setLoading] = useState(false)
+    const [_loading, setLoading] = useState(false)
     const [activeTab, setActiveTab] = useState('overview')
     const refreshRef = useRef(null)
 

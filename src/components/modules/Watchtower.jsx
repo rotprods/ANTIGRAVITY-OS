@@ -4,7 +4,7 @@
 // Wired to Supabase via useAlerts hook
 // /////////////////////////////////////////////////////////////////////////////
 
-import { useState, useMemo } from 'react'
+import { useState } from 'react'
 import { useAlerts } from '../../hooks/useAlerts'
 import { useAgents } from '../../hooks/useAgents'
 import { useApiCatalog } from '../../hooks/useApiCatalog'

@@ -17,8 +17,9 @@ export function AgentVaultProvider({ children }) {
     )
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function useAgentVaultContext() {
     const ctx = useContext(AgentVaultContext)
-    if (!ctx) return useAgentVault() // fallback if provider not mounted
+    if (!ctx) throw new Error('useAgentVaultContext must be used within AgentVaultProvider')
     return ctx
 }
