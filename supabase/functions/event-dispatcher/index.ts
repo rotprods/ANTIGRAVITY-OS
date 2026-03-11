@@ -29,18 +29,18 @@ const EVENT_ROUTES: Record<string, string> = {
   "agent.error":         "/agent-error",
 
   // Lead/CRM events
-  "lead.captured":       "/speed-to-lead",
-  "lead.qualified":      "/chatbot-lead-qualifier",
+  "lead.captured":       "/new-lead",              // speed-to-lead workflow
+  "lead.qualified":      "/chatbot-lead-qualifier", // lead-to-crm-pipeline workflow
 
   // Pipeline events
   "deal.stage_changed":  "/deal-stage-changed",
   "deal.closed_won":     "/deal-closed-won",
 
   // Content events
-  "content.requested":   "/forge-content-webhook",
+  "content.requested":   "/forge-content",          // forge-content-webhook workflow
 
   // Strategy events
-  "strategy.requested":  "/strategist-webhook",
+  "strategy.requested":  "/strategist-evaluate",    // strategist-webhook workflow
 
   // Signal events
   "signal.detected":     "/signal-detected",
