@@ -12,6 +12,13 @@ export const useFinanceStore = create(
       setPeriod: (period) => set({ period }),
       setView: (view) => set({ view }),
     }),
-    { name: 'ag-finance-ui', version: 1 }
+    {
+      name: 'ag-finance-ui',
+      version: 1,
+      migrate: (persisted, version) => {
+        if (version === 0) return { filter: 'all', period: 'all', view: 'table', ...persisted }
+        return persisted
+      },
+    }
   )
 )

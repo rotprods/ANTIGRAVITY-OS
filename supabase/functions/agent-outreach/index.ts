@@ -186,6 +186,46 @@ Deno.serve(async (req: Request) => {
       return jsonResponse({ ok: true, email: data });
     }
 
+    if (action === "send") {
+      // Send an approved outreach email via messaging-dispatch or send-email fallback
+      const { data: email, error: fetchError } = await admin
+        .from("outreach_queue")
+        .select("*")
+        .eq("id", body.id)
+        .eq("status", "approved")
+        .single();
+
+      if (fetchError || !email) {
+        return errorResponse("Approved email not found", 404);
+      }
+
+      const supabaseUrl = Deno.env.get("SUPABASE_URL");
+      const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+
+      // Try send-email (Resend) as fallback for cold outreach
+      const sendRes = await fetch(`${supabaseUrl}/functions/v1/send-email`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${serviceKey}`,
+        },
+        body: JSON.stringify({
+          to: email.recipient_email,
+          subject: email.subject,
+          html: email.html_body,
+          outreach_queue_id: email.id,
+        }),
+      });
+
+      const sendResult = await sendRes.json();
+
+      if (!sendRes.ok) {
+        return errorResponse(sendResult.error || "Send failed", 502);
+      }
+
+      return jsonResponse({ ok: true, sent: true, result: sendResult });
+    }
+
     if (action === "batch_approve") {
       let query = admin
         .from("outreach_queue")

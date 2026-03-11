@@ -12,6 +12,10 @@ import { useAtlasCRM } from '../../hooks/useAtlasCRM'
 import FlightDeck from './FlightDeck'
 import './ProspectorHub.css'
 
+const GOOGLE_MAPS_EMBED_KEY =
+    import.meta.env.VITE_GOOGLE_MAPS_EMBED_KEY ||
+    import.meta.env.VITE_GOOGLE_MAPS_API_KEY ||
+    ''
 
 function ScoreRing({ score, size = 40 }) {
     const r = (size - 4) / 2
@@ -29,15 +33,52 @@ function ScoreRing({ score, size = 40 }) {
 
 function MapEmbed({ leads, selectedId, onSelectLead }) {
     const mapLeads = leads.filter(l => l.lat && l.lng)
+    const selectedLead = leads.find(lead => lead.id === selectedId) || mapLeads[0] || null
     const bounds = useMemo(() => {
         if (mapLeads.length === 0) return { minLat: 36, maxLat: 43.5, minLng: -9.5, maxLng: 4.5 }
         const lats = mapLeads.map(l => l.lat), lngs = mapLeads.map(l => l.lng), pad = 0.02
         return { minLat: Math.min(...lats) - pad, maxLat: Math.max(...lats) + pad, minLng: Math.min(...lngs) - pad, maxLng: Math.max(...lngs) + pad }
     }, [mapLeads])
     const toXY = (lat, lng) => ({ x: ((lng - bounds.minLng) / (bounds.maxLng - bounds.minLng)) * 100, y: (1 - (lat - bounds.minLat) / (bounds.maxLat - bounds.minLat)) * 100 })
+    const iframeSrc = useMemo(() => {
+        if (!GOOGLE_MAPS_EMBED_KEY || !selectedLead) return null
+
+        const url = new URL('https://www.google.com/maps/embed/v1/place')
+        url.searchParams.set('key', GOOGLE_MAPS_EMBED_KEY)
+
+        if (selectedLead.place_id) {
+            url.searchParams.set('q', `place_id:${selectedLead.place_id}`)
+        } else {
+            const query = [selectedLead.name, selectedLead.address].filter(Boolean).join(', ')
+            url.searchParams.set('q', query || `${selectedLead.lat},${selectedLead.lng}`)
+        }
+
+        if (selectedLead.lat && selectedLead.lng) {
+            url.searchParams.set('center', `${selectedLead.lat},${selectedLead.lng}`)
+            url.searchParams.set('zoom', '15')
+        }
+
+        return url.toString()
+    }, [selectedLead])
 
     return (
         <div className="ph-map-embed">
+            {iframeSrc ? (
+                <>
+                    <iframe
+                        title={selectedLead ? `${selectedLead.name} on Google Maps` : 'Google Maps'}
+                        className="ph-map-iframe"
+                        src={iframeSrc}
+                        loading="lazy"
+                        referrerPolicy="no-referrer-when-downgrade"
+                        allowFullScreen
+                    />
+                    <div className="ph-map-provider-badge">
+                        <span>OCULOPS Business Radar</span>
+                        <span>Powered by Google Maps</span>
+                    </div>
+                </>
+            ) : null}
             <svg width="100%" height="100%" className="ph-map-grid-svg">
                 {[...Array(11)].map((_, i) => (
                     <g key={i}>
@@ -46,6 +87,11 @@ function MapEmbed({ leads, selectedId, onSelectLead }) {
                     </g>
                 ))}
             </svg>
+            {!iframeSrc && mapLeads.length === 0 ? (
+                <div className="ph-map-empty-state">
+                    Run a scan to project targets on the map.
+                </div>
+            ) : null}
             {mapLeads.map(lead => {
                 const pos = toXY(lead.lat, lead.lng)
                 const isSelected = lead.id === selectedId

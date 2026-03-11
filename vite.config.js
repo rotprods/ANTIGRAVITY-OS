@@ -6,6 +6,12 @@ import path from 'path'
 export default defineConfig({
   plugins: [react()],
   base: '/', // Web deployment (was './' for Electron)
+  test: {
+    globals: true,
+    environment: 'jsdom',
+    setupFiles: ['./src/test/setup.js'],
+    css: true,
+  },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),

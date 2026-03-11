@@ -4,22 +4,26 @@
 
 import React from 'react'
 import ReactDOM from 'react-dom/client'
+import { initSentry } from './lib/sentry'
 import App from './App.jsx'
 import './styles/tokens.css'
 import './styles/global.css'
 import './styles/animations.css'
 
+// Initialize Sentry before React renders (no-op if DSN not set)
+initSentry()
+
 window.addEventListener('error', (e) => {
-  console.error('[CRITICAL] Runtime error:', e.message, e.filename, e.lineno);
+  if (import.meta.env.DEV) console.error('[CRITICAL] Runtime error:', e.message, e.filename, e.lineno);
 });
 
 window.addEventListener('unhandledrejection', (e) => {
-  console.error('[CRITICAL] Unhandled promise rejection:', e.reason);
+  if (import.meta.env.DEV) console.error('[CRITICAL] Unhandled promise rejection:', e.reason);
 });
 
 const rootElement = document.getElementById('root');
 if (!rootElement) {
-  console.error('❌ [FATAL] Root element not found!');
+  if (import.meta.env.DEV) console.error('[FATAL] Root element not found!');
 } else {
   ReactDOM.createRoot(rootElement).render(
     <React.StrictMode>

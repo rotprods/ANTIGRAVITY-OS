@@ -3,9 +3,11 @@
 // 100-Year UX: strictly OLED Black, Gold, 1px Primitives
 // ═══════════════════════════════════════════════════
 
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import { useKnowledge } from '../../hooks/useKnowledge'
 import { useKnowledgeStore } from '../../stores/useKnowledgeStore'
+import { useAppStore } from '../../stores/useAppStore'
+import ModuleSkeleton from '../ui/ModuleSkeleton'
 
 const TYPES = [
     { value: 'learning', label: 'MACHINE LEARNING', icon: '🧠' },
@@ -18,10 +20,14 @@ const TYPES = [
 const emptyForm = { title: '', type: 'learning', content: '', tags: '' }
 
 function Knowledge() {
-    const { entries, loading, addEntry, removeEntry, byType } = useKnowledge()
+    const { entries, loading, addEntry, removeEntry, byType, searchSemantic, searchResults, searching, clearSearch, embedAll, embeddedCount } = useKnowledge()
     const { search, typeFilter: filter, setSearch, setTypeFilter: setFilter } = useKnowledgeStore()
+    const { toast } = useAppStore()
     const [form, setForm] = useState(emptyForm)
     const [saving, setSaving] = useState(false)
+    const [semanticMode, setSemanticMode] = useState(false)
+    const [semanticQuery, setSemanticQuery] = useState('')
+    const [embedding, setEmbedding] = useState(false)
 
     const handleAdd = async () => {
         if (!form.title.trim()) return
@@ -29,29 +35,62 @@ function Knowledge() {
         await addEntry({ ...form, date: new Date().toISOString().split('T')[0], tags: form.tags.split(',').map(t => t.trim()).filter(Boolean) })
         setForm(emptyForm)
         setSaving(false)
+        toast('Entry encrypted & embedding queued', 'success')
     }
 
-    const filtered = entries
-        .filter(e => filter === 'all' || e.type === filter)
-        .filter(e => !search || e.title?.toLowerCase().includes(search.toLowerCase()) || e.content?.toLowerCase().includes(search.toLowerCase()))
-        .sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0))
+    const handleSemanticSearch = useCallback(async () => {
+        if (!semanticQuery.trim()) return
+        await searchSemantic(semanticQuery, { matchCount: 15, threshold: 0.6, filterType: filter !== 'all' ? filter : null })
+    }, [semanticQuery, searchSemantic, filter])
 
-    if (loading) return <div className="fade-in mono text-xs text-tertiary" style={{ padding: '32px', textAlign: 'center' }}>ACCESSING SECURE VAULT...</div>
+    const handleEmbedAll = useCallback(async () => {
+        setEmbedding(true)
+        const result = await embedAll()
+        setEmbedding(false)
+        if (result) toast(`Embedded ${result.embedded}/${result.total} entries`, 'success')
+        else toast('Batch embed failed', 'warning')
+    }, [embedAll, toast])
+
+    const displayEntries = semanticMode && searchResults
+        ? searchResults
+        : entries
+            .filter(e => filter === 'all' || e.type === filter)
+            .filter(e => !search || e.title?.toLowerCase().includes(search.toLowerCase()) || e.content?.toLowerCase().includes(search.toLowerCase()))
+            .sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0))
+
+    if (loading) return <ModuleSkeleton variant="table" rows={5} />
 
     return (
-        <div className="fade-in" style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+        <div className="fade-in module-wrap">
             {/* ── HEADER ── */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: '16px', borderBottom: '1px solid var(--color-border)', marginBottom: '16px' }}>
+            <div className="module-header-bar">
                 <div>
                     <h1 style={{ fontFamily: 'var(--font-editorial)', color: 'var(--color-primary)', letterSpacing: '0.05em', margin: 0 }}>KNOWLEDGE VAULT</h1>
-                    <span className="mono text-xs text-tertiary">ENCRYPTED CORPORATE MEMORY & OPERATIONAL PLAYBOOKS</span>
+                    <span className="mono text-xs text-tertiary">ENCRYPTED CORPORATE MEMORY & OPERATIONAL PLAYBOOKS // {embeddedCount}/{entries.length} VECTORIZED</span>
+                </div>
+                <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                    <button
+                        className="mono"
+                        style={{ fontSize: '9px', padding: '6px 12px', background: semanticMode ? 'var(--color-primary)' : '#000', color: semanticMode ? '#000' : 'var(--color-primary)', border: '1px solid var(--color-primary)', cursor: 'pointer', fontWeight: 'bold' }}
+                        onClick={() => { setSemanticMode(!semanticMode); if (semanticMode) clearSearch() }}
+                    >
+                        {semanticMode ? 'AI SEARCH ON' : 'AI SEARCH'}
+                    </button>
+                    <button
+                        className="mono"
+                        style={{ fontSize: '9px', padding: '6px 12px', background: '#000', color: 'var(--color-info)', border: '1px solid var(--border-subtle)', cursor: 'pointer', fontWeight: 'bold' }}
+                        onClick={handleEmbedAll}
+                        disabled={embedding}
+                    >
+                        {embedding ? 'VECTORIZING...' : 'EMBED ALL'}
+                    </button>
                 </div>
             </div>
 
-            <div style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '16px', paddingBottom: '32px' }}>
+            <div className="module-scroll">
 
                 {/* ── KPI STRIP ── */}
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '1px', background: 'var(--color-border)', border: '1px solid var(--color-border)' }}>
+                <div className="kpi-strip kpi-strip-5">
                     {TYPES.map(t => {
                         const count = (byType[t.value] || []).length
                         const isSelected = filter === t.value
@@ -67,33 +106,63 @@ function Knowledge() {
                     })}
                 </div>
 
+                {/* ── SEMANTIC SEARCH BAR ── */}
+                {semanticMode && (
+                    <div style={{ border: '1px solid var(--color-primary)', background: '#000', padding: '16px', display: 'flex', gap: '8px', alignItems: 'center' }}>
+                        <span className="mono text-xs font-bold" style={{ color: 'var(--color-primary)', whiteSpace: 'nowrap' }}>AI QUERY:</span>
+                        <input
+                            className="input mono text-xs"
+                            style={{ flex: 1, border: '1px solid var(--border-subtle)', background: 'var(--color-bg-2)', borderRadius: 0, padding: '10px', color: 'var(--color-text)' }}
+                            placeholder="Describe what you're looking for in natural language..."
+                            value={semanticQuery}
+                            onChange={e => setSemanticQuery(e.target.value)}
+                            onKeyDown={e => e.key === 'Enter' && handleSemanticSearch()}
+                        />
+                        <button
+                            className="mono font-bold"
+                            style={{ padding: '10px 20px', background: 'var(--color-primary)', color: '#000', border: 'none', fontSize: '10px', cursor: 'pointer', whiteSpace: 'nowrap' }}
+                            onClick={handleSemanticSearch}
+                            disabled={searching}
+                        >
+                            {searching ? 'SCANNING...' : 'VECTOR SCAN'}
+                        </button>
+                    </div>
+                )}
+
                 <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '16px' }}>
 
                     {/* ── MAIN VAULT CONTENT ── */}
                     <div style={{ border: '1px solid var(--color-border)', display: 'flex', flexDirection: 'column' }}>
                         <div className="mono text-xs font-bold" style={{ padding: '12px 16px', background: 'var(--border-subtle)', borderBottom: '1px solid var(--color-border)', color: 'var(--color-primary)', display: 'flex', justifyContent: 'space-between' }}>
-                            <span>/// SECURE ENTRIES [{filtered.length}]</span>
-                            <div className="input-group" style={{ margin: 0 }}>
-                                <input className="input mono text-xs" style={{ border: '1px solid var(--border-subtle)', background: '#000', borderRadius: 0, padding: '4px 8px', color: 'var(--color-primary)', width: '200px' }} placeholder="SEARCH ARCHIVE..." value={search} onChange={e => setSearch(e.target.value)} />
-                            </div>
+                            <span>/// {semanticMode && searchResults ? `SEMANTIC RESULTS [${displayEntries.length}]` : `SECURE ENTRIES [${displayEntries.length}]`}</span>
+                            {!semanticMode && (
+                                <div className="input-group" style={{ margin: 0 }}>
+                                    <input className="input mono text-xs" style={{ border: '1px solid var(--border-subtle)', background: '#000', borderRadius: 0, padding: '4px 8px', color: 'var(--color-primary)', width: '200px' }} placeholder="SEARCH ARCHIVE..." value={search} onChange={e => setSearch(e.target.value)} />
+                                </div>
+                            )}
                         </div>
 
                         <div style={{ display: 'flex', flexDirection: 'column', background: 'var(--color-bg-2)', flex: 1, minHeight: '300px' }}>
-                            {filtered.length === 0 ? (
+                            {displayEntries.length === 0 ? (
                                 <div className="mono text-xs text-tertiary" style={{ padding: '32px', textAlign: 'center' }}>NO RECORDS FOUND IN ARCHIVE.</div>
                             ) : (
                                 <div style={{ display: 'flex', flexDirection: 'column' }}>
-                                    {filtered.map((entry, idx) => (
-                                        <div key={entry.id} style={{ display: 'flex', flexDirection: 'column', padding: '16px', borderBottom: idx < filtered.length - 1 ? '1px solid var(--border-subtle)' : 'none', background: idx % 2 === 0 ? 'transparent' : '#000' }}>
+                                    {displayEntries.map((entry, idx) => (
+                                        <div key={entry.id} style={{ display: 'flex', flexDirection: 'column', padding: '16px', borderBottom: idx < displayEntries.length - 1 ? '1px solid var(--border-subtle)' : 'none', background: idx % 2 === 0 ? 'transparent' : '#000' }}>
                                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '8px' }}>
                                                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                                                     <span style={{ fontSize: '14px' }}>{TYPES.find(t => t.value === entry.type)?.icon || '📖'}</span>
                                                     <span className="mono font-bold" style={{ color: 'var(--color-text)', fontSize: '14px' }}>{entry.title.toUpperCase()}</span>
+                                                    {entry.similarity != null && (
+                                                        <span className="mono" style={{ fontSize: '9px', padding: '2px 6px', background: 'var(--color-primary)', color: '#000', fontWeight: 'bold' }}>
+                                                            {Math.round(entry.similarity * 100)}% MATCH
+                                                        </span>
+                                                    )}
                                                 </div>
                                                 <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-                                                    <span className="mono text-xs" style={{ border: '1px solid var(--border-subtle)', color: 'var(--color-info)', padding: '2px 6px' }}>{entry.type.toUpperCase()}</span>
+                                                    <span className="mono text-xs" style={{ border: '1px solid var(--border-subtle)', color: 'var(--color-info)', padding: '2px 6px' }}>{(entry.type || 'note').toUpperCase()}</span>
                                                     <span className="mono text-xs text-tertiary">{entry.date}</span>
-                                                    <button className="btn btn-ghost mono" style={{ fontSize: '9px', padding: '2px 8px', borderColor: 'var(--color-danger)', color: 'var(--color-danger)' }} onClick={() => removeEntry(entry.id)}>PURGE</button>
+                                                    {!entry.similarity && <button className="btn btn-ghost mono" style={{ fontSize: '9px', padding: '2px 8px', borderColor: 'var(--color-danger)', color: 'var(--color-danger)' }} onClick={() => removeEntry(entry.id)}>PURGE</button>}
                                                 </div>
                                             </div>
 

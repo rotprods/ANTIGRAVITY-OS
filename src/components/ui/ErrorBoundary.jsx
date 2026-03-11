@@ -13,7 +13,7 @@ export class ErrorBoundary extends Component {
     }
 
     componentDidCatch(error, info) {
-        console.error('[ErrorBoundary]', error, info.componentStack)
+        if (import.meta.env.DEV) console.error('[ErrorBoundary]', error, info.componentStack)
     }
 
     render() {

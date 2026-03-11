@@ -186,6 +186,12 @@ function normalizeResponse(normalizerKey: string | null, raw: any, meta: JsonRec
                 mx: raw?.mx ?? null,
                 raw,
             };
+        case "disify_view":
+            return {
+                id: meta.params?.id || null,
+                record: raw ?? null,
+                raw,
+            };
         case "microlink_preview":
             return raw?.data || raw;
         case "open_meteo_forecast":

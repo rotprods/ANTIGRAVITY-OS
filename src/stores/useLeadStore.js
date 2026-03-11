@@ -20,6 +20,13 @@ export const useLeadStore = create(
       clearSelected: () => set({ selected: [] }),
       resetFilters: () => set({ filters: { status: 'all', source: 'all' }, search: '' }),
     }),
-    { name: 'ag-leads-ui', version: 1 }
+    {
+      name: 'ag-leads-ui',
+      version: 1,
+      migrate: (persisted, version) => {
+        if (version === 0) return { filters: { status: 'all', source: 'all' }, search: '', selected: [], view: 'table', ...persisted }
+        return persisted
+      },
+    }
   )
 )

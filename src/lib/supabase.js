@@ -8,7 +8,7 @@ const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
 if (!supabaseUrl || !supabaseAnonKey) {
-    console.warn('⚠️ Supabase credentials not configured. Running in offline mode.');
+    if (import.meta.env.DEV) console.warn('Supabase credentials not configured. Running in offline mode.');
 }
 
 // Ensure URL is at least syntactically valid to prevent `@supabase/supabase-js`'s internal "Invalid supabaseUrl" throw.
@@ -148,14 +148,14 @@ export async function fetchAll(table, filters = {}) {
         query = query.eq(key, value);
     });
     const { data, error } = await query.order('created_at', { ascending: false });
-    if (error) { console.error(`Error fetching ${table}:`, error); return []; }
+    if (error) { if (import.meta.env.DEV) console.error(`Error fetching ${table}:`, error); return []; }
     return data;
 }
 
 export async function fetchOne(table, id) {
     if (!supabase) return null;
     const { data, error } = await supabase.from(table).select('*').eq('id', id).single();
-    if (error) { console.error(`Error fetching ${table}/${id}:`, error); return null; }
+    if (error) { if (import.meta.env.DEV) console.error(`Error fetching ${table}/${id}:`, error); return null; }
     return data;
 }
 
@@ -169,21 +169,21 @@ export async function insertRow(table, row) {
     }
 
     const { data, error } = await supabase.from(table).insert(payload).select().single();
-    if (error) { console.error(`Error inserting into ${table}:`, error); return null; }
+    if (error) { if (import.meta.env.DEV) console.error(`Error inserting into ${table}:`, error); return null; }
     return data;
 }
 
 export async function updateRow(table, id, updates) {
     if (!supabase) return null;
     const { data, error } = await supabase.from(table).update(updates).eq('id', id).select().single();
-    if (error) { console.error(`Error updating ${table}/${id}:`, error); return null; }
+    if (error) { if (import.meta.env.DEV) console.error(`Error updating ${table}/${id}:`, error); return null; }
     return data;
 }
 
 export async function deleteRow(table, id) {
     if (!supabase) return false;
     const { error } = await supabase.from(table).delete().eq('id', id);
-    if (error) { console.error(`Error deleting from ${table}/${id}:`, error); return false; }
+    if (error) { if (import.meta.env.DEV) console.error(`Error deleting from ${table}/${id}:`, error); return false; }
     return true;
 }
 

@@ -96,13 +96,8 @@ Deno.serve(async (req: Request) => {
           scanId = String((atlasResult.output as Record<string, unknown> | undefined)?.scan?.id || "");
         }
 
+        // Hunter now includes strategic briefs (merged Strategist)
         const hunterResult = await callAgent("agent-hunter", {
-          action: "cycle",
-          scan_id: scanId,
-          user_id: body.user_id,
-          skip_telegram: true,
-        });
-        const strategistResult = await callAgent("agent-strategist", {
           action: "cycle",
           scan_id: scanId,
           user_id: body.user_id,
@@ -118,7 +113,6 @@ Deno.serve(async (req: Request) => {
           scan_id: scanId,
           atlas: atlasResult,
           hunter: hunterResult,
-          strategist: strategistResult,
           outreach: outreachResult,
         };
       },

@@ -94,3 +94,20 @@ CREATED:
 ---
 
 <!-- NEXT SESSION: append below this line -->
+
+## 2026-03-10 | Terminal: Opus Preview (this session)
+
+### Summary
+- Added the public API catalog “By Access / By Theme / Open Only” toggles, refreshed `MiniAppLauncher` + `publicApiCatalog` logic, and verified `npm run lint` + `npm run build` still pass.  
+- Ran `npm run preview` + Playwright to inspect the API Network while toggling each catalog view and capturing screenshots (`api-network-catalog-access.png`, `api-network-catalog-open-only.png`).  
+- Attempted a Vercel deploy (`npx vercel --prod --yes`) but it failed twice because `api.vercel.com` could not be resolved; deployment is still pending.
+
+### Errors
+- `npx vercel --prod --yes` → `getaddrinfo ENOTFOUND api.vercel.com` (project/teams fetch).  
+- Preview console shows Supabase fetch failures for `ai-advisor`, `market-data`, `social-signals`, `messaging-dispatch`, `meta-business-discovery`, `tiktok-business-search`, `manychat-sync`, `banana-generate`, `websocket` connection errors (remote functions not reachable without secrets).
+
+### Pending
+- [ ] Redeploy the cleaned build to Vercel once `api.vercel.com` is accessible (or from another network).  
+- [ ] Supply `APIFY_TOKEN`/valid Reddit credentials so `social-signals` can stop falling back to blocked endpoints.  
+- [ ] Set `TELEGRAM_CHAT_ID` (and optionally thread) so Herald/Scribe reports have a default destination.  
+- [ ] Capture the new API catalog info into n8n or agents (scripts/workflows need to learn the new access-theme grouping).  

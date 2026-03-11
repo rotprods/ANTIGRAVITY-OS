@@ -144,6 +144,13 @@ export const useAppStore = create(
         }
       },
     }),
-    { name: 'oculops-v10' }
+    {
+      name: 'oculops-v10',
+      version: 1,
+      migrate: (persisted, version) => {
+        if (version === 0) return { ...persisted }
+        return persisted
+      },
+    }
   )
 )

@@ -5,6 +5,8 @@
 
 import { useState } from 'react'
 import { useDecisions } from '../../hooks/useDecisions'
+import VaultAgentPanel from '../ui/VaultAgentPanel'
+import ModuleSkeleton from '../ui/ModuleSkeleton'
 
 const emptyForm = { title: '', context: '', options: '', rationale: '', expected_outcome: '', review_date: '' }
 
@@ -21,7 +23,7 @@ function Decisions() {
         setSaving(false)
     }
 
-    if (loading) return <div className="fade-in mono text-xs text-tertiary" style={{ padding: '32px', textAlign: 'center' }}>ACCESSING STRATEGIC ARCHIVES...</div>
+    if (loading) return <ModuleSkeleton variant="kpi" rows={3} />
 
     return (
         <div className="fade-in" style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
@@ -166,6 +168,9 @@ function Decisions() {
                 </div>
 
             </div>
+
+                <VaultAgentPanel title="DECISION INTELLIGENCE" namespaces={['product', 'research', 'orchestration']} />
+
         </div>
     )
 }

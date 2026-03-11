@@ -7,6 +7,8 @@ import { useState } from 'react'
 import { useTasks } from '../../hooks/useTasks'
 import { useAppStore } from '../../stores/useAppStore'
 import { useTaskStore } from '../../stores/useTaskStore'
+import VaultAgentPanel from '../ui/VaultAgentPanel'
+import ModuleSkeleton from '../ui/ModuleSkeleton'
 
 function Execution() {
   const { tasks, loading, addTask, updateTask, completionRate, currentDay } = useTasks()
@@ -37,7 +39,7 @@ function Execution() {
     'pending': { icon: '[ ]', color: 'var(--text-tertiary)', label: 'PENDING' }
   }
 
-  if (loading) return <div className="fade-in mono text-xs" style={{ padding: '3rem', textAlign: 'center', color: 'var(--color-primary)' }}>&gt; ROOT EXEC: INJECTING PAYLOAD...</div>
+  if (loading) return <ModuleSkeleton variant="table" rows={5} />
 
   return (
     <div className="fade-in" style={{ height: '100%', display: 'flex', flexDirection: 'column', background: '#000' }}>
@@ -149,6 +151,11 @@ function Execution() {
           )}
         </div>
       </div>
+
+      <div style={{ marginTop: '16px' }}>
+        <VaultAgentPanel title="EXECUTION INTELLIGENCE" namespaces={['orchestration', 'product']} />
+      </div>
+
     </div>
   )
 }

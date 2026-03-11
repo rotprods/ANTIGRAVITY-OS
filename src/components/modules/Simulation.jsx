@@ -8,6 +8,7 @@ import { useAppStore } from '../../stores/useAppStore'
 import { useFinance } from '../../hooks/useFinance'
 import { useDeals } from '../../hooks/useDeals'
 import { Charts } from '../../lib/charts'
+import VaultAgentPanel from '../ui/VaultAgentPanel'
 
 function simulate(params, startClients = 0, startMrr = 0, months = 3) {
   const { contactsPerWeek, responseRate, meetingRate, closeRate, avgTicket, churn, capacity } = params
@@ -223,6 +224,11 @@ function Simulation() {
           </table>
         </div>
       </div>
+
+      <div style={{ marginTop: '16px' }}>
+        <VaultAgentPanel title="SIMULATION INTELLIGENCE" namespaces={['data', 'research']} />
+      </div>
+
     </div>
   )
 }

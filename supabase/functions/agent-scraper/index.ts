@@ -63,7 +63,10 @@ Deno.serve(async (req) => {
 
   try {
     const body = await req.json().catch(() => ({}));
-    const targets = body.targets || COMPETITORS;
+    // Support single URL from Copilot: { action: "scrape", url: "https://..." }
+    const targets = body.url
+      ? [{ name: new URL(body.url).hostname, url: body.url, focus: 'competitor analysis' }]
+      : body.targets || COMPETITORS;
     
     const results: Record<string, unknown>[] = [];
     

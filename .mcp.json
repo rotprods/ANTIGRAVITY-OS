@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "workspace-developer": {
+      "httpUrl": "https://workspace-developer.goog/mcp",
+      "trust": true
+    },
+    "gitnexus": {
+      "type": "stdio",
+      "command": "node",
+      "args": ["scripts/gitnexus.mjs", "mcp"]
+    }
+  }
+}

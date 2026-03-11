@@ -82,6 +82,26 @@ Deno.serve(async (req: Request) => {
       updatedLead = data;
     }
 
+    // Emit lead.qualified event if score >= 72
+    if (qualification.aiScore >= 72 && body.lead_id) {
+      try {
+        await admin.from("event_log").insert({
+          event_type: "lead.qualified",
+          payload: {
+            lead_id: body.lead_id,
+            score: qualification.aiScore,
+            status: qualification.status,
+            contact_name: qualification.contactName,
+            email: qualification.email,
+            estimated_deal_value: qualification.estimatedDealValue,
+          },
+          user_id: (lead as Record<string, unknown>).user_id || null,
+        });
+      } catch (eventError) {
+        console.error("[ai-qualifier] Failed to emit lead.qualified:", eventError);
+      }
+    }
+
     return jsonResponse({
       ok: true,
       qualification,

@@ -5,6 +5,8 @@
 
 import { useState } from 'react'
 import { useOpportunities } from '../../hooks/useOpportunities'
+import VaultAgentPanel from '../ui/VaultAgentPanel'
+import ModuleSkeleton from '../ui/ModuleSkeleton'
 
 const STATUSES = [
     { value: 'identified', label: 'IDENTIFIED', color: 'var(--color-info)', symbol: '[?]' },
@@ -40,22 +42,22 @@ function Opportunities() {
         if (idx < order.length - 1) await updateOpportunity(opp.id, { status: order[idx + 1] })
     }
 
-    if (loading) return <div className="fade-in mono text-xs" style={{ padding: '2rem', textAlign: 'center', color: 'var(--color-primary)' }}>/// INTERCEPTING OPPORTUNITY SIGNALS...</div>
+    if (loading) return <ModuleSkeleton variant="kpi" rows={4} />
 
     return (
-        <div className="fade-in" style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+        <div className="fade-in module-wrap">
             {/* ── HEADER ── */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: '16px', borderBottom: '1px solid var(--color-border)', marginBottom: '16px' }}>
+            <div className="module-header-bar">
                 <div>
                     <h1 style={{ fontFamily: 'var(--font-editorial)', color: 'var(--color-primary)', letterSpacing: '0.05em', margin: 0 }}>OPPORTUNITY MATRIX</h1>
                     <span className="mono text-xs text-tertiary">SIGNAL EVALUATION & PURSUIT LOG</span>
                 </div>
             </div>
 
-            <div style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '16px', paddingBottom: '32px' }}>
+            <div className="module-scroll">
 
                 {/* ── KPI STRIP ── */}
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '1px', background: 'var(--border-subtle)', border: '1px solid var(--color-border)' }}>
+                <div className="kpi-strip kpi-strip-5">
                     {STATUSES.map(s => (
                         <div key={s.value} style={{ background: '#000', padding: '16px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
                             <div className="mono text-2xs" style={{ color: 'var(--text-tertiary)' }}>{s.symbol} {s.label}</div>
@@ -67,8 +69,8 @@ function Opportunities() {
                 </div>
 
                 {/* ── SIGNAL LIST ── */}
-                <div style={{ border: '1px solid var(--color-border)', background: 'var(--color-bg-2)', display: 'flex', flexDirection: 'column' }}>
-                    <div className="mono text-xs font-bold" style={{ padding: '12px 16px', background: 'var(--border-subtle)', borderBottom: '1px solid var(--color-border)', color: 'var(--color-primary)' }}>
+                <div className="section-box">
+                    <div className="section-header">
                         /// DETECTED OPPORTUNITIES [{opportunities.length}]
                     </div>
                     {opportunities.length === 0 ? (
@@ -76,7 +78,7 @@ function Opportunities() {
                             CLEAR SKIES. NO OPPORTUNITIES DETECTED.
                         </div>
                     ) : (
-                        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '11px', fontFamily: 'var(--font-mono)', textAlign: 'left' }}>
+                        <table className="data-table">
                             <thead style={{ background: '#000', borderBottom: '1px solid var(--border-subtle)' }}>
                                 <tr>
                                     <th style={{ padding: '12px 16px', color: 'var(--color-text-2)' }}>ID</th>
@@ -92,7 +94,7 @@ function Opportunities() {
                                     const statusObj = STATUSES.find(s => s.value === opp.status) || STATUSES[0]
                                     return (
                                         <tr key={opp.id} style={{ borderBottom: idx < opportunities.length - 1 ? '1px solid var(--border-subtle)' : 'none', background: idx % 2 === 0 ? 'transparent' : '#000' }}>
-                                            <td style={{ padding: '12px 16px', color: 'var(--text-tertiary)' }}>{opp.id.slice(0, 6).toUpperCase()}</td>
+                                            <td style={{ padding: '12px 16px', color: 'var(--text-tertiary)' }}>{String(opp.id).slice(0, 6).toUpperCase()}</td>
                                             <td style={{ padding: '12px 16px' }}>
                                                 <div style={{ fontWeight: 'bold', color: 'var(--color-text)' }}>{opp.title.toUpperCase()}</div>
                                                 {opp.description && <div style={{ color: 'var(--text-tertiary)', fontSize: '9px', marginTop: '4px' }}>{opp.description.toUpperCase()}</div>}
@@ -117,15 +119,15 @@ function Opportunities() {
                 </div>
 
                 {/* ── INPUT MATRIX ── */}
-                <div style={{ border: '1px solid var(--color-border)', background: 'var(--color-bg-2)', display: 'flex', flexDirection: 'column' }}>
-                    <div className="mono text-xs font-bold" style={{ padding: '12px 16px', background: 'var(--border-subtle)', borderBottom: '1px solid var(--color-border)', color: 'var(--color-primary)' }}>
+                <div className="section-box">
+                    <div className="section-header">
                         /// COMPILE NEW OPPORTUNITY DOSSIER
                     </div>
                     <div style={{ padding: '16px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
                         <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1.5fr) minmax(0, 1fr) minmax(0, 1fr) 120px', gap: '12px' }}>
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
                                 <label className="mono text-2xs" style={{ color: 'var(--text-tertiary)' }}>OPP DESIGNATION</label>
-                                <input className="mono" style={{ background: '#000', border: '1px solid var(--border-subtle)', color: 'var(--color-text)', padding: '10px 12px', fontSize: '11px', outline: 'none', width: '100%' }} value={form.title} onChange={e => setForm(f => ({ ...f, title: e.target.value }))} placeholder="PROJECT TARGET" />
+                                <input className="mono" className="input-terminal" value={form.title} onChange={e => setForm(f => ({ ...f, title: e.target.value }))} placeholder="PROJECT TARGET" />
                             </div>
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
                                 <label className="mono text-2xs" style={{ color: 'var(--text-tertiary)' }}>PROJECTED VAL ($)</label>
@@ -157,6 +159,8 @@ function Opportunities() {
                         </div>
                     </div>
                 </div>
+
+                <VaultAgentPanel title="MARKET INTELLIGENCE" namespaces={['research', 'product']} />
 
             </div>
         </div>

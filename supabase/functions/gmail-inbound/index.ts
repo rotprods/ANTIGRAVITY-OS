@@ -5,6 +5,45 @@ import { getHeader, extractMessageText, fetchGmailMessage, listGmailHistory } fr
 import { base64UrlDecode, compact, errorResponse, handleCors, jsonResponse, readJson } from "../_shared/http.ts";
 import { admin } from "../_shared/supabase.ts";
 
+const OPENAI_API_KEY = Deno.env.get("OPENAI_API_KEY");
+
+async function classifyMessage(content: string, subject: string | null): Promise<Record<string, unknown> | null> {
+  if (!OPENAI_API_KEY || !content || content.length < 10) return null;
+
+  try {
+    const res = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${OPENAI_API_KEY}`,
+      },
+      body: JSON.stringify({
+        model: "gpt-4o-mini",
+        messages: [
+          {
+            role: "system",
+            content: `Classify this inbound email response. Return JSON only:
+{ "intent": "interested|not_interested|meeting_request|auto_reply|question|unsubscribe", "confidence": 0.0-1.0, "summary": "one sentence summary", "suggested_action": "create_meeting|send_followup|mark_closed|none" }`,
+          },
+          {
+            role: "user",
+            content: `Subject: ${subject || "(none)"}\n\n${content.slice(0, 2000)}`,
+          },
+        ],
+        temperature: 0.2,
+        max_tokens: 150,
+      }),
+    });
+
+    if (!res.ok) return null;
+    const data = await res.json();
+    const raw = data.choices?.[0]?.message?.content || "";
+    return JSON.parse(raw.replace(/```json\n?|```/g, "").trim());
+  } catch {
+    return null;
+  }
+}
+
 function parseMailbox(value: string | null) {
   const raw = compact(value);
   if (!raw) return { name: null, email: null };
@@ -212,6 +251,33 @@ async function persistInboundMessage({
       provider_message_id: messageId,
     },
   });
+
+  // AI classification of inbound message
+  try {
+    const classification = await classifyMessage(content || "", subject);
+    if (classification) {
+      await admin
+        .from("messages")
+        .update({ classification })
+        .eq("id", data.id);
+
+      // Emit classified event for downstream automation
+      await admin.from("event_log").insert({
+        event_type: "message.classified",
+        payload: {
+          message_id: data.id,
+          contact_id: contact.id,
+          conversation_id: conversation.id,
+          intent: classification.intent,
+          confidence: classification.confidence,
+          suggested_action: classification.suggested_action,
+        },
+        user_id: userId,
+      });
+    }
+  } catch (classifyError) {
+    console.error("[gmail-inbound] classification failed:", classifyError);
+  }
 
   try {
     await executeTriggeredWorkflows({

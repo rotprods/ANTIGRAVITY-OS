@@ -1,0 +1,180 @@
+{
+  "name": "OCULOPS — Lead to CRM Pipeline",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "chatbot-lead-qualifier",
+        "responseMode": "responseNode"
+      },
+      "name": "Webhook (lead.qualified)",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [220, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": { "caseSensitive": true },
+          "conditions": [
+            {
+              "leftValue": "={{ $json.payload.score }}",
+              "rightValue": "72",
+              "operator": { "type": "number", "operation": "gte" }
+            }
+          ]
+        }
+      },
+      "name": "Score >= 72?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [440, 300]
+    },
+    {
+      "parameters": {
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/contacts",
+        "method": "POST",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            { "name": "name", "value": "={{ $json.payload.contact_name || 'Unknown Lead' }}" },
+            { "name": "email", "value": "={{ $json.payload.email }}" },
+            { "name": "source", "value": "prospector" },
+            { "name": "status", "value": "qualified" },
+            { "name": "confidence", "value": "={{ $json.payload.score }}" },
+            { "name": "user_id", "value": "={{ $json.user_id }}" }
+          ]
+        },
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "headerParameters": {
+          "parameters": [
+            { "name": "apikey", "value": "={{ $env.SUPABASE_ANON_KEY }}" },
+            { "name": "Authorization", "value": "Bearer {{ $env.SUPABASE_SERVICE_ROLE_KEY }}" },
+            { "name": "Prefer", "value": "return=representation" }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Create Contact",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [660, 200]
+    },
+    {
+      "parameters": {
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/deals",
+        "method": "POST",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            { "name": "title", "value": "={{ $('Create Contact').item.json.name }} — Auto Deal" },
+            { "name": "contact_id", "value": "={{ $('Create Contact').item.json.id }}" },
+            { "name": "value", "value": "={{ $json.payload.estimated_deal_value || 1500 }}" },
+            { "name": "probability", "value": "={{ $json.payload.score }}" },
+            { "name": "stage", "value": "lead" },
+            { "name": "user_id", "value": "={{ $json.user_id }}" },
+            { "name": "notes", "value": "Auto-created from lead qualification pipeline" }
+          ]
+        },
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "headerParameters": {
+          "parameters": [
+            { "name": "apikey", "value": "={{ $env.SUPABASE_ANON_KEY }}" },
+            { "name": "Authorization", "value": "Bearer {{ $env.SUPABASE_SERVICE_ROLE_KEY }}" },
+            { "name": "Prefer", "value": "return=representation" }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Create Deal",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [880, 200]
+    },
+    {
+      "parameters": {
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/event_log",
+        "method": "POST",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            { "name": "event_type", "value": "deal.created" },
+            { "name": "payload", "value": "={{ JSON.stringify({ deal_id: $('Create Deal').item.json.id, contact_id: $('Create Contact').item.json.id, source: 'lead_pipeline' }) }}" },
+            { "name": "user_id", "value": "={{ $json.user_id }}" }
+          ]
+        },
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "headerParameters": {
+          "parameters": [
+            { "name": "apikey", "value": "={{ $env.SUPABASE_ANON_KEY }}" },
+            { "name": "Authorization", "value": "Bearer {{ $env.SUPABASE_SERVICE_ROLE_KEY }}" },
+            { "name": "Prefer", "value": "return=minimal" }
+          ]
+        }
+      },
+      "name": "Emit deal.created Event",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1100, 200]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={ \"ok\": true, \"message\": \"Lead promoted to CRM\" }"
+      },
+      "name": "Respond OK",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [1320, 200]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={ \"ok\": true, \"message\": \"Score below threshold, skipped\" }"
+      },
+      "name": "Respond Skipped",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [660, 400]
+    }
+  ],
+  "connections": {
+    "Webhook (lead.qualified)": {
+      "main": [
+        [{ "node": "Score >= 72?", "type": "main", "index": 0 }]
+      ]
+    },
+    "Score >= 72?": {
+      "main": [
+        [{ "node": "Create Contact", "type": "main", "index": 0 }],
+        [{ "node": "Respond Skipped", "type": "main", "index": 0 }]
+      ]
+    },
+    "Create Contact": {
+      "main": [
+        [{ "node": "Create Deal", "type": "main", "index": 0 }]
+      ]
+    },
+    "Create Deal": {
+      "main": [
+        [{ "node": "Emit deal.created Event", "type": "main", "index": 0 }]
+      ]
+    },
+    "Emit deal.created Event": {
+      "main": [
+        [{ "node": "Respond OK", "type": "main", "index": 0 }]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "tags": [
+    { "name": "oculops" },
+    { "name": "crm" },
+    { "name": "lead-pipeline" }
+  ]
+}

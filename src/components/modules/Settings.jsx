@@ -3,7 +3,8 @@
 // 100-Year UX: strictly OLED Black, Gold, 1px Primitives
 // ═══════════════════════════════════════════════════
 
-import { useState } from 'react'
+import { useState, useEffect, useCallback } from 'react'
+import { supabase, getCurrentUserId } from '../../lib/supabase'
 
 const AGENCY_DEFAULTS = {
   name: 'OCULOPS AGENCY',
@@ -32,11 +33,25 @@ function formatPublicValue(key, value) {
 }
 
 function Settings() {
-  const [agency, setAgency] = useState(() => {
-    try { return JSON.parse(localStorage.getItem('ag_agency') || 'null') || AGENCY_DEFAULTS } catch { return AGENCY_DEFAULTS }
-  })
+  const [agency, setAgency] = useState(AGENCY_DEFAULTS)
   const [saved, setSaved] = useState(false)
   const [activeTab, setActiveTab] = useState('agency')
+  const [loadingProfile, setLoadingProfile] = useState(true)
+
+  // Load agency settings from Supabase profiles.settings
+  useEffect(() => {
+    async function loadSettings() {
+      if (!supabase) { setLoadingProfile(false); return }
+      const userId = await getCurrentUserId()
+      if (!userId) { setLoadingProfile(false); return }
+      const { data } = await supabase.from('profiles').select('settings').eq('id', userId).single()
+      if (data?.settings?.agency) {
+        setAgency(prev => ({ ...prev, ...data.settings.agency }))
+      }
+      setLoadingProfile(false)
+    }
+    loadSettings()
+  }, [])
 
   const publicEnvKeys = [
     { label: 'SUPABASE URL', key: 'VITE_SUPABASE_URL' },
@@ -50,11 +65,24 @@ function Settings() {
     { label: 'META WHATSAPP', location: 'PRIVATE WEBHOOKS / SECRETS' },
   ]
 
-  const saveAgency = () => {
+  const saveAgency = useCallback(async () => {
+    // Save to Supabase profiles.settings
+    if (supabase) {
+      const userId = await getCurrentUserId()
+      if (userId) {
+        const { data: profile } = await supabase.from('profiles').select('settings').eq('id', userId).single()
+        const existingSettings = profile?.settings || {}
+        await supabase.from('profiles').update({
+          settings: { ...existingSettings, agency },
+          updated_at: new Date().toISOString(),
+        }).eq('id', userId)
+      }
+    }
+    // Also keep localStorage as fallback
     localStorage.setItem('ag_agency', JSON.stringify(agency))
     setSaved(true)
     setTimeout(() => setSaved(false), 2000)
-  }
+  }, [agency])
 
   const clearCache = () => {
     const keys = Object.keys(localStorage).filter(k => k.startsWith('ag_') || k.startsWith('oculops'))
@@ -205,7 +233,7 @@ function Settings() {
                       { label: 'OS VERSION', value: 'V10.3 (ALPHA)' },
                       { label: 'RUNTIME STACK', value: 'REACT 19 + VITE 7 + ELECTRON 35' },
                       { label: 'DB LAYER', value: 'SUPABASE POSTGRESQL // EDGE' },
-                      { label: 'CURRENT MODE', value: import.meta.env.VITE_DEV_MODE !== 'false' ? 'DEV_MODE = TRUE' : 'PRODUCTION' },
+                      { label: 'CURRENT MODE', value: import.meta.env.MODE === 'production' ? 'PRODUCTION' : 'DEVELOPMENT' },
                       { label: 'NODE ENVIRONMENT', value: import.meta.env.MODE.toUpperCase() },
                     ].map(({ label, value }) => (
                       <tr key={label} style={{ borderBottom: '1px solid var(--border-subtle)' }}>

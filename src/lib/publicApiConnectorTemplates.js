@@ -136,6 +136,7 @@ export const PUBLIC_API_ADAPTER_TEMPLATES = [
     capabilities: ['email_validation', 'outreach', 'prospector'],
     inputSchema: [
       { key: 'email', label: 'Email Address', type: 'text', placeholder: 'hello@example.com' },
+      { key: 'id', label: 'Record ID', type: 'text', placeholder: 'd117271ce938bf91bc718f6cfb7954de' },
     ],
     endpoints: [
       {
@@ -144,6 +145,14 @@ export const PUBLIC_API_ADAPTER_TEMPLATES = [
         path: '/api/email/{email}',
         requiredParams: ['email'],
         sampleParams: { email: 'hello@example.com' },
+      },
+      {
+        name: 'view_record',
+        method: 'GET',
+        path: '/api/view/{id}',
+        requiredParams: ['id'],
+        sampleParams: { id: 'd117271ce938bf91bc718f6cfb7954de' },
+        normalizer_key: 'disify_view',
       },
     ],
     healthcheckEndpoint: {

@@ -14,6 +14,13 @@ export const useKnowledgeStore = create(
       setView: (view) => set({ view }),
       setExpanded: (expandedId) => set({ expandedId }),
     }),
-    { name: 'ag-knowledge-ui', version: 1 }
+    {
+      name: 'ag-knowledge-ui',
+      version: 1,
+      migrate: (persisted, version) => {
+        if (version === 0) return { search: '', typeFilter: 'all', view: 'list', expandedId: null, ...persisted }
+        return persisted
+      },
+    }
   )
 )

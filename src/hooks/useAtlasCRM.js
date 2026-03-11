@@ -444,7 +444,7 @@ export function useAtlasCRM() {
                     source: 'atlas_crm',
                 })
             } catch (automationError) {
-                console.warn('Atlas import automation trigger failed:', automationError)
+                if (import.meta.env.DEV) console.warn('Atlas import automation trigger failed:', automationError)
             }
 
             return { company, contact, deal, activity, automation }

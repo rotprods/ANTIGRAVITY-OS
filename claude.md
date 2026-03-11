@@ -405,7 +405,7 @@ npm run gws -- drive files list --params '{"pageSize": 5}'  # Google Workspace C
 - [x] 1.2 Supabase CLI auth — WORKING (logged in, functions list OK)
 - [x] 1.3 ALPHA_VANTAGE_KEY + n8n secrets — SET in Supabase + Vercel + .env
 - [x] 1.4 Design system token rebrand — ALL canonical, 0 legacy tokens
-- [ ] 1.5 DEV_MODE auth — deferred to security phase (last before public deploy)
+- [x] 1.5 DEV_MODE killed — real Supabase auth flow enforced, 10 edge functions redeployed, pg_notify channel migrated
 
 ### Phase 2: Live Agent Runtime
 - [x] 2.1-2.6 — ALREADY BUILT: `_shared/agents.ts`, `agent-cortex`, `useAgents.js`, `Agents.jsx`, realtime subscriptions — 95% complete from prior work

@@ -7,8 +7,11 @@ import { useMemo, useState } from 'react'
 import { useAppStore } from '../../stores/useAppStore'
 import { useApiCatalog } from '../../hooks/useApiCatalog'
 import { useAutomation } from '../../hooks/useAutomation'
+import { useAgentVault } from '../../hooks/useAgentVault'
 import { AGENT_AUTOMATION_PACKS } from '../../data/agentAutomationPacks'
 import { CORE_MINI_APPS } from '../miniapps/MiniAppRegistry'
+
+const VAULT_AUTOMATION_CAPS = ['orchestration', 'ml-ai', 'api-design']
 
 const TRIGGERS = [
     { key: 'atlas_import', icon: '✈️', label: 'ATLAS LEAD IMPORT', type: 'event' },
@@ -74,6 +77,7 @@ function Automation() {
     const { toast } = useAppStore()
     const { installedApps } = useApiCatalog()
     const { workflows, runs, loading, runningWorkflowId, addWorkflow, toggleWorkflow, removeWorkflow, runWorkflow, loadRuns, activeCount, totalRuns } = useAutomation()
+    const { agents: vaultAgents, loading: vaultLoading } = useAgentVault()
     const liveConnectorApps = installedApps.filter(app => app.runMode === 'connector_proxy' && app.connectorStatus === 'live')
     const liveApiApps = useMemo(() => CORE_MINI_APPS.filter(app => app.runMode === 'edge_function' && app.status !== 'planned'), [])
     const agentOptions = useMemo(() => unique([...liveApiApps.flatMap(app => app.agentTargets || []), ...AGENT_AUTOMATION_PACKS.map(pack => pack.agentCodeName)]), [liveApiApps])
@@ -91,6 +95,13 @@ function Automation() {
     const [form, setForm] = useState(defaultForm)
 
     const selectedWorkflow = useMemo(() => workflows.find(workflow => workflow.id === selectedWorkflowId) || null, [selectedWorkflowId, workflows])
+
+    // Vault agents filtered by automation-compatible capabilities
+    const automationVaultAgents = useMemo(() => {
+        return vaultAgents
+            .filter(a => (a.capabilities || []).some(c => VAULT_AUTOMATION_CAPS.includes(c)))
+            .slice(0, 20)
+    }, [vaultAgents])
 
     const toggleAction = (key) => {
         setForm(current => {
@@ -318,6 +329,35 @@ function Automation() {
                                     </div>
                                 ))}
                             </div>
+                        </div>
+                    </div>
+                )}
+
+                {/* ── VAULT AGENT ARSENAL — AUTOMATION COMPATIBLE ── */}
+                {!showForm && (
+                    <div style={{ border: '1px solid var(--color-border)', display: 'flex', flexDirection: 'column' }}>
+                        <div className="mono text-xs font-bold" style={{ padding: '12px 16px', background: 'var(--border-subtle)', borderBottom: '1px solid var(--color-border)', color: 'var(--color-primary)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <span>/// VAULT AGENT ARSENAL — AUTOMATION COMPATIBLE</span>
+                            <span className="mono text-xs" style={{ color: 'var(--text-tertiary)', fontWeight: 'normal' }}>{automationVaultAgents.length} AGENTS</span>
+                        </div>
+                        <div style={{ background: 'var(--color-bg-2)', display: 'flex', flexDirection: 'column' }}>
+                            {vaultLoading ? (
+                                <div className="mono text-xs text-tertiary" style={{ padding: '24px', textAlign: 'center' }}>LOADING VAULT MANIFEST...</div>
+                            ) : automationVaultAgents.length === 0 ? (
+                                <div className="mono text-xs text-tertiary" style={{ padding: '24px', textAlign: 'center' }}>NO AUTOMATION-COMPATIBLE AGENTS IN VAULT</div>
+                            ) : (
+                                automationVaultAgents.map((agent, i) => (
+                                    <div key={agent.name || i} style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '8px 16px', borderBottom: '1px solid var(--border-subtle)' }}>
+                                        <span className="mono text-xs font-bold" style={{ color: 'var(--color-text)', minWidth: '180px' }}>{(agent.name || '').toUpperCase()}</span>
+                                        <span className="mono" style={{ fontSize: '9px', padding: '2px 6px', border: '1px solid var(--color-primary)', color: 'var(--color-primary)', flexShrink: 0 }}>{(agent.namespace || '').toUpperCase()}</span>
+                                        <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap', flex: 1 }}>
+                                            {(agent.capabilities || []).map(cap => (
+                                                <span key={cap} className="mono" style={{ fontSize: '9px', padding: '1px 4px', border: '1px solid var(--border-subtle)', color: VAULT_AUTOMATION_CAPS.includes(cap) ? 'var(--color-info)' : 'var(--text-tertiary)' }}>{cap.toUpperCase()}</span>
+                                            ))}
+                                        </div>
+                                    </div>
+                                ))
+                            )}
                         </div>
                     </div>
                 )}

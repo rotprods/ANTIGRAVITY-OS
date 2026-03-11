@@ -6,6 +6,7 @@
 import { useState } from 'react'
 import { useFinance } from '../../hooks/useFinance'
 import { useFinanceStore } from '../../stores/useFinanceStore'
+import ModuleSkeleton from '../ui/ModuleSkeleton'
 
 const emptyForm = { type: 'revenue', category: 'servicio', description: '', amount: '', date: new Date().toISOString().split('T')[0], recurrence: 'one_time' }
 
@@ -32,7 +33,7 @@ function Finance() {
     .filter(e => filter === 'all' || e.type === filter)
     .sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0))
 
-  if (loading) return <div className="fade-in mono text-xs text-tertiary" style={{ padding: '32px', textAlign: 'center' }}>ACCESSING FISCAL ARCHIVES...</div>
+  if (loading) return <ModuleSkeleton variant="kpi" rows={4} />
 
   return (
     <div className="fade-in" style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>

@@ -43,7 +43,7 @@ export function useRealtime(table, options = {}) {
             setData(rows || [])
             setError(null)
         } catch (err) {
-            console.error(`[useRealtime] ${table}:`, err)
+            if (import.meta.env.DEV) console.error(`[useRealtime] ${table}:`, err)
             setError(err.message)
         } finally {
             setLoading(false)
@@ -91,21 +91,21 @@ export function useRealtime(table, options = {}) {
     const insert = useCallback(async (row) => {
         if (!supabase) return null
         const { data: inserted, error: err } = await supabase.from(table).insert(row).select().single()
-        if (err) { console.error(`[insert] ${table}:`, err); return null }
+        if (err) { if (import.meta.env.DEV) console.error(`[insert] ${table}:`, err); return null }
         return inserted
     }, [table])
 
     const update = useCallback(async (id, updates) => {
         if (!supabase) return null
         const { data: updated, error: err } = await supabase.from(table).update(updates).eq('id', id).select().single()
-        if (err) { console.error(`[update] ${table}:`, err); return null }
+        if (err) { if (import.meta.env.DEV) console.error(`[update] ${table}:`, err); return null }
         return updated
     }, [table])
 
     const remove = useCallback(async (id) => {
         if (!supabase) return false
         const { error: err } = await supabase.from(table).delete().eq('id', id)
-        if (err) { console.error(`[remove] ${table}:`, err); return false }
+        if (err) { if (import.meta.env.DEV) console.error(`[remove] ${table}:`, err); return false }
         return true
     }, [table])
 

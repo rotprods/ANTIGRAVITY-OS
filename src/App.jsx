@@ -2,24 +2,27 @@
 // OCULOPS — Root App Component
 // ═══════════════════════════════════════════════════
 
-import { useState, lazy, Suspense } from 'react'
+import { useState, useEffect, lazy, Suspense } from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { useAuth } from './hooks/useAuth'
 import Layout from './components/layout/Layout'
 import Auth from './components/Auth'
+import Onboarding from './components/Onboarding'
 import { NotificationCenter } from './components/ui/NotificationCenter'
 import { ErrorBoundary } from './components/ui/ErrorBoundary'
+import { SentryErrorBoundary } from './components/ui/SentryErrorBoundary'
+import { AgentVaultProvider } from './contexts/AgentVaultContext'
 
 // DEV MODE: skip auth gate but keep Supabase data connection
-// Default false — must be explicitly set to 'true' in .env to activate
 const DEV_MODE = import.meta.env.VITE_DEV_MODE === 'true'
 
-console.log('🚀 [OCULOPS] Booting OS...', { devMode: DEV_MODE })
+if (import.meta.env.DEV) console.log('🚀 [OCULOPS] Booting OS...', { devMode: DEV_MODE })
 
 // ─── Lazy-loaded modules — each becomes a separate chunk ───────────────────
 
 // CORE
 const ControlTower = lazy(() => import('./components/modules/ControlTower'))
+const CopilotChat = lazy(() => import('./components/modules/CopilotChat'))
 const CRM = lazy(() => import('./components/modules/CRM'))
 const Pipeline = lazy(() => import('./components/modules/Pipeline'))
 const Execution = lazy(() => import('./components/modules/Execution'))
@@ -61,6 +64,17 @@ const CreativeStudio = lazy(() => import('./components/modules/CreativeStudio'))
 const Analytics = lazy(() => import('./components/modules/Analytics'))
 const Billing = lazy(() => import('./components/modules/Billing'))
 
+// ─── Prefetch core modules after login ───────────────────────────────────────
+function prefetchCoreModules() {
+  const idle = window.requestIdleCallback || ((cb) => setTimeout(cb, 100))
+  idle(() => {
+    import('./components/modules/ControlTower')
+    import('./components/modules/CRM')
+    import('./components/modules/Pipeline')
+    import('./components/modules/Intelligence')
+  })
+}
+
 // ─── Module Fallback ────────────────────────────────────────────────────────
 
 function ModuleFallback() {
@@ -77,6 +91,7 @@ function ModuleFallback() {
 const modules = [
   // CORE — war room + revenue operations
   { id: 'control-tower', label: 'Control Tower', icon: '⚡', component: ControlTower, group: 'CORE' },
+  { id: 'copilot', label: 'Copilot', icon: '🧠', component: CopilotChat, group: 'CORE' },
   { id: 'crm', label: 'CRM', icon: '👥', component: CRM, group: 'CORE' },
   { id: 'pipeline', label: 'Pipeline', icon: '💎', component: Pipeline, group: 'CORE' },
   { id: 'execution', label: 'Execution', icon: '🚀', component: Execution, group: 'CORE' },
@@ -153,11 +168,21 @@ function AppRoutes({ user, profile }) {
 
 function App() {
   const { session, user, profile, loading } = useAuth()
+  const [onboarded, setOnboarded] = useState(false)
 
-  // Diagnostic log
-  console.log('🛡️ [Auth] State update:', { loading, hasSession: !!session, user: user?.email })
+  if (import.meta.env.DEV) console.log('🛡️ [Auth] State update:', { loading, hasSession: !!session, user: user?.email })
+
+  // Prefetch core modules once authenticated
+  useEffect(() => {
+    if (session || DEV_MODE) prefetchCoreModules()
+  }, [session])
+
+  // Show onboarding if user hasn't completed setup
+  // TODO: migrate to profile.onboarding_completed boolean once ALTER TABLE runs
+  const needsOnboarding = session && user && !profile?.onboarding_completed && !profile?.full_name && !onboarded
 
   return (
+    <SentryErrorBoundary>
     <ErrorBoundary>
       <Suspense fallback={<ModuleFallback />}>
         {loading ? (
@@ -182,22 +207,29 @@ function App() {
           </div>
         ) : DEV_MODE ? (
           <BrowserRouter>
-            <NotificationCenter />
-            <AppRoutes
-              user={{ email: 'dev@oculops.com', id: 'dev' }}
-              profile={{ full_name: 'Roberto Ortega' }}
-            />
+            <AgentVaultProvider>
+              <NotificationCenter />
+              <AppRoutes
+                user={{ email: 'dev@oculops.com', id: 'dev' }}
+                profile={{ full_name: 'Roberto Ortega' }}
+              />
+            </AgentVaultProvider>
           </BrowserRouter>
         ) : !session ? (
           <Auth />
+        ) : needsOnboarding ? (
+          <Onboarding user={user} onComplete={() => setOnboarded(true)} />
         ) : (
           <BrowserRouter>
-            <NotificationCenter />
-            <AppRoutes user={user} profile={profile} />
+            <AgentVaultProvider>
+              <NotificationCenter />
+              <AppRoutes user={user} profile={profile} />
+            </AgentVaultProvider>
           </BrowserRouter>
         )}
       </Suspense>
     </ErrorBoundary>
+    </SentryErrorBoundary>
   )
 }
 

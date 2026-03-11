@@ -3,22 +3,47 @@
 // 100-Year UX: strictly OLED Black, Gold, 1px Primitives
 // ═══════════════════════════════════════════════════
 
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import { useDeals } from '../../hooks/useDeals'
 import { useFinance } from '../../hooks/useFinance'
+import { useAppStore } from '../../stores/useAppStore'
+import { supabase } from '../../lib/supabase'
+import ModuleSkeleton from '../ui/ModuleSkeleton'
 
-const INVOICE_STATUS = {
-  paid: { label: 'CLEARED', color: 'var(--color-success)' },
-  pending: { label: 'PENDING', color: 'var(--text-tertiary)' },
-  overdue: { label: 'OVERDUE', color: 'var(--color-danger)' },
-}
+const PLANS = [
+  { id: 'free', name: 'FREE', price: 0, features: ['1 user', '100 contacts', '3 agents', 'Basic CRM'] },
+  { id: 'starter', name: 'STARTER', price: 49, features: ['5 users', '5,000 contacts', '7 agents', 'Full CRM + Pipeline', 'Email automation', 'Basic analytics'] },
+  { id: 'pro', name: 'PRO', price: 149, features: ['20 users', '50,000 contacts', '13 agents', 'Full automation suite', 'AI prospecting', 'Custom workflows', 'Priority support'] },
+  { id: 'enterprise', name: 'ENTERPRISE', price: 499, features: ['Unlimited users', 'Unlimited contacts', 'All agents + custom', 'White-label', 'Dedicated infra', 'SLA + onboarding', 'API access'] },
+]
 
 function Billing() {
   const { pipelineView, loading: dealsLoading } = useDeals()
   const { entries, mrr, totalRevenue, totalExpenses, addEntry, loading: financeLoading } = useFinance()
+  const { toast } = useAppStore()
   const [showForm, setShowForm] = useState(false)
   const [form, setForm] = useState({ description: '', amount: '', date: new Date().toISOString().split('T')[0], status: 'pending', client: '' })
   const [saving, setSaving] = useState(false)
+  const [upgrading, setUpgrading] = useState(null)
+
+  const handleUpgrade = useCallback(async (planId) => {
+    setUpgrading(planId)
+    try {
+      const { data, error } = await supabase.functions.invoke('stripe-checkout', {
+        body: { plan: planId, org_id: 'default' },
+      })
+      if (error) throw new Error(error.message)
+      if (data?.url) {
+        window.open(data.url, '_blank')
+        toast('Redirecting to Stripe checkout...', 'success')
+      } else {
+        toast('Stripe not configured yet. Set STRIPE_SECRET_KEY in Supabase secrets.', 'warning')
+      }
+    } catch (err) {
+      toast(err.message || 'Checkout failed', 'warning')
+    }
+    setUpgrading(null)
+  }, [toast])
 
   const loading = dealsLoading || financeLoading
 
@@ -53,11 +78,7 @@ function Billing() {
     setSaving(false)
   }
 
-  if (loading) return (
-    <div className="fade-in mono text-xs text-tertiary" style={{ padding: '32px', textAlign: 'center' }}>
-      CALCULATING FINANCE MATRIX...
-    </div>
-  )
+  if (loading) return <ModuleSkeleton variant="kpi" rows={4} />
 
   return (
     <div className="fade-in" style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
@@ -104,6 +125,42 @@ function Billing() {
             </div>
             <span className="mono text-lg font-bold" style={{ color: 'var(--color-danger)' }}>€{totalExpenses.toLocaleString()}</span>
           </div>
+        </div>
+
+        {/* ── SUBSCRIPTION PLANS ── */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1px', background: 'var(--color-border)', border: '1px solid var(--color-border)' }}>
+          {PLANS.map(plan => {
+            // TODO: read actual plan from org profile when multi-tenancy lands (Phase 5.1)
+            const isCurrent = plan.id === 'free'
+            return (
+              <div key={plan.id} style={{ background: isCurrent ? '#000' : 'var(--color-bg-2)', padding: '20px', display: 'flex', flexDirection: 'column', gap: '12px', borderLeft: isCurrent ? '3px solid var(--color-primary)' : 'none' }}>
+                <div>
+                  <div className="mono text-xs font-bold" style={{ color: isCurrent ? 'var(--color-primary)' : 'var(--color-text)', marginBottom: '4px' }}>{plan.name}</div>
+                  <div className="mono font-bold" style={{ fontSize: '24px', color: 'var(--color-text)' }}>
+                    {plan.price === 0 ? 'FREE' : `€${plan.price}`}
+                    {plan.price > 0 && <span className="mono text-xs text-tertiary">/MO</span>}
+                  </div>
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', flex: 1 }}>
+                  {plan.features.map(f => (
+                    <div key={f} className="mono text-xs" style={{ color: 'var(--color-text-2)' }}>+ {f.toUpperCase()}</div>
+                  ))}
+                </div>
+                {isCurrent ? (
+                  <div className="mono text-xs font-bold" style={{ color: 'var(--color-primary)', textAlign: 'center', padding: '8px' }}>CURRENT PLAN</div>
+                ) : (
+                  <button
+                    className="mono font-bold"
+                    style={{ padding: '10px', background: plan.id === 'pro' ? 'var(--color-primary)' : '#000', color: plan.id === 'pro' ? '#000' : 'var(--color-primary)', border: '1px solid var(--color-primary)', fontSize: '10px', cursor: 'pointer', letterSpacing: '0.1em' }}
+                    onClick={() => handleUpgrade(plan.id)}
+                    disabled={upgrading === plan.id}
+                  >
+                    {upgrading === plan.id ? 'PROCESSING...' : 'UPGRADE'}
+                  </button>
+                )}
+              </div>
+            )
+          })}
         </div>
 
         {/* ── INVOICE CREATION TERMINAL ── */}

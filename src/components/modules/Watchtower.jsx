@@ -10,6 +10,7 @@ import { useAgents } from '../../hooks/useAgents'
 import { useApiCatalog } from '../../hooks/useApiCatalog'
 import { useConnectorProxy } from '../../hooks/useConnectorProxy'
 import { useAgentVault } from '../../hooks/useAgentVault'
+import ModuleSkeleton from '../ui/ModuleSkeleton'
 
 const SEVERITY_CONFIG = {
     1: { label: 'CRITICAL', color: 'var(--color-danger)', marker: '[ CRIT ]' },
@@ -58,7 +59,7 @@ function Watchtower() {
     const activeCount = alerts.filter(a => a.status === 'active').length
     const criticalCount = alerts.filter(a => a.status === 'active' && a.severity === 1).length
 
-    if (loading) return <div className="fade-in mono" style={{ padding: '2rem', textAlign: 'center', color: 'var(--color-primary)', fontSize: '12px', letterSpacing: '0.1em' }}>[ INITIALIZING RADAR... ]</div>
+    if (loading) return <ModuleSkeleton variant="kpi" rows={4} />
 
     return (
         <div className="fade-in" style={{ padding: '24px' }}>

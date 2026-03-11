@@ -6,6 +6,8 @@
 import { useState } from 'react'
 import { useNiches } from '../../hooks/useNiches'
 import { Charts } from '../../lib/charts'
+import VaultAgentPanel from '../ui/VaultAgentPanel'
+import ModuleSkeleton from '../ui/ModuleSkeleton'
 
 const emptyForm = { name: '', impact: 70, velocity: 70, scalability: 70, confidence: 70, risk: 30, resource_cost: 40 }
 
@@ -31,7 +33,7 @@ function Niches() {
         setSaving(false)
     }
 
-    if (loading) return <div className="fade-in mono text-xs" style={{ padding: '2rem', textAlign: 'center', color: 'var(--color-primary)' }}>/// INITIALIZING NICHES DB...</div>
+    if (loading) return <ModuleSkeleton variant="table" rows={5} />
 
     return (
         <div className="fade-in" style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
@@ -133,6 +135,8 @@ function Niches() {
                 </div>
 
             </div>
+
+                <VaultAgentPanel title="NICHE INTELLIGENCE" namespaces={['research', 'product']} />
         </div>
     )
 }

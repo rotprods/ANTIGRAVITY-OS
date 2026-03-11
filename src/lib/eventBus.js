@@ -29,7 +29,7 @@ export async function emitEvent(eventType, payload = {}) {
         .single()
 
     if (error) {
-        console.error('emitEvent error:', error)
+        if (import.meta.env.DEV) console.error('emitEvent error:', error)
         return null
     }
 

@@ -139,7 +139,7 @@ function GTM() {
                 toast('NULL RESPONSE', 'warning');
             }
         } catch (e) {
-            console.error(e);
+            if (import.meta.env.DEV) console.error(e);
             toast('ENRICH_FAIL', 'error');
         } finally {
             setIsProspecting(false);

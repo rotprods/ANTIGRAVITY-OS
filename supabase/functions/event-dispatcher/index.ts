@@ -43,6 +43,15 @@ const EVENT_ROUTES: Record<string, string> = {
 
   // Signal events
   "signal.detected":     "/signal-detected",
+
+  // Message events (Phase 2)
+  "message.classified":  "/message-classified",
+
+  // Pipeline events (Phase 3)
+  "deal.closed_lost":    "/deal-closed-lost",
+
+  // Drip sequence events
+  "outreach.step_due":   "/drip-outreach-step",
 };
 
 // ── Wildcard routes (prefix matching) ──

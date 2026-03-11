@@ -1,8 +1,13 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 
+// ═══════════════════════════════════════════════════════════════════════════════
+// HUNTER — Lead Qualification + Strategic Brief (merged: Hunter + Strategist)
+// Actions: cycle (qualify + brief top leads) | qualify_only | strategy_only
+// ═══════════════════════════════════════════════════════════════════════════════
+
 import { runAgentTask, sendAgentMessage } from "../_shared/agents.ts";
-import { qualifyLead } from "../_shared/lead-intel.ts";
-import { errorResponse, handleCors, jsonResponse, readJson } from "../_shared/http.ts";
+import { qualifyLead, buildStrategicBrief } from "../_shared/lead-intel.ts";
+import { compact, errorResponse, handleCors, jsonResponse, readJson } from "../_shared/http.ts";
 import { admin } from "../_shared/supabase.ts";
 
 async function loadCandidateLeads({
@@ -99,13 +104,51 @@ Deno.serve(async (req: Request) => {
           .sort((a, b) => (b.ai_score || 0) - (a.ai_score || 0))
           .slice(0, 10);
 
-        await sendAgentMessage("hunter", "strategist", "Qualified lead shortlist", {
-          leads: shortlist.map(lead => ({ id: lead.id, name: lead.name, score: lead.ai_score })),
-        });
+        // ── Strategic Brief (merged from Strategist) ──
+        // Auto-brief top qualified leads (score >= 72)
+        const briefedLeads = shortlist.filter(l => (l.ai_score || 0) >= 72);
+        const briefs = [];
+
+        for (const lead of briefedLeads.slice(0, 5)) {
+          try {
+            const brief = await buildStrategicBrief(lead);
+            await admin
+              .from("prospector_leads")
+              .update({
+                ai_reasoning: [
+                  compact(lead.ai_reasoning),
+                  brief.positioning,
+                  ...(brief.pain_points || []),
+                ].filter(Boolean).join(" "),
+                raw_payload: {
+                  ...(lead.raw_payload as Record<string, unknown> || {}),
+                  strategist: brief,
+                },
+                data: {
+                  ...(lead.data as Record<string, unknown> || {}),
+                  strategist: brief,
+                },
+              })
+              .eq("id", lead.id);
+            briefs.push({ lead_id: lead.id, lead_name: lead.name, brief });
+          } catch {
+            // Brief failed for this lead — continue with others
+          }
+        }
+
+        if (briefs.length > 0) {
+          await sendAgentMessage("hunter", "outreach", "Qualified leads with strategic briefs ready", {
+            leads: briefs.map(b => ({
+              lead_id: b.lead_id,
+              recommended_channel: b.brief.recommended_channel,
+            })),
+          });
+        }
 
         return {
           total_reviewed: qualified.length,
           qualified_count: qualified.filter(lead => (lead.ai_score || 0) >= 72).length,
+          briefs_generated: briefs.length,
           shortlist,
         };
       },

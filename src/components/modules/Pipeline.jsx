@@ -183,10 +183,21 @@ function DealCard({ deal, stage, onRemove, onSelect, isDragging }) {
           {deal.company?.name || deal.company}
         </div>
       )}
-      <div style={{ fontSize: '11px', color: 'var(--color-success)', marginTop: '8px' }}>
-        EUR {(parseFloat(deal.value) || 0).toLocaleString()}
+      <div style={{ fontSize: '11px', color: 'var(--color-success)', marginTop: '8px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+        <span>EUR {(parseFloat(deal.value) || 0).toLocaleString()}</span>
         {deal.probability > 0 && (
-          <span style={{ color: 'var(--text-tertiary)', marginLeft: '8px' }}>[ {deal.probability}% P ]</span>
+          <span style={{ color: 'var(--text-tertiary)' }}>[ {deal.probability}% P ]</span>
+        )}
+        {deal.ai_score != null && (
+          <span style={{
+            fontSize: '9px',
+            padding: '2px 6px',
+            border: `1px solid ${deal.ai_score >= 70 ? 'var(--color-primary)' : 'var(--border-subtle)'}`,
+            color: deal.ai_score >= 70 ? 'var(--color-primary)' : 'var(--text-tertiary)',
+            letterSpacing: '0.05em',
+          }}>
+            AI:{deal.ai_score}
+          </span>
         )}
       </div>
       {deal.contact_person && (

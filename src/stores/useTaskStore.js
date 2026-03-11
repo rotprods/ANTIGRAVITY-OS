@@ -19,6 +19,13 @@ export const useTaskStore = create(
       })),
       clearSelected: () => set({ selected: [] }),
     }),
-    { name: 'ag-tasks-ui', version: 1 }
+    {
+      name: 'ag-tasks-ui',
+      version: 1,
+      migrate: (persisted, version) => {
+        if (version === 0) return { filter: 'all', priority: 'all', selected: [], groupBy: 'day', ...persisted }
+        return persisted
+      },
+    }
   )
 )

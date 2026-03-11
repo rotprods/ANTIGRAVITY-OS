@@ -39,7 +39,7 @@ export function useAgents() {
             setMessages(msgsData || [])
             setApiLogs(apiLogsData || [])
         } catch (err) {
-            console.error('useAgents fetch error:', err)
+            if (import.meta.env.DEV) console.error('useAgents fetch error:', err)
         }
         setLoading(false)
     }, [])
@@ -81,7 +81,7 @@ export function useAgents() {
             await refresh()
             return data
         } catch (err) {
-            console.error(`Error triggering ${codeName}:`, err)
+            if (import.meta.env.DEV) console.error(`Error triggering ${codeName}:`, err)
             return { error: err.message }
         }
     }, [SUPABASE_URL, refresh])
@@ -107,7 +107,7 @@ export function useAgents() {
             const data = await res.json()
             return data
         } catch (err) {
-            console.error(`Error querying public API ${apiName}:`, err)
+            if (import.meta.env.DEV) console.error(`Error querying public API ${apiName}:`, err)
             return { error: err.message, success: false }
         }
     }, [SUPABASE_URL])

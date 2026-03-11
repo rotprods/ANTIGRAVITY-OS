@@ -3,12 +3,39 @@
 // 100-Year UX: rigorous documentation reader
 // ═══════════════════════════════════════════════════
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { studies, STUDY_CATEGORIES } from '../../data/studies'
+import { supabase, getCurrentUserId } from '../../lib/supabase'
 import './StudyHub.css'
+
+function useAgentStudies() {
+    const [agentStudies, setAgentStudies] = useState([])
+    const [loading, setLoading] = useState(true)
+
+    const load = useCallback(async () => {
+        if (!supabase) { setLoading(false); return }
+        const userId = await getCurrentUserId()
+        let query = supabase
+            .from('agent_studies')
+            .select('*')
+            .order('created_at', { ascending: false })
+            .limit(50)
+        if (userId) query = query.eq('user_id', userId)
+        const { data } = await query
+        setAgentStudies(data || [])
+        setLoading(false)
+    }, [])
+
+    useEffect(() => { load() }, [load])
+
+    return { agentStudies, loading, reload: load }
+}
 
 function StudyHub() {
     const [activeStudy, setActiveStudy] = useState(null)
+    const [viewMode, setViewMode] = useState('docs') // 'docs' | 'agent'
+    const [selectedAgentStudy, setSelectedAgentStudy] = useState(null)
+    const { agentStudies, loading: agentLoading, reload: reloadAgentStudies } = useAgentStudies()
     const [completed, setCompleted] = useState(() => {
         try {
             return JSON.parse(localStorage.getItem('oculops_studies_completed') || '[]')
@@ -55,6 +82,43 @@ function StudyHub() {
                         </div>
                     </div>
                 </div>
+
+                <div style={{ display: 'flex', gap: '2px', marginBottom: '16px' }}>
+                    <button className="mono" style={{ padding: '8px 16px', fontSize: '10px', background: viewMode === 'docs' ? 'var(--color-primary)' : 'transparent', color: viewMode === 'docs' ? '#000' : 'var(--color-text)', border: 'none', cursor: 'pointer', fontWeight: 'bold' }} onClick={() => setViewMode('docs')}>
+                        01. DOSSIER ARCHIVE
+                    </button>
+                    <button className="mono" style={{ padding: '8px 16px', fontSize: '10px', background: viewMode === 'agent' ? 'var(--color-primary)' : 'transparent', color: viewMode === 'agent' ? '#000' : 'var(--color-text)', border: 'none', cursor: 'pointer', fontWeight: 'bold' }} onClick={() => { setViewMode('agent'); reloadAgentStudies() }}>
+                        02. AGENT INTELLIGENCE ({agentStudies.length})
+                    </button>
+                </div>
+
+                {viewMode === 'agent' && (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '24px' }}>
+                        {agentLoading ? (
+                            <div className="mono" style={{ padding: '24px', textAlign: 'center', color: 'var(--text-tertiary)', fontSize: '11px' }}>[ LOADING AGENT STUDIES... ]</div>
+                        ) : agentStudies.length === 0 ? (
+                            <div className="mono" style={{ padding: '24px', textAlign: 'center', color: 'var(--text-tertiary)', fontSize: '11px' }}>[ NO AGENT STUDIES YET — RUN AGENTS TO GENERATE ]</div>
+                        ) : agentStudies.map(s => (
+                            <div key={s.id} onClick={() => setSelectedAgentStudy(selectedAgentStudy?.id === s.id ? null : s)} style={{ border: '1px solid var(--border-subtle)', padding: '12px 16px', cursor: 'pointer', background: selectedAgentStudy?.id === s.id ? 'var(--color-bg-2)' : '#000' }}>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                    <div className="mono" style={{ fontSize: '11px', fontWeight: 'bold', color: 'var(--color-text)', textTransform: 'uppercase' }}>{s.title}</div>
+                                    <div className="mono" style={{ fontSize: '9px', color: 'var(--text-tertiary)' }}>{s.agent_code_name?.toUpperCase()} | {new Date(s.created_at).toLocaleDateString()}</div>
+                                </div>
+                                {s.summary && <div className="mono" style={{ fontSize: '10px', color: 'var(--color-text-2)', marginTop: '6px' }}>{s.summary}</div>}
+                                {s.highlights?.length > 0 && (
+                                    <div style={{ display: 'flex', gap: '6px', marginTop: '8px', flexWrap: 'wrap' }}>
+                                        {s.highlights.slice(0, 4).map((h, i) => <span key={i} className="mono" style={{ fontSize: '9px', padding: '2px 6px', border: '1px solid var(--border-subtle)', color: 'var(--text-tertiary)' }}>{h}</span>)}
+                                    </div>
+                                )}
+                                {selectedAgentStudy?.id === s.id && s.content_markdown && (
+                                    <div className="mono" style={{ fontSize: '11px', color: 'var(--color-text-2)', marginTop: '12px', padding: '12px', border: '1px solid var(--border-subtle)', background: '#000', whiteSpace: 'pre-wrap', maxHeight: '400px', overflow: 'auto' }}>
+                                        {s.content_markdown}
+                                    </div>
+                                )}
+                            </div>
+                        ))}
+                    </div>
+                )}
 
                 <div className="study-index-header">
                     <h2>/// KNOWLEDGE MODULES</h2>

@@ -18,6 +18,13 @@ export const useSignalStore = create(
       })),
       resetRead: () => set({ readIds: [] }),
     }),
-    { name: 'ag-signals-ui', version: 1 }
+    {
+      name: 'ag-signals-ui',
+      version: 1,
+      migrate: (persisted, version) => {
+        if (version === 0) return { filter: 'all', search: '', readIds: [], ...persisted }
+        return persisted
+      },
+    }
   )
 )

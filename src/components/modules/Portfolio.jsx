@@ -5,6 +5,8 @@
 
 import { useState } from 'react'
 import { useBets } from '../../hooks/useBets'
+import VaultAgentPanel from '../ui/VaultAgentPanel'
+import ModuleSkeleton from '../ui/ModuleSkeleton'
 
 const emptyForm = { name: '', type: 'core', hypothesis: '', kpi: '', kill_criteria: '', pivot_path: '', resources: '' }
 
@@ -31,7 +33,7 @@ function Portfolio() {
     const statusColor = s => s === 'active' ? 'var(--color-success)' : s === 'paused' ? 'var(--color-warning)' : 'var(--color-danger)'
     const statusSymbol = s => s === 'active' ? '[+]' : s === 'paused' ? '[~]' : '[-]'
 
-    if (loading) return <div className="fade-in mono text-xs" style={{ padding: '2rem', textAlign: 'center', color: 'var(--color-primary)' }}>/// LOADING PORTFOLIO DIRECTORY...</div>
+    if (loading) return <ModuleSkeleton variant="cards" rows={4} />
 
     return (
         <div className="fade-in" style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
@@ -176,6 +178,9 @@ function Portfolio() {
                 </div>
 
             </div>
+
+                <VaultAgentPanel title="PORTFOLIO INTELLIGENCE" namespaces={['data', 'product', 'research']} />
+
         </div>
     )
 }
