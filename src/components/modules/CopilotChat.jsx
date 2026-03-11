@@ -6,7 +6,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useEdgeFunction } from '../../hooks/useEdgeFunction'
-import CopilotAvatar from './CopilotAvatar'
+import MasterIntelligence from './CopilotAvatar'
 import skills from '../../data/copilot-skills.json'
 import './CopilotChat.css'
 
@@ -53,7 +53,7 @@ function ToolBadge({ tool, success, error }) {
 
 function CopilotChat() {
   const [messages, setMessages] = useState([
-    { role: 'system', content: 'COPILOT ONLINE — 20 TOOLS ARMED — AWAITING DIRECTIVE' },
+    { role: 'system', content: 'MASTER INTELLIGENCE ONLINE — 20 TOOLS ARMED — AWAITING DIRECTIVE' },
   ])
   const [listening, setListening] = useState(false)
   const [energy, setEnergy] = useState(48)
@@ -264,12 +264,12 @@ function CopilotChat() {
         <div>
           <h1 style={{
             fontFamily: 'var(--font-editorial)',
-            color: 'var(--accent-primary)',
+            color: 'var(--color-primary)',
             letterSpacing: '0.05em',
             margin: 0,
             fontSize: '24px',
           }}>
-            COPILOT
+            MASTER INTELLIGENCE
           </h1>
           <span className="mono text-xs" style={{ color: 'var(--text-tertiary)' }}>
             AI BRAIN — 20 TOOLS — FUNCTION CALLING ORCHESTRATOR
@@ -286,7 +286,7 @@ function CopilotChat() {
 
       <div className="copilot-body">
         <div className="copilot-avatar-column">
-          <CopilotAvatar listening={listening} energy={energy} phoneConnected={phoneConnected} />
+          <MasterIntelligence state={listening ? 'listening' : 'idle'} energy={energy} phoneConnected={phoneConnected} />
           <div className="copilot-status-grid">
             <span className="copilot-status-pill">{listening ? 'LISTENING' : 'MIC STANDBY'}</span>
             <span className="copilot-status-pill">{phoneConnected ? 'PHONE LINKED' : 'PHONE STANDBY'}</span>
@@ -355,7 +355,7 @@ function CopilotChat() {
                 {msg.role === 'thinking' && (
                   <div className="copilot-message copilot-message--system" style={{ opacity: 0.6 }}>
                     <span className="copilot-thinking-pulse">
-                      COPILOT IS EXECUTING TOOLS...
+                      EXECUTING...
                     </span>
                   </div>
                 )}
