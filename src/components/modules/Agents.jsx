@@ -60,7 +60,7 @@ function Agents() {
   const { toast } = useAppStore()
   const { agents, tasks, logs, stats, triggerAgent, runCortexCycle } = useAgents()
   const { studies, telegramTarget, loading: studiesLoading, busy: studiesBusy, postStudy, resendStudy, saveTelegramTarget } = useAgentStudies()
-  const { filteredAgents: vaultAgents, namespaces: vaultNamespaces, loading: vaultLoading, error: vaultError, filters: vaultFilters, setNamespace: setVaultNamespace, setSearch: setVaultSearch, setRole: setVaultRole, suggestRole, toggleActive: toggleVaultAgent, runAgent: runVaultAgent, runningAgent: vaultRunning, totalAgents: vaultTotal, activeCount: vaultActive, canonicalCount: vaultCanonical } = useAgentVault()
+  const { filteredAgents: vaultAgents, namespaces: vaultNamespaces, loading: vaultLoading, error: vaultError, filters: vaultFilters, setNamespace: setVaultNamespace, setSearch: setVaultSearch, setRole: setVaultRole, suggestRole, toggleActive: toggleVaultAgent, runAgent: runVaultAgent, runningAgent: vaultRunning, totalAgents: vaultTotal, activeCount: vaultActive, } = useAgentVault()
   const { agentHealth, runningAgents } = useAgentState()
 
   const [triggering, setTriggering] = useState(null)

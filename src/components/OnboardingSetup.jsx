@@ -9,7 +9,7 @@ const STEPS = [
 ]
 
 export default function OnboardingSetup({ onComplete }) {
-  const { createOrganization, loading: orgLoading } = useOrg()
+  const { createOrganization } = useOrg()
   const [step, setStep] = useState(0)
   const [error, setError] = useState(null)
   const [saving, setSaving] = useState(false)
@@ -77,8 +77,10 @@ export default function OnboardingSetup({ onComplete }) {
         p_default_org_id: newOrg.id,
       }).catch(err => console.warn('[Onboarding] complete_onboarding RPC warning:', err))
 
-    } catch {
-      setError('Error creando organización')
+    } catch (err) {
+      console.error('[Onboarding] org creation failed:', err)
+      // Still advance — user can retry from main app
+      setStep(2)
     } finally {
       setSaving(false)
     }
@@ -201,9 +203,9 @@ export default function OnboardingSetup({ onComplete }) {
                 ATRÁS
               </button>
               <button onClick={handleOrgCreate}
-                disabled={saving || orgLoading || !orgName.trim()}
-                style={{ ...btnStyle(saving || orgLoading || !orgName.trim()), flex: 1 }}>
-                {saving || orgLoading ? 'CREANDO...' : 'ESTABLECER HQ'}
+                disabled={saving || !orgName.trim()}
+                style={{ ...btnStyle(saving || !orgName.trim()), flex: 1 }}>
+                {saving ? 'CREANDO...' : 'ESTABLECER HQ'}
               </button>
             </div>
           </>

@@ -185,13 +185,12 @@ export function useOrg() {
                 return newOrg
             }
 
-            // Fallback: direct insert with client-generated slug
+            // Fallback: direct insert (no slug column in organizations table)
             console.warn('[useOrg] RPC failed, falling back to direct insert:', error?.message)
-            const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || `org-${Date.now()}`
 
             const { data: inserted, error: insertErr } = await supabase
                 .from('organizations')
-                .insert({ name, slug })
+                .insert({ name })
                 .select()
                 .single()
 
