@@ -6,6 +6,8 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useEdgeFunction } from '../../hooks/useEdgeFunction'
+import CopilotAvatar from './CopilotAvatar'
+import skills from '../../data/copilot-skills.json'
 import './CopilotChat.css'
 
 const TOOL_LABELS = {
@@ -53,12 +55,109 @@ function CopilotChat() {
   const [messages, setMessages] = useState([
     { role: 'system', content: 'COPILOT ONLINE — 20 TOOLS ARMED — AWAITING DIRECTIVE' },
   ])
+  const [listening, setListening] = useState(false)
+  const [energy, setEnergy] = useState(48)
+  const [phoneConnected, setPhoneConnected] = useState(false)
+  const [navIntent, setNavIntent] = useState(null)
+  const [matchedSkill, setMatchedSkill] = useState(null)
   const [input, setInput] = useState('')
   const [sending, setSending] = useState(false)
   const messagesEndRef = useRef(null)
   const inputRef = useRef(null)
+  const navIntentTimer = useRef(null)
   const navigate = useNavigate()
   const { execute } = useEdgeFunction('agent-copilot')
+
+  const triggerNavigation = useCallback((path, label) => {
+    if (!path) return
+    setNavIntent({ label: label || path.replace('/', '').replace('-', ' ').toUpperCase() })
+    if (navIntentTimer.current) {
+      window.clearTimeout(navIntentTimer.current)
+    }
+    navIntentTimer.current = window.setTimeout(() => setNavIntent(null), 3800)
+    navigate(path)
+  }, [navigate])
+
+  useEffect(() => {
+    return () => {
+      if (navIntentTimer.current) window.clearTimeout(navIntentTimer.current)
+    }
+  }, [])
+
+  const findSkillForText = useCallback((text) => {
+    if (!text) return null
+    return skills.find(skill =>
+      skill.triggers.some(trigger => text.toLowerCase().includes(trigger.toLowerCase()))
+    )
+  }, [])
+
+  useEffect(() => {
+    let stream
+    let context
+    let analyser
+    let animationFrame
+    let fallbackInterval
+
+    const stopFallback = () => {
+      if (fallbackInterval) window.clearInterval(fallbackInterval)
+    }
+
+    const computeEnergy = (data) => {
+      const rms = Math.sqrt(data.reduce((acc, value) => {
+        const norm = value / 128 - 1
+        return acc + norm * norm
+      }, 0) / data.length)
+      return Math.min(99, Math.max(15, Math.round(rms * 240)))
+    }
+
+    const startFallback = () => {
+      fallbackInterval = window.setInterval(() => {
+        setListening(value => !value)
+        setEnergy(cur => Math.min(99, Math.max(32, Math.round(cur + (Math.random() * 12 - 6)))))
+      }, 6000)
+    }
+
+    const initMicrophone = async () => {
+      if (!navigator.mediaDevices?.getUserMedia) {
+        startFallback()
+        return
+      }
+      try {
+        stream = await navigator.mediaDevices.getUserMedia({ audio: true })
+        setListening(true)
+        setEnergy(54)
+        context = new (window.AudioContext || window.webkitAudioContext)()
+        const source = context.createMediaStreamSource(stream)
+        analyser = context.createAnalyser()
+        analyser.fftSize = 256
+        const bufferLength = analyser.frequencyBinCount
+        const dataArray = new Uint8Array(bufferLength)
+        source.connect(analyser)
+
+        const tick = () => {
+          analyser.getByteTimeDomainData(dataArray)
+          const level = computeEnergy(dataArray)
+          setEnergy(level)
+          setListening(level > 40)
+          animationFrame = window.requestAnimationFrame(tick)
+        }
+
+        tick()
+      } catch (err) {
+        startFallback()
+      }
+    }
+
+    initMicrophone()
+
+    return () => {
+      stopFallback()
+      if (animationFrame) window.cancelAnimationFrame(animationFrame)
+      if (analyser) analyser.disconnect()
+      if (stream) stream.getTracks().forEach(track => track.stop())
+      if (context) context.close()
+    }
+  }, [])
 
   const scrollToBottom = useCallback(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
@@ -71,11 +170,22 @@ function CopilotChat() {
     const text = input.trim()
     if (!text || sending) return
 
-    setMessages(prev => [...prev, { role: 'user', content: text }])
+    const skillMatch = findSkillForText(text)
+    setMessages(prev => {
+      const next = [...prev, { role: 'user', content: text }]
+      if (skillMatch) {
+        next.push({ role: 'system', content: `SKILL ACTIVATED — ${skillMatch.label}` })
+      }
+      return next
+    })
     setInput('')
     setSending(true)
 
     // Show thinking indicator
+    setMatchedSkill(skillMatch || null)
+    if (skillMatch?.panel) {
+      triggerNavigation(skillMatch.panel, skillMatch.label)
+    }
     setMessages(prev => [...prev, { role: 'thinking', content: 'PROCESSING...' }])
 
     try {
@@ -101,7 +211,7 @@ function CopilotChat() {
         if (result.actions?.length > 0) {
           for (const action of result.actions) {
             if (action.type === 'navigate' && action.payload?.path) {
-              setTimeout(() => navigate(action.payload.path), 500)
+              setTimeout(() => triggerNavigation(action.payload.path, action.payload?.label || action.payload.path.replace('/', ' ').trim()), 500)
             }
           }
         }
@@ -137,16 +247,29 @@ function CopilotChat() {
     { label: 'HEALTH CHECK', cmd: 'Ejecuta Sentinel para detectar anomalías en el sistema' },
   ]
 
+  const navShortcuts = [
+    { label: 'PROSPECTOR HUB', path: '/prospector', hint: 'Mira la base de leads y Gmail' },
+    { label: 'MESSAGING', path: '/messaging', hint: 'Revisa canales Gmail + WA' },
+    { label: 'CONTROL TOWER', path: '/control-tower', hint: 'Dashboard ejecutivo' },
+    { label: 'WORLD MONITOR', path: '/world-monitor', hint: 'Señales macro y forecast' },
+  ]
+
+  const skillPreview = skills.slice(0, 6)
+
+  const handleNavigation = useCallback((path) => {
+    if (!path) return
+    setMessages(prev => [...prev, {
+      role: 'system',
+      content: `NAVIGATING TO ${path.replace('/', '').toUpperCase()}`
+    }])
+    navigate(path)
+  }, [navigate])
+
+  const togglePhone = () => setPhoneConnected(state => !state)
+
   return (
     <div className="copilot-container fade-in">
-      {/* Header */}
-      <div style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        padding: '16px 20px',
-        borderBottom: '1px solid var(--color-border)',
-      }}>
+      <div className="copilot-header">
         <div>
           <h1 style={{
             fontFamily: 'var(--font-editorial)',
@@ -170,87 +293,119 @@ function CopilotChat() {
         </div>
       </div>
 
-      {/* Quick Actions */}
-      <div style={{
-        display: 'flex',
-        gap: '4px',
-        padding: '8px 20px',
-        borderBottom: '1px solid var(--border-subtle)',
-        overflowX: 'auto',
-      }}>
-        {quickActions.map((qa, i) => (
-          <button
-            key={i}
-            className="mono"
-            style={{
-              fontSize: '9px',
-              padding: '4px 10px',
-              background: 'transparent',
-              border: '1px solid var(--border-subtle)',
-              color: 'var(--color-text-2)',
-              cursor: 'pointer',
-              whiteSpace: 'nowrap',
-              flexShrink: 0,
-            }}
-            onClick={() => { setInput(qa.cmd); inputRef.current?.focus() }}
-            disabled={sending}
-          >
-            {qa.label}
-          </button>
-        ))}
-      </div>
-
-      {/* Messages */}
-      <div className="copilot-messages">
-        {messages.map((msg, i) => (
-          <div key={i}>
-            {/* Thinking indicator */}
-            {msg.role === 'thinking' && (
-              <div className="copilot-message copilot-message--system" style={{ opacity: 0.6 }}>
-                <span className="copilot-thinking-pulse">
-                  COPILOT IS EXECUTING TOOLS...
-                </span>
-              </div>
-            )}
-
-            {/* Regular messages */}
-            {msg.role !== 'thinking' && (
-              <div className={`copilot-message copilot-message--${msg.role === 'assistant' ? 'ai' : msg.role}`}>
-                {msg.content}
-              </div>
-            )}
-
-            {/* Tool execution badges */}
-            {msg.tools?.length > 0 && (
-              <div className="copilot-tools-row">
-                {msg.tools.map((t, j) => (
-                  <ToolBadge key={j} tool={t.tool} success={t.success} error={t.error} />
-                ))}
-              </div>
-            )}
+      <div className="copilot-body">
+        <div className="copilot-avatar-column">
+          <CopilotAvatar listening={listening} energy={energy} phoneConnected={phoneConnected} />
+          <div className="copilot-status-grid">
+            <span className="copilot-status-pill">{listening ? 'LISTENING' : 'MIC STANDBY'}</span>
+            <span className="copilot-status-pill">{phoneConnected ? 'PHONE LINKED' : 'PHONE STANDBY'}</span>
+            <span className="copilot-status-pill">{sending ? 'ENGINE BUSY' : 'ENGINE READY'}</span>
+            <span className="copilot-status-pill">{energy > 60 ? 'HIGH ENERGY' : 'STABILIZING'}</span>
           </div>
-        ))}
-        <div ref={messagesEndRef} />
-      </div>
+          {matchedSkill && (
+            <div className="copilot-active-skill">
+              <span>Active skill</span>
+              <strong>{matchedSkill.label}</strong>
+            </div>
+          )}
+          <div className="copilot-skill-list">
+            {skillPreview.map(skill => (
+              <div key={skill.id} className="copilot-skill-card">
+                <span className="label">{skill.label}</span>
+                <span className="description">{skill.description}</span>
+                <span className="mode">{skill.category} · {skill.mode}</span>
+              </div>
+            ))}
+          </div>
+          <button
+            className="copilot-action-btn"
+            onClick={togglePhone}
+            style={{ width: '100%', marginTop: '6px' }}
+          >
+            {phoneConnected ? '[ SEVER PHONE LINK ]' : '[ LINK REMOTE DEVICE ]'}
+          </button>
+        </div>
 
-      {/* Input */}
-      <div className="copilot-input-bar">
-        <input
-          ref={inputRef}
-          className="copilot-input"
-          value={input}
-          onChange={e => setInput(e.target.value)}
-          onKeyDown={handleKeyDown}
-          placeholder="Busca restaurantes en Barcelona... / Genera un email para... / Estado del pipeline..."
-          disabled={sending}
-        />
-        <button
-          className="copilot-send"
-          onClick={handleSend}
-          disabled={sending || !input.trim()}
-        >
-          {sending ? '...' : 'EXEC'}
-        </button>
+        <div className="copilot-chat-column">
+          <div className="copilot-quick-actions">
+            {quickActions.map((qa, i) => (
+              <button
+                key={i}
+                className="copilot-action-btn"
+                style={{ flex: '1 1 auto' }}
+                onClick={() => { setInput(qa.cmd); inputRef.current?.focus() }}
+                disabled={sending}
+              >
+                {qa.label}
+              </button>
+            ))}
+          </div>
+          <div className="copilot-nav-actions">
+            {navShortcuts.map((nav) => (
+              <button
+                key={nav.path}
+                className="copilot-nav-btn mono"
+                onClick={() => triggerNavigation(nav.path, nav.label)}
+              >
+                <span>{nav.label}</span>
+                <small>{nav.hint}</small>
+              </button>
+            ))}
+          </div>
+          {navIntent && (
+            <div className="copilot-nav-intent">
+              <span>Navegando hacia</span>
+              <strong>{navIntent.label}</strong>
+            </div>
+          )}
+          <div className="copilot-messages">
+            {messages.map((msg, i) => (
+              <div key={i}>
+                {msg.role === 'thinking' && (
+                  <div className="copilot-message copilot-message--system" style={{ opacity: 0.6 }}>
+                    <span className="copilot-thinking-pulse">
+                      COPILOT IS EXECUTING TOOLS...
+                    </span>
+                  </div>
+                )}
+
+                {msg.role !== 'thinking' && (
+                  <div className={`copilot-message copilot-message--${msg.role === 'assistant' ? 'ai' : msg.role}`}>
+                    {msg.content}
+                  </div>
+                )}
+
+                {msg.tools?.length > 0 && (
+                  <div className="copilot-tools-row">
+                    {msg.tools.map((t, j) => (
+                      <ToolBadge key={j} tool={t.tool} success={t.success} error={t.error} />
+                    ))}
+                  </div>
+                )}
+              </div>
+            ))}
+            <div ref={messagesEndRef} />
+          </div>
+
+          <div className="copilot-input-bar">
+            <input
+              ref={inputRef}
+              className="copilot-input"
+              value={input}
+              onChange={e => setInput(e.target.value)}
+              onKeyDown={handleKeyDown}
+              placeholder="Busca restaurantes en Barcelona... / Genera un email para... / Estado del pipeline..."
+              disabled={sending}
+            />
+            <button
+              className="copilot-send"
+              onClick={handleSend}
+              disabled={sending || !input.trim()}
+            >
+              {sending ? '...' : 'EXEC'}
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   )

@@ -52,6 +52,10 @@ const EVENT_ROUTES: Record<string, string> = {
 
   // Drip sequence events
   "outreach.step_due":   "/drip-outreach-step",
+
+  // TouchDesigner bridge
+  "td.state_request":    "/td-state-sync",
+  "td.command_executed": "/td-command-log",
 };
 
 // ── Wildcard routes (prefix matching) ──

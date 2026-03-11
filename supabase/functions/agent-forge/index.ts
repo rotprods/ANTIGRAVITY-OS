@@ -1,5 +1,6 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { runBrain } from "../_shared/agent-brain-v2.ts";
 
 const corsHeaders = { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type' };
 const AGENT_CODE = 'forge';
@@ -55,6 +56,18 @@ Deno.serve(async (req: Request) => {
 
     result.content_type = content_type;
     result.agent = AGENT_CODE;
+
+    // ── Brain: enrich content with external data + store in knowledge base ──
+    if (action === 'generate') {
+      const brain = await runBrain({
+        agent: "forge",
+        goal: `You just generated ${content_type} content about "${topic}". Now: 1) Fetch relevant real-time data (trends, stats, news) to validate/enrich the content. 2) Store the generated content in memory for future campaigns. 3) If content quality is high, create a task to schedule it.`,
+        context: { generated: result, topic, audience, tone, content_type },
+        systemPromptExtra: "You are FORGE: the content engine. Be creative and data-driven.",
+        maxRounds: 3,
+      }).catch(() => null);
+      if (brain) result.brain_enrichment = { skills_used: brain.skills_used?.length, notes: brain.answer?.slice(0, 300) };
+    }
 
     const duration = Date.now() - startTime;
     await supabase.from('agent_registry').update({ status: 'online', total_runs: (agent.total_runs || 0) + 1 }).eq('id', agent.id);

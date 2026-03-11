@@ -44,21 +44,21 @@ function Experiments() {
                 {/* ── KPI STRIP ── */}
                 <div className="kpi-strip kpi-strip-3">
                     <div className="kpi-strip-cell">
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                        <div className="kpi-strip-cell-header">
                             <span className="mono text-xs text-tertiary">ACTIVE EXPERIMENTS</span>
                             <span style={{ fontSize: '14px', color: 'var(--color-info)' }}>🔬</span>
                         </div>
                         <span className="mono text-lg font-bold" style={{ color: 'var(--color-text)' }}>{active.length}</span>
                     </div>
                     <div className="kpi-strip-cell">
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                        <div className="kpi-strip-cell-header">
                             <span className="mono text-xs text-tertiary">PROVEN HYPOTHESES</span>
                             <span style={{ fontSize: '14px', color: 'var(--color-success)' }}>✅</span>
                         </div>
                         <span className="mono text-lg font-bold" style={{ color: 'var(--color-success)' }}>{concluded.filter(e => e.result === 'success').length}</span>
                     </div>
                     <div className="kpi-strip-cell">
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                        <div className="kpi-strip-cell-header">
                             <span className="mono text-xs text-tertiary">REJECTED HYPOTHESES</span>
                             <span style={{ fontSize: '14px', color: 'var(--color-danger)' }}>❌</span>
                         </div>
@@ -77,7 +77,7 @@ function Experiments() {
                                 <div style={{ display: 'flex', flexDirection: 'column' }}>
                                     {active.map((exp, idx) => (
                                         <div key={exp.id} style={{ padding: '16px', borderBottom: idx < active.length - 1 ? '1px solid var(--border-subtle)' : 'none', background: idx % 2 === 0 ? 'transparent' : '#000', borderLeft: '2px solid var(--color-info)' }}>
-                                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                                            <div className="kpi-strip-cell-header">
                                                 <div>
                                                     <div className="mono font-bold" style={{ color: 'var(--color-text)', fontSize: '14px' }}>{exp.name.toUpperCase()}</div>
                                                     <div className="mono text-xs" style={{ color: 'var(--color-info)', marginTop: '4px' }}>HYP_1: {exp.hypothesis.toUpperCase()}</div>

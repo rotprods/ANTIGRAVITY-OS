@@ -1,0 +1,134 @@
+import { useCallback, useEffect, useState } from 'react'
+import { supabase } from '../lib/supabase'
+
+const CREDIT_ENGINE_URL = `${import.meta.env.VITE_SUPABASE_URL || 'https://yxzdafptqtcvpsbqkmkm.supabase.co'}/functions/v1/credit-engine`
+
+async function callEngine(action, body = {}) {
+  const { data: { session } } = await supabase.auth.getSession()
+  const token = session?.access_token || import.meta.env.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl4emRhZnB0cXRjdnBzYnFrbWttIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI3NjUwNjIsImV4cCI6MjA4ODM0MTA2Mn0.-Kg8u3DVUq5T8JiJNJMPknzPgDBJVJusRatk_WkTxyU'
+
+  const res = await fetch(`${CREDIT_ENGINE_URL}?action=${action}`, {
+    method: 'POST',
+    headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  })
+  return res.json()
+}
+
+export function useCredits() {
+  const [balance, setBalance] = useState(0)
+  const [tier, setTier] = useState('free')
+  const [stakedAmount, setStakedAmount] = useState(0)
+  const [pricing, setPricing] = useState([])
+  const [history, setHistory] = useState([])
+  const [deflation, setDeflation] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const [userId, setUserId] = useState(null)
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => setUserId(data.session?.user?.id || null))
+    const { data: listener } = supabase.auth.onAuthStateChange((_, session) => setUserId(session?.user?.id || null))
+    return () => listener?.subscription?.unsubscribe()
+  }, [])
+
+  useEffect(() => {
+    if (!userId) { setLoading(false); return }
+    setLoading(true)
+    Promise.all([
+      callEngine('check-balance', { userId }),
+      callEngine('pricing'),
+    ]).then(([balRes, priceRes]) => {
+      setBalance(balRes?.balance || 0)
+      setTier(balRes?.tier || 'free')
+      setStakedAmount(balRes?.stakedAmount || 0)
+      setPricing(priceRes?.pricing || [])
+      setLoading(false)
+    }).catch(() => setLoading(false))
+  }, [userId])
+
+  useEffect(() => {
+    if (!userId) return
+    const channel = supabase
+      .channel('credit_balance')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'credit_accounts' }, (payload) => {
+        if (payload.new?.user_id === userId) {
+          setBalance(payload.new.balance)
+          setTier(payload.new.tier)
+          setStakedAmount(payload.new.staked_amount)
+        }
+      })
+      .subscribe()
+    return () => supabase.removeChannel(channel)
+  }, [userId])
+
+  const canAfford = useCallback(async (action) => {
+    if (!userId) return { canAfford: false }
+    return callEngine('can-afford', { userId, action })
+  }, [userId])
+
+  const debit = useCallback(async (action, correlationId) => {
+    if (!userId) return { error: 'Not logged in' }
+    const r = await callEngine('debit', { userId, action, correlationId })
+    if (r.success) setBalance(r.balanceAfter)
+    return r
+  }, [userId])
+
+  const credit = useCallback(async (amount, action, type = 'credit', correlationId) => {
+    if (!userId) return { error: 'Not logged in' }
+    const r = await callEngine('credit', { userId, amount, action, type, correlationId })
+    if (r.success) setBalance(r.balanceAfter)
+    return r
+  }, [userId])
+
+  const purchase = useCallback(async (amountFiat, currency = 'EUR') => {
+    if (!userId) return { error: 'Not logged in' }
+    const r = await callEngine('purchase', { userId, amountFiat, currency })
+    if (r.success) setBalance(r.newBalance)
+    return r
+  }, [userId])
+
+  const stake = useCallback(async (amount) => {
+    if (!userId) return { error: 'Not logged in' }
+    const r = await callEngine('stake', { userId, amount })
+    if (r.success) {
+      setBalance(r.balanceAfter)
+      setStakedAmount(r.totalStaked)
+      setTier(r.tier)
+    }
+    return r
+  }, [userId])
+
+  const unstake = useCallback(async (amount) => {
+    if (!userId) return { error: 'Not logged in' }
+    const r = await callEngine('unstake', { userId, amount })
+    if (r.success) {
+      setBalance(r.balanceAfter)
+      setStakedAmount(r.totalStaked)
+      setTier(r.tier)
+    }
+    return r
+  }, [userId])
+
+  const refreshHistory = useCallback(async (limit = 50) => {
+    if (!userId) return
+    const r = await callEngine('history', { userId, limit })
+    setHistory(r?.transactions || [])
+    return r
+  }, [userId])
+
+  const refreshDeflation = useCallback(async () => {
+    const r = await callEngine('deflation')
+    setDeflation(r)
+    return r
+  }, [])
+
+  const getCost = useCallback((action) => {
+    return pricing.find(p => p.action === action)?.cost || 0
+  }, [pricing])
+
+  return {
+    balance, tier, stakedAmount, pricing, history, deflation, loading, userId,
+    canAfford, debit, credit, purchase, stake, unstake,
+    refreshHistory, refreshDeflation, getCost,
+  }
+}

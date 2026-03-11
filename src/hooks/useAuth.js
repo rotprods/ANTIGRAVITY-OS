@@ -21,6 +21,8 @@ export function useAuth() {
                 fetchOne('profiles', sess.user.id).then(p => setProfile(p))
             }
             setLoading(false)
+        }).catch(() => {
+            setLoading(false)
         })
 
         // Listen for auth changes

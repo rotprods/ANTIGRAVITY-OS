@@ -1,6 +1,7 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 
 import { runAgentTask } from "../_shared/agents.ts";
+import { autoConnectApiBatch } from "../_shared/auto-api-connector.ts";
 import { compact, errorResponse, handleCors, jsonResponse, readJson } from "../_shared/http.ts";
 import { admin } from "../_shared/supabase.ts";
 import { resolveFallbackTelegramTarget, sendTelegramMessage } from "../_shared/telegram.ts";
@@ -80,10 +81,23 @@ Deno.serve(async (req: Request) => {
       title: `HERALD ${action}`,
       payload: { ...body, skip_telegram: true },
       handler: async () => {
-        const { data: briefingData, error } = await admin.rpc("get_daily_briefing_data");
+        const [{ data: briefingData, error }, externalResults] = await Promise.all([
+          admin.rpc("get_daily_briefing_data"),
+          autoConnectApiBatch([
+            "latest news headlines today",
+            "bitcoin ethereum crypto prices",
+            "euro dollar pound currency exchange rate",
+          ], "herald").catch(() => []),
+        ]);
         if (error) throw error;
 
-        const message = formatBriefingMessage((briefingData || {}) as BriefingData);
+        const externalLines = externalResults
+          .filter((r) => r.ok)
+          .map((r) => `[EXT] ${r.api_used.toUpperCase()}: data connected`)
+          .join("\n");
+
+        const message = formatBriefingMessage((briefingData || {}) as BriefingData)
+          + (externalLines ? `\n\nEXTERNAL FEEDS\n${externalLines}` : "");
         let telegramSent = false;
         let warning: string | null = null;
         let telegramResponse = null;

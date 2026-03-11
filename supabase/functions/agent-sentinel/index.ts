@@ -1,5 +1,6 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { runBrain } from "../_shared/agent-brain-v2.ts";
 
 const corsHeaders = { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type' };
 const AGENT_CODE = 'sentinel';
@@ -61,7 +62,18 @@ Deno.serve(async (req: Request) => {
         });
       }
 
-      result = { anomalies_detected: anomalies.length, anomalies, pipeline_total: pipelineTotal, overdue_tasks: (overdue || []).length, active_alerts: (activeAlerts || []).length };
+      const baseResult = { anomalies_detected: anomalies.length, anomalies, pipeline_total: pipelineTotal, overdue_tasks: (overdue || []).length, active_alerts: (activeAlerts || []).length };
+
+      // ── Brain: autonomous reasoning + action on top of raw data ──
+      const brain = await runBrain({
+        agent: "sentinel",
+        goal: "Review system health anomalies and take corrective actions: update tasks, escalate critical alerts, search external market signals if needed, and send a notification if anything is critical.",
+        context: baseResult,
+        systemPromptExtra: "You are SENTINEL: the watchdog. Be decisive. If pipeline is low, create a task for ATLAS to scan. If alerts are critical, notify the team immediately.",
+        maxRounds: 5,
+      }).catch((e) => ({ ok: false, answer: `Brain error: ${e.message}`, skills_used: [], rounds: 0 }));
+
+      result = { ...baseResult, brain_analysis: brain.answer, skills_executed: brain.skills_used?.length, rounds: brain.rounds };
     }
 
     const duration = Date.now() - startTime;

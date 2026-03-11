@@ -174,6 +174,7 @@ function StepProfile({ user, data, setData, onNext }) {
         full_name: data.fullName.trim(),
         company: data.company.trim(),
         role_title: data.roleTitle.trim(),
+        phone: data.phone?.trim() || null,
       })
       onNext()
     } catch (err) {
@@ -192,10 +193,10 @@ function StepProfile({ user, data, setData, onNext }) {
       exit="exit"
       onSubmit={handleSubmit}
     >
-      <h2 style={s.title}>Profile Setup</h2>
+      <h2 style={s.title}>Configura tu perfil</h2>
 
       <div style={s.fieldGroup}>
-        <label style={s.label}>Full Name</label>
+        <label style={s.label}>Nombre completo</label>
         <input
           style={s.input}
           type="text"
@@ -207,24 +208,35 @@ function StepProfile({ user, data, setData, onNext }) {
       </div>
 
       <div style={s.fieldGroup}>
-        <label style={s.label}>Company Name</label>
+        <label style={s.label}>Empresa</label>
         <input
           style={s.input}
           type="text"
           value={data.company}
           onChange={(e) => setData({ ...data, company: e.target.value })}
-          placeholder="Acme Corp"
+          placeholder="Mi Empresa S.L."
         />
       </div>
 
       <div style={s.fieldGroup}>
-        <label style={s.label}>Role / Title</label>
+        <label style={s.label}>Cargo</label>
         <input
           style={s.input}
           type="text"
           value={data.roleTitle}
           onChange={(e) => setData({ ...data, roleTitle: e.target.value })}
           placeholder="CEO"
+        />
+      </div>
+
+      <div style={s.fieldGroup}>
+        <label style={s.label}>Telefono (opcional)</label>
+        <input
+          style={s.input}
+          type="tel"
+          value={data.phone || ''}
+          onChange={(e) => setData({ ...data, phone: e.target.value })}
+          placeholder="+34 600 000 000"
         />
       </div>
 
@@ -235,7 +247,7 @@ function StepProfile({ user, data, setData, onNext }) {
         style={{ ...s.button, ...((!canSubmit || loading) ? s.buttonDisabled : {}) }}
         disabled={!canSubmit || loading}
       >
-        {loading ? 'SAVING...' : 'CONFIGURE IDENTITY'}
+        {loading ? 'GUARDANDO...' : 'CONFIGURAR IDENTIDAD'}
       </button>
     </Motion.form>
   )
@@ -279,10 +291,14 @@ function StepWorkspace({ user, data, setData, onNext }) {
           user_id: user.id,
           role: 'owner',
         })
+        await updateRow('profiles', user.id, {
+          default_org_id: org.id,
+          onboarding_completed: true,
+        })
       }
       onNext()
     } catch (err) {
-      setError(err.message || 'Failed to create workspace')
+      setError(err.message || 'Error al crear workspace')
     } finally {
       setLoading(false)
     }
@@ -297,10 +313,10 @@ function StepWorkspace({ user, data, setData, onNext }) {
       exit="exit"
       onSubmit={handleSubmit}
     >
-      <h2 style={s.title}>Workspace Creation</h2>
+      <h2 style={s.title}>Crea tu workspace</h2>
 
       <div style={s.fieldGroup}>
-        <label style={s.label}>Organization Name</label>
+        <label style={s.label}>Nombre de la organizacion</label>
         <input
           style={s.input}
           type="text"
@@ -323,13 +339,13 @@ function StepWorkspace({ user, data, setData, onNext }) {
       </div>
 
       <div style={s.fieldGroup}>
-        <label style={s.label}>Industry</label>
+        <label style={s.label}>Industria</label>
         <select
           style={s.select}
           value={data.industry}
           onChange={(e) => setData({ ...data, industry: e.target.value })}
         >
-          <option value="" disabled>Select industry</option>
+          <option value="" disabled>Selecciona industria</option>
           {INDUSTRIES.map((ind) => (
             <option key={ind} value={ind}>{ind}</option>
           ))}
@@ -337,7 +353,7 @@ function StepWorkspace({ user, data, setData, onNext }) {
       </div>
 
       <div style={s.fieldGroup}>
-        <label style={s.label}>Team Size</label>
+        <label style={s.label}>Equipo</label>
         <div style={{ display: 'flex', gap: 8 }}>
           {TEAM_SIZES.map((size) => (
             <button
@@ -370,7 +386,7 @@ function StepWorkspace({ user, data, setData, onNext }) {
         style={{ ...s.button, ...((!canSubmit || loading) ? s.buttonDisabled : {}) }}
         disabled={!canSubmit || loading}
       >
-        {loading ? 'INITIALIZING...' : 'INITIALIZE WORKSPACE'}
+        {loading ? 'INICIALIZANDO...' : 'CREAR WORKSPACE'}
       </button>
     </Motion.form>
   )
@@ -406,10 +422,26 @@ function AnimatedCheckmark({ delay = 0 }) {
 }
 
 function StepActivation({ onComplete }) {
-  const links = [
-    { label: 'Go to Control Tower', delay: 0 },
-    { label: 'Set up AI Agents', delay: 1 },
-    { label: 'Import contacts', delay: 2 },
+  const [typedText, setTypedText] = useState('')
+  const welcomeMsg = 'Bienvenido a OCULOPS. Soy tu Copilot de inteligencia artificial. Estoy listo para gestionar tu pipeline, analizar mercados, y automatizar tu crecimiento. Escribe lo que necesites en el chat.'
+
+  useState(() => {
+    let i = 0
+    const interval = setInterval(() => {
+      if (i < welcomeMsg.length) {
+        setTypedText(welcomeMsg.slice(0, i + 1))
+        i++
+      } else {
+        clearInterval(interval)
+      }
+    }, 25)
+    return () => clearInterval(interval)
+  })
+
+  const checks = [
+    { label: 'Perfil configurado', delay: 0 },
+    { label: 'Workspace creado', delay: 1 },
+    { label: 'Agentes IA activados', delay: 2 },
   ]
 
   return (
@@ -421,22 +453,41 @@ function StepActivation({ onComplete }) {
       exit="exit"
       style={{ textAlign: 'center' }}
     >
-      <h2 style={{ ...s.title, marginBottom: 16 }}>System Online</h2>
-      <p style={{
-        fontFamily: 'var(--font-mono)',
-        fontSize: 12,
-        color: 'var(--color-text-3)',
-        letterSpacing: 1,
-        textTransform: 'uppercase',
-        marginBottom: 40,
+      <h2 style={{ ...s.title, marginBottom: 16 }}>Sistema Online</h2>
+
+      <div style={{
+        padding: '16px 20px',
+        border: '1px solid var(--color-primary)',
+        background: 'rgba(255, 212, 0, 0.03)',
+        marginBottom: 32,
+        textAlign: 'left',
       }}>
-        All systems initialized. Workspace ready.
-      </p>
+        <div style={{
+          fontFamily: 'var(--font-mono)',
+          fontSize: 10,
+          letterSpacing: 2,
+          textTransform: 'uppercase',
+          color: 'var(--color-primary)',
+          marginBottom: 8,
+        }}>
+          COPILOT
+        </div>
+        <p style={{
+          fontFamily: 'var(--font-sans)',
+          fontSize: 13,
+          color: 'var(--color-text-2)',
+          lineHeight: 1.6,
+          margin: 0,
+          minHeight: 60,
+        }}>
+          {typedText}<span style={{ opacity: typedText.length < welcomeMsg.length ? 1 : 0, animation: 'blink 1s step-end infinite' }}>|</span>
+        </p>
+      </div>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 16, marginBottom: 40 }}>
-        {links.map((link) => (
+        {checks.map((item) => (
           <div
-            key={link.label}
+            key={item.label}
             style={{
               display: 'flex',
               alignItems: 'center',
@@ -446,14 +497,14 @@ function StepActivation({ onComplete }) {
               textAlign: 'left',
             }}
           >
-            <AnimatedCheckmark delay={link.delay} />
+            <AnimatedCheckmark delay={item.delay} />
             <span style={{
               fontFamily: 'var(--font-mono)',
               fontSize: 13,
               letterSpacing: 1,
               color: 'var(--color-text-2)',
             }}>
-              {link.label}
+              {item.label}
             </span>
           </div>
         ))}
@@ -464,7 +515,7 @@ function StepActivation({ onComplete }) {
         style={s.button}
         onClick={onComplete}
       >
-        LAUNCH OCULOPS
+        ENTRAR A OCULOPS
       </button>
     </Motion.div>
   )
@@ -478,6 +529,7 @@ export default function Onboarding({ user, onComplete }) {
     fullName: user?.user_metadata?.full_name || user?.user_metadata?.name || '',
     company: '',
     roleTitle: '',
+    phone: '',
   })
   const [workspaceData, setWorkspaceData] = useState({
     orgName: '',

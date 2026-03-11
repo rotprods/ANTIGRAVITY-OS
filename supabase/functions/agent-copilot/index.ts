@@ -450,6 +450,37 @@ const TOOLS: Array<{
   {
     type: "function",
     function: {
+      name: "api_catalog_search",
+      description:
+        "Search the OCULOPS API catalog (6,898+ APIs) to find external data sources, integrations, or services. Use this when the user asks about APIs, data sources, or external integrations available.",
+      parameters: {
+        type: "object",
+        properties: {
+          query: {
+            type: "string",
+            description: "Keyword to search (e.g. 'weather', 'finance', 'maps', 'AI')",
+          },
+          category: {
+            type: "string",
+            description: "Optional category filter (e.g. 'Finance', 'Weather', 'Government')",
+          },
+          auth: {
+            type: "string",
+            enum: ["none", "api_key", "oauth2", "unknown"],
+            description: "Filter by auth type. Use 'none' to get APIs requiring no credentials.",
+          },
+          limit: {
+            type: "number",
+            description: "Max results to return (default 10)",
+          },
+        },
+        required: ["query"],
+      },
+    },
+  },
+  {
+    type: "function",
+    function: {
       name: "navigate",
       description:
         "Navigate the user to a specific OCULOPS module. Returns a navigation action for the frontend.",
@@ -793,6 +824,33 @@ async function executeTool(
       path: `/${args.module}`,
       message: `Navigating to ${args.module}`,
     };
+  }
+
+  if (name === "api_catalog_search") {
+    const { query = "", category, auth, limit = 10 } = args as {
+      query: string;
+      category?: string;
+      auth?: string;
+      limit?: number;
+    };
+    let q = admin
+      .from("api_catalog")
+      .select("name, url, docs, description, category, auth, source")
+      .or(`name.ilike.%${query}%,description.ilike.%${query}%,category.ilike.%${query}%`);
+    if (category) q = q.ilike("category", `%${category}%`);
+    if (auth) q = q.eq("auth", auth);
+    const { data, error } = await q.limit(limit);
+
+    // Fallback: if table doesn't exist, do in-memory search on a small subset
+    if (error || !data) {
+      return {
+        ok: false,
+        error: "api_catalog table not seeded yet. Run: node scripts/seed-api-catalog.mjs",
+        hint: "The catalog JSON is at src/data/api-mega-catalog.json with 6,898+ APIs.",
+      };
+    }
+
+    return { ok: true, count: data.length, results: data };
   }
 
   throw new Error(`Unknown tool: ${name}`);

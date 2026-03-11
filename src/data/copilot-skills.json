@@ -1,0 +1,132 @@
+[
+  {
+    "id": "briefing.daily",
+    "category": "Briefings",
+    "label": "Resumen diario",
+    "description": "Repasa pipeline, CRM y señales de mercado en un solo reporte con enlaces a tarjetas clave.",
+    "tools": ["agent-copilot", "agent-cortex"],
+    "triggers": ["briefing", "resumen diario", "informe ejecutivo"],
+    "mode": "live",
+    "panel": "/control-tower"
+  },
+  {
+    "id": "briefing.threat",
+    "category": "Briefings",
+    "label": "Radar de riesgos",
+    "description": "Detecta anomalías en señales críticas, clasifícalas y postea alertas en Control Tower.",
+    "tools": ["agent-sentinel", "agent-cortex"],
+    "triggers": ["alerta", "vulnerabilidad"],
+    "mode": "safe",
+    "panel": "/control-tower"
+  },
+  {
+    "id": "outreach.gmail-summary",
+    "category": "Outreach",
+    "label": "Digest de Gmail",
+    "description": "Extrae remitentes clave, clasifica intenciones y responde con plantilla aprobada.",
+    "tools": ["gmail-inbound", "messaging-dispatch"],
+    "triggers": ["gmail", "inbox"],
+    "mode": "live",
+    "panel": "/messaging"
+  },
+  {
+    "id": "outreach.sequence",
+    "category": "Outreach",
+    "label": "Lanzar secuencia",
+    "description": "Activa n8n + Copilot para ejecutar secuencia de Gmail → WhatsApp → CRM para un lead.",
+    "tools": ["n8n/outreach-gmail-sender", "automation-runner"],
+    "triggers": ["drip", "secuencia"],
+    "mode": "dry-run",
+    "panel": "/automation"
+  },
+  {
+    "id": "prospect.intent",
+    "category": "Prospecting",
+    "label": "Calificar lead",
+    "description": "Analiza la señal entrante, enriquece con datos públicos y decide si crear deal.",
+    "tools": ["agent-scribe", "agent-cortex", "agent-hunter"],
+    "triggers": ["califica", "lead"],
+    "mode": "live",
+    "panel": "/prospector"
+  },
+  {
+    "id": "crm.sync",
+    "category": "CRM",
+    "label": "Sincronizar atlas",
+    "description": "Valida contactos y deals contra Atlas CRM y actualiza pipeline con nuevos stages.",
+    "tools": ["useAtlasCRM"],
+    "triggers": ["atlas", "crm sync"],
+    "mode": "safe",
+    "panel": "/crm"
+  },
+  {
+    "id": "analytics.insight",
+    "category": "Analytics",
+    "label": "Insight financiero",
+    "description": "Resume cashflow y score de deals con criterio de CEO Score.",
+    "tools": ["finance", "agent-oracle"],
+    "triggers": ["finance", "cashflow"],
+    "mode": "live",
+    "panel": "/analytics"
+  },
+  {
+    "id": "creatives.social",
+    "category": "Creatives",
+    "label": "Post social",
+    "description": "Diseña copy, escala visual y calendariza junto a Creative Studio.",
+    "tools": ["agent-forge", "CreativeStudio"],
+    "triggers": ["social", "post"],
+    "mode": "dry-run",
+    "panel": "/creative-studio"
+  },
+  {
+    "id": "admin.navigate",
+    "category": "Navigation",
+    "label": "Ir a panel",
+    "description": "Navega entre paneles y destaca widgets relacionados a la consulta.",
+    "tools": ["react-router"],
+    "triggers": ["mostrar", "ver panel"],
+    "mode": "live",
+    "panel": "/control-tower"
+  },
+  {
+    "id": "admin.phone",
+    "category": "Operators",
+    "label": "Control remoto",
+    "description": "Activa canal Twilio/Supabase para enviar comandos desde un device remoto.",
+    "tools": ["supabase-realtime", "twilio"],
+    "triggers": ["telefono", "remoto"],
+    "mode": "safe",
+    "panel": "/settings"
+  },
+  {
+    "id": "agent.prospect",
+    "category": "Agents",
+    "label": "Prospector Runner",
+    "description": "Dispara scraping, enruta la data y crea oportunidades automáticamente.",
+    "tools": ["agent-scraper", "agent-hunter", "agent-copilot"],
+    "triggers": ["run prospect", "scraper"],
+    "mode": "live",
+    "panel": "/agents"
+  },
+  {
+    "id": "agent.fact-check",
+    "category": "Agents",
+    "label": "Verificador",
+    "description": "Corrobora hechos en fuentes públicas antes de responder al cliente.",
+    "tools": ["agent-oracle", "agent-cortex"],
+    "triggers": ["verifica", "hechos"],
+    "mode": "dry-run",
+    "panel": "/knowledge"
+  },
+  {
+    "id": "portal.forecast",
+    "category": "World",
+    "label": "Forecast global",
+    "description": "Agrupa señales macro y activa el World Monitor con filtros ready-made.",
+    "tools": ["WorldMonitor", "market-data"],
+    "triggers": ["forecast", "macro"],
+    "mode": "live",
+    "panel": "/world-monitor"
+  }
+]

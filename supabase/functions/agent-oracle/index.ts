@@ -1,5 +1,6 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { autoConnectApiBatch } from "../_shared/auto-api-connector.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -106,6 +107,17 @@ Deno.serve(async (req: Request) => {
         },
       };
 
+      // ── External data enrichment (auto-connects to catalog APIs) ──
+      const externalResults = await autoConnectApiBatch([
+        "stock market indices S&P NASDAQ price today",
+        "latest business tech news headlines",
+        "euro dollar exchange rate today",
+        "global cryptocurrency bitcoin price",
+      ], "oracle").catch(() => []);
+      const externalData = externalResults
+        .filter((r) => r.ok)
+        .map((r) => ({ intent: r.intent, api: r.api_used, data: r.data }));
+
       // ── AI Insights (skip for daily_report to save tokens) ──
       const openaiKey = Deno.env.get("OPENAI_API_KEY");
       let aiInsights = null;
@@ -118,7 +130,7 @@ Deno.serve(async (req: Request) => {
             model: "gpt-4o-mini",
             messages: [{
               role: "user",
-              content: `Eres ORACLE, motor analítico de una agencia de IA en Murcia.\n\nDatos del sistema:\n${JSON.stringify(snapshot, null, 2)}\n\nGenera un análisis ejecutivo JSON con:\n1. "health_score": 0-100\n2. "key_insights": 3 insights de los datos\n3. "bottlenecks": 2 cuellos de botella detectados\n4. "recommendations": 2 acciones prioritarias\n5. "mrr_estimate": estimación MRR basada en deals\n\nJSON válido solamente.`,
+              content: `Eres ORACLE, motor analítico de una agencia de IA en Murcia.\n\nDatos del sistema:\n${JSON.stringify(snapshot, null, 2)}\n\nDatos externos (mercados, noticias):\n${JSON.stringify(externalData, null, 2)}\n\nGenera un análisis ejecutivo JSON con:\n1. "health_score": 0-100\n2. "key_insights": 3 insights de los datos\n3. "bottlenecks": 2 cuellos de botella detectados\n4. "recommendations": 2 acciones prioritarias\n5. "mrr_estimate": estimación MRR basada en deals\n6. "market_context": 1 frase sobre el contexto de mercado externo\n\nJSON válido solamente.`,
             }],
             temperature: 0.4,
             max_tokens: 800,
@@ -175,7 +187,7 @@ Deno.serve(async (req: Request) => {
         tags: ["analytics", "insights", "auto"],
       });
 
-      result = { snapshot, ai_analysis: aiInsights, health_score: healthScore };
+      result = { snapshot, ai_analysis: aiInsights, health_score: healthScore, external_data: externalData };
     }
 
     const duration = Date.now() - startTime;

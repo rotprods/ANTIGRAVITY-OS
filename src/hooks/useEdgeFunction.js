@@ -45,11 +45,14 @@ export function useEdgeFunction(functionName, options = {}) {
         }
 
         try {
-            // Get auth token
+            // Get auth token (user JWT or fallback to anon key)
             let token = null
             if (supabase) {
                 const { data: { session } } = await supabase.auth.getSession()
                 token = session?.access_token
+            }
+            if (!token) {
+                token = import.meta.env.VITE_SUPABASE_ANON_KEY
             }
 
             if (!BASE) throw new Error('Supabase URL not configured')
@@ -58,7 +61,7 @@ export function useEdgeFunction(functionName, options = {}) {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
+                    'Authorization': `Bearer ${token}`,
                 },
                 body: JSON.stringify(payload),
             })
