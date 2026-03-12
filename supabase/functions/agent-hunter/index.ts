@@ -61,7 +61,7 @@ Deno.serve(async (req: Request) => {
     }>(req);
 
     const action = body.action || "cycle";
-    const limit = Math.max(1, Math.min(50, body.limit || 15));
+    const limit = Math.max(1, Math.min(20, body.limit || 3));
     const { task_id } = body;
 
     // ── Agent lifecycle: start ──

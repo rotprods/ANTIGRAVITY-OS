@@ -424,7 +424,6 @@ export const AGENT_REGISTRY: Record<string, AgentRegistryEntry> = {
     max_rounds: 4,
     kpis: ["orchestrations_completed", "agent_coordination_success", "pipeline_throughput"],
   },
-};
 
   evolver: {
     code_name: "evolver",
@@ -465,6 +464,7 @@ export const AGENT_REGISTRY: Record<string, AgentRegistryEntry> = {
     max_rounds: 10,
     kpis: ["experiments_run", "improvements_kept", "avg_delta_score", "agents_optimized"],
   },
+};
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 

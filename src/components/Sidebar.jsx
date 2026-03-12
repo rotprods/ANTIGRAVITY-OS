@@ -39,6 +39,7 @@ import {
   CreditCardIcon,
   UsersIcon,
   Cog6ToothIcon,
+  BuildingOffice2Icon,
 } from '@heroicons/react/24/outline'
 
 const NAV_GROUPS = [
@@ -70,6 +71,7 @@ const NAV_GROUPS = [
       { path: '/prospector',    label: 'Prospector',    icon: MagnifyingGlassIcon },
       { path: '/automation',    label: 'Automation',    icon: CogIcon },
       { path: '/flight-deck',   label: 'Flight Deck',   icon: PaperAirplaneIcon },
+      { path: '/pixel-office',  label: 'Pixel Office',  icon: BuildingOffice2Icon },
     ],
   },
   {
