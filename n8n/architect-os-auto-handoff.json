@@ -1,0 +1,453 @@
+{
+  "updatedAt": "2026-03-12T14:37:46.333Z",
+  "createdAt": "2026-02-21T20:30:35.629Z",
+  "id": "p8JXWxdpyJ7BM96U",
+  "name": "ARCHITECT OS - Auto Handoff",
+  "description": null,
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "architect-os-handoff",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "id": "e98e4d26-7a0e-4ab8-a15d-5fb901f4ab98",
+      "name": "Webhook (Handoff Receiver)",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        208,
+        304
+      ],
+      "webhookId": "architect-os-handoff"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "number": [
+            {
+              "value1": "={{ $json.body.qa_score }}",
+              "operation": "largerEqual",
+              "value2": 85
+            }
+          ]
+        }
+      },
+      "id": "3be2b325-1e4e-4e4b-a289-53e7f53a47b1",
+      "name": "QA Approved?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        464,
+        304
+      ]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "Email_Body",
+              "value": "=🚀 EL PROYECTO ESTÁ LIVE: {{ $json.body.brand_name }}\n\nHola Equipo,\n\nArchitect OS V10.4 acaba de desplegar exitosamente un nuevo proyecto en Firebase.\n\n🌐 URL: {{ $json.body.website_url }}\n💯 QA Score: {{ $json.body.qa_score }}\n⏱️ Timestamp: {{ $json.body.timestamp }}\n\nPor favor, iniciad el onboarding del cliente."
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "be858f6b-77fa-4e78-bcf6-dbb568bc561f",
+      "name": "Format Email (Success)",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [
+        704,
+        208
+      ]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "Email_Body",
+              "value": "=⚠️ ATENCIÓN: PROYECTO DESPLEGADO CON QA BAJO: {{ $json.body.brand_name }}\n\nHola Equipo,\n\nArchitect OS hizo el Handoff pero el QA es menor a 85. Se requiere revisión manual inmediata.\n\n🌐 URL: {{ $json.body.website_url }}\n⚠️ QA Score: {{ $json.body.qa_score }}\n⏱️ Timestamp: {{ $json.body.timestamp }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "be858f6b-1234-4e78-bcf6-dbb568bc5620",
+      "name": "Format Email (Warning)",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [
+        704,
+        432
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "={{ JSON.stringify({ status: 'success', message: 'Handoff processed! Email notifications prepared.', qa_score: $json.body.qa_score || null }) }}",
+        "options": {}
+      },
+      "id": "bcda1d7f-2b36-4078-abc2-9ea97b5e43a9",
+      "name": "HTTP Response",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        992,
+        208
+      ]
+    },
+    {
+      "parameters": {
+        "sendTo": "rot.prods@gmail.com",
+        "subject": "=Architect OS: Nuevo Lead de {{ $json.body.brand_name }}",
+        "message": "={   \"status\": \"success\",   \"message\": \"Handoff processed! Email notifications prepared.\",   \"qa_score\": {{ $json.body.qa_score }} }",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        1200,
+        208
+      ],
+      "id": "8fa70516-b551-424b-a1aa-591e8ae1e3b9",
+      "name": "Send a message",
+      "webhookId": "44b23022-10a3-4e9c-b852-68a7c24a8d0a",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "4N1TnkcBwzEadvRU",
+          "name": "Gmail account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Webhook (Handoff Receiver)": {
+      "main": [
+        [
+          {
+            "node": "QA Approved?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "QA Approved?": {
+      "main": [
+        [
+          {
+            "node": "Format Email (Success)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Format Email (Warning)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Email (Success)": {
+      "main": [
+        [
+          {
+            "node": "HTTP Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Email (Warning)": {
+      "main": [
+        [
+          {
+            "node": "HTTP Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Response": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "availableInMCP": false,
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {
+    "Send a message": [
+      {
+        "json": {
+          "name": "First item",
+          "code": 1
+        }
+      },
+      {
+        "json": {
+          "name": "Second item",
+          "code": 2
+        }
+      }
+    ]
+  },
+  "versionId": "6c4a6529-3a01-43e2-b440-4f12a28aea37",
+  "activeVersionId": "6c4a6529-3a01-43e2-b440-4f12a28aea37",
+  "versionCounter": 28,
+  "triggerCount": 1,
+  "shared": [
+    {
+      "updatedAt": "2026-02-21T20:30:35.632Z",
+      "createdAt": "2026-02-21T20:30:35.632Z",
+      "role": "workflow:owner",
+      "workflowId": "p8JXWxdpyJ7BM96U",
+      "projectId": "HK1iip8J42clWPk7",
+      "project": {
+        "updatedAt": "2026-02-20T23:19:55.264Z",
+        "createdAt": "2026-02-20T23:19:49.728Z",
+        "id": "HK1iip8J42clWPk7",
+        "name": "roberto gil ortega <rot.prods@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "creatorId": "7bb07d44-3c5c-4470-893a-e5a8a8262f00"
+      }
+    }
+  ],
+  "tags": [],
+  "activeVersion": {
+    "updatedAt": "2026-03-12T14:37:46.334Z",
+    "createdAt": "2026-03-12T14:37:46.334Z",
+    "versionId": "6c4a6529-3a01-43e2-b440-4f12a28aea37",
+    "workflowId": "p8JXWxdpyJ7BM96U",
+    "nodes": [
+      {
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "architect-os-handoff",
+          "responseMode": "lastNode",
+          "options": {}
+        },
+        "id": "e98e4d26-7a0e-4ab8-a15d-5fb901f4ab98",
+        "name": "Webhook (Handoff Receiver)",
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 1,
+        "position": [
+          208,
+          304
+        ],
+        "webhookId": "architect-os-handoff"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "number": [
+              {
+                "value1": "={{ $json.body.qa_score }}",
+                "operation": "largerEqual",
+                "value2": 85
+              }
+            ]
+          }
+        },
+        "id": "3be2b325-1e4e-4e4b-a289-53e7f53a47b1",
+        "name": "QA Approved?",
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 1,
+        "position": [
+          464,
+          304
+        ]
+      },
+      {
+        "parameters": {
+          "values": {
+            "string": [
+              {
+                "name": "Email_Body",
+                "value": "=🚀 EL PROYECTO ESTÁ LIVE: {{ $json.body.brand_name }}\n\nHola Equipo,\n\nArchitect OS V10.4 acaba de desplegar exitosamente un nuevo proyecto en Firebase.\n\n🌐 URL: {{ $json.body.website_url }}\n💯 QA Score: {{ $json.body.qa_score }}\n⏱️ Timestamp: {{ $json.body.timestamp }}\n\nPor favor, iniciad el onboarding del cliente."
+              }
+            ]
+          },
+          "options": {}
+        },
+        "id": "be858f6b-77fa-4e78-bcf6-dbb568bc561f",
+        "name": "Format Email (Success)",
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 1,
+        "position": [
+          704,
+          208
+        ]
+      },
+      {
+        "parameters": {
+          "values": {
+            "string": [
+              {
+                "name": "Email_Body",
+                "value": "=⚠️ ATENCIÓN: PROYECTO DESPLEGADO CON QA BAJO: {{ $json.body.brand_name }}\n\nHola Equipo,\n\nArchitect OS hizo el Handoff pero el QA es menor a 85. Se requiere revisión manual inmediata.\n\n🌐 URL: {{ $json.body.website_url }}\n⚠️ QA Score: {{ $json.body.qa_score }}\n⏱️ Timestamp: {{ $json.body.timestamp }}"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "id": "be858f6b-1234-4e78-bcf6-dbb568bc5620",
+        "name": "Format Email (Warning)",
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 1,
+        "position": [
+          704,
+          432
+        ]
+      },
+      {
+        "parameters": {
+          "respondWith": "text",
+          "responseBody": "={{ JSON.stringify({ status: 'success', message: 'Handoff processed! Email notifications prepared.', qa_score: $json.body.qa_score || null }) }}",
+          "options": {}
+        },
+        "id": "bcda1d7f-2b36-4078-abc2-9ea97b5e43a9",
+        "name": "HTTP Response",
+        "type": "n8n-nodes-base.respondToWebhook",
+        "typeVersion": 1,
+        "position": [
+          992,
+          208
+        ]
+      },
+      {
+        "parameters": {
+          "sendTo": "rot.prods@gmail.com",
+          "subject": "=Architect OS: Nuevo Lead de {{ $json.body.brand_name }}",
+          "message": "={   \"status\": \"success\",   \"message\": \"Handoff processed! Email notifications prepared.\",   \"qa_score\": {{ $json.body.qa_score }} }",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.gmail",
+        "typeVersion": 2.2,
+        "position": [
+          1200,
+          208
+        ],
+        "id": "8fa70516-b551-424b-a1aa-591e8ae1e3b9",
+        "name": "Send a message",
+        "webhookId": "44b23022-10a3-4e9c-b852-68a7c24a8d0a",
+        "credentials": {
+          "gmailOAuth2": {
+            "id": "4N1TnkcBwzEadvRU",
+            "name": "Gmail account"
+          }
+        }
+      }
+    ],
+    "connections": {
+      "Webhook (Handoff Receiver)": {
+        "main": [
+          [
+            {
+              "node": "QA Approved?",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "QA Approved?": {
+        "main": [
+          [
+            {
+              "node": "Format Email (Success)",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Format Email (Warning)",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Format Email (Success)": {
+        "main": [
+          [
+            {
+              "node": "HTTP Response",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Format Email (Warning)": {
+        "main": [
+          [
+            {
+              "node": "HTTP Response",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "HTTP Response": {
+        "main": [
+          [
+            {
+              "node": "Send a message",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "roberto gil ortega",
+    "name": null,
+    "description": null,
+    "autosaved": false,
+    "workflowPublishHistory": [
+      {
+        "createdAt": "2026-03-12T14:37:46.585Z",
+        "id": 47,
+        "workflowId": "p8JXWxdpyJ7BM96U",
+        "versionId": "6c4a6529-3a01-43e2-b440-4f12a28aea37",
+        "event": "activated",
+        "userId": "7bb07d44-3c5c-4470-893a-e5a8a8262f00"
+      },
+      {
+        "createdAt": "2026-03-12T14:37:46.462Z",
+        "id": 46,
+        "workflowId": "p8JXWxdpyJ7BM96U",
+        "versionId": "6c4a6529-3a01-43e2-b440-4f12a28aea37",
+        "event": "deactivated",
+        "userId": "7bb07d44-3c5c-4470-893a-e5a8a8262f00"
+      }
+    ]
+  }
+}

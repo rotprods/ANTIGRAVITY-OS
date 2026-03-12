@@ -1,171 +1,179 @@
 {
-    "name": "🔍 Competitor & Market Monitor (Every 12 Hours)",
-    "nodes": [
-        {
-            "parameters": {
-                "rule": {
-                    "interval": [
-                        {
-                            "field": "hours",
-                            "hoursInterval": 12
-                        }
-                    ]
-                }
-            },
-            "id": "schedule-12h",
-            "name": "Every 12 Hours",
-            "type": "n8n-nodes-base.scheduleTrigger",
-            "typeVersion": 1.2,
-            "position": [
-                240,
-                300
-            ]
-        },
-        {
-            "parameters": {
-                "method": "POST",
-                "url": "https://api.openai.com/v1/chat/completions",
-                "sendHeaders": true,
-                "headerParameters": {
-                    "parameters": [
-                        {
-                            "name": "Content-Type",
-                            "value": "application/json"
-                        },
-                        {
-                            "name": "Authorization",
-                            "value": "Bearer {{OPENAI_API_KEY}}"
-                        }
-                    ]
-                },
-                "sendBody": true,
-                "specifyBody": "json",
-                "jsonBody": "{\n  \"model\": \"gpt-4o-mini\",\n  \"messages\": [\n    {\n      \"role\": \"system\",\n      \"content\": \"Eres un analista de inteligencia competitiva para una agencia de IA y marketing digital en Murcia. Responde solo con JSON válido.\"\n    },\n    {\n      \"role\": \"user\",\n      \"content\": \"Analiza el mercado actual de agencias de marketing digital y agencias de IA en la Región de Murcia y sureste de España. Genera un JSON con:\\n1. competitor_moves: 3 movimientos recientes de competidores regionales\\n2. market_trends: 3 tendencias del sector en España\\n3. opportunities: 2 oportunidades de mercado para Murcia\\n4. pricing_signals: información sobre precios de servicios similares\\n5. threat_assessment: nivel de amenaza general (low/medium/high) con justificación\\n\\nEnfócate en: agencias de IA generativa, automatización empresarial, marketing digital para pymes.\"\n    }\n  ],\n  \"temperature\": 0.6,\n  \"max_tokens\": 1000\n}",
-                "options": {
-                    "timeout": 30000
-                }
-            },
-            "id": "gpt-analysis",
-            "name": "GPT Market Analysis",
-            "type": "n8n-nodes-base.httpRequest",
-            "typeVersion": 4.2,
-            "position": [
-                480,
-                300
-            ]
-        },
-        {
-            "parameters": {
-                "method": "POST",
-                "url": "https://yxzdafptqtcvpsbqkmkm.supabase.co/rest/v1/signals",
-                "sendHeaders": true,
-                "headerParameters": {
-                    "parameters": [
-                        {
-                            "name": "apikey",
-                            "value": "{{SUPABASE_ANON_KEY}}"
-                        },
-                        {
-                            "name": "Authorization",
-                            "value": "Bearer {{SUPABASE_ANON_KEY}}"
-                        },
-                        {
-                            "name": "Content-Type",
-                            "value": "application/json"
-                        }
-                    ]
-                },
-                "sendBody": true,
-                "specifyBody": "json",
-                "jsonBody": "={\n  \"title\": \"Market Intel — {{ new Date().toISOString().split('T')[0] }}\",\n  \"category\": \"competitive\",\n  \"indicator\": \"leading\",\n  \"impact\": 65,\n  \"confidence\": 70,\n  \"source\": \"n8n-competitor-monitor\",\n  \"implication\": {{ JSON.stringify($json.choices[0].message.content) }},\n  \"status\": \"active\"\n}",
-                "options": {}
-            },
-            "id": "create-signal",
-            "name": "Create Signal",
-            "type": "n8n-nodes-base.httpRequest",
-            "typeVersion": 4.2,
-            "position": [
-                740,
-                200
-            ]
-        },
-        {
-            "parameters": {
-                "method": "POST",
-                "url": "https://yxzdafptqtcvpsbqkmkm.supabase.co/rest/v1/knowledge_entries",
-                "sendHeaders": true,
-                "headerParameters": {
-                    "parameters": [
-                        {
-                            "name": "apikey",
-                            "value": "{{SUPABASE_ANON_KEY}}"
-                        },
-                        {
-                            "name": "Authorization",
-                            "value": "Bearer {{SUPABASE_ANON_KEY}}"
-                        },
-                        {
-                            "name": "Content-Type",
-                            "value": "application/json"
-                        }
-                    ]
-                },
-                "sendBody": true,
-                "specifyBody": "json",
-                "jsonBody": "={\n  \"title\": \"Competitor Analysis — {{ new Date().toISOString().split('T')[0] }}\",\n  \"content\": {{ JSON.stringify($json.choices[0].message.content) }},\n  \"category\": \"market_intelligence\",\n  \"type\": \"ai_generated\",\n  \"source\": \"n8n-competitor-monitor\",\n  \"tags\": [\"competitor\", \"market\", \"intelligence\", \"auto\"]\n}",
-                "options": {}
-            },
-            "id": "save-knowledge",
-            "name": "Save to Knowledge",
-            "type": "n8n-nodes-base.httpRequest",
-            "typeVersion": 4.2,
-            "position": [
-                740,
-                400
-            ]
+  "name": "🔍 Competitor & Market Monitor (Every 12 Hours)",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 12
+            }
+          ]
         }
-    ],
-    "connections": {
-        "Every 12 Hours": {
-            "main": [
-                [
-                    {
-                        "node": "GPT Market Analysis",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "GPT Market Analysis": {
-            "main": [
-                [
-                    {
-                        "node": "Create Signal",
-                        "type": "main",
-                        "index": 0
-                    },
-                    {
-                        "node": "Save to Knowledge",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        }
+      },
+      "id": "schedule-12h",
+      "name": "Every 12 Hours",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        240,
+        300
+      ]
     },
-    "settings": {
-        "executionOrder": "v1"
-    },
-    "tags": [
-        {
-            "name": "OCULOPS"
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.openai.com/v1/chat/completions",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer {{OPENAI_API_KEY}}"
+            }
+          ]
         },
-        {
-            "name": "INTELLIGENCE"
-        },
-        {
-            "name": "COMPETITOR"
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"model\": \"gpt-4o-mini\",\n  \"messages\": [\n    {\n      \"role\": \"system\",\n      \"content\": \"Eres un analista de inteligencia competitiva para una agencia de IA y marketing digital en Murcia. Responde solo con JSON válido.\"\n    },\n    {\n      \"role\": \"user\",\n      \"content\": \"Analiza el mercado actual de agencias de marketing digital y agencias de IA en la Región de Murcia y sureste de España. Genera un JSON con:\\n1. competitor_moves: 3 movimientos recientes de competidores regionales\\n2. market_trends: 3 tendencias del sector en España\\n3. opportunities: 2 oportunidades de mercado para Murcia\\n4. pricing_signals: información sobre precios de servicios similares\\n5. threat_assessment: nivel de amenaza general (low/medium/high) con justificación\\n\\nEnfócate en: agencias de IA generativa, automatización empresarial, marketing digital para pymes.\"\n    }\n  ],\n  \"temperature\": 0.6,\n  \"max_tokens\": 1000\n}",
+        "options": {
+          "timeout": 30000
         }
-    ]
+      },
+      "id": "gpt-analysis",
+      "name": "GPT Market Analysis",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        480,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://yxzdafptqtcvpsbqkmkm.supabase.co/rest/v1/signals",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $env.SUPABASE_ANON_KEY }}"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer {{ $env.SUPABASE_SERVICE_ROLE_KEY }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=representation"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"title\": \"Market Intel — {{ new Date().toISOString().split('T')[0] }}\",\n  \"category\": \"competitive\",\n  \"indicator\": \"leading\",\n  \"impact\": 65,\n  \"confidence\": 70,\n  \"source\": \"n8n-competitor-monitor\",\n  \"implication\": {{ JSON.stringify($json.choices[0].message.content) }},\n  \"status\": \"active\"\n}",
+        "options": {}
+      },
+      "id": "create-signal",
+      "name": "Create Signal",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        740,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://yxzdafptqtcvpsbqkmkm.supabase.co/rest/v1/knowledge_entries",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $env.SUPABASE_ANON_KEY }}"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer {{ $env.SUPABASE_SERVICE_ROLE_KEY }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=representation"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"title\": \"Competitor Analysis — {{ new Date().toISOString().split('T')[0] }}\",\n  \"content\": {{ JSON.stringify($json.choices[0].message.content) }},\n  \"category\": \"market_intelligence\",\n  \"type\": \"ai_generated\",\n  \"source\": \"n8n-competitor-monitor\",\n  \"tags\": [\"competitor\", \"market\", \"intelligence\", \"auto\"]\n}",
+        "options": {}
+      },
+      "id": "save-knowledge",
+      "name": "Save to Knowledge",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        740,
+        400
+      ]
+    }
+  ],
+  "connections": {
+    "Every 12 Hours": {
+      "main": [
+        [
+          {
+            "node": "GPT Market Analysis",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GPT Market Analysis": {
+      "main": [
+        [
+          {
+            "node": "Create Signal",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Save to Knowledge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "tags": [
+    {
+      "name": "OCULOPS"
+    },
+    {
+      "name": "INTELLIGENCE"
+    },
+    {
+      "name": "COMPETITOR"
+    }
+  ]
 }

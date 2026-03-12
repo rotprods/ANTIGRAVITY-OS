@@ -1,170 +1,182 @@
 {
-    "name": "📧 AI Cold Outreach Email Generator (Weekly)",
-    "nodes": [
-        {
-            "parameters": {
-                "rule": {
-                    "interval": [
-                        {
-                            "field": "cronExpression",
-                            "expression": "0 10 * * 1"
-                        }
-                    ]
-                }
-            },
-            "id": "schedule-monday",
-            "name": "Every Monday 10AM",
-            "type": "n8n-nodes-base.scheduleTrigger",
-            "typeVersion": 1.2,
-            "position": [
-                240,
-                300
-            ]
-        },
-        {
-            "parameters": {
-                "method": "GET",
-                "url": "https://yxzdafptqtcvpsbqkmkm.supabase.co/rest/v1/contacts?status=eq.qualified&order=score.desc&limit=10",
-                "sendHeaders": true,
-                "headerParameters": {
-                    "parameters": [
-                        {
-                            "name": "apikey",
-                            "value": "{{SUPABASE_ANON_KEY}}"
-                        },
-                        {
-                            "name": "Authorization",
-                            "value": "Bearer {{SUPABASE_ANON_KEY}}"
-                        }
-                    ]
-                },
-                "options": {}
-            },
-            "id": "fetch-leads",
-            "name": "Get Top Qualified Leads",
-            "type": "n8n-nodes-base.httpRequest",
-            "typeVersion": 4.2,
-            "position": [
-                480,
-                300
-            ]
-        },
-        {
-            "parameters": {
-                "method": "POST",
-                "url": "https://yxzdafptqtcvpsbqkmkm.supabase.co/functions/v1/agent-forge",
-                "sendHeaders": true,
-                "headerParameters": {
-                    "parameters": [
-                        {
-                            "name": "Content-Type",
-                            "value": "application/json"
-                        },
-                        {
-                            "name": "Authorization",
-                            "value": "Bearer {{SUPABASE_ANON_KEY}}"
-                        }
-                    ]
-                },
-                "sendBody": true,
-                "specifyBody": "json",
-                "jsonBody": "{\n  \"action\": \"generate\",\n  \"content_type\": \"email_outreach\",\n  \"audience\": \"pymes cualificadas en Murcia\",\n  \"tone\": \"profesional_cercano\"\n}",
-                "options": {
-                    "timeout": 60000
-                }
-            },
-            "id": "forge-emails",
-            "name": "FORGE Generate Emails",
-            "type": "n8n-nodes-base.httpRequest",
-            "typeVersion": 4.2,
-            "position": [
-                720,
-                300
-            ]
-        },
-        {
-            "parameters": {
-                "method": "POST",
-                "url": "https://yxzdafptqtcvpsbqkmkm.supabase.co/rest/v1/knowledge_entries",
-                "sendHeaders": true,
-                "headerParameters": {
-                    "parameters": [
-                        {
-                            "name": "apikey",
-                            "value": "{{SUPABASE_ANON_KEY}}"
-                        },
-                        {
-                            "name": "Authorization",
-                            "value": "Bearer {{SUPABASE_ANON_KEY}}"
-                        },
-                        {
-                            "name": "Content-Type",
-                            "value": "application/json"
-                        }
-                    ]
-                },
-                "sendBody": true,
-                "specifyBody": "json",
-                "jsonBody": "={\n  \"title\": \"Outreach Emails — {{ new Date().toISOString().split('T')[0] }}\",\n  \"content\": {{ JSON.stringify(JSON.stringify($json)) }},\n  \"category\": \"outreach\",\n  \"type\": \"ai_generated\",\n  \"source\": \"n8n-email-generator\",\n  \"tags\": [\"email\", \"outreach\", \"auto\"]\n}",
-                "options": {}
-            },
-            "id": "save-emails",
-            "name": "Save Email Drafts",
-            "type": "n8n-nodes-base.httpRequest",
-            "typeVersion": 4.2,
-            "position": [
-                960,
-                300
-            ]
+  "name": "📧 AI Cold Outreach Email Generator (Weekly)",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 10 * * 1"
+            }
+          ]
         }
-    ],
-    "connections": {
-        "Every Monday 10AM": {
-            "main": [
-                [
-                    {
-                        "node": "Get Top Qualified Leads",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "Get Top Qualified Leads": {
-            "main": [
-                [
-                    {
-                        "node": "FORGE Generate Emails",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "FORGE Generate Emails": {
-            "main": [
-                [
-                    {
-                        "node": "Save Email Drafts",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        }
+      },
+      "id": "schedule-monday",
+      "name": "Every Monday 10AM",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        240,
+        300
+      ]
     },
-    "settings": {
-        "executionOrder": "v1"
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "https://yxzdafptqtcvpsbqkmkm.supabase.co/rest/v1/contacts?status=eq.qualified&order=score.desc&limit=10",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $env.SUPABASE_ANON_KEY }}"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer {{ $env.SUPABASE_SERVICE_ROLE_KEY }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "fetch-leads",
+      "name": "Get Top Qualified Leads",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        480,
+        300
+      ]
     },
-    "tags": [
-        {
-            "name": "OCULOPS"
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://yxzdafptqtcvpsbqkmkm.supabase.co/functions/v1/agent-forge",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer ={{ $env.SUPABASE_ANON_KEY }}"
+            },
+            {
+              "name": "apikey",
+              "value": "={{ $env.SUPABASE_ANON_KEY }}"
+            }
+          ]
         },
-        {
-            "name": "OUTREACH"
-        },
-        {
-            "name": "EMAIL"
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"action\": \"generate\",\n  \"content_type\": \"email_outreach\",\n  \"audience\": \"pymes cualificadas en Murcia\",\n  \"tone\": \"profesional_cercano\"\n}",
+        "options": {
+          "timeout": 60000
         }
-    ]
+      },
+      "id": "forge-emails",
+      "name": "FORGE Generate Emails",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        720,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://yxzdafptqtcvpsbqkmkm.supabase.co/rest/v1/knowledge_entries",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $env.SUPABASE_ANON_KEY }}"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer {{ $env.SUPABASE_SERVICE_ROLE_KEY }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=representation"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"title\": \"Outreach Emails — {{ new Date().toISOString().split('T')[0] }}\",\n  \"content\": {{ JSON.stringify(JSON.stringify($json)) }},\n  \"category\": \"outreach\",\n  \"type\": \"ai_generated\",\n  \"source\": \"n8n-email-generator\",\n  \"tags\": [\"email\", \"outreach\", \"auto\"]\n}",
+        "options": {}
+      },
+      "id": "save-emails",
+      "name": "Save Email Drafts",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        960,
+        300
+      ]
+    }
+  ],
+  "connections": {
+    "Every Monday 10AM": {
+      "main": [
+        [
+          {
+            "node": "Get Top Qualified Leads",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Top Qualified Leads": {
+      "main": [
+        [
+          {
+            "node": "FORGE Generate Emails",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "FORGE Generate Emails": {
+      "main": [
+        [
+          {
+            "node": "Save Email Drafts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "tags": [
+    {
+      "name": "OCULOPS"
+    },
+    {
+      "name": "OUTREACH"
+    },
+    {
+      "name": "EMAIL"
+    }
+  ]
 }

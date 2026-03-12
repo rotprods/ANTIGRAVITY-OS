@@ -1,146 +1,154 @@
 {
-    "name": "HERALD — Daily Telegram Briefing (8AM)",
-    "nodes": [
-        {
-            "parameters": {
-                "rule": {
-                    "interval": [
-                        {
-                            "field": "cronExpression",
-                            "expression": "0 8 * * *"
-                        }
-                    ]
-                }
-            },
-            "id": "herald-trigger",
-            "name": "Daily 8AM",
-            "type": "n8n-nodes-base.scheduleTrigger",
-            "typeVersion": 1.2,
-            "position": [
-                240,
-                300
-            ]
-        },
-        {
-            "parameters": {
-                "method": "POST",
-                "url": "https://yxzdafptqtcvpsbqkmkm.supabase.co/functions/v1/agent-herald",
-                "sendHeaders": true,
-                "headerParameters": {
-                    "parameters": [
-                        {
-                            "name": "Content-Type",
-                            "value": "application/json"
-                        },
-                        {
-                            "name": "Authorization",
-                            "value": "Bearer {{SUPABASE_ANON_KEY}}"
-                        }
-                    ]
-                },
-                "sendBody": true,
-                "bodyParameters": {
-                    "parameters": [
-                        {
-                            "name": "action",
-                            "value": "daily_briefing"
-                        }
-                    ]
-                },
-                "options": {
-                    "timeout": 30000
-                }
-            },
-            "id": "herald-send",
-            "name": "HERALD Send Briefing",
-            "type": "n8n-nodes-base.httpRequest",
-            "typeVersion": 4.2,
-            "position": [
-                480,
-                300
-            ]
-        },
-        {
-            "parameters": {
-                "method": "POST",
-                "url": "https://yxzdafptqtcvpsbqkmkm.supabase.co/functions/v1/agent-scribe",
-                "sendHeaders": true,
-                "headerParameters": {
-                    "parameters": [
-                        {
-                            "name": "Content-Type",
-                            "value": "application/json"
-                        },
-                        {
-                            "name": "Authorization",
-                            "value": "Bearer {{SUPABASE_ANON_KEY}}"
-                        }
-                    ]
-                },
-                "sendBody": true,
-                "bodyParameters": {
-                    "parameters": [
-                        {
-                            "name": "action",
-                            "value": "log"
-                        },
-                        {
-                            "name": "source",
-                            "value": "herald"
-                        },
-                        {
-                            "name": "event",
-                            "value": "daily_telegram_briefing_sent"
-                        }
-                    ]
-                },
-                "options": {
-                    "timeout": 15000
-                }
-            },
-            "id": "scribe-log",
-            "name": "Log to SCRIBE Agent",
-            "type": "n8n-nodes-base.httpRequest",
-            "typeVersion": 4.2,
-            "position": [
-                720,
-                300
-            ]
+  "name": "HERALD — Daily Telegram Briefing (8AM)",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 8 * * *"
+            }
+          ]
         }
-    ],
-    "connections": {
-        "Daily 8AM": {
-            "main": [
-                [
-                    {
-                        "node": "HERALD Send Briefing",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "HERALD Send Briefing": {
-            "main": [
-                [
-                    {
-                        "node": "Log to SCRIBE Agent",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        }
+      },
+      "id": "herald-trigger",
+      "name": "Daily 8AM",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        240,
+        300
+      ]
     },
-    "settings": {
-        "executionOrder": "v1"
-    },
-    "tags": [
-        {
-            "name": "OCULOPS"
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://yxzdafptqtcvpsbqkmkm.supabase.co/functions/v1/agent-herald",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer ={{ $env.SUPABASE_ANON_KEY }}"
+            },
+            {
+              "name": "apikey",
+              "value": "={{ $env.SUPABASE_ANON_KEY }}"
+            }
+          ]
         },
-        {
-            "name": "HERALD"
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "action",
+              "value": "daily_briefing"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 30000
         }
-    ]
+      },
+      "id": "herald-send",
+      "name": "HERALD Send Briefing",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        480,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://yxzdafptqtcvpsbqkmkm.supabase.co/functions/v1/agent-scribe",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer ={{ $env.SUPABASE_ANON_KEY }}"
+            },
+            {
+              "name": "apikey",
+              "value": "={{ $env.SUPABASE_ANON_KEY }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "action",
+              "value": "log"
+            },
+            {
+              "name": "source",
+              "value": "herald"
+            },
+            {
+              "name": "event",
+              "value": "daily_telegram_briefing_sent"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "id": "scribe-log",
+      "name": "Log to SCRIBE Agent",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        720,
+        300
+      ]
+    }
+  ],
+  "connections": {
+    "Daily 8AM": {
+      "main": [
+        [
+          {
+            "node": "HERALD Send Briefing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HERALD Send Briefing": {
+      "main": [
+        [
+          {
+            "node": "Log to SCRIBE Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "tags": [
+    {
+      "name": "OCULOPS"
+    },
+    {
+      "name": "HERALD"
+    }
+  ]
 }

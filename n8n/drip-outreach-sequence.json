@@ -4,24 +4,40 @@
     {
       "parameters": {
         "rule": {
-          "interval": [{ "field": "hours", "hoursInterval": 6 }]
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 6
+            }
+          ]
         }
       },
       "name": "Schedule Trigger",
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.1,
-      "position": [220, 300]
+      "position": [
+        220,
+        300
+      ]
     },
     {
       "parameters": {
         "url": "={{ $env.SUPABASE_URL }}/rest/v1/outreach_sequences?status=eq.active&next_step_at=lte.{{ $now.toISO() }}&select=*,outreach_sequence_steps(*),contacts(*)",
-        "authentication": "genericCredentialType",
-        "genericAuthType": "httpHeaderAuth",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
-            { "name": "apikey", "value": "={{ $env.SUPABASE_ANON_KEY }}" },
-            { "name": "Authorization", "value": "Bearer {{ $env.SUPABASE_SERVICE_ROLE_KEY }}" }
+            {
+              "name": "apikey",
+              "value": "={{ $env.SUPABASE_ANON_KEY }}"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer {{ $env.SUPABASE_SERVICE_ROLE_KEY }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
           ]
         },
         "options": {}
@@ -29,17 +45,25 @@
       "name": "Fetch Due Sequences",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [440, 300]
+      "position": [
+        440,
+        300
+      ]
     },
     {
       "parameters": {
         "conditions": {
-          "options": { "caseSensitive": true },
+          "options": {
+            "caseSensitive": true
+          },
           "conditions": [
             {
               "leftValue": "={{ $json.id }}",
               "rightValue": "",
-              "operator": { "type": "string", "operation": "notEmpty" }
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty"
+              }
             }
           ]
         }
@@ -47,7 +71,10 @@
       "name": "Has Due Sequences?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
-      "position": [660, 300]
+      "position": [
+        660,
+        300
+      ]
     },
     {
       "parameters": {
@@ -55,23 +82,45 @@
         "sendBody": true,
         "bodyParameters": {
           "parameters": [
-            { "name": "action", "value": "generate" },
-            { "name": "user_id", "value": "={{ $json.user_id }}" },
-            { "name": "limit", "value": "1" }
+            {
+              "name": "action",
+              "value": "generate"
+            },
+            {
+              "name": "user_id",
+              "value": "={{ $json.user_id }}"
+            },
+            {
+              "name": "limit",
+              "value": "1"
+            }
           ]
         },
-        "authentication": "genericCredentialType",
-        "genericAuthType": "httpHeaderAuth",
         "headerParameters": {
           "parameters": [
-            { "name": "Authorization", "value": "Bearer {{ $env.SUPABASE_SERVICE_ROLE_KEY }}" }
+            {
+              "name": "Authorization",
+              "value": "Bearer ={{ $env.SUPABASE_ANON_KEY }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "apikey",
+              "value": "={{ $env.SUPABASE_ANON_KEY }}"
+            }
           ]
-        }
+        },
+        "sendHeaders": true
       },
       "name": "Generate & Send Step",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [880, 200]
+      "position": [
+        880,
+        200
+      ]
     },
     {
       "parameters": {
@@ -80,53 +129,107 @@
         "sendBody": true,
         "bodyParameters": {
           "parameters": [
-            { "name": "current_step", "value": "={{ $json.current_step + 1 }}" },
-            { "name": "next_step_at", "value": "={{ $now.plus({ days: $json.outreach_sequence_steps[$json.current_step]?.delay_days || 3 }).toISO() }}" }
+            {
+              "name": "current_step",
+              "value": "={{ $json.current_step + 1 }}"
+            },
+            {
+              "name": "next_step_at",
+              "value": "={{ $now.plus({ days: $json.outreach_sequence_steps[$json.current_step]?.delay_days || 3 }).toISO() }}"
+            }
           ]
         },
-        "authentication": "genericCredentialType",
-        "genericAuthType": "httpHeaderAuth",
         "headerParameters": {
           "parameters": [
-            { "name": "apikey", "value": "={{ $env.SUPABASE_ANON_KEY }}" },
-            { "name": "Authorization", "value": "Bearer {{ $env.SUPABASE_SERVICE_ROLE_KEY }}" },
-            { "name": "Prefer", "value": "return=minimal" }
+            {
+              "name": "apikey",
+              "value": "={{ $env.SUPABASE_ANON_KEY }}"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer {{ $env.SUPABASE_SERVICE_ROLE_KEY }}"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=minimal"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
           ]
-        }
+        },
+        "sendHeaders": true
       },
       "name": "Advance Sequence Step",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [1100, 200]
+      "position": [
+        1100,
+        200
+      ]
     },
     {
       "parameters": {},
       "name": "No Op (empty)",
       "type": "n8n-nodes-base.noOp",
       "typeVersion": 1,
-      "position": [880, 400]
+      "position": [
+        880,
+        400
+      ]
     }
   ],
   "connections": {
     "Schedule Trigger": {
       "main": [
-        [{ "node": "Fetch Due Sequences", "type": "main", "index": 0 }]
+        [
+          {
+            "node": "Fetch Due Sequences",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "Fetch Due Sequences": {
       "main": [
-        [{ "node": "Has Due Sequences?", "type": "main", "index": 0 }]
+        [
+          {
+            "node": "Has Due Sequences?",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "Has Due Sequences?": {
       "main": [
-        [{ "node": "Generate & Send Step", "type": "main", "index": 0 }],
-        [{ "node": "No Op (empty)", "type": "main", "index": 0 }]
+        [
+          {
+            "node": "Generate & Send Step",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No Op (empty)",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "Generate & Send Step": {
       "main": [
-        [{ "node": "Advance Sequence Step", "type": "main", "index": 0 }]
+        [
+          {
+            "node": "Advance Sequence Step",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     }
   },
@@ -134,8 +237,14 @@
     "executionOrder": "v1"
   },
   "tags": [
-    { "name": "oculops" },
-    { "name": "outreach" },
-    { "name": "drip" }
+    {
+      "name": "oculops"
+    },
+    {
+      "name": "outreach"
+    },
+    {
+      "name": "drip"
+    }
   ]
 }

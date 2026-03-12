@@ -1,121 +1,125 @@
 {
-    "name": "🔭 HUNTER — Daily Lead Prospection (Autopilot)",
-    "nodes": [
-        {
-            "parameters": {
-                "rule": {
-                    "interval": [
-                        {
-                            "field": "cronExpression",
-                            "expression": "0 7 * * 1-5"
-                        }
-                    ]
-                }
-            },
-            "id": "cron-7am",
-            "name": "Weekdays 7AM",
-            "type": "n8n-nodes-base.scheduleTrigger",
-            "typeVersion": 1.2,
-            "position": [
-                240,
-                300
-            ]
-        },
-        {
-            "parameters": {
-                "method": "POST",
-                "url": "https://yxzdafptqtcvpsbqkmkm.supabase.co/functions/v1/agent-hunter",
-                "sendHeaders": true,
-                "headerParameters": {
-                    "parameters": [
-                        {
-                            "name": "Content-Type",
-                            "value": "application/json"
-                        },
-                        {
-                            "name": "Authorization",
-                            "value": "Bearer {{SUPABASE_ANON_KEY}}"
-                        }
-                    ]
-                },
-                "sendBody": true,
-                "specifyBody": "json",
-                "jsonBody": "{}",
-                "options": {
-                    "timeout": 120000
-                }
-            },
-            "id": "hunter-scan",
-            "name": "HUNTER Prospect (Auto-Niche)",
-            "type": "n8n-nodes-base.httpRequest",
-            "typeVersion": 4.2,
-            "position": [
-                480,
-                300
-            ]
-        },
-        {
-            "parameters": {
-                "sendTo": "rot.prods@gmail.com",
-                "subject": "=🔭 HUNTER Report — {{ $json.result?.leads_discovered || 0 }} leads ({{ $json.result?.niches_searched?.join(', ') || 'auto' }})",
-                "emailType": "html",
-                "message": "=<div style=\"font-family:system-ui;max-width:600px;margin:0 auto;background:#0a0a0a;color:#e2e8f0;padding:30px;border-radius:12px\">\n<h1 style=\"color:#7c3aed;font-size:20px;margin:0 0 4px\">🔭 HUNTER Daily Report</h1>\n<p style=\"color:#64748b;font-size:12px;margin:0 0 20px\">{{ new Date().toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) }}</p>\n<table style=\"width:100%;border-collapse:collapse;font-size:14px\">\n<tr style=\"border-bottom:1px solid #1e293b\"><td style=\"padding:10px;color:#94a3b8\">Nichos</td><td style=\"padding:10px;font-weight:700\">{{ $json.result?.niches_searched?.join(', ') || '-' }}</td></tr>\n<tr style=\"border-bottom:1px solid #1e293b\"><td style=\"padding:10px;color:#94a3b8\">Leads descubiertos</td><td style=\"padding:10px;font-weight:700;color:#22c55e\">{{ $json.result?.leads_discovered || 0 }}</td></tr>\n<tr style=\"border-bottom:1px solid #1e293b\"><td style=\"padding:10px;color:#94a3b8\">Leads guardados</td><td style=\"padding:10px;font-weight:700\">{{ $json.result?.leads_saved || 0 }}</td></tr>\n<tr style=\"border-bottom:1px solid #1e293b\"><td style=\"padding:10px;color:#94a3b8\">Contactos creados</td><td style=\"padding:10px;font-weight:700;color:#3b82f6\">{{ $json.result?.contacts_created || 0 }}</td></tr>\n<tr style=\"border-bottom:1px solid #1e293b\"><td style=\"padding:10px;color:#94a3b8\">Deals creados</td><td style=\"padding:10px;font-weight:700;color:#eab308\">{{ $json.result?.deals_created || 0 }}</td></tr>\n<tr><td style=\"padding:10px;color:#94a3b8\">Emails en cola</td><td style=\"padding:10px;font-weight:700;color:#a78bfa\">{{ $json.result?.emails_staged || 0 }}</td></tr>\n</table>\n<h3 style=\"color:#fff;font-size:14px;margin:24px 0 12px\">🏆 Top Leads</h3>\n{{ ($json.result?.top_leads || []).slice(0,5).map(l => '<div style=\"padding:8px 12px;background:#111;border-radius:8px;margin:4px 0;font-size:13px\"><strong>' + l.name + '</strong> <span style=\"color:' + (l.score >= 70 ? '#22c55e' : '#eab308') + ';float:right\">' + l.score + '/100</span></div>').join('') }}\n<p style=\"color:#64748b;font-size:11px;margin-top:24px\">OCULOPS OS — HUNTER v6 Lead Machine</p>\n</div>",
-                "options": {
-                    "senderName": "OCULOPS HUNTER"
-                }
-            },
-            "id": "notify-hunter",
-            "name": "Email HUNTER Results",
-            "type": "n8n-nodes-base.gmail",
-            "typeVersion": 2.1,
-            "position": [
-                720,
-                300
-            ],
-            "credentials": {
-                "gmailOAuth2": {
-                    "id": "",
-                    "name": "Gmail OCULOPS"
-                }
+  "name": "🔭 HUNTER — Daily Lead Prospection (Autopilot)",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 7 * * 1-5"
             }
+          ]
         }
-    ],
-    "connections": {
-        "Weekdays 7AM": {
-            "main": [
-                [
-                    {
-                        "node": "HUNTER Prospect (Auto-Niche)",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "HUNTER Prospect (Auto-Niche)": {
-            "main": [
-                [
-                    {
-                        "node": "Email HUNTER Results",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        }
+      },
+      "id": "cron-7am",
+      "name": "Weekdays 7AM",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        240,
+        300
+      ]
     },
-    "settings": {
-        "executionOrder": "v1"
-    },
-    "tags": [
-        {
-            "name": "OCULOPS"
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://yxzdafptqtcvpsbqkmkm.supabase.co/functions/v1/agent-hunter",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer ={{ $env.SUPABASE_ANON_KEY }}"
+            },
+            {
+              "name": "apikey",
+              "value": "={{ $env.SUPABASE_ANON_KEY }}"
+            }
+          ]
         },
-        {
-            "name": "HUNTER"
-        },
-        {
-            "name": "LEADS"
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{}",
+        "options": {
+          "timeout": 120000
         }
-    ]
+      },
+      "id": "hunter-scan",
+      "name": "HUNTER Prospect (Auto-Niche)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        480,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "sendTo": "rot.prods@gmail.com",
+        "subject": "=🔭 HUNTER Report — {{ $json.result?.leads_discovered || 0 }} leads ({{ $json.result?.niches_searched?.join(', ') || 'auto' }})",
+        "emailType": "html",
+        "message": "=<div style=\"font-family:system-ui;max-width:600px;margin:0 auto;background:#0a0a0a;color:#e2e8f0;padding:30px;border-radius:12px\">\n<h1 style=\"color:#7c3aed;font-size:20px;margin:0 0 4px\">🔭 HUNTER Daily Report</h1>\n<p style=\"color:#64748b;font-size:12px;margin:0 0 20px\">{{ new Date().toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) }}</p>\n<table style=\"width:100%;border-collapse:collapse;font-size:14px\">\n<tr style=\"border-bottom:1px solid #1e293b\"><td style=\"padding:10px;color:#94a3b8\">Nichos</td><td style=\"padding:10px;font-weight:700\">{{ $json.result?.niches_searched?.join(', ') || '-' }}</td></tr>\n<tr style=\"border-bottom:1px solid #1e293b\"><td style=\"padding:10px;color:#94a3b8\">Leads descubiertos</td><td style=\"padding:10px;font-weight:700;color:#22c55e\">{{ $json.result?.leads_discovered || 0 }}</td></tr>\n<tr style=\"border-bottom:1px solid #1e293b\"><td style=\"padding:10px;color:#94a3b8\">Leads guardados</td><td style=\"padding:10px;font-weight:700\">{{ $json.result?.leads_saved || 0 }}</td></tr>\n<tr style=\"border-bottom:1px solid #1e293b\"><td style=\"padding:10px;color:#94a3b8\">Contactos creados</td><td style=\"padding:10px;font-weight:700;color:#3b82f6\">{{ $json.result?.contacts_created || 0 }}</td></tr>\n<tr style=\"border-bottom:1px solid #1e293b\"><td style=\"padding:10px;color:#94a3b8\">Deals creados</td><td style=\"padding:10px;font-weight:700;color:#eab308\">{{ $json.result?.deals_created || 0 }}</td></tr>\n<tr><td style=\"padding:10px;color:#94a3b8\">Emails en cola</td><td style=\"padding:10px;font-weight:700;color:#a78bfa\">{{ $json.result?.emails_staged || 0 }}</td></tr>\n</table>\n<h3 style=\"color:#fff;font-size:14px;margin:24px 0 12px\">🏆 Top Leads</h3>\n{{ ($json.result?.top_leads || []).slice(0,5).map(l => '<div style=\"padding:8px 12px;background:#111;border-radius:8px;margin:4px 0;font-size:13px\"><strong>' + l.name + '</strong> <span style=\"color:' + (l.score >= 70 ? '#22c55e' : '#eab308') + ';float:right\">' + l.score + '/100</span></div>').join('') }}\n<p style=\"color:#64748b;font-size:11px;margin-top:24px\">OCULOPS OS — HUNTER v6 Lead Machine</p>\n</div>",
+        "options": {
+          "senderName": "OCULOPS HUNTER"
+        }
+      },
+      "id": "notify-hunter",
+      "name": "Email HUNTER Results",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        720,
+        300
+      ],
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "",
+          "name": "Gmail OCULOPS"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Weekdays 7AM": {
+      "main": [
+        [
+          {
+            "node": "HUNTER Prospect (Auto-Niche)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HUNTER Prospect (Auto-Niche)": {
+      "main": [
+        [
+          {
+            "node": "Email HUNTER Results",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "tags": [
+    {
+      "name": "OCULOPS"
+    },
+    {
+      "name": "HUNTER"
+    },
+    {
+      "name": "LEADS"
+    }
+  ]
 }

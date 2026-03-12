@@ -1,170 +1,178 @@
 {
-    "name": "📈 CRM Deal Nurture Automation (Every 2 Hours)",
-    "nodes": [
-        {
-            "parameters": {
-                "rule": {
-                    "interval": [
-                        {
-                            "field": "hours",
-                            "hoursInterval": 2
-                        }
-                    ]
-                }
-            },
-            "id": "schedule-2h",
-            "name": "Every 2 Hours",
-            "type": "n8n-nodes-base.scheduleTrigger",
-            "typeVersion": 1.2,
-            "position": [
-                240,
-                300
-            ]
-        },
-        {
-            "parameters": {
-                "method": "GET",
-                "url": "https://yxzdafptqtcvpsbqkmkm.supabase.co/rest/v1/deals?select=id,title,value,stage,probability,contact_id,updated_at&stage=in.(proposal,negotiation)&order=updated_at.asc&limit=5",
-                "sendHeaders": true,
-                "headerParameters": {
-                    "parameters": [
-                        {
-                            "name": "apikey",
-                            "value": "{{SUPABASE_ANON_KEY}}"
-                        },
-                        {
-                            "name": "Authorization",
-                            "value": "Bearer {{SUPABASE_ANON_KEY}}"
-                        }
-                    ]
-                },
-                "options": {}
-            },
-            "id": "fetch-stale-deals",
-            "name": "Get Stale Deals",
-            "type": "n8n-nodes-base.httpRequest",
-            "typeVersion": 4.2,
-            "position": [
-                480,
-                300
-            ]
-        },
-        {
-            "parameters": {
-                "method": "POST",
-                "url": "https://api.openai.com/v1/chat/completions",
-                "sendHeaders": true,
-                "headerParameters": {
-                    "parameters": [
-                        {
-                            "name": "Content-Type",
-                            "value": "application/json"
-                        },
-                        {
-                            "name": "Authorization",
-                            "value": "Bearer {{OPENAI_API_KEY}}"
-                        }
-                    ]
-                },
-                "sendBody": true,
-                "specifyBody": "json",
-                "jsonBody": "={\n  \"model\": \"gpt-4o-mini\",\n  \"messages\": [\n    {\n      \"role\": \"system\",\n      \"content\": \"Eres un sales advisor para una agencia de IA en Murcia. Analiza deals estancados y sugiere acciones de nurturing. JSON válido.\"\n    },\n    {\n      \"role\": \"user\",\n      \"content\": \"Deals en proposal/negotiation sin actualizar recientemente:\\n\" + JSON.stringify({{ $json }}) + \"\\n\\nPara cada deal sugiere:\\n- action: acción de seguimiento recomendada\\n- email_subject: asunto de email de seguimiento\\n- urgency: low/medium/high\\n- next_step: siguiente paso concreto\\n\\nJSON array.\"\n    }\n  ],\n  \"temperature\": 0.5,\n  \"max_tokens\": 800\n}",
-                "options": {
-                    "timeout": 30000
-                }
-            },
-            "id": "gpt-nurture",
-            "name": "GPT Nurture Suggestions",
-            "type": "n8n-nodes-base.httpRequest",
-            "typeVersion": 4.2,
-            "position": [
-                720,
-                300
-            ]
-        },
-        {
-            "parameters": {
-                "method": "POST",
-                "url": "https://yxzdafptqtcvpsbqkmkm.supabase.co/rest/v1/tasks",
-                "sendHeaders": true,
-                "headerParameters": {
-                    "parameters": [
-                        {
-                            "name": "apikey",
-                            "value": "{{SUPABASE_ANON_KEY}}"
-                        },
-                        {
-                            "name": "Authorization",
-                            "value": "Bearer {{SUPABASE_ANON_KEY}}"
-                        },
-                        {
-                            "name": "Content-Type",
-                            "value": "application/json"
-                        }
-                    ]
-                },
-                "sendBody": true,
-                "specifyBody": "json",
-                "jsonBody": "={\n  \"title\": \"🔄 Deal Nurture Follow-up\",\n  \"description\": {{ JSON.stringify($json.choices[0].message.content) }},\n  \"status\": \"pending\",\n  \"priority\": \"high\",\n  \"category\": \"sales\"\n}",
-                "options": {}
-            },
-            "id": "create-follow-task",
-            "name": "Create Follow-up Task",
-            "type": "n8n-nodes-base.httpRequest",
-            "typeVersion": 4.2,
-            "position": [
-                960,
-                300
-            ]
+  "name": "📈 CRM Deal Nurture Automation (Every 2 Hours)",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 2
+            }
+          ]
         }
-    ],
-    "connections": {
-        "Every 2 Hours": {
-            "main": [
-                [
-                    {
-                        "node": "Get Stale Deals",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "Get Stale Deals": {
-            "main": [
-                [
-                    {
-                        "node": "GPT Nurture Suggestions",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "GPT Nurture Suggestions": {
-            "main": [
-                [
-                    {
-                        "node": "Create Follow-up Task",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        }
+      },
+      "id": "schedule-2h",
+      "name": "Every 2 Hours",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        240,
+        300
+      ]
     },
-    "settings": {
-        "executionOrder": "v1"
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "https://yxzdafptqtcvpsbqkmkm.supabase.co/rest/v1/deals?select=id,title,value,stage,probability,contact_id,updated_at&stage=in.(proposal,negotiation)&order=updated_at.asc&limit=5",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $env.SUPABASE_ANON_KEY }}"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer {{ $env.SUPABASE_SERVICE_ROLE_KEY }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "fetch-stale-deals",
+      "name": "Get Stale Deals",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        480,
+        300
+      ]
     },
-    "tags": [
-        {
-            "name": "OCULOPS"
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.openai.com/v1/chat/completions",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer {{OPENAI_API_KEY}}"
+            }
+          ]
         },
-        {
-            "name": "CRM"
-        },
-        {
-            "name": "SALES"
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"gpt-4o-mini\",\n  \"messages\": [\n    {\n      \"role\": \"system\",\n      \"content\": \"Eres un sales advisor para una agencia de IA en Murcia. Analiza deals estancados y sugiere acciones de nurturing. JSON válido.\"\n    },\n    {\n      \"role\": \"user\",\n      \"content\": \"Deals en proposal/negotiation sin actualizar recientemente:\\n\" + JSON.stringify({{ $json }}) + \"\\n\\nPara cada deal sugiere:\\n- action: acción de seguimiento recomendada\\n- email_subject: asunto de email de seguimiento\\n- urgency: low/medium/high\\n- next_step: siguiente paso concreto\\n\\nJSON array.\"\n    }\n  ],\n  \"temperature\": 0.5,\n  \"max_tokens\": 800\n}",
+        "options": {
+          "timeout": 30000
         }
-    ]
+      },
+      "id": "gpt-nurture",
+      "name": "GPT Nurture Suggestions",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        720,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://yxzdafptqtcvpsbqkmkm.supabase.co/rest/v1/tasks",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $env.SUPABASE_ANON_KEY }}"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer {{ $env.SUPABASE_SERVICE_ROLE_KEY }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=representation"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"title\": \"🔄 Deal Nurture Follow-up\",\n  \"description\": {{ JSON.stringify($json.choices[0].message.content) }},\n  \"status\": \"pending\",\n  \"priority\": \"high\",\n  \"category\": \"sales\"\n}",
+        "options": {}
+      },
+      "id": "create-follow-task",
+      "name": "Create Follow-up Task",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        960,
+        300
+      ]
+    }
+  ],
+  "connections": {
+    "Every 2 Hours": {
+      "main": [
+        [
+          {
+            "node": "Get Stale Deals",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Stale Deals": {
+      "main": [
+        [
+          {
+            "node": "GPT Nurture Suggestions",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GPT Nurture Suggestions": {
+      "main": [
+        [
+          {
+            "node": "Create Follow-up Task",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "tags": [
+    {
+      "name": "OCULOPS"
+    },
+    {
+      "name": "CRM"
+    },
+    {
+      "name": "SALES"
+    }
+  ]
 }

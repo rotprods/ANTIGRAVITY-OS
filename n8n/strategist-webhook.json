@@ -1,104 +1,108 @@
 {
-    "name": "STRATEGIST — Decision Evaluation (On Webhook)",
-    "nodes": [
-        {
-            "parameters": {
-                "httpMethod": "POST",
-                "path": "strategist-evaluate",
-                "responseMode": "responseNode",
-                "options": {}
-            },
-            "id": "webhook-trigger",
-            "name": "Webhook — Strategist",
-            "type": "n8n-nodes-base.webhook",
-            "typeVersion": 2,
-            "position": [
-                240,
-                300
-            ],
-            "webhookId": "strategist-evaluate"
-        },
-        {
-            "parameters": {
-                "method": "POST",
-                "url": "https://yxzdafptqtcvpsbqkmkm.supabase.co/functions/v1/agent-strategist",
-                "sendHeaders": true,
-                "headerParameters": {
-                    "parameters": [
-                        {
-                            "name": "Content-Type",
-                            "value": "application/json"
-                        },
-                        {
-                            "name": "Authorization",
-                            "value": "Bearer {{SUPABASE_ANON_KEY}}"
-                        }
-                    ]
-                },
-                "sendBody": true,
-                "specifyBody": "json",
-                "jsonBody": "={{ JSON.stringify($json.body) }}",
-                "options": {
-                    "timeout": 120000
-                }
-            },
-            "id": "strategist-eval",
-            "name": "STRATEGIST Evaluate",
-            "type": "n8n-nodes-base.httpRequest",
-            "typeVersion": 4.2,
-            "position": [
-                460,
-                300
-            ]
-        },
-        {
-            "parameters": {
-                "respondWith": "json",
-                "responseBody": "={{ $json }}"
-            },
-            "id": "respond",
-            "name": "Send Response",
-            "type": "n8n-nodes-base.respondToWebhook",
-            "typeVersion": 1.1,
-            "position": [
-                680,
-                300
-            ]
-        }
-    ],
-    "connections": {
-        "Webhook — Strategist": {
-            "main": [
-                [
-                    {
-                        "node": "STRATEGIST Evaluate",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "STRATEGIST Evaluate": {
-            "main": [
-                [
-                    {
-                        "node": "Send Response",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        }
+  "name": "STRATEGIST — Decision Evaluation (On Webhook)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "strategist-evaluate",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-trigger",
+      "name": "Webhook — Strategist",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        240,
+        300
+      ],
+      "webhookId": "strategist-evaluate"
     },
-    "settings": {
-        "executionOrder": "v1"
-    },
-    "tags": [
-        {
-            "name": "OCULOPS"
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://yxzdafptqtcvpsbqkmkm.supabase.co/functions/v1/agent-strategist",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer ={{ $env.SUPABASE_ANON_KEY }}"
+            },
+            {
+              "name": "apikey",
+              "value": "={{ $env.SUPABASE_ANON_KEY }}"
+            }
+          ]
         },
-        {
-            "name": "STRATEGIST"
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.body) }}",
+        "options": {
+          "timeout": 120000
         }
-    ]
+      },
+      "id": "strategist-eval",
+      "name": "STRATEGIST Evaluate",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        460,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}"
+      },
+      "id": "respond",
+      "name": "Send Response",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        680,
+        300
+      ]
+    }
+  ],
+  "connections": {
+    "Webhook — Strategist": {
+      "main": [
+        [
+          {
+            "node": "STRATEGIST Evaluate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "STRATEGIST Evaluate": {
+      "main": [
+        [
+          {
+            "node": "Send Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "tags": [
+    {
+      "name": "OCULOPS"
+    },
+    {
+      "name": "STRATEGIST"
+    }
+  ]
 }

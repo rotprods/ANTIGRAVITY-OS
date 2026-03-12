@@ -1,186 +1,194 @@
 {
-    "name": "SCRIBE — Weekly Intelligence Email Report",
-    "nodes": [
-        {
-            "parameters": {
-                "rule": {
-                    "interval": [
-                        {
-                            "triggerAtHour": 9,
-                            "triggerAtMinute": 0
-                        }
-                    ]
-                }
-            },
-            "id": "schedule-trigger",
-            "name": "Every Monday 9AM",
-            "type": "n8n-nodes-base.scheduleTrigger",
-            "typeVersion": 1.2,
-            "position": [
-                200,
-                300
-            ]
-        },
-        {
-            "parameters": {
-                "method": "POST",
-                "url": "https://yxzdafptqtcvpsbqkmkm.supabase.co/rest/v1/rpc/get_weekly_report_data",
-                "sendHeaders": true,
-                "headerParameters": {
-                    "parameters": [
-                        {
-                            "name": "apikey",
-                            "value": "{{SUPABASE_ANON_KEY}}"
-                        },
-                        {
-                            "name": "Authorization",
-                            "value": "Bearer {{SUPABASE_ANON_KEY}}"
-                        },
-                        {
-                            "name": "Content-Type",
-                            "value": "application/json"
-                        }
-                    ]
-                },
-                "options": {
-                    "timeout": 30000
-                }
-            },
-            "id": "fetch-report-data",
-            "name": "Fetch Report Data (Supabase)",
-            "type": "n8n-nodes-base.httpRequest",
-            "typeVersion": 4.2,
-            "position": [
-                420,
-                300
-            ]
-        },
-        {
-            "parameters": {
-                "jsCode": "// Build the HTML email from the template and live data\nconst data = $input.first().json;\n\n// Fallback data structure if RPC not available\nconst report = {\n  report_date: new Date().toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' }),\n  pipeline_value: data.pipeline_value || '53,200',\n  pipeline_change: data.pipeline_change || '+12%',\n  deal_count: data.deal_count || '5',\n  new_deals: data.new_deals || '2',\n  signal_count: data.signal_count || '4',\n  critical_signals: data.critical_signals || '1',\n  health_score: data.health_score || '43',\n  health_change: data.health_change || '-5%',\n  stages: data.stages || [\n    { name: 'Lead', value: '12,000', count: 1, pct: 23, color: '#888' },\n    { name: 'Contactado', value: '25,000', count: 1, pct: 47, color: '#4FC3F7' },\n    { name: 'Meeting', value: '4,200', count: 1, pct: 8, color: '#FFB74D' },\n    { name: 'Propuesta', value: '8,500', count: 1, pct: 16, color: '#AB47BC' },\n    { name: 'Cerrado', value: '3,500', count: 1, pct: 6, color: '#66BB6A' }\n  ],\n  signals: data.signals || [\n    { category: 'Tecnología', title: 'Meta API deprecation alert', impact: 85, implication: 'Migrar integraciones antes de Q3', color: '#4FC3F7', bg: 'rgba(79,195,247,0.15)' },\n    { category: 'Mercado', title: 'TikTok Shop expansion EU', impact: 78, implication: 'Oportunidad para clientes e-commerce', color: '#66BB6A', bg: 'rgba(102,187,106,0.15)' },\n    { category: 'Tecnología', title: 'AI agent cost reduction trend', impact: 90, implication: 'Reducir costes operativos 40%', color: '#4FC3F7', bg: 'rgba(79,195,247,0.15)' }\n  ],\n  agents: data.agents || [\n    { name: 'CORTEX', icon: '🧠', runs: 10, last_run: '17:20', status_color: '#00E676' },\n    { name: 'ATLAS', icon: '🗺️', runs: 8, last_run: '17:15', status_color: '#00E676' },\n    { name: 'HUNTER', icon: '🎯', runs: 3, last_run: '17:15', status_color: '#00E676' },\n    { name: 'ORACLE', icon: '🔮', runs: 1, last_run: '15:39', status_color: '#FFB74D' },\n    { name: 'SENTINEL', icon: '🛡️', runs: 5, last_run: '18:00', status_color: '#00E676' },\n    { name: 'FORGE', icon: '⚒️', runs: 2, last_run: '15:39', status_color: '#FFB74D' },\n    { name: 'STRATEGIST', icon: '♟️', runs: 1, last_run: '17:41', status_color: '#00E676' },\n    { name: 'SCRIBE', icon: '📝', runs: 6, last_run: '18:00', status_color: '#00E676' }\n  ],\n  actions: data.actions || [\n    { priority: '🔴', title: 'Follow up con DataPulse deal', desc: 'Deal de €25,000 en Contactado — mover a Meeting esta semana' },\n    { priority: '🟡', title: 'Preparar propuesta TechVista', desc: 'AI Integration Suite en fase Propuesta — cerrar antes del 15' },\n    { priority: '🟢', title: 'Revisar señales de mercado', desc: '2 señales nuevas de tecnología requieren análisis estratégico' }\n  ]\n};\n\nreturn [{ json: report }];"
-            },
-            "id": "build-report",
-            "name": "Build Report Data",
-            "type": "n8n-nodes-base.code",
-            "typeVersion": 2,
-            "position": [
-                640,
-                300
-            ]
-        },
-        {
-            "parameters": {
-                "fromEmail": "reports@oculops.os",
-                "toEmail": "roberto@oculops.os",
-                "subject": "⚡ OCULOPS — Weekly Intelligence Report | {{ $json.report_date }}",
-                "emailType": "html",
-                "html": "={{ $json.html_email }}",
-                "options": {}
-            },
-            "id": "send-email",
-            "name": "Send Email (SMTP)",
-            "type": "n8n-nodes-base.emailSend",
-            "typeVersion": 2.1,
-            "position": [
-                860,
-                300
-            ],
-            "credentials": {
-                "smtp": {
-                    "id": "smtp-credential-id",
-                    "name": "SMTP Account"
-                }
+  "name": "SCRIBE — Weekly Intelligence Email Report",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 9,
+              "triggerAtMinute": 0
             }
-        },
-        {
-            "parameters": {
-                "method": "POST",
-                "url": "https://yxzdafptqtcvpsbqkmkm.supabase.co/functions/v1/agent-scribe",
-                "sendHeaders": true,
-                "headerParameters": {
-                    "parameters": [
-                        {
-                            "name": "Content-Type",
-                            "value": "application/json"
-                        },
-                        {
-                            "name": "Authorization",
-                            "value": "Bearer {{SUPABASE_ANON_KEY}}"
-                        }
-                    ]
-                },
-                "sendBody": true,
-                "specifyBody": "json",
-                "jsonBody": "={{ JSON.stringify({ action: 'log_email_sent', report_date: $json.report_date, recipient: 'roberto@oculops.os' }) }}"
+          ]
+        }
+      },
+      "id": "schedule-trigger",
+      "name": "Every Monday 9AM",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        200,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://yxzdafptqtcvpsbqkmkm.supabase.co/rest/v1/rpc/get_weekly_report_data",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $env.SUPABASE_ANON_KEY }}"
             },
-            "id": "log-to-scribe",
-            "name": "Log to SCRIBE Agent",
-            "type": "n8n-nodes-base.httpRequest",
-            "typeVersion": 4.2,
-            "position": [
-                1080,
-                300
-            ]
+            {
+              "name": "Authorization",
+              "value": "Bearer {{ $env.SUPABASE_SERVICE_ROLE_KEY }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=representation"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 30000
         }
-    ],
-    "connections": {
-        "Every Monday 9AM": {
-            "main": [
-                [
-                    {
-                        "node": "Fetch Report Data (Supabase)",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "Fetch Report Data (Supabase)": {
-            "main": [
-                [
-                    {
-                        "node": "Build Report Data",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "Build Report Data": {
-            "main": [
-                [
-                    {
-                        "node": "Send Email (SMTP)",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "Send Email (SMTP)": {
-            "main": [
-                [
-                    {
-                        "node": "Log to SCRIBE Agent",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        }
+      },
+      "id": "fetch-report-data",
+      "name": "Fetch Report Data (Supabase)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        420,
+        300
+      ]
     },
-    "settings": {
-        "executionOrder": "v1"
+    {
+      "parameters": {
+        "jsCode": "// Build the HTML email from the template and live data\nconst data = $input.first().json;\n\n// Fallback data structure if RPC not available\nconst report = {\n  report_date: new Date().toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' }),\n  pipeline_value: data.pipeline_value || '53,200',\n  pipeline_change: data.pipeline_change || '+12%',\n  deal_count: data.deal_count || '5',\n  new_deals: data.new_deals || '2',\n  signal_count: data.signal_count || '4',\n  critical_signals: data.critical_signals || '1',\n  health_score: data.health_score || '43',\n  health_change: data.health_change || '-5%',\n  stages: data.stages || [\n    { name: 'Lead', value: '12,000', count: 1, pct: 23, color: '#888' },\n    { name: 'Contactado', value: '25,000', count: 1, pct: 47, color: '#4FC3F7' },\n    { name: 'Meeting', value: '4,200', count: 1, pct: 8, color: '#FFB74D' },\n    { name: 'Propuesta', value: '8,500', count: 1, pct: 16, color: '#AB47BC' },\n    { name: 'Cerrado', value: '3,500', count: 1, pct: 6, color: '#66BB6A' }\n  ],\n  signals: data.signals || [\n    { category: 'Tecnología', title: 'Meta API deprecation alert', impact: 85, implication: 'Migrar integraciones antes de Q3', color: '#4FC3F7', bg: 'rgba(79,195,247,0.15)' },\n    { category: 'Mercado', title: 'TikTok Shop expansion EU', impact: 78, implication: 'Oportunidad para clientes e-commerce', color: '#66BB6A', bg: 'rgba(102,187,106,0.15)' },\n    { category: 'Tecnología', title: 'AI agent cost reduction trend', impact: 90, implication: 'Reducir costes operativos 40%', color: '#4FC3F7', bg: 'rgba(79,195,247,0.15)' }\n  ],\n  agents: data.agents || [\n    { name: 'CORTEX', icon: '🧠', runs: 10, last_run: '17:20', status_color: '#00E676' },\n    { name: 'ATLAS', icon: '🗺️', runs: 8, last_run: '17:15', status_color: '#00E676' },\n    { name: 'HUNTER', icon: '🎯', runs: 3, last_run: '17:15', status_color: '#00E676' },\n    { name: 'ORACLE', icon: '🔮', runs: 1, last_run: '15:39', status_color: '#FFB74D' },\n    { name: 'SENTINEL', icon: '🛡️', runs: 5, last_run: '18:00', status_color: '#00E676' },\n    { name: 'FORGE', icon: '⚒️', runs: 2, last_run: '15:39', status_color: '#FFB74D' },\n    { name: 'STRATEGIST', icon: '♟️', runs: 1, last_run: '17:41', status_color: '#00E676' },\n    { name: 'SCRIBE', icon: '📝', runs: 6, last_run: '18:00', status_color: '#00E676' }\n  ],\n  actions: data.actions || [\n    { priority: '🔴', title: 'Follow up con DataPulse deal', desc: 'Deal de €25,000 en Contactado — mover a Meeting esta semana' },\n    { priority: '🟡', title: 'Preparar propuesta TechVista', desc: 'AI Integration Suite en fase Propuesta — cerrar antes del 15' },\n    { priority: '🟢', title: 'Revisar señales de mercado', desc: '2 señales nuevas de tecnología requieren análisis estratégico' }\n  ]\n};\n\nreturn [{ json: report }];"
+      },
+      "id": "build-report",
+      "name": "Build Report Data",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        640,
+        300
+      ]
     },
-    "tags": [
-        {
-            "name": "OCULOPS"
-        },
-        {
-            "name": "SCRIBE"
-        },
-        {
-            "name": "EMAIL"
+    {
+      "parameters": {
+        "fromEmail": "reports@oculops.os",
+        "toEmail": "roberto@oculops.os",
+        "subject": "⚡ OCULOPS — Weekly Intelligence Report | {{ $json.report_date }}",
+        "emailType": "html",
+        "html": "={{ $json.html_email }}",
+        "options": {}
+      },
+      "id": "send-email",
+      "name": "Send Email (SMTP)",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        860,
+        300
+      ],
+      "credentials": {
+        "smtp": {
+          "id": "smtp-credential-id",
+          "name": "SMTP Account"
         }
-    ]
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://yxzdafptqtcvpsbqkmkm.supabase.co/functions/v1/agent-scribe",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer ={{ $env.SUPABASE_ANON_KEY }}"
+            },
+            {
+              "name": "apikey",
+              "value": "={{ $env.SUPABASE_ANON_KEY }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ action: 'log_email_sent', report_date: $json.report_date, recipient: 'roberto@oculops.os' }) }}"
+      },
+      "id": "log-to-scribe",
+      "name": "Log to SCRIBE Agent",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1080,
+        300
+      ]
+    }
+  ],
+  "connections": {
+    "Every Monday 9AM": {
+      "main": [
+        [
+          {
+            "node": "Fetch Report Data (Supabase)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Report Data (Supabase)": {
+      "main": [
+        [
+          {
+            "node": "Build Report Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Report Data": {
+      "main": [
+        [
+          {
+            "node": "Send Email (SMTP)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Email (SMTP)": {
+      "main": [
+        [
+          {
+            "node": "Log to SCRIBE Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "tags": [
+    {
+      "name": "OCULOPS"
+    },
+    {
+      "name": "SCRIBE"
+    },
+    {
+      "name": "EMAIL"
+    }
+  ]
 }

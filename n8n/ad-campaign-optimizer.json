@@ -1,170 +1,178 @@
 {
-    "name": "📢 Ad Campaign Performance Monitor (Every 3 Hours)",
-    "nodes": [
-        {
-            "parameters": {
-                "rule": {
-                    "interval": [
-                        {
-                            "field": "hours",
-                            "hoursInterval": 3
-                        }
-                    ]
-                }
-            },
-            "id": "schedule-3h",
-            "name": "Every 3 Hours",
-            "type": "n8n-nodes-base.scheduleTrigger",
-            "typeVersion": 1.2,
-            "position": [
-                240,
-                300
-            ]
-        },
-        {
-            "parameters": {
-                "method": "GET",
-                "url": "https://yxzdafptqtcvpsbqkmkm.supabase.co/rest/v1/campaigns?select=*&status=eq.active",
-                "sendHeaders": true,
-                "headerParameters": {
-                    "parameters": [
-                        {
-                            "name": "apikey",
-                            "value": "{{SUPABASE_ANON_KEY}}"
-                        },
-                        {
-                            "name": "Authorization",
-                            "value": "Bearer {{SUPABASE_ANON_KEY}}"
-                        }
-                    ]
-                },
-                "options": {}
-            },
-            "id": "fetch-campaigns",
-            "name": "Get Active Campaigns",
-            "type": "n8n-nodes-base.httpRequest",
-            "typeVersion": 4.2,
-            "position": [
-                480,
-                300
-            ]
-        },
-        {
-            "parameters": {
-                "method": "POST",
-                "url": "https://api.openai.com/v1/chat/completions",
-                "sendHeaders": true,
-                "headerParameters": {
-                    "parameters": [
-                        {
-                            "name": "Content-Type",
-                            "value": "application/json"
-                        },
-                        {
-                            "name": "Authorization",
-                            "value": "Bearer {{OPENAI_API_KEY}}"
-                        }
-                    ]
-                },
-                "sendBody": true,
-                "specifyBody": "json",
-                "jsonBody": "={\n  \"model\": \"gpt-4o-mini\",\n  \"messages\": [\n    {\n      \"role\": \"system\",\n      \"content\": \"Eres un media buyer expert para una agencia de IA. Analiza campañas activas y optimiza. Solo JSON.\"\n    },\n    {\n      \"role\": \"user\",\n      \"content\": \"Campañas activas:\\n\" + JSON.stringify({{ $json }}) + \"\\n\\nPara cada campaña analiza:\\n- performance_score: 0-100\\n- roas_estimate: basado en spent vs budget\\n- recommendation: pause/scale/optimize/maintain\\n- optimization_tips: 2 sugerencias concretas\\n- budget_recommendation: increase/decrease/maintain con %\\n\\nJSON array.\"\n    }\n  ],\n  \"temperature\": 0.4,\n  \"max_tokens\": 800\n}",
-                "options": {
-                    "timeout": 30000
-                }
-            },
-            "id": "gpt-optimize",
-            "name": "GPT Campaign Analysis",
-            "type": "n8n-nodes-base.httpRequest",
-            "typeVersion": 4.2,
-            "position": [
-                720,
-                300
-            ]
-        },
-        {
-            "parameters": {
-                "method": "POST",
-                "url": "https://yxzdafptqtcvpsbqkmkm.supabase.co/rest/v1/knowledge_entries",
-                "sendHeaders": true,
-                "headerParameters": {
-                    "parameters": [
-                        {
-                            "name": "apikey",
-                            "value": "{{SUPABASE_ANON_KEY}}"
-                        },
-                        {
-                            "name": "Authorization",
-                            "value": "Bearer {{SUPABASE_ANON_KEY}}"
-                        },
-                        {
-                            "name": "Content-Type",
-                            "value": "application/json"
-                        }
-                    ]
-                },
-                "sendBody": true,
-                "specifyBody": "json",
-                "jsonBody": "={\n  \"title\": \"Campaign Optimization — {{ new Date().toISOString().split('T')[0] }}\",\n  \"content\": {{ JSON.stringify($json.choices[0].message.content) }},\n  \"category\": \"campaigns\",\n  \"type\": \"ai_generated\",\n  \"source\": \"n8n-ad-optimizer\",\n  \"tags\": [\"campaigns\", \"ads\", \"optimization\", \"auto\"]\n}",
-                "options": {}
-            },
-            "id": "save-optimization",
-            "name": "Save Optimization",
-            "type": "n8n-nodes-base.httpRequest",
-            "typeVersion": 4.2,
-            "position": [
-                960,
-                300
-            ]
+  "name": "📢 Ad Campaign Performance Monitor (Every 3 Hours)",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 3
+            }
+          ]
         }
-    ],
-    "connections": {
-        "Every 3 Hours": {
-            "main": [
-                [
-                    {
-                        "node": "Get Active Campaigns",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "Get Active Campaigns": {
-            "main": [
-                [
-                    {
-                        "node": "GPT Campaign Analysis",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "GPT Campaign Analysis": {
-            "main": [
-                [
-                    {
-                        "node": "Save Optimization",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        }
+      },
+      "id": "schedule-3h",
+      "name": "Every 3 Hours",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        240,
+        300
+      ]
     },
-    "settings": {
-        "executionOrder": "v1"
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "https://yxzdafptqtcvpsbqkmkm.supabase.co/rest/v1/campaigns?select=*&status=eq.active",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $env.SUPABASE_ANON_KEY }}"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer {{ $env.SUPABASE_SERVICE_ROLE_KEY }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "fetch-campaigns",
+      "name": "Get Active Campaigns",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        480,
+        300
+      ]
     },
-    "tags": [
-        {
-            "name": "OCULOPS"
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.openai.com/v1/chat/completions",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer {{OPENAI_API_KEY}}"
+            }
+          ]
         },
-        {
-            "name": "ADS"
-        },
-        {
-            "name": "CAMPAIGNS"
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"gpt-4o-mini\",\n  \"messages\": [\n    {\n      \"role\": \"system\",\n      \"content\": \"Eres un media buyer expert para una agencia de IA. Analiza campañas activas y optimiza. Solo JSON.\"\n    },\n    {\n      \"role\": \"user\",\n      \"content\": \"Campañas activas:\\n\" + JSON.stringify({{ $json }}) + \"\\n\\nPara cada campaña analiza:\\n- performance_score: 0-100\\n- roas_estimate: basado en spent vs budget\\n- recommendation: pause/scale/optimize/maintain\\n- optimization_tips: 2 sugerencias concretas\\n- budget_recommendation: increase/decrease/maintain con %\\n\\nJSON array.\"\n    }\n  ],\n  \"temperature\": 0.4,\n  \"max_tokens\": 800\n}",
+        "options": {
+          "timeout": 30000
         }
-    ]
+      },
+      "id": "gpt-optimize",
+      "name": "GPT Campaign Analysis",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        720,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://yxzdafptqtcvpsbqkmkm.supabase.co/rest/v1/knowledge_entries",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $env.SUPABASE_ANON_KEY }}"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer {{ $env.SUPABASE_SERVICE_ROLE_KEY }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=representation"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"title\": \"Campaign Optimization — {{ new Date().toISOString().split('T')[0] }}\",\n  \"content\": {{ JSON.stringify($json.choices[0].message.content) }},\n  \"category\": \"campaigns\",\n  \"type\": \"ai_generated\",\n  \"source\": \"n8n-ad-optimizer\",\n  \"tags\": [\"campaigns\", \"ads\", \"optimization\", \"auto\"]\n}",
+        "options": {}
+      },
+      "id": "save-optimization",
+      "name": "Save Optimization",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        960,
+        300
+      ]
+    }
+  ],
+  "connections": {
+    "Every 3 Hours": {
+      "main": [
+        [
+          {
+            "node": "Get Active Campaigns",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Active Campaigns": {
+      "main": [
+        [
+          {
+            "node": "GPT Campaign Analysis",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GPT Campaign Analysis": {
+      "main": [
+        [
+          {
+            "node": "Save Optimization",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "tags": [
+    {
+      "name": "OCULOPS"
+    },
+    {
+      "name": "ADS"
+    },
+    {
+      "name": "CAMPAIGNS"
+    }
+  ]
 }

@@ -1,374 +1,390 @@
 {
-    "name": "📧 OUTREACH — Gmail Sender (Approved Emails)",
-    "nodes": [
-        {
-            "parameters": {
-                "rule": {
-                    "interval": [
-                        {
-                            "field": "cronExpression",
-                            "expression": "0 9 * * 1-5"
-                        }
-                    ]
-                }
-            },
-            "id": "cron-9am",
-            "name": "Weekdays 9AM",
-            "type": "n8n-nodes-base.scheduleTrigger",
-            "typeVersion": 1.2,
-            "position": [
-                240,
-                300
-            ]
-        },
-        {
-            "parameters": {
-                "method": "POST",
-                "url": "https://yxzdafptqtcvpsbqkmkm.supabase.co/functions/v1/agent-outreach",
-                "sendHeaders": true,
-                "headerParameters": {
-                    "parameters": [
-                        {
-                            "name": "Content-Type",
-                            "value": "application/json"
-                        },
-                        {
-                            "name": "Authorization",
-                            "value": "Bearer {{SUPABASE_ANON_KEY}}"
-                        }
-                    ]
-                },
-                "sendBody": true,
-                "specifyBody": "json",
-                "jsonBody": "{\n  \"action\": \"list\",\n  \"status\": \"approved\",\n  \"limit\": 20\n}",
-                "options": {
-                    "timeout": 30000
-                }
-            },
-            "id": "fetch-approved",
-            "name": "Fetch Approved Emails",
-            "type": "n8n-nodes-base.httpRequest",
-            "typeVersion": 4.2,
-            "position": [
-                480,
-                300
-            ]
-        },
-        {
-            "parameters": {
-                "conditions": {
-                    "options": {
-                        "caseSensitive": true,
-                        "leftValue": "",
-                        "typeValidation": "strict"
-                    },
-                    "conditions": [
-                        {
-                            "id": "check-emails",
-                            "leftValue": "={{ $json.count }}",
-                            "rightValue": 0,
-                            "operator": {
-                                "type": "number",
-                                "operation": "gt"
-                            }
-                        }
-                    ],
-                    "combinator": "and"
-                }
-            },
-            "id": "has-emails",
-            "name": "Has Approved Emails?",
-            "type": "n8n-nodes-base.if",
-            "typeVersion": 2,
-            "position": [
-                700,
-                300
-            ]
-        },
-        {
-            "parameters": {
-                "fieldToSplitOut": "emails",
-                "options": {}
-            },
-            "id": "split-emails",
-            "name": "Split Each Email",
-            "type": "n8n-nodes-base.splitOut",
-            "typeVersion": 1,
-            "position": [
-                920,
-                280
-            ]
-        },
-        {
-            "parameters": {
-                "sendTo": "={{ $json.recipient_email || 'rot.prods@gmail.com' }}",
-                "subject": "={{ $json.subject }}",
-                "emailType": "html",
-                "message": "={{ $json.html_body }}",
-                "options": {
-                    "replyTo": "rot.prods@gmail.com",
-                    "senderName": "OCULOPS - IA Boutique"
-                }
-            },
-            "id": "gmail-send",
-            "name": "Send via Gmail",
-            "type": "n8n-nodes-base.gmail",
-            "typeVersion": 2.1,
-            "position": [
-                1140,
-                280
-            ],
-            "credentials": {
-                "gmailOAuth2": {
-                    "id": "",
-                    "name": "Gmail OCULOPS"
-                }
+  "name": "📧 OUTREACH — Gmail Sender (Approved Emails)",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 9 * * 1-5"
             }
-        },
-        {
-            "parameters": {
-                "method": "POST",
-                "url": "https://yxzdafptqtcvpsbqkmkm.supabase.co/functions/v1/agent-outreach",
-                "sendHeaders": true,
-                "headerParameters": {
-                    "parameters": [
-                        {
-                            "name": "Content-Type",
-                            "value": "application/json"
-                        },
-                        {
-                            "name": "Authorization",
-                            "value": "Bearer {{SUPABASE_ANON_KEY}}"
-                        }
-                    ]
-                },
-                "sendBody": true,
-                "specifyBody": "json",
-                "jsonBody": "={\n  \"action\": \"mark_sent\",\n  \"id\": \"{{ $json.id }}\"\n}",
-                "options": {}
+          ]
+        }
+      },
+      "id": "cron-9am",
+      "name": "Weekdays 9AM",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        240,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://yxzdafptqtcvpsbqkmkm.supabase.co/functions/v1/agent-outreach",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
             },
-            "id": "mark-sent",
-            "name": "Mark as Sent",
-            "type": "n8n-nodes-base.httpRequest",
-            "typeVersion": 4.2,
-            "position": [
-                1360,
-                280
-            ]
-        },
-        {
-            "parameters": {
-                "amount": 3,
-                "unit": "seconds"
+            {
+              "name": "Authorization",
+              "value": "Bearer ={{ $env.SUPABASE_ANON_KEY }}"
             },
-            "id": "rate-limit",
-            "name": "Wait 3s (Rate Limit)",
-            "type": "n8n-nodes-base.wait",
-            "typeVersion": 1.1,
-            "position": [
-                1580,
-                280
-            ]
-        },
-        {
-            "parameters": {
-                "method": "POST",
-                "url": "https://yxzdafptqtcvpsbqkmkm.supabase.co/functions/v1/agent-outreach",
-                "sendHeaders": true,
-                "headerParameters": {
-                    "parameters": [
-                        {
-                            "name": "Content-Type",
-                            "value": "application/json"
-                        },
-                        {
-                            "name": "Authorization",
-                            "value": "Bearer {{SUPABASE_ANON_KEY}}"
-                        }
-                    ]
-                },
-                "sendBody": true,
-                "specifyBody": "json",
-                "jsonBody": "{\n  \"action\": \"stage_followups\"\n}",
-                "options": {
-                    "timeout": 30000
-                }
-            },
-            "id": "stage-followups",
-            "name": "Stage Follow-ups (7d)",
-            "type": "n8n-nodes-base.httpRequest",
-            "typeVersion": 4.2,
-            "position": [
-                920,
-                460
-            ]
-        },
-        {
-            "parameters": {
-                "method": "POST",
-                "url": "https://yxzdafptqtcvpsbqkmkm.supabase.co/functions/v1/agent-outreach",
-                "sendHeaders": true,
-                "headerParameters": {
-                    "parameters": [
-                        {
-                            "name": "Content-Type",
-                            "value": "application/json"
-                        },
-                        {
-                            "name": "Authorization",
-                            "value": "Bearer {{SUPABASE_ANON_KEY}}"
-                        }
-                    ]
-                },
-                "sendBody": true,
-                "specifyBody": "json",
-                "jsonBody": "{\n  \"action\": \"stats\"\n}",
-                "options": {}
-            },
-            "id": "final-stats",
-            "name": "Get Final Stats",
-            "type": "n8n-nodes-base.httpRequest",
-            "typeVersion": 4.2,
-            "position": [
-                1140,
-                460
-            ]
-        },
-        {
-            "parameters": {
-                "sendTo": "rot.prods@gmail.com",
-                "subject": "=📧 OCULOPS Outreach Report — {{ new Date().toLocaleDateString('es-ES') }}",
-                "emailType": "html",
-                "message": "=<div style=\"font-family:system-ui;max-width:600px;margin:0 auto;background:#0a0a0a;color:#e2e8f0;padding:30px;border-radius:12px\">\n<h1 style=\"color:#7c3aed;font-size:20px;margin:0 0 20px\">📧 Outreach Report</h1>\n<table style=\"width:100%;border-collapse:collapse;font-size:14px\">\n<tr><td style=\"padding:8px;color:#94a3b8\">Pendientes</td><td style=\"padding:8px;font-weight:700;color:#eab308\">{{ $json.stats?.staged || 0 }}</td></tr>\n<tr><td style=\"padding:8px;color:#94a3b8\">Aprobados</td><td style=\"padding:8px;font-weight:700;color:#3b82f6\">{{ $json.stats?.approved || 0 }}</td></tr>\n<tr><td style=\"padding:8px;color:#94a3b8\">Enviados</td><td style=\"padding:8px;font-weight:700;color:#22c55e\">{{ $json.stats?.sent || 0 }}</td></tr>\n<tr><td style=\"padding:8px;color:#94a3b8\">Respondidos</td><td style=\"padding:8px;font-weight:700;color:#a78bfa\">{{ $json.stats?.replied || 0 }}</td></tr>\n<tr><td style=\"padding:8px;color:#94a3b8\">Total</td><td style=\"padding:8px;font-weight:700;color:#fff\">{{ $json.stats?.total || 0 }}</td></tr>\n</table>\n<p style=\"color:#64748b;font-size:12px;margin-top:20px\">OCULOPS OS — Outreach Pipeline</p>\n</div>",
-                "options": {
-                    "senderName": "OCULOPS OS"
-                }
-            },
-            "id": "notify-summary",
-            "name": "Email Summary to You",
-            "type": "n8n-nodes-base.gmail",
-            "typeVersion": 2.1,
-            "position": [
-                1360,
-                460
-            ],
-            "credentials": {
-                "gmailOAuth2": {
-                    "id": "",
-                    "name": "Gmail OCULOPS"
-                }
+            {
+              "name": "apikey",
+              "value": "={{ $env.SUPABASE_ANON_KEY }}"
             }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"action\": \"list\",\n  \"status\": \"approved\",\n  \"limit\": 20\n}",
+        "options": {
+          "timeout": 30000
         }
-    ],
-    "connections": {
-        "Weekdays 9AM": {
-            "main": [
-                [
-                    {
-                        "node": "Fetch Approved Emails",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "Fetch Approved Emails": {
-            "main": [
-                [
-                    {
-                        "node": "Has Approved Emails?",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "Has Approved Emails?": {
-            "main": [
-                [
-                    {
-                        "node": "Split Each Email",
-                        "type": "main",
-                        "index": 0
-                    }
-                ],
-                [
-                    {
-                        "node": "Stage Follow-ups (7d)",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "Split Each Email": {
-            "main": [
-                [
-                    {
-                        "node": "Send via Gmail",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "Send via Gmail": {
-            "main": [
-                [
-                    {
-                        "node": "Mark as Sent",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "Mark as Sent": {
-            "main": [
-                [
-                    {
-                        "node": "Wait 3s (Rate Limit)",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "Stage Follow-ups (7d)": {
-            "main": [
-                [
-                    {
-                        "node": "Get Final Stats",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "Get Final Stats": {
-            "main": [
-                [
-                    {
-                        "node": "Email Summary to You",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        }
+      },
+      "id": "fetch-approved",
+      "name": "Fetch Approved Emails",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        480,
+        300
+      ]
     },
-    "settings": {
-        "executionOrder": "v1"
-    },
-    "tags": [
-        {
-            "name": "OCULOPS"
-        },
-        {
-            "name": "OUTREACH"
-        },
-        {
-            "name": "GMAIL"
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "check-emails",
+              "leftValue": "={{ $json.count }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
         }
-    ]
+      },
+      "id": "has-emails",
+      "name": "Has Approved Emails?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        700,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "emails",
+        "options": {}
+      },
+      "id": "split-emails",
+      "name": "Split Each Email",
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        920,
+        280
+      ]
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.recipient_email || 'rot.prods@gmail.com' }}",
+        "subject": "={{ $json.subject }}",
+        "emailType": "html",
+        "message": "={{ $json.html_body }}",
+        "options": {
+          "replyTo": "rot.prods@gmail.com",
+          "senderName": "OCULOPS - IA Boutique"
+        }
+      },
+      "id": "gmail-send",
+      "name": "Send via Gmail",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1140,
+        280
+      ],
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "",
+          "name": "Gmail OCULOPS"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://yxzdafptqtcvpsbqkmkm.supabase.co/functions/v1/agent-outreach",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer ={{ $env.SUPABASE_ANON_KEY }}"
+            },
+            {
+              "name": "apikey",
+              "value": "={{ $env.SUPABASE_ANON_KEY }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"action\": \"mark_sent\",\n  \"id\": \"{{ $json.id }}\"\n}",
+        "options": {}
+      },
+      "id": "mark-sent",
+      "name": "Mark as Sent",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1360,
+        280
+      ]
+    },
+    {
+      "parameters": {
+        "amount": 3,
+        "unit": "seconds"
+      },
+      "id": "rate-limit",
+      "name": "Wait 3s (Rate Limit)",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1580,
+        280
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://yxzdafptqtcvpsbqkmkm.supabase.co/functions/v1/agent-outreach",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer ={{ $env.SUPABASE_ANON_KEY }}"
+            },
+            {
+              "name": "apikey",
+              "value": "={{ $env.SUPABASE_ANON_KEY }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"action\": \"stage_followups\"\n}",
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "id": "stage-followups",
+      "name": "Stage Follow-ups (7d)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        920,
+        460
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://yxzdafptqtcvpsbqkmkm.supabase.co/functions/v1/agent-outreach",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer ={{ $env.SUPABASE_ANON_KEY }}"
+            },
+            {
+              "name": "apikey",
+              "value": "={{ $env.SUPABASE_ANON_KEY }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"action\": \"stats\"\n}",
+        "options": {}
+      },
+      "id": "final-stats",
+      "name": "Get Final Stats",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1140,
+        460
+      ]
+    },
+    {
+      "parameters": {
+        "sendTo": "rot.prods@gmail.com",
+        "subject": "=📧 OCULOPS Outreach Report — {{ new Date().toLocaleDateString('es-ES') }}",
+        "emailType": "html",
+        "message": "=<div style=\"font-family:system-ui;max-width:600px;margin:0 auto;background:#0a0a0a;color:#e2e8f0;padding:30px;border-radius:12px\">\n<h1 style=\"color:#7c3aed;font-size:20px;margin:0 0 20px\">📧 Outreach Report</h1>\n<table style=\"width:100%;border-collapse:collapse;font-size:14px\">\n<tr><td style=\"padding:8px;color:#94a3b8\">Pendientes</td><td style=\"padding:8px;font-weight:700;color:#eab308\">{{ $json.stats?.staged || 0 }}</td></tr>\n<tr><td style=\"padding:8px;color:#94a3b8\">Aprobados</td><td style=\"padding:8px;font-weight:700;color:#3b82f6\">{{ $json.stats?.approved || 0 }}</td></tr>\n<tr><td style=\"padding:8px;color:#94a3b8\">Enviados</td><td style=\"padding:8px;font-weight:700;color:#22c55e\">{{ $json.stats?.sent || 0 }}</td></tr>\n<tr><td style=\"padding:8px;color:#94a3b8\">Respondidos</td><td style=\"padding:8px;font-weight:700;color:#a78bfa\">{{ $json.stats?.replied || 0 }}</td></tr>\n<tr><td style=\"padding:8px;color:#94a3b8\">Total</td><td style=\"padding:8px;font-weight:700;color:#fff\">{{ $json.stats?.total || 0 }}</td></tr>\n</table>\n<p style=\"color:#64748b;font-size:12px;margin-top:20px\">OCULOPS OS — Outreach Pipeline</p>\n</div>",
+        "options": {
+          "senderName": "OCULOPS OS"
+        }
+      },
+      "id": "notify-summary",
+      "name": "Email Summary to You",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1360,
+        460
+      ],
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "",
+          "name": "Gmail OCULOPS"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Weekdays 9AM": {
+      "main": [
+        [
+          {
+            "node": "Fetch Approved Emails",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Approved Emails": {
+      "main": [
+        [
+          {
+            "node": "Has Approved Emails?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Has Approved Emails?": {
+      "main": [
+        [
+          {
+            "node": "Split Each Email",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Stage Follow-ups (7d)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Each Email": {
+      "main": [
+        [
+          {
+            "node": "Send via Gmail",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send via Gmail": {
+      "main": [
+        [
+          {
+            "node": "Mark as Sent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mark as Sent": {
+      "main": [
+        [
+          {
+            "node": "Wait 3s (Rate Limit)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Stage Follow-ups (7d)": {
+      "main": [
+        [
+          {
+            "node": "Get Final Stats",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Final Stats": {
+      "main": [
+        [
+          {
+            "node": "Email Summary to You",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "tags": [
+    {
+      "name": "OCULOPS"
+    },
+    {
+      "name": "OUTREACH"
+    },
+    {
+      "name": "GMAIL"
+    }
+  ]
 }

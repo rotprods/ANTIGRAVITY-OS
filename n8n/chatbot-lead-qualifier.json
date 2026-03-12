@@ -1,147 +1,151 @@
 {
-    "name": "🤖 AI Chatbot Lead Qualifier (Webhook)",
-    "nodes": [
-        {
-            "parameters": {
-                "httpMethod": "POST",
-                "path": "chatbot-message",
-                "responseMode": "responseNode",
-                "options": {}
-            },
-            "id": "webhook-chat",
-            "name": "Chat Message Webhook",
-            "type": "n8n-nodes-base.webhook",
-            "typeVersion": 2,
-            "position": [
-                240,
-                300
-            ],
-            "webhookId": "chatbot-lead-qualifier"
-        },
-        {
-            "parameters": {
-                "method": "POST",
-                "url": "https://api.openai.com/v1/chat/completions",
-                "sendHeaders": true,
-                "headerParameters": {
-                    "parameters": [
-                        {
-                            "name": "Content-Type",
-                            "value": "application/json"
-                        },
-                        {
-                            "name": "Authorization",
-                            "value": "Bearer {{OPENAI_API_KEY}}"
-                        }
-                    ]
-                },
-                "sendBody": true,
-                "specifyBody": "json",
-                "jsonBody": "={\n  \"model\": \"gpt-4o-mini\",\n  \"messages\": [\n    {\n      \"role\": \"system\",\n      \"content\": \"Eres el asistente virtual de OCULOPS, una agencia de IA y marketing digital premium en Murcia. Tu objetivo es:\\n1. Responder preguntas sobre nuestros servicios\\n2. Cualificar al lead (tamaño empresa, presupuesto, necesidades)\\n3. Capturar información de contacto\\n4. Agendar reuniones\\n\\nServicios: Automatización con IA, Marketing Digital, Desarrollo Web, Chatbots, Analítica de Datos, Estrategia Digital.\\n\\nSé profesional, innovador y cercano. Responde en español.\"\n    },\n    {\n      \"role\": \"user\",\n      \"content\": \"{{ $json.body.message }}\"\n    }\n  ],\n  \"temperature\": 0.7,\n  \"max_tokens\": 500\n}",
-                "options": {
-                    "timeout": 15000
-                }
-            },
-            "id": "gpt-chat",
-            "name": "GPT Response",
-            "type": "n8n-nodes-base.httpRequest",
-            "typeVersion": 4.2,
-            "position": [
-                480,
-                300
-            ]
-        },
-        {
-            "parameters": {
-                "method": "POST",
-                "url": "https://yxzdafptqtcvpsbqkmkm.supabase.co/rest/v1/messages",
-                "sendHeaders": true,
-                "headerParameters": {
-                    "parameters": [
-                        {
-                            "name": "apikey",
-                            "value": "{{SUPABASE_ANON_KEY}}"
-                        },
-                        {
-                            "name": "Authorization",
-                            "value": "Bearer {{SUPABASE_ANON_KEY}}"
-                        },
-                        {
-                            "name": "Content-Type",
-                            "value": "application/json"
-                        }
-                    ]
-                },
-                "sendBody": true,
-                "specifyBody": "json",
-                "jsonBody": "={\n  \"channel\": \"chatbot\",\n  \"direction\": \"both\",\n  \"content\": {{ JSON.stringify({user_message: $input.first().json.body.message, ai_response: $json.choices[0].message.content}) }},\n  \"status\": \"delivered\"\n}",
-                "options": {}
-            },
-            "id": "save-message",
-            "name": "Log Conversation",
-            "type": "n8n-nodes-base.httpRequest",
-            "typeVersion": 4.2,
-            "position": [
-                720,
-                400
-            ]
-        },
-        {
-            "parameters": {
-                "respondWith": "json",
-                "responseBody": "={\n  \"response\": {{ JSON.stringify($json.choices[0].message.content) }},\n  \"model\": \"gpt-4o-mini\"\n}"
-            },
-            "id": "respond",
-            "name": "Send Response",
-            "type": "n8n-nodes-base.respondToWebhook",
-            "typeVersion": 1.1,
-            "position": [
-                720,
-                200
-            ]
-        }
-    ],
-    "connections": {
-        "Chat Message Webhook": {
-            "main": [
-                [
-                    {
-                        "node": "GPT Response",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "GPT Response": {
-            "main": [
-                [
-                    {
-                        "node": "Send Response",
-                        "type": "main",
-                        "index": 0
-                    },
-                    {
-                        "node": "Log Conversation",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        }
+  "name": "🤖 AI Chatbot Lead Qualifier (Webhook)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "chatbot-message",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-chat",
+      "name": "Chat Message Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        240,
+        300
+      ],
+      "webhookId": "chatbot-lead-qualifier"
     },
-    "settings": {
-        "executionOrder": "v1"
-    },
-    "tags": [
-        {
-            "name": "OCULOPS"
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.openai.com/v1/chat/completions",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer {{OPENAI_API_KEY}}"
+            }
+          ]
         },
-        {
-            "name": "CHATBOT"
-        },
-        {
-            "name": "LEADS"
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"gpt-4o-mini\",\n  \"messages\": [\n    {\n      \"role\": \"system\",\n      \"content\": \"Eres el asistente virtual de OCULOPS, una agencia de IA y marketing digital premium en Murcia. Tu objetivo es:\\n1. Responder preguntas sobre nuestros servicios\\n2. Cualificar al lead (tamaño empresa, presupuesto, necesidades)\\n3. Capturar información de contacto\\n4. Agendar reuniones\\n\\nServicios: Automatización con IA, Marketing Digital, Desarrollo Web, Chatbots, Analítica de Datos, Estrategia Digital.\\n\\nSé profesional, innovador y cercano. Responde en español.\"\n    },\n    {\n      \"role\": \"user\",\n      \"content\": \"{{ $json.body.message }}\"\n    }\n  ],\n  \"temperature\": 0.7,\n  \"max_tokens\": 500\n}",
+        "options": {
+          "timeout": 15000
         }
-    ]
+      },
+      "id": "gpt-chat",
+      "name": "GPT Response",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        480,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://yxzdafptqtcvpsbqkmkm.supabase.co/rest/v1/messages",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $env.SUPABASE_ANON_KEY }}"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer {{ $env.SUPABASE_SERVICE_ROLE_KEY }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=representation"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"channel\": \"chatbot\",\n  \"direction\": \"both\",\n  \"content\": {{ JSON.stringify({user_message: $input.first().json.body.message, ai_response: $json.choices[0].message.content}) }},\n  \"status\": \"delivered\"\n}",
+        "options": {}
+      },
+      "id": "save-message",
+      "name": "Log Conversation",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        720,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n  \"response\": {{ JSON.stringify($json.choices[0].message.content) }},\n  \"model\": \"gpt-4o-mini\"\n}"
+      },
+      "id": "respond",
+      "name": "Send Response",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        720,
+        200
+      ]
+    }
+  ],
+  "connections": {
+    "Chat Message Webhook": {
+      "main": [
+        [
+          {
+            "node": "GPT Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GPT Response": {
+      "main": [
+        [
+          {
+            "node": "Send Response",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Log Conversation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "tags": [
+    {
+      "name": "OCULOPS"
+    },
+    {
+      "name": "CHATBOT"
+    },
+    {
+      "name": "LEADS"
+    }
+  ]
 }

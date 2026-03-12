@@ -1,496 +1,524 @@
 {
-    "name": "🔄 Master Multi-Agent Full Cycle (Daily 7AM)",
-    "nodes": [
-        {
-            "parameters": {
-                "rule": {
-                    "interval": [
-                        {
-                            "field": "cronExpression",
-                            "expression": "0 7 * * *"
-                        }
-                    ]
-                }
-            },
-            "id": "cron-7am",
-            "name": "Daily 7AM",
-            "type": "n8n-nodes-base.scheduleTrigger",
-            "typeVersion": 1.2,
-            "position": [
-                200,
-                400
-            ]
-        },
-        {
-            "parameters": {
-                "method": "POST",
-                "url": "https://yxzdafptqtcvpsbqkmkm.supabase.co/functions/v1/agent-atlas",
-                "sendHeaders": true,
-                "headerParameters": {
-                    "parameters": [
-                        {
-                            "name": "Content-Type",
-                            "value": "application/json"
-                        },
-                        {
-                            "name": "Authorization",
-                            "value": "Bearer {{SUPABASE_ANON_KEY}}"
-                        }
-                    ]
-                },
-                "sendBody": true,
-                "bodyParameters": {
-                    "parameters": [
-                        {
-                            "name": "action",
-                            "value": "scan"
-                        }
-                    ]
-                },
-                "options": {
-                    "timeout": 60000
-                }
-            },
-            "id": "step1-atlas",
-            "name": "① ATLAS Scan",
-            "type": "n8n-nodes-base.httpRequest",
-            "typeVersion": 4.2,
-            "position": [
-                440,
-                400
-            ]
-        },
-        {
-            "parameters": {
-                "method": "POST",
-                "url": "https://yxzdafptqtcvpsbqkmkm.supabase.co/functions/v1/agent-hunter",
-                "sendHeaders": true,
-                "headerParameters": {
-                    "parameters": [
-                        {
-                            "name": "Content-Type",
-                            "value": "application/json"
-                        },
-                        {
-                            "name": "Authorization",
-                            "value": "Bearer {{SUPABASE_ANON_KEY}}"
-                        }
-                    ]
-                },
-                "sendBody": true,
-                "bodyParameters": {
-                    "parameters": [
-                        {
-                            "name": "action",
-                            "value": "qualify"
-                        }
-                    ]
-                },
-                "options": {
-                    "timeout": 60000
-                }
-            },
-            "id": "step2-hunter",
-            "name": "② HUNTER Qualify",
-            "type": "n8n-nodes-base.httpRequest",
-            "typeVersion": 4.2,
-            "position": [
-                680,
-                400
-            ]
-        },
-        {
-            "parameters": {
-                "method": "POST",
-                "url": "https://yxzdafptqtcvpsbqkmkm.supabase.co/functions/v1/agent-oracle",
-                "sendHeaders": true,
-                "headerParameters": {
-                    "parameters": [
-                        {
-                            "name": "Content-Type",
-                            "value": "application/json"
-                        },
-                        {
-                            "name": "Authorization",
-                            "value": "Bearer {{SUPABASE_ANON_KEY}}"
-                        }
-                    ]
-                },
-                "sendBody": true,
-                "bodyParameters": {
-                    "parameters": [
-                        {
-                            "name": "action",
-                            "value": "analyze"
-                        }
-                    ]
-                },
-                "options": {
-                    "timeout": 120000
-                }
-            },
-            "id": "step3-oracle",
-            "name": "③ ORACLE Analyze",
-            "type": "n8n-nodes-base.httpRequest",
-            "typeVersion": 4.2,
-            "position": [
-                920,
-                400
-            ]
-        },
-        {
-            "parameters": {
-                "method": "POST",
-                "url": "https://yxzdafptqtcvpsbqkmkm.supabase.co/functions/v1/agent-sentinel",
-                "sendHeaders": true,
-                "headerParameters": {
-                    "parameters": [
-                        {
-                            "name": "Content-Type",
-                            "value": "application/json"
-                        },
-                        {
-                            "name": "Authorization",
-                            "value": "Bearer {{SUPABASE_ANON_KEY}}"
-                        }
-                    ]
-                },
-                "sendBody": true,
-                "bodyParameters": {
-                    "parameters": [
-                        {
-                            "name": "action",
-                            "value": "monitor"
-                        }
-                    ]
-                },
-                "options": {
-                    "timeout": 30000
-                }
-            },
-            "id": "step4-sentinel",
-            "name": "④ SENTINEL Monitor",
-            "type": "n8n-nodes-base.httpRequest",
-            "typeVersion": 4.2,
-            "position": [
-                1160,
-                300
-            ]
-        },
-        {
-            "parameters": {
-                "method": "POST",
-                "url": "https://yxzdafptqtcvpsbqkmkm.supabase.co/functions/v1/agent-forge",
-                "sendHeaders": true,
-                "headerParameters": {
-                    "parameters": [
-                        {
-                            "name": "Content-Type",
-                            "value": "application/json"
-                        },
-                        {
-                            "name": "Authorization",
-                            "value": "Bearer {{SUPABASE_ANON_KEY}}"
-                        }
-                    ]
-                },
-                "sendBody": true,
-                "specifyBody": "json",
-                "jsonBody": "{\"action\":\"generate\",\"content_type\":\"social_post\",\"topic\":\"daily AI insight\",\"audience\":\"pymes_murcia\"}",
-                "options": {
-                    "timeout": 60000
-                }
-            },
-            "id": "step5-forge",
-            "name": "⑤ FORGE Content",
-            "type": "n8n-nodes-base.httpRequest",
-            "typeVersion": 4.2,
-            "position": [
-                1160,
-                500
-            ]
-        },
-        {
-            "parameters": {
-                "method": "POST",
-                "url": "https://yxzdafptqtcvpsbqkmkm.supabase.co/functions/v1/agent-scribe",
-                "sendHeaders": true,
-                "headerParameters": {
-                    "parameters": [
-                        {
-                            "name": "Content-Type",
-                            "value": "application/json"
-                        },
-                        {
-                            "name": "Authorization",
-                            "value": "Bearer {{SUPABASE_ANON_KEY}}"
-                        }
-                    ]
-                },
-                "sendBody": true,
-                "bodyParameters": {
-                    "parameters": [
-                        {
-                            "name": "action",
-                            "value": "daily_report"
-                        }
-                    ]
-                },
-                "options": {
-                    "timeout": 60000
-                }
-            },
-            "id": "step6-scribe",
-            "name": "⑥ SCRIBE Report",
-            "type": "n8n-nodes-base.httpRequest",
-            "typeVersion": 4.2,
-            "position": [
-                1400,
-                400
-            ]
-        },
-        {
-            "parameters": {
-                "method": "POST",
-                "url": "https://yxzdafptqtcvpsbqkmkm.supabase.co/functions/v1/agent-cortex",
-                "sendHeaders": true,
-                "headerParameters": {
-                    "parameters": [
-                        {
-                            "name": "Content-Type",
-                            "value": "application/json"
-                        },
-                        {
-                            "name": "Authorization",
-                            "value": "Bearer {{SUPABASE_ANON_KEY}}"
-                        }
-                    ]
-                },
-                "sendBody": true,
-                "bodyParameters": {
-                    "parameters": [
-                        {
-                            "name": "action",
-                            "value": "orchestrate"
-                        }
-                    ]
-                },
-                "options": {
-                    "timeout": 30000
-                }
-            },
-            "id": "step7-cortex",
-            "name": "⑦ CORTEX Synthesize",
-            "type": "n8n-nodes-base.httpRequest",
-            "typeVersion": 4.2,
-            "position": [
-                1640,
-                400
-            ]
-        },
-        {
-            "parameters": {
-                "jsCode": "// Compile all agent results into a readable daily report\nconst now = new Date();\nconst dateStr = now.toLocaleDateString('es-ES', { weekday:'long', year:'numeric', month:'long', day:'numeric' });\nconst timeStr = now.toLocaleTimeString('es-ES');\n\n// Gather results from previous nodes (they're all in the chain)\nconst atlas = $('① ATLAS Scan').first().json;\nconst hunter = $('② HUNTER Qualify').first().json;\nconst oracle = $('③ ORACLE Analyze').first().json;\nconst scribe = $('⑥ SCRIBE Report').first().json;\nconst cortex = $('⑦ CORTEX Synthesize').first().json;\n\nlet atlasAnalysis = '';\ntry {\n  const parsed = JSON.parse(atlas?.result?.ai_analysis || '{}');\n  atlasAnalysis = parsed.summary || atlas?.result?.ai_analysis || 'No AI analysis available';\n} catch(e) {\n  atlasAnalysis = atlas?.result?.ai_analysis || 'No analysis';\n}\n\nconst report = `\n╔══════════════════════════════════════════════════════════════╗\n║           OCULOPS OS — DAILY INTELLIGENCE REPORT         ║\n╚══════════════════════════════════════════════════════════════╝\n\nFecha: ${dateStr}\nHora de generación: ${timeStr}\nGenerado por: CORTEX Multi-Agent System\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n① ATLAS — INTELIGENCIA DE MERCADO\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\nEstado: ${atlas?.success ? '✅ COMPLETADO' : '❌ ERROR'}\nSeñales activas: ${atlas?.result?.signals_count ?? 'N/A'}\nNichos monitorizados: ${atlas?.result?.niches_count ?? 'N/A'}\nOpenAI activo: ${atlas?.result?.openai_configured ? 'Sí' : 'No'}\nDuración: ${atlas?.duration_ms ?? 0}ms\n\nAnálisis IA:\n${atlasAnalysis}\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n② HUNTER — CALIFICACIÓN DE LEADS\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\nEstado: ${hunter?.success ? '✅ COMPLETADO' : '❌ ERROR'}\nLeads raw encontrados: ${hunter?.result?.raw_leads_found ?? 0}\nContactos procesados: ${hunter?.result?.raw_contacts ?? 0}\nLeads puntuados: ${hunter?.result?.leads_scored ?? 0}\nAuto-promovidos: ${hunter?.result?.auto_promoted ?? 0}\nDuración: ${hunter?.duration_ms ?? 0}ms\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n③ ORACLE — ANALÍTICAS\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\nEstado: ${oracle?.success ? '✅ COMPLETADO' : '❌ ERROR'}\nDuración: ${oracle?.duration_ms ?? 0}ms\n${JSON.stringify(oracle?.result ?? {}, null, 2)}\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n⑥ SCRIBE — INFORME DIARIO\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\nEstado: ${scribe?.success ? '✅ COMPLETADO' : '❌ ERROR'}\nDuración: ${scribe?.duration_ms ?? 0}ms\n${JSON.stringify(scribe?.result ?? {}, null, 2)}\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n⑦ CORTEX — SÍNTESIS FINAL\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\nEstado: ${cortex?.success ? '✅ COMPLETADO' : '❌ ERROR'}\nDuración: ${cortex?.duration_ms ?? 0}ms\n${JSON.stringify(cortex?.result ?? {}, null, 2)}\n\n══════════════════════════════════════════════════════════════\n🤖 OCULOPS OS — Sistema de Inteligencia Estratégica v11\n   rotprods.app.n8n.cloud | yxzdafptqtcvpsbqkmkm.supabase.co\n══════════════════════════════════════════════════════════════\n`.trim();\n\nconst filename = `OCULOPS_Report_${now.toISOString().split('T')[0]}.txt`;\n\nreturn [{ json: { report, filename, date: now.toISOString() } }];"
-            },
-            "id": "compile-report",
-            "name": "📄 Compile Report",
-            "type": "n8n-nodes-base.code",
-            "typeVersion": 2,
-            "position": [
-                1880,
-                400
-            ]
-        },
-        {
-            "parameters": {
-                "method": "POST",
-                "url": "https://yxzdafptqtcvpsbqkmkm.supabase.co/rest/v1/knowledge_entries",
-                "sendHeaders": true,
-                "headerParameters": {
-                    "parameters": [
-                        {
-                            "name": "apikey",
-                            "value": "{{SUPABASE_ANON_KEY}}"
-                        },
-                        {
-                            "name": "Authorization",
-                            "value": "Bearer {{SUPABASE_ANON_KEY}}"
-                        },
-                        {
-                            "name": "Content-Type",
-                            "value": "application/json"
-                        },
-                        {
-                            "name": "Prefer",
-                            "value": "return=representation"
-                        }
-                    ]
-                },
-                "sendBody": true,
-                "specifyBody": "json",
-                "jsonBody": "={\"title\": \"Daily Report — \" + new Date().toISOString().split('T')[0], \"content\": $json.report, \"category\": \"reports\", \"type\": \"daily_report\", \"source\": \"n8n-master-cycle\", \"tags\": [\"daily\", \"report\", \"auto\", \"cortex\"]}",
-                "options": {}
-            },
-            "id": "save-to-app",
-            "name": "💾 Save to App",
-            "type": "n8n-nodes-base.httpRequest",
-            "typeVersion": 4.2,
-            "position": [
-                2120,
-                300
-            ]
-        },
-        {
-            "parameters": {
-                "sendTo": "rot.prods@gmail.com",
-                "subject": "=🤖 OCULOPS OS — Daily Report {{ new Date().toISOString().split('T')[0] }}",
-                "emailType": "text",
-                "message": "={{ $('📄 Compile Report').first().json.report }}",
-                "options": {
-                    "attachmentsUi": {
-                        "attachmentsBinary": []
-                    }
-                }
-            },
-            "id": "send-email",
-            "name": "📧 Email Report",
-            "type": "n8n-nodes-base.gmail",
-            "typeVersion": 2.1,
-            "position": [
-                2120,
-                500
-            ],
-            "credentials": {
-                "gmailOAuth2": {
-                    "id": "",
-                    "name": "Gmail OCULOPS"
-                }
+  "name": "🔄 Master Multi-Agent Full Cycle (Daily 7AM)",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 7 * * *"
             }
+          ]
         }
-    ],
-    "connections": {
-        "Daily 7AM": {
-            "main": [
-                [
-                    {
-                        "node": "① ATLAS Scan",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "① ATLAS Scan": {
-            "main": [
-                [
-                    {
-                        "node": "② HUNTER Qualify",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "② HUNTER Qualify": {
-            "main": [
-                [
-                    {
-                        "node": "③ ORACLE Analyze",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "③ ORACLE Analyze": {
-            "main": [
-                [
-                    {
-                        "node": "④ SENTINEL Monitor",
-                        "type": "main",
-                        "index": 0
-                    },
-                    {
-                        "node": "⑤ FORGE Content",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "④ SENTINEL Monitor": {
-            "main": [
-                [
-                    {
-                        "node": "⑥ SCRIBE Report",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "⑤ FORGE Content": {
-            "main": [
-                [
-                    {
-                        "node": "⑥ SCRIBE Report",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "⑥ SCRIBE Report": {
-            "main": [
-                [
-                    {
-                        "node": "⑦ CORTEX Synthesize",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "⑦ CORTEX Synthesize": {
-            "main": [
-                [
-                    {
-                        "node": "📄 Compile Report",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "📄 Compile Report": {
-            "main": [
-                [
-                    {
-                        "node": "💾 Save to App",
-                        "type": "main",
-                        "index": 0
-                    },
-                    {
-                        "node": "📧 Email Report",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        }
+      },
+      "id": "cron-7am",
+      "name": "Daily 7AM",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        200,
+        400
+      ]
     },
-    "settings": {
-        "executionOrder": "v1"
-    },
-    "tags": [
-        {
-            "name": "OCULOPS"
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://yxzdafptqtcvpsbqkmkm.supabase.co/functions/v1/agent-atlas",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer ={{ $env.SUPABASE_ANON_KEY }}"
+            },
+            {
+              "name": "apikey",
+              "value": "={{ $env.SUPABASE_ANON_KEY }}"
+            }
+          ]
         },
-        {
-            "name": "MASTER"
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "action",
+              "value": "scan"
+            }
+          ]
         },
-        {
-            "name": "FULL-CYCLE"
+        "options": {
+          "timeout": 60000
         }
-    ]
+      },
+      "id": "step1-atlas",
+      "name": "① ATLAS Scan",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        440,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://yxzdafptqtcvpsbqkmkm.supabase.co/functions/v1/agent-hunter",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer ={{ $env.SUPABASE_ANON_KEY }}"
+            },
+            {
+              "name": "apikey",
+              "value": "={{ $env.SUPABASE_ANON_KEY }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "action",
+              "value": "qualify"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 60000
+        }
+      },
+      "id": "step2-hunter",
+      "name": "② HUNTER Qualify",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        680,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://yxzdafptqtcvpsbqkmkm.supabase.co/functions/v1/agent-oracle",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer ={{ $env.SUPABASE_ANON_KEY }}"
+            },
+            {
+              "name": "apikey",
+              "value": "={{ $env.SUPABASE_ANON_KEY }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "action",
+              "value": "analyze"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 120000
+        }
+      },
+      "id": "step3-oracle",
+      "name": "③ ORACLE Analyze",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        920,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://yxzdafptqtcvpsbqkmkm.supabase.co/functions/v1/agent-sentinel",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer ={{ $env.SUPABASE_ANON_KEY }}"
+            },
+            {
+              "name": "apikey",
+              "value": "={{ $env.SUPABASE_ANON_KEY }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "action",
+              "value": "monitor"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "id": "step4-sentinel",
+      "name": "④ SENTINEL Monitor",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1160,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://yxzdafptqtcvpsbqkmkm.supabase.co/functions/v1/agent-forge",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer ={{ $env.SUPABASE_ANON_KEY }}"
+            },
+            {
+              "name": "apikey",
+              "value": "={{ $env.SUPABASE_ANON_KEY }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\"action\":\"generate\",\"content_type\":\"social_post\",\"topic\":\"daily AI insight\",\"audience\":\"pymes_murcia\"}",
+        "options": {
+          "timeout": 60000
+        }
+      },
+      "id": "step5-forge",
+      "name": "⑤ FORGE Content",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1160,
+        500
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://yxzdafptqtcvpsbqkmkm.supabase.co/functions/v1/agent-scribe",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer ={{ $env.SUPABASE_ANON_KEY }}"
+            },
+            {
+              "name": "apikey",
+              "value": "={{ $env.SUPABASE_ANON_KEY }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "action",
+              "value": "daily_report"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 60000
+        }
+      },
+      "id": "step6-scribe",
+      "name": "⑥ SCRIBE Report",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1400,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://yxzdafptqtcvpsbqkmkm.supabase.co/functions/v1/agent-cortex",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer ={{ $env.SUPABASE_ANON_KEY }}"
+            },
+            {
+              "name": "apikey",
+              "value": "={{ $env.SUPABASE_ANON_KEY }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "action",
+              "value": "orchestrate"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "id": "step7-cortex",
+      "name": "⑦ CORTEX Synthesize",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1640,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Compile all agent results into a readable daily report\nconst now = new Date();\nconst dateStr = now.toLocaleDateString('es-ES', { weekday:'long', year:'numeric', month:'long', day:'numeric' });\nconst timeStr = now.toLocaleTimeString('es-ES');\n\n// Gather results from previous nodes (they're all in the chain)\nconst atlas = $('① ATLAS Scan').first().json;\nconst hunter = $('② HUNTER Qualify').first().json;\nconst oracle = $('③ ORACLE Analyze').first().json;\nconst scribe = $('⑥ SCRIBE Report').first().json;\nconst cortex = $('⑦ CORTEX Synthesize').first().json;\n\nlet atlasAnalysis = '';\ntry {\n  const parsed = JSON.parse(atlas?.result?.ai_analysis || '{}');\n  atlasAnalysis = parsed.summary || atlas?.result?.ai_analysis || 'No AI analysis available';\n} catch(e) {\n  atlasAnalysis = atlas?.result?.ai_analysis || 'No analysis';\n}\n\nconst report = `\n╔══════════════════════════════════════════════════════════════╗\n║           OCULOPS OS — DAILY INTELLIGENCE REPORT         ║\n╚══════════════════════════════════════════════════════════════╝\n\nFecha: ${dateStr}\nHora de generación: ${timeStr}\nGenerado por: CORTEX Multi-Agent System\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n① ATLAS — INTELIGENCIA DE MERCADO\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\nEstado: ${atlas?.success ? '✅ COMPLETADO' : '❌ ERROR'}\nSeñales activas: ${atlas?.result?.signals_count ?? 'N/A'}\nNichos monitorizados: ${atlas?.result?.niches_count ?? 'N/A'}\nOpenAI activo: ${atlas?.result?.openai_configured ? 'Sí' : 'No'}\nDuración: ${atlas?.duration_ms ?? 0}ms\n\nAnálisis IA:\n${atlasAnalysis}\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n② HUNTER — CALIFICACIÓN DE LEADS\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\nEstado: ${hunter?.success ? '✅ COMPLETADO' : '❌ ERROR'}\nLeads raw encontrados: ${hunter?.result?.raw_leads_found ?? 0}\nContactos procesados: ${hunter?.result?.raw_contacts ?? 0}\nLeads puntuados: ${hunter?.result?.leads_scored ?? 0}\nAuto-promovidos: ${hunter?.result?.auto_promoted ?? 0}\nDuración: ${hunter?.duration_ms ?? 0}ms\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n③ ORACLE — ANALÍTICAS\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\nEstado: ${oracle?.success ? '✅ COMPLETADO' : '❌ ERROR'}\nDuración: ${oracle?.duration_ms ?? 0}ms\n${JSON.stringify(oracle?.result ?? {}, null, 2)}\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n⑥ SCRIBE — INFORME DIARIO\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\nEstado: ${scribe?.success ? '✅ COMPLETADO' : '❌ ERROR'}\nDuración: ${scribe?.duration_ms ?? 0}ms\n${JSON.stringify(scribe?.result ?? {}, null, 2)}\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n⑦ CORTEX — SÍNTESIS FINAL\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\nEstado: ${cortex?.success ? '✅ COMPLETADO' : '❌ ERROR'}\nDuración: ${cortex?.duration_ms ?? 0}ms\n${JSON.stringify(cortex?.result ?? {}, null, 2)}\n\n══════════════════════════════════════════════════════════════\n🤖 OCULOPS OS — Sistema de Inteligencia Estratégica v11\n   rotprods.app.n8n.cloud | yxzdafptqtcvpsbqkmkm.supabase.co\n══════════════════════════════════════════════════════════════\n`.trim();\n\nconst filename = `OCULOPS_Report_${now.toISOString().split('T')[0]}.txt`;\n\nreturn [{ json: { report, filename, date: now.toISOString() } }];"
+      },
+      "id": "compile-report",
+      "name": "📄 Compile Report",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1880,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://yxzdafptqtcvpsbqkmkm.supabase.co/rest/v1/knowledge_entries",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $env.SUPABASE_ANON_KEY }}"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer {{ $env.SUPABASE_SERVICE_ROLE_KEY }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=representation"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\"title\": \"Daily Report — \" + new Date().toISOString().split('T')[0], \"content\": $json.report, \"category\": \"reports\", \"type\": \"daily_report\", \"source\": \"n8n-master-cycle\", \"tags\": [\"daily\", \"report\", \"auto\", \"cortex\"]}",
+        "options": {}
+      },
+      "id": "save-to-app",
+      "name": "💾 Save to App",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2120,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "sendTo": "rot.prods@gmail.com",
+        "subject": "=🤖 OCULOPS OS — Daily Report {{ new Date().toISOString().split('T')[0] }}",
+        "emailType": "text",
+        "message": "={{ $('📄 Compile Report').first().json.report }}",
+        "options": {
+          "attachmentsUi": {
+            "attachmentsBinary": []
+          }
+        }
+      },
+      "id": "send-email",
+      "name": "📧 Email Report",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        2120,
+        500
+      ],
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "",
+          "name": "Gmail OCULOPS"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Daily 7AM": {
+      "main": [
+        [
+          {
+            "node": "① ATLAS Scan",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "① ATLAS Scan": {
+      "main": [
+        [
+          {
+            "node": "② HUNTER Qualify",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "② HUNTER Qualify": {
+      "main": [
+        [
+          {
+            "node": "③ ORACLE Analyze",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "③ ORACLE Analyze": {
+      "main": [
+        [
+          {
+            "node": "④ SENTINEL Monitor",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "⑤ FORGE Content",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "④ SENTINEL Monitor": {
+      "main": [
+        [
+          {
+            "node": "⑥ SCRIBE Report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "⑤ FORGE Content": {
+      "main": [
+        [
+          {
+            "node": "⑥ SCRIBE Report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "⑥ SCRIBE Report": {
+      "main": [
+        [
+          {
+            "node": "⑦ CORTEX Synthesize",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "⑦ CORTEX Synthesize": {
+      "main": [
+        [
+          {
+            "node": "📄 Compile Report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "📄 Compile Report": {
+      "main": [
+        [
+          {
+            "node": "💾 Save to App",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "📧 Email Report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "tags": [
+    {
+      "name": "OCULOPS"
+    },
+    {
+      "name": "MASTER"
+    },
+    {
+      "name": "FULL-CYCLE"
+    }
+  ]
 }

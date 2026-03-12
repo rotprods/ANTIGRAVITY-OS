@@ -1,6 +1,6 @@
 # Codex Operating Guide
 
-Updated: 2026-03-10
+Updated: 2026-03-12
 
 ## Role
 
@@ -13,13 +13,15 @@ Updated: 2026-03-10
 Use documents in this order when they conflict:
 
 1. `CURRENT_TRUTH.md`
-2. `docs/CONTINUITY_STATUS_2026-03-09.md`
-3. `docs/OPERATIONS_ARCHITECTURE.md`
-4. `docs/OPERATIONS_DEPLOY_CHECKLIST.md`
-5. `docs/AGENT_ROLES.md`
-6. `docs/MASTER_API_REGISTRY.md`
-7. `claude.md`, `HANDOFF.md`, `docs/CLAUDE_EXECUTION_BRIEF.md`, `docs/audit*`
-8. `OCULOPS_OS_MASTER_SNAPSHOT*.md` as archive only, never as live operational truth
+2. `missing/central-secrets.md`
+3. `missing/go-live-checklist.md`
+4. `docs/CONTINUITY_STATUS_2026-03-09.md`
+5. `docs/OPERATIONS_ARCHITECTURE.md`
+6. `docs/OPERATIONS_DEPLOY_CHECKLIST.md`
+7. `docs/AGENT_ROLES.md`
+8. `docs/MASTER_API_REGISTRY.md`
+9. `claude.md`, `HANDOFF.md`, `docs/CLAUDE_EXECUTION_BRIEF.md`, `docs/audit*`
+10. `OCULOPS_OS_MASTER_SNAPSHOT*.md` as archive only, never as live operational truth
 
 ## Product Boundaries
 
@@ -56,26 +58,24 @@ Use documents in this order when they conflict:
 
 ## Current P0 Focus
 
-- Re-auth Supabase CLI and finish blocked deploys:
-  - `ai-advisor`
-  - `messaging-dispatch`
-  - `api-proxy`
-- Close missing env coverage:
-  - `ALPHA_VANTAGE_KEY`
-  - Google Maps and Gmail OAuth vars
-  - Meta / WhatsApp vars
-  - `N8N_WEBHOOK_URL`
-  - TikTok and ManyChat vars
-- Configure real schedules for `market-data` and `social-signals`.
-- Run authenticated end-to-end QA across:
-  - Markets
-  - Intelligence
-  - Prospector to CRM
-  - Messaging
-  - Automation
-- Remove repo ambiguity:
-  - keep `package.json` and docs aligned with real tooling
-  - keep `electron/*.cjs` as the only live Electron entrypoints
+- Treat `missing/central-secrets.md` and `missing/go-live-checklist.md` as the source of truth for what is actually still missing.
+- Repair live n8n workflows first:
+  - remove literal `{{SUPABASE_ANON_KEY}}` placeholders and stale hardcoded Supabase JWTs
+  - verify `architect-os-handoff`, Speed-to-Lead, Strategist, and CORTEX live paths
+  - persist any live workflow fixes back into local `n8n/*.json`
+- Reconcile Supabase migration drift before any repair command:
+  - do not reuse stale pre-`20260321000000` repair lists blindly
+  - compare local `supabase/migrations` to remote history first
+- Keep deploys stable while Docker is unreliable:
+  - prefer the existing API-based Supabase deploy path when local Docker is not ready
+- Operational missing secrets for this phase are now:
+  - `APIFY_TOKEN` for Reddit reliability
+  - `TELEGRAM_CHAT_ID` for default Herald/report delivery
+- Treat Meta / WhatsApp / TikTok / ManyChat secrets as deferred unless Roberto explicitly reopens those integrations
+- Run end-to-end verification after the live repair pass:
+  - n8n webhook smoke checks
+  - authenticated app smoke
+  - build/lint/test baseline
 
 ## Visual Rules
 

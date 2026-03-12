@@ -1,170 +1,178 @@
 {
-    "name": "🔬 Niche Discovery & Scoring (Weekly Tuesday)",
-    "nodes": [
-        {
-            "parameters": {
-                "rule": {
-                    "interval": [
-                        {
-                            "field": "cronExpression",
-                            "expression": "0 11 * * 2"
-                        }
-                    ]
-                }
-            },
-            "id": "cron-tuesday",
-            "name": "Tuesday 11AM",
-            "type": "n8n-nodes-base.scheduleTrigger",
-            "typeVersion": 1.2,
-            "position": [
-                240,
-                300
-            ]
-        },
-        {
-            "parameters": {
-                "method": "GET",
-                "url": "https://yxzdafptqtcvpsbqkmkm.supabase.co/rest/v1/niches?select=*&order=score.desc&limit=20",
-                "sendHeaders": true,
-                "headerParameters": {
-                    "parameters": [
-                        {
-                            "name": "apikey",
-                            "value": "{{SUPABASE_ANON_KEY}}"
-                        },
-                        {
-                            "name": "Authorization",
-                            "value": "Bearer {{SUPABASE_ANON_KEY}}"
-                        }
-                    ]
-                },
-                "options": {}
-            },
-            "id": "fetch-niches",
-            "name": "Get Current Niches",
-            "type": "n8n-nodes-base.httpRequest",
-            "typeVersion": 4.2,
-            "position": [
-                480,
-                300
-            ]
-        },
-        {
-            "parameters": {
-                "method": "POST",
-                "url": "https://api.openai.com/v1/chat/completions",
-                "sendHeaders": true,
-                "headerParameters": {
-                    "parameters": [
-                        {
-                            "name": "Content-Type",
-                            "value": "application/json"
-                        },
-                        {
-                            "name": "Authorization",
-                            "value": "Bearer {{OPENAI_API_KEY}}"
-                        }
-                    ]
-                },
-                "sendBody": true,
-                "specifyBody": "json",
-                "jsonBody": "={\n  \"model\": \"gpt-4o\",\n  \"messages\": [\n    {\n      \"role\": \"system\",\n      \"content\": \"Eres un estratega de nicho para una agencia de IA en Murcia. Analiza nichos existentes y descubre nuevos. Solo JSON válido.\"\n    },\n    {\n      \"role\": \"user\",\n      \"content\": \"Nichos actuales:\\n\" + JSON.stringify({{ $json }}) + \"\\n\\nAnaliza y genera:\\n1. existing_updates: Para cada nicho existente, actualiza el score (0-100) y añade 'trend' (rising/stable/declining)\\n2. new_niches: Descubre 3 nichos NUEVOS no explorados en Murcia ideales para servicios de IA/marketing digital. Para cada uno:\\n  - name, description, tam_estimate (mercado total), competition_level (low/medium/high), entry_difficulty, potential_revenue, first_target_businesses (3 ejemplos), score (0-100)\\n3. recommendation: top 3 nichos prioritarios para este trimestre\\n\\nJSON válido.\"\n    }\n  ],\n  \"temperature\": 0.6,\n  \"max_tokens\": 1500\n}",
-                "options": {
-                    "timeout": 60000
-                }
-            },
-            "id": "gpt-niche",
-            "name": "GPT Niche Analysis",
-            "type": "n8n-nodes-base.httpRequest",
-            "typeVersion": 4.2,
-            "position": [
-                720,
-                300
-            ]
-        },
-        {
-            "parameters": {
-                "method": "POST",
-                "url": "https://yxzdafptqtcvpsbqkmkm.supabase.co/rest/v1/knowledge_entries",
-                "sendHeaders": true,
-                "headerParameters": {
-                    "parameters": [
-                        {
-                            "name": "apikey",
-                            "value": "{{SUPABASE_ANON_KEY}}"
-                        },
-                        {
-                            "name": "Authorization",
-                            "value": "Bearer {{SUPABASE_ANON_KEY}}"
-                        },
-                        {
-                            "name": "Content-Type",
-                            "value": "application/json"
-                        }
-                    ]
-                },
-                "sendBody": true,
-                "specifyBody": "json",
-                "jsonBody": "={\n  \"title\": \"Niche Discovery — {{ new Date().toISOString().split('T')[0] }}\",\n  \"content\": {{ JSON.stringify($json.choices[0].message.content) }},\n  \"category\": \"strategy\",\n  \"type\": \"ai_generated\",\n  \"source\": \"n8n-niche-discovery\",\n  \"tags\": [\"niche\", \"strategy\", \"discovery\", \"auto\"]\n}",
-                "options": {}
-            },
-            "id": "save-results",
-            "name": "Save to Knowledge",
-            "type": "n8n-nodes-base.httpRequest",
-            "typeVersion": 4.2,
-            "position": [
-                960,
-                300
-            ]
+  "name": "🔬 Niche Discovery & Scoring (Weekly Tuesday)",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 11 * * 2"
+            }
+          ]
         }
-    ],
-    "connections": {
-        "Tuesday 11AM": {
-            "main": [
-                [
-                    {
-                        "node": "Get Current Niches",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "Get Current Niches": {
-            "main": [
-                [
-                    {
-                        "node": "GPT Niche Analysis",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "GPT Niche Analysis": {
-            "main": [
-                [
-                    {
-                        "node": "Save to Knowledge",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        }
+      },
+      "id": "cron-tuesday",
+      "name": "Tuesday 11AM",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        240,
+        300
+      ]
     },
-    "settings": {
-        "executionOrder": "v1"
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "https://yxzdafptqtcvpsbqkmkm.supabase.co/rest/v1/niches?select=*&order=score.desc&limit=20",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $env.SUPABASE_ANON_KEY }}"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer {{ $env.SUPABASE_SERVICE_ROLE_KEY }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "fetch-niches",
+      "name": "Get Current Niches",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        480,
+        300
+      ]
     },
-    "tags": [
-        {
-            "name": "OCULOPS"
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.openai.com/v1/chat/completions",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer {{OPENAI_API_KEY}}"
+            }
+          ]
         },
-        {
-            "name": "STRATEGY"
-        },
-        {
-            "name": "NICHES"
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"gpt-4o\",\n  \"messages\": [\n    {\n      \"role\": \"system\",\n      \"content\": \"Eres un estratega de nicho para una agencia de IA en Murcia. Analiza nichos existentes y descubre nuevos. Solo JSON válido.\"\n    },\n    {\n      \"role\": \"user\",\n      \"content\": \"Nichos actuales:\\n\" + JSON.stringify({{ $json }}) + \"\\n\\nAnaliza y genera:\\n1. existing_updates: Para cada nicho existente, actualiza el score (0-100) y añade 'trend' (rising/stable/declining)\\n2. new_niches: Descubre 3 nichos NUEVOS no explorados en Murcia ideales para servicios de IA/marketing digital. Para cada uno:\\n  - name, description, tam_estimate (mercado total), competition_level (low/medium/high), entry_difficulty, potential_revenue, first_target_businesses (3 ejemplos), score (0-100)\\n3. recommendation: top 3 nichos prioritarios para este trimestre\\n\\nJSON válido.\"\n    }\n  ],\n  \"temperature\": 0.6,\n  \"max_tokens\": 1500\n}",
+        "options": {
+          "timeout": 60000
         }
-    ]
+      },
+      "id": "gpt-niche",
+      "name": "GPT Niche Analysis",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        720,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://yxzdafptqtcvpsbqkmkm.supabase.co/rest/v1/knowledge_entries",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $env.SUPABASE_ANON_KEY }}"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer {{ $env.SUPABASE_SERVICE_ROLE_KEY }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=representation"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"title\": \"Niche Discovery — {{ new Date().toISOString().split('T')[0] }}\",\n  \"content\": {{ JSON.stringify($json.choices[0].message.content) }},\n  \"category\": \"strategy\",\n  \"type\": \"ai_generated\",\n  \"source\": \"n8n-niche-discovery\",\n  \"tags\": [\"niche\", \"strategy\", \"discovery\", \"auto\"]\n}",
+        "options": {}
+      },
+      "id": "save-results",
+      "name": "Save to Knowledge",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        960,
+        300
+      ]
+    }
+  ],
+  "connections": {
+    "Tuesday 11AM": {
+      "main": [
+        [
+          {
+            "node": "Get Current Niches",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Current Niches": {
+      "main": [
+        [
+          {
+            "node": "GPT Niche Analysis",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GPT Niche Analysis": {
+      "main": [
+        [
+          {
+            "node": "Save to Knowledge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "tags": [
+    {
+      "name": "OCULOPS"
+    },
+    {
+      "name": "STRATEGY"
+    },
+    {
+      "name": "NICHES"
+    }
+  ]
 }

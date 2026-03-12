@@ -1,170 +1,178 @@
 {
-    "name": "📊 Weekly Business Report + KPI Digest (Sunday 20:00)",
-    "nodes": [
-        {
-            "parameters": {
-                "rule": {
-                    "interval": [
-                        {
-                            "field": "cronExpression",
-                            "expression": "0 20 * * 0"
-                        }
-                    ]
-                }
-            },
-            "id": "cron-sunday",
-            "name": "Sunday 8PM",
-            "type": "n8n-nodes-base.scheduleTrigger",
-            "typeVersion": 1.2,
-            "position": [
-                240,
-                300
-            ]
-        },
-        {
-            "parameters": {
-                "method": "GET",
-                "url": "https://yxzdafptqtcvpsbqkmkm.supabase.co/rest/v1/daily_snapshots?order=date.desc&limit=7",
-                "sendHeaders": true,
-                "headerParameters": {
-                    "parameters": [
-                        {
-                            "name": "apikey",
-                            "value": "{{SUPABASE_ANON_KEY}}"
-                        },
-                        {
-                            "name": "Authorization",
-                            "value": "Bearer {{SUPABASE_ANON_KEY}}"
-                        }
-                    ]
-                },
-                "options": {}
-            },
-            "id": "fetch-snapshots",
-            "name": "Get Weekly Snapshots",
-            "type": "n8n-nodes-base.httpRequest",
-            "typeVersion": 4.2,
-            "position": [
-                480,
-                300
-            ]
-        },
-        {
-            "parameters": {
-                "method": "POST",
-                "url": "https://api.openai.com/v1/chat/completions",
-                "sendHeaders": true,
-                "headerParameters": {
-                    "parameters": [
-                        {
-                            "name": "Content-Type",
-                            "value": "application/json"
-                        },
-                        {
-                            "name": "Authorization",
-                            "value": "Bearer {{OPENAI_API_KEY}}"
-                        }
-                    ]
-                },
-                "sendBody": true,
-                "specifyBody": "json",
-                "jsonBody": "={\n  \"model\": \"gpt-4o\",\n  \"messages\": [\n    {\n      \"role\": \"system\",\n      \"content\": \"Eres el director de operaciones de una agencia de IA en Murcia. Genera reportes ejecutivos semanales profesionales. Responde SOLO con JSON válido.\"\n    },\n    {\n      \"role\": \"user\",\n      \"content\": \"Genera el reporte semanal basado en estos snapshots diarios:\\n\" + JSON.stringify({{ $json }}) + \"\\n\\nGenera JSON con:\\n1. executive_summary: resumen ejecutivo en 3 frases\\n2. kpi_highlights: top 5 KPIs de la semana con valores y tendencia (up/down/stable)\\n3. wins: 3 logros de la semana\\n4. risks: 2 riesgos identificados\\n5. next_week_priorities: 3 prioridades para la próxima semana\\n6. health_grade: nota general A-F\\n7. revenue_forecast: previsión de facturación del mes\\n\\nJSON válido solamente.\"\n    }\n  ],\n  \"temperature\": 0.5,\n  \"max_tokens\": 1200\n}",
-                "options": {
-                    "timeout": 60000
-                }
-            },
-            "id": "gpt-report",
-            "name": "GPT Weekly Report",
-            "type": "n8n-nodes-base.httpRequest",
-            "typeVersion": 4.2,
-            "position": [
-                720,
-                300
-            ]
-        },
-        {
-            "parameters": {
-                "method": "POST",
-                "url": "https://yxzdafptqtcvpsbqkmkm.supabase.co/rest/v1/knowledge_entries",
-                "sendHeaders": true,
-                "headerParameters": {
-                    "parameters": [
-                        {
-                            "name": "apikey",
-                            "value": "{{SUPABASE_ANON_KEY}}"
-                        },
-                        {
-                            "name": "Authorization",
-                            "value": "Bearer {{SUPABASE_ANON_KEY}}"
-                        },
-                        {
-                            "name": "Content-Type",
-                            "value": "application/json"
-                        }
-                    ]
-                },
-                "sendBody": true,
-                "specifyBody": "json",
-                "jsonBody": "={\n  \"title\": \"Weekly Report — Week {{ Math.ceil(new Date().getDate() / 7) }}\",\n  \"content\": {{ JSON.stringify($json.choices[0].message.content) }},\n  \"category\": \"reports\",\n  \"type\": \"ai_generated\",\n  \"source\": \"n8n-weekly-report\",\n  \"tags\": [\"weekly\", \"report\", \"kpi\", \"executive\"]\n}",
-                "options": {}
-            },
-            "id": "save-report",
-            "name": "Save Report",
-            "type": "n8n-nodes-base.httpRequest",
-            "typeVersion": 4.2,
-            "position": [
-                960,
-                300
-            ]
+  "name": "📊 Weekly Business Report + KPI Digest (Sunday 20:00)",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 20 * * 0"
+            }
+          ]
         }
-    ],
-    "connections": {
-        "Sunday 8PM": {
-            "main": [
-                [
-                    {
-                        "node": "Get Weekly Snapshots",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "Get Weekly Snapshots": {
-            "main": [
-                [
-                    {
-                        "node": "GPT Weekly Report",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "GPT Weekly Report": {
-            "main": [
-                [
-                    {
-                        "node": "Save Report",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        }
+      },
+      "id": "cron-sunday",
+      "name": "Sunday 8PM",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        240,
+        300
+      ]
     },
-    "settings": {
-        "executionOrder": "v1"
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "https://yxzdafptqtcvpsbqkmkm.supabase.co/rest/v1/daily_snapshots?order=date.desc&limit=7",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $env.SUPABASE_ANON_KEY }}"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer {{ $env.SUPABASE_SERVICE_ROLE_KEY }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "fetch-snapshots",
+      "name": "Get Weekly Snapshots",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        480,
+        300
+      ]
     },
-    "tags": [
-        {
-            "name": "OCULOPS"
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.openai.com/v1/chat/completions",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer {{OPENAI_API_KEY}}"
+            }
+          ]
         },
-        {
-            "name": "REPORTS"
-        },
-        {
-            "name": "KPI"
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"gpt-4o\",\n  \"messages\": [\n    {\n      \"role\": \"system\",\n      \"content\": \"Eres el director de operaciones de una agencia de IA en Murcia. Genera reportes ejecutivos semanales profesionales. Responde SOLO con JSON válido.\"\n    },\n    {\n      \"role\": \"user\",\n      \"content\": \"Genera el reporte semanal basado en estos snapshots diarios:\\n\" + JSON.stringify({{ $json }}) + \"\\n\\nGenera JSON con:\\n1. executive_summary: resumen ejecutivo en 3 frases\\n2. kpi_highlights: top 5 KPIs de la semana con valores y tendencia (up/down/stable)\\n3. wins: 3 logros de la semana\\n4. risks: 2 riesgos identificados\\n5. next_week_priorities: 3 prioridades para la próxima semana\\n6. health_grade: nota general A-F\\n7. revenue_forecast: previsión de facturación del mes\\n\\nJSON válido solamente.\"\n    }\n  ],\n  \"temperature\": 0.5,\n  \"max_tokens\": 1200\n}",
+        "options": {
+          "timeout": 60000
         }
-    ]
+      },
+      "id": "gpt-report",
+      "name": "GPT Weekly Report",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        720,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://yxzdafptqtcvpsbqkmkm.supabase.co/rest/v1/knowledge_entries",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $env.SUPABASE_ANON_KEY }}"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer {{ $env.SUPABASE_SERVICE_ROLE_KEY }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=representation"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"title\": \"Weekly Report — Week {{ Math.ceil(new Date().getDate() / 7) }}\",\n  \"content\": {{ JSON.stringify($json.choices[0].message.content) }},\n  \"category\": \"reports\",\n  \"type\": \"ai_generated\",\n  \"source\": \"n8n-weekly-report\",\n  \"tags\": [\"weekly\", \"report\", \"kpi\", \"executive\"]\n}",
+        "options": {}
+      },
+      "id": "save-report",
+      "name": "Save Report",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        960,
+        300
+      ]
+    }
+  ],
+  "connections": {
+    "Sunday 8PM": {
+      "main": [
+        [
+          {
+            "node": "Get Weekly Snapshots",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Weekly Snapshots": {
+      "main": [
+        [
+          {
+            "node": "GPT Weekly Report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GPT Weekly Report": {
+      "main": [
+        [
+          {
+            "node": "Save Report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "tags": [
+    {
+      "name": "OCULOPS"
+    },
+    {
+      "name": "REPORTS"
+    },
+    {
+      "name": "KPI"
+    }
+  ]
 }

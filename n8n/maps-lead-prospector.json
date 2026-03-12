@@ -1,171 +1,179 @@
 {
-    "name": "🗺️ Google Maps Lead Prospector (Every 8 Hours)",
-    "nodes": [
-        {
-            "parameters": {
-                "rule": {
-                    "interval": [
-                        {
-                            "field": "hours",
-                            "hoursInterval": 8
-                        }
-                    ]
-                }
-            },
-            "id": "schedule-8h",
-            "name": "Every 8 Hours",
-            "type": "n8n-nodes-base.scheduleTrigger",
-            "typeVersion": 1.2,
-            "position": [
-                240,
-                300
-            ]
-        },
-        {
-            "parameters": {
-                "method": "POST",
-                "url": "https://api.openai.com/v1/chat/completions",
-                "sendHeaders": true,
-                "headerParameters": {
-                    "parameters": [
-                        {
-                            "name": "Content-Type",
-                            "value": "application/json"
-                        },
-                        {
-                            "name": "Authorization",
-                            "value": "Bearer {{OPENAI_API_KEY}}"
-                        }
-                    ]
-                },
-                "sendBody": true,
-                "specifyBody": "json",
-                "jsonBody": "{\n  \"model\": \"gpt-4o-mini\",\n  \"messages\": [\n    {\n      \"role\": \"system\",\n      \"content\": \"Eres un prospector de leads B2B para una agencia de IA y marketing digital en Murcia. Tu trabajo es generar listas de negocios reales que podrían necesitar servicios de marketing digital o automatización con IA. Responde SOLO con JSON válido.\"\n    },\n    {\n      \"role\": \"user\",\n      \"content\": \"Genera una lista de 10 tipos de negocios en Murcia, España que serían buenos prospectos para servicios de marketing digital y automatización con IA. Para cada uno, incluye:\\n- business_type: tipo de negocio\\n- search_query: búsqueda real de Google Maps\\n- estimated_count: cantidad estimada en Murcia\\n- pain_points: 2 problemas que podemos resolver\\n- service_fit: servicio nuestro más adecuado\\n- avg_deal_value: valor estimado del deal en euros\\n- priority: high/medium/low\\n\\nEnfócate en negocios que claramente necesitan presencia digital y automatización.\\nJSON válido solamente.\"\n    }\n  ],\n  \"temperature\": 0.7,\n  \"max_tokens\": 1500\n}",
-                "options": {
-                    "timeout": 30000
-                }
-            },
-            "id": "gpt-prospects",
-            "name": "GPT Generate Prospects",
-            "type": "n8n-nodes-base.httpRequest",
-            "typeVersion": 4.2,
-            "position": [
-                480,
-                300
-            ]
-        },
-        {
-            "parameters": {
-                "method": "POST",
-                "url": "https://yxzdafptqtcvpsbqkmkm.supabase.co/rest/v1/prospector_scans",
-                "sendHeaders": true,
-                "headerParameters": {
-                    "parameters": [
-                        {
-                            "name": "apikey",
-                            "value": "{{SUPABASE_ANON_KEY}}"
-                        },
-                        {
-                            "name": "Authorization",
-                            "value": "Bearer {{SUPABASE_ANON_KEY}}"
-                        },
-                        {
-                            "name": "Content-Type",
-                            "value": "application/json"
-                        }
-                    ]
-                },
-                "sendBody": true,
-                "specifyBody": "json",
-                "jsonBody": "={\n  \"query\": \"AI prospect generation\",\n  \"location\": \"Murcia, Spain\",\n  \"results_count\": 10,\n  \"status\": \"completed\",\n  \"source\": \"n8n-gpt-prospector\",\n  \"data\": {{ $json.choices[0].message.content }}\n}",
-                "options": {}
-            },
-            "id": "save-scan",
-            "name": "Save Scan Results",
-            "type": "n8n-nodes-base.httpRequest",
-            "typeVersion": 4.2,
-            "position": [
-                720,
-                200
-            ]
-        },
-        {
-            "parameters": {
-                "method": "POST",
-                "url": "https://yxzdafptqtcvpsbqkmkm.supabase.co/rest/v1/knowledge_entries",
-                "sendHeaders": true,
-                "headerParameters": {
-                    "parameters": [
-                        {
-                            "name": "apikey",
-                            "value": "{{SUPABASE_ANON_KEY}}"
-                        },
-                        {
-                            "name": "Authorization",
-                            "value": "Bearer {{SUPABASE_ANON_KEY}}"
-                        },
-                        {
-                            "name": "Content-Type",
-                            "value": "application/json"
-                        }
-                    ]
-                },
-                "sendBody": true,
-                "specifyBody": "json",
-                "jsonBody": "={\n  \"title\": \"Prospect Targets — {{ new Date().toISOString().split('T')[0] }}\",\n  \"content\": {{ JSON.stringify($json.choices[0].message.content) }},\n  \"category\": \"prospection\",\n  \"type\": \"ai_generated\",\n  \"source\": \"n8n-maps-prospector\",\n  \"tags\": [\"prospects\", \"maps\", \"leads\", \"auto\"]\n}",
-                "options": {}
-            },
-            "id": "save-knowledge",
-            "name": "Save to Knowledge",
-            "type": "n8n-nodes-base.httpRequest",
-            "typeVersion": 4.2,
-            "position": [
-                720,
-                400
-            ]
+  "name": "🗺️ Google Maps Lead Prospector (Every 8 Hours)",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 8
+            }
+          ]
         }
-    ],
-    "connections": {
-        "Every 8 Hours": {
-            "main": [
-                [
-                    {
-                        "node": "GPT Generate Prospects",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "GPT Generate Prospects": {
-            "main": [
-                [
-                    {
-                        "node": "Save Scan Results",
-                        "type": "main",
-                        "index": 0
-                    },
-                    {
-                        "node": "Save to Knowledge",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        }
+      },
+      "id": "schedule-8h",
+      "name": "Every 8 Hours",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        240,
+        300
+      ]
     },
-    "settings": {
-        "executionOrder": "v1"
-    },
-    "tags": [
-        {
-            "name": "OCULOPS"
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.openai.com/v1/chat/completions",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer {{OPENAI_API_KEY}}"
+            }
+          ]
         },
-        {
-            "name": "PROSPECTOR"
-        },
-        {
-            "name": "MAPS"
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"model\": \"gpt-4o-mini\",\n  \"messages\": [\n    {\n      \"role\": \"system\",\n      \"content\": \"Eres un prospector de leads B2B para una agencia de IA y marketing digital en Murcia. Tu trabajo es generar listas de negocios reales que podrían necesitar servicios de marketing digital o automatización con IA. Responde SOLO con JSON válido.\"\n    },\n    {\n      \"role\": \"user\",\n      \"content\": \"Genera una lista de 10 tipos de negocios en Murcia, España que serían buenos prospectos para servicios de marketing digital y automatización con IA. Para cada uno, incluye:\\n- business_type: tipo de negocio\\n- search_query: búsqueda real de Google Maps\\n- estimated_count: cantidad estimada en Murcia\\n- pain_points: 2 problemas que podemos resolver\\n- service_fit: servicio nuestro más adecuado\\n- avg_deal_value: valor estimado del deal en euros\\n- priority: high/medium/low\\n\\nEnfócate en negocios que claramente necesitan presencia digital y automatización.\\nJSON válido solamente.\"\n    }\n  ],\n  \"temperature\": 0.7,\n  \"max_tokens\": 1500\n}",
+        "options": {
+          "timeout": 30000
         }
-    ]
+      },
+      "id": "gpt-prospects",
+      "name": "GPT Generate Prospects",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        480,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://yxzdafptqtcvpsbqkmkm.supabase.co/rest/v1/prospector_scans",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $env.SUPABASE_ANON_KEY }}"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer {{ $env.SUPABASE_SERVICE_ROLE_KEY }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=representation"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"query\": \"AI prospect generation\",\n  \"location\": \"Murcia, Spain\",\n  \"results_count\": 10,\n  \"status\": \"completed\",\n  \"source\": \"n8n-gpt-prospector\",\n  \"data\": {{ $json.choices[0].message.content }}\n}",
+        "options": {}
+      },
+      "id": "save-scan",
+      "name": "Save Scan Results",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        720,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://yxzdafptqtcvpsbqkmkm.supabase.co/rest/v1/knowledge_entries",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $env.SUPABASE_ANON_KEY }}"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer {{ $env.SUPABASE_SERVICE_ROLE_KEY }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=representation"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"title\": \"Prospect Targets — {{ new Date().toISOString().split('T')[0] }}\",\n  \"content\": {{ JSON.stringify($json.choices[0].message.content) }},\n  \"category\": \"prospection\",\n  \"type\": \"ai_generated\",\n  \"source\": \"n8n-maps-prospector\",\n  \"tags\": [\"prospects\", \"maps\", \"leads\", \"auto\"]\n}",
+        "options": {}
+      },
+      "id": "save-knowledge",
+      "name": "Save to Knowledge",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        720,
+        400
+      ]
+    }
+  ],
+  "connections": {
+    "Every 8 Hours": {
+      "main": [
+        [
+          {
+            "node": "GPT Generate Prospects",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GPT Generate Prospects": {
+      "main": [
+        [
+          {
+            "node": "Save Scan Results",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Save to Knowledge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "tags": [
+    {
+      "name": "OCULOPS"
+    },
+    {
+      "name": "PROSPECTOR"
+    },
+    {
+      "name": "MAPS"
+    }
+  ]
 }

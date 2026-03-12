@@ -1,203 +1,211 @@
 {
-    "name": "🎯 Speed-to-Lead — Instant Lead Response Pipeline",
-    "nodes": [
-        {
-            "parameters": {
-                "httpMethod": "POST",
-                "path": "new-lead",
-                "responseMode": "responseNode",
-                "options": {}
-            },
-            "id": "webhook-lead",
-            "name": "New Lead Webhook",
-            "type": "n8n-nodes-base.webhook",
-            "typeVersion": 2,
-            "position": [
-                240,
-                300
-            ],
-            "webhookId": "new-lead-intake"
-        },
-        {
-            "parameters": {
-                "method": "POST",
-                "url": "https://yxzdafptqtcvpsbqkmkm.supabase.co/rest/v1/contacts",
-                "sendHeaders": true,
-                "headerParameters": {
-                    "parameters": [
-                        {
-                            "name": "apikey",
-                            "value": "{{SUPABASE_ANON_KEY}}"
-                        },
-                        {
-                            "name": "Authorization",
-                            "value": "Bearer {{SUPABASE_ANON_KEY}}"
-                        },
-                        {
-                            "name": "Content-Type",
-                            "value": "application/json"
-                        },
-                        {
-                            "name": "Prefer",
-                            "value": "return=representation"
-                        }
-                    ]
-                },
-                "sendBody": true,
-                "specifyBody": "json",
-                "jsonBody": "={\n  \"name\": \"{{ $json.body.name }}\",\n  \"email\": \"{{ $json.body.email }}\",\n  \"phone\": \"{{ $json.body.phone || '' }}\",\n  \"company\": \"{{ $json.body.company || '' }}\",\n  \"source\": \"{{ $json.body.source || 'webhook' }}\",\n  \"notes\": \"{{ $json.body.message || '' }}\",\n  \"status\": \"raw\",\n  \"score\": 50\n}",
-                "options": {}
-            },
-            "id": "save-contact",
-            "name": "Save to CRM",
-            "type": "n8n-nodes-base.httpRequest",
-            "typeVersion": 4.2,
-            "position": [
-                460,
-                300
-            ]
-        },
-        {
-            "parameters": {
-                "method": "POST",
-                "url": "https://yxzdafptqtcvpsbqkmkm.supabase.co/functions/v1/agent-hunter",
-                "sendHeaders": true,
-                "headerParameters": {
-                    "parameters": [
-                        {
-                            "name": "Content-Type",
-                            "value": "application/json"
-                        },
-                        {
-                            "name": "Authorization",
-                            "value": "Bearer {{SUPABASE_ANON_KEY}}"
-                        }
-                    ]
-                },
-                "sendBody": true,
-                "bodyParameters": {
-                    "parameters": [
-                        {
-                            "name": "action",
-                            "value": "qualify"
-                        }
-                    ]
-                },
-                "options": {
-                    "timeout": 30000
-                }
-            },
-            "id": "hunter-qualify",
-            "name": "HUNTER Auto-Qualify",
-            "type": "n8n-nodes-base.httpRequest",
-            "typeVersion": 4.2,
-            "position": [
-                700,
-                300
-            ]
-        },
-        {
-            "parameters": {
-                "method": "POST",
-                "url": "https://yxzdafptqtcvpsbqkmkm.supabase.co/rest/v1/alerts",
-                "sendHeaders": true,
-                "headerParameters": {
-                    "parameters": [
-                        {
-                            "name": "apikey",
-                            "value": "{{SUPABASE_ANON_KEY}}"
-                        },
-                        {
-                            "name": "Authorization",
-                            "value": "Bearer {{SUPABASE_ANON_KEY}}"
-                        },
-                        {
-                            "name": "Content-Type",
-                            "value": "application/json"
-                        }
-                    ]
-                },
-                "sendBody": true,
-                "specifyBody": "json",
-                "jsonBody": "={\n  \"title\": \"🎯 New Lead: {{ $json.body.name }}\",\n  \"description\": \"Source: {{ $json.body.source || 'webhook' }} | Company: {{ $json.body.company || 'N/A' }}\",\n  \"severity\": \"info\",\n  \"category\": \"leads\",\n  \"status\": \"active\",\n  \"source\": \"n8n-speed-to-lead\"\n}",
-                "options": {}
-            },
-            "id": "create-alert",
-            "name": "Create Alert",
-            "type": "n8n-nodes-base.httpRequest",
-            "typeVersion": 4.2,
-            "position": [
-                700,
-                500
-            ]
-        },
-        {
-            "parameters": {
-                "respondWith": "json",
-                "responseBody": "={\"success\": true, \"message\": \"Lead captured and queued for qualification\"}"
-            },
-            "id": "respond-ok",
-            "name": "Respond OK",
-            "type": "n8n-nodes-base.respondToWebhook",
-            "typeVersion": 1.1,
-            "position": [
-                940,
-                300
-            ]
-        }
-    ],
-    "connections": {
-        "New Lead Webhook": {
-            "main": [
-                [
-                    {
-                        "node": "Save to CRM",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "Save to CRM": {
-            "main": [
-                [
-                    {
-                        "node": "HUNTER Auto-Qualify",
-                        "type": "main",
-                        "index": 0
-                    },
-                    {
-                        "node": "Create Alert",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "HUNTER Auto-Qualify": {
-            "main": [
-                [
-                    {
-                        "node": "Respond OK",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        }
+  "name": "🎯 Speed-to-Lead — Instant Lead Response Pipeline",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "new-lead",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-lead",
+      "name": "New Lead Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        240,
+        300
+      ],
+      "webhookId": "new-lead-intake"
     },
-    "settings": {
-        "executionOrder": "v1"
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://yxzdafptqtcvpsbqkmkm.supabase.co/rest/v1/contacts",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $env.SUPABASE_ANON_KEY }}"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer {{ $env.SUPABASE_SERVICE_ROLE_KEY }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=representation"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"name\": \"{{ $json.body.name }}\",\n  \"email\": \"{{ $json.body.email }}\",\n  \"phone\": \"{{ $json.body.phone || '' }}\",\n  \"company\": \"{{ $json.body.company || '' }}\",\n  \"source\": \"{{ $json.body.source || 'webhook' }}\",\n  \"notes\": \"{{ $json.body.message || '' }}\",\n  \"status\": \"raw\",\n  \"score\": 50\n}",
+        "options": {}
+      },
+      "id": "save-contact",
+      "name": "Save to CRM",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        460,
+        300
+      ]
     },
-    "tags": [
-        {
-            "name": "OCULOPS"
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://yxzdafptqtcvpsbqkmkm.supabase.co/functions/v1/agent-hunter",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer ={{ $env.SUPABASE_ANON_KEY }}"
+            },
+            {
+              "name": "apikey",
+              "value": "={{ $env.SUPABASE_ANON_KEY }}"
+            }
+          ]
         },
-        {
-            "name": "LEADS"
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "action",
+              "value": "qualify"
+            }
+          ]
         },
-        {
-            "name": "CRM"
+        "options": {
+          "timeout": 30000
         }
-    ]
+      },
+      "id": "hunter-qualify",
+      "name": "HUNTER Auto-Qualify",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        700,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://yxzdafptqtcvpsbqkmkm.supabase.co/rest/v1/alerts",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $env.SUPABASE_ANON_KEY }}"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer {{ $env.SUPABASE_SERVICE_ROLE_KEY }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=representation"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"title\": \"🎯 New Lead: {{ $json.body.name }}\",\n  \"description\": \"Source: {{ $json.body.source || 'webhook' }} | Company: {{ $json.body.company || 'N/A' }}\",\n  \"severity\": \"info\",\n  \"category\": \"leads\",\n  \"status\": \"active\",\n  \"source\": \"n8n-speed-to-lead\"\n}",
+        "options": {}
+      },
+      "id": "create-alert",
+      "name": "Create Alert",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        700,
+        500
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\"success\": true, \"message\": \"Lead captured and queued for qualification\"}"
+      },
+      "id": "respond-ok",
+      "name": "Respond OK",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        940,
+        300
+      ]
+    }
+  ],
+  "connections": {
+    "New Lead Webhook": {
+      "main": [
+        [
+          {
+            "node": "Save to CRM",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save to CRM": {
+      "main": [
+        [
+          {
+            "node": "HUNTER Auto-Qualify",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Create Alert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HUNTER Auto-Qualify": {
+      "main": [
+        [
+          {
+            "node": "Respond OK",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "tags": [
+    {
+      "name": "OCULOPS"
+    },
+    {
+      "name": "LEADS"
+    },
+    {
+      "name": "CRM"
+    }
+  ]
 }
