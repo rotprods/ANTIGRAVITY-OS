@@ -11,7 +11,7 @@ SELECT cron.schedule(
     url := 'https://yxzdafptqtcvpsbqkmkm.supabase.co/functions/v1/agent-hunter',
     headers := jsonb_build_object(
       'Content-Type', 'application/json',
-      'Authorization', 'Bearer REDACTED_SERVICE_ROLE_JWT'
+      'Authorization', 'Bearer ' || current_setting('app.settings.cron_secret', true)
     ),
     body := '{"action":"cycle","limit":3}'::jsonb
   ) AS request_id;
@@ -31,7 +31,7 @@ SELECT cron.schedule(
     url := 'https://yxzdafptqtcvpsbqkmkm.supabase.co/functions/v1/agent-outreach',
     headers := jsonb_build_object(
       'Content-Type', 'application/json',
-      'Authorization', 'Bearer REDACTED_SERVICE_ROLE_JWT'
+      'Authorization', 'Bearer ' || current_setting('app.settings.cron_secret', true)
     ),
     body := '{"action":"cycle","limit":10}'::jsonb
   ) AS request_id;
