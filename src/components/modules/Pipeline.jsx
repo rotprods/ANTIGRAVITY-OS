@@ -16,6 +16,7 @@ import { CSS } from '@dnd-kit/utilities'
 import { useDeals } from '../../hooks/useDeals'
 import { usePipelineStore } from '../../stores/usePipelineStore'
 import { useAppStore } from '../../stores/useAppStore'
+import { useCalendar } from '../../hooks/useGoogleWorkspace'
 import { Charts } from '../../lib/charts'
 import Modal from '../ui/Modal'
 import {
@@ -26,6 +27,7 @@ import {
   RectangleStackIcon,
   CurrencyEuroIcon,
   ScaleIcon,
+  CalendarIcon,
 } from '@heroicons/react/24/outline'
 import './Pipeline.css'
 const STAGES = [
@@ -41,7 +43,7 @@ const STAGE_MAP = Object.fromEntries(STAGES.map(s => [s.id, s]))
 const emptyDeal = { title: '', company: '', value: '', probability: '20', contact_person: '' }
 
 // ── Deal Detail Modal ─────────────────────────────────────
-function DealDetailModal({ deal, stages, onSave, onDelete, onClose }) {
+function DealDetailModal({ deal, stages, onSave, onDelete, onClose, onFollowUp }) {
   const [form, setForm] = useState({
     title: deal.title || '',
     company: typeof deal.company === 'object' ? deal.company?.name || '' : deal.company || '',
@@ -54,6 +56,7 @@ function DealDetailModal({ deal, stages, onSave, onDelete, onClose }) {
     loss_reason: deal.loss_reason || '',
   })
   const [saving, setSaving] = useState(false)
+  const [schedulingFollowUp, setSchedulingFollowUp] = useState(false)
 
   const handleSave = async () => {
     setSaving(true)
@@ -70,6 +73,12 @@ function DealDetailModal({ deal, stages, onSave, onDelete, onClose }) {
     setSaving(false)
   }
 
+  const handleFollowUp = async () => {
+    setSchedulingFollowUp(true)
+    await onFollowUp(deal.id)
+    setSchedulingFollowUp(false)
+  }
+
   return (
     <Modal open title="Deal details" onClose={onClose} size="md" footer={
       <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
@@ -77,6 +86,9 @@ function DealDetailModal({ deal, stages, onSave, onDelete, onClose }) {
           <TrashIcon width={14} height={14} /> Delete
         </button>
         <div style={{ display: 'flex', gap: 'var(--space-2)' }}>
+          <button className="btn btn-ghost btn-sm" onClick={handleFollowUp} disabled={schedulingFollowUp} title="Schedule follow-up in Google Calendar">
+            <CalendarIcon width={14} height={14} /> {schedulingFollowUp ? 'Scheduling...' : 'Follow-up'}
+          </button>
           <button className="btn btn-ghost btn-sm" onClick={onClose}>Cancel</button>
           <button className="btn btn-primary btn-sm" onClick={handleSave} disabled={saving}>
             {saving ? 'Saving...' : 'Save changes'}
@@ -227,6 +239,7 @@ function KanbanColumn({ stage, deals, onRemove, onSelect, activeId }) {
 function Pipeline() {
   const { deals, loading, addDeal, updateDeal, removeDeal, pipelineView, totalValue, weightedValue } = useDeals()
   const toast = useAppStore(s => s.toast)
+  const { createFollowUp } = useCalendar()
   const showClosedLost = usePipelineStore(s => s.showClosedLost)
   const toggleClosedLost = usePipelineStore(s => s.toggleClosedLost)
   const selectedDeal = usePipelineStore(s => s.selectedDeal)
@@ -254,6 +267,18 @@ function Pipeline() {
     setSelectedDeal(null)
     toast('Deal removed', 'success')
   }, [removeDeal, setSelectedDeal, toast])
+
+  const handleFollowUp = useCallback(async (dealId) => {
+    try {
+      const result = await createFollowUp(dealId, { daysFromNow: 3 })
+      if (result?.event?.htmlLink) {
+        toast('Follow-up scheduled in Google Calendar', 'success')
+        window.open(result.event.htmlLink, '_blank', 'noopener,noreferrer')
+      }
+    } catch (err) {
+      toast(err.message || 'Calendar error — is Gmail connected?', 'error')
+    }
+  }, [createFollowUp, toast])
 
   const handleDragEnd = useCallback(async ({ active, over }) => {
     setActiveId(null)
@@ -378,7 +403,7 @@ function Pipeline() {
 
       {/* Deal Detail Modal */}
       {selectedDeal && (
-        <DealDetailModal deal={selectedDeal} stages={STAGES} onSave={handleModalSave} onDelete={handleModalDelete} onClose={handleCloseModal} />
+        <DealDetailModal deal={selectedDeal} stages={STAGES} onSave={handleModalSave} onDelete={handleModalDelete} onClose={handleCloseModal} onFollowUp={handleFollowUp} />
       )}
 
       {/* Funnel chart */}

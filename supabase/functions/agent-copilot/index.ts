@@ -1,6 +1,6 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 
-import { handleCors, jsonResponse, errorResponse, readJson } from "../_shared/http.ts";
+import { checkRateLimit, handleCors, jsonResponse, errorResponse, readJson, requireBearerAuth } from "../_shared/http.ts";
 import { admin } from "../_shared/supabase.ts";
 
 const OPENAI_API_KEY = Deno.env.get("OPENAI_API_KEY");
@@ -1167,19 +1167,25 @@ Deno.serve(async (req: Request) => {
     return errorResponse("OPENAI_API_KEY not configured", 500);
   }
 
+  // ── Auth ──
+  const { userId, error: authError } = await requireBearerAuth(req);
+  if (authError) return authError;
+
+  // ── Rate limit: 30 copilot messages/min per user ──
+  if (!checkRateLimit(userId!, 30, 60_000)) {
+    return errorResponse("Rate limit exceeded — max 30 messages per minute", 429);
+  }
+
   try {
     const body = await readJson<{
       message: string;
       history?: Array<{ role: string; content: string }>;
-      user_id?: string;
       conversation_id?: string;
     }>(req);
 
     if (!body.message) {
       return errorResponse("message is required");
     }
-
-    const userId = body.user_id || null;
     const context = await getContextSummary();
 
     const messages: Array<Record<string, unknown>> = [

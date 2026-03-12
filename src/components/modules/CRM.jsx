@@ -10,6 +10,7 @@ import { useDeals } from '../../hooks/useDeals'
 import { useActivities } from '../../hooks/useActivities'
 import { useAtlasCRM } from '../../hooks/useAtlasCRM'
 import { useAppStore } from '../../stores/useAppStore'
+import { useSheetsSync } from '../../hooks/useGoogleWorkspace'
 import { isSupabaseConfigured } from '../../lib/supabase'
 import Modal from '../ui/Modal'
 import {
@@ -21,6 +22,7 @@ import {
     TrashIcon,
     ArrowPathIcon,
     MagnifyingGlassIcon,
+    TableCellsIcon,
 } from '@heroicons/react/24/outline'
 import './CRM.css'
 
@@ -203,9 +205,22 @@ function CRM() {
     const { deals, loading: dealsLoading, addDeal, updateDeal, removeDeal, reload: reloadDeals } = useDeals()
     const { activities, loading: activitiesLoading, removeActivity, reload: reloadActivities } = useActivities()
     const { importingLeadId, bulkImporting, stagingKey, error: atlasError } = useAtlasCRM()
+    const { exportCRM, busy: sheetsBusy } = useSheetsSync()
 
     const loading = contactsLoading || companiesLoading || dealsLoading || activitiesLoading
     const syncBusy = bulkImporting || Boolean(importingLeadId) || Boolean(stagingKey)
+
+    const handleExportSheets = useCallback(async () => {
+        try {
+            const result = await exportCRM()
+            if (result?.spreadsheetUrl) {
+                toast('Exported to Google Sheets', 'success')
+                window.open(result.spreadsheetUrl, '_blank', 'noopener,noreferrer')
+            }
+        } catch (err) {
+            toast(err.message || 'Export failed', 'error')
+        }
+    }, [exportCRM, toast])
     const systemHealthy = isSupabaseConfigured && !atlasError
 
     const q = search.toLowerCase()
@@ -271,6 +286,9 @@ function CRM() {
                     </div>
                     <button className="btn btn-ghost btn-sm" onClick={handleSyncAtlas} disabled={syncBusy}>
                         <ArrowPathIcon width={14} height={14} className={syncBusy ? 'spin' : ''} /> {syncBusy ? 'Syncing...' : 'Sync'}
+                    </button>
+                    <button className="btn btn-ghost btn-sm" onClick={handleExportSheets} disabled={sheetsBusy} title="Export CRM to Google Sheets">
+                        <TableCellsIcon width={14} height={14} /> {sheetsBusy ? 'Exporting...' : 'Sheets'}
                     </button>
                 </div>
             </div>

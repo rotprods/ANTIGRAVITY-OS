@@ -1,4 +1,5 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
+import { createClient } from "jsr:@supabase/supabase-js@2";
 
 export const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -80,4 +81,56 @@ export function base64UrlDecode(value: string) {
   const binary = atob(normalized + padding);
   const bytes = Uint8Array.from(binary, char => char.charCodeAt(0));
   return new TextDecoder().decode(bytes);
+}
+
+// ─── Auth ─────────────────────────────────────────────────────────────────────
+
+/**
+ * Verify the Bearer JWT from the request against Supabase Auth.
+ * Returns { userId, error } — if error is set, respond 401.
+ */
+export async function requireBearerAuth(req: Request): Promise<{ userId: string | null; error: Response | null }> {
+  const token = getBearerToken(req);
+  if (!token) {
+    return { userId: null, error: errorResponse("Missing Authorization header", 401) };
+  }
+
+  const supabaseUrl = Deno.env.get("SUPABASE_URL");
+  const anonKey = Deno.env.get("SUPABASE_ANON_KEY");
+  if (!supabaseUrl || !anonKey) {
+    return { userId: null, error: errorResponse("Server misconfiguration", 500) };
+  }
+
+  const client = createClient(supabaseUrl, anonKey, {
+    global: { headers: { Authorization: `Bearer ${token}` } },
+  });
+
+  const { data: { user }, error } = await client.auth.getUser();
+  if (error || !user) {
+    return { userId: null, error: errorResponse("Invalid or expired token", 401) };
+  }
+
+  return { userId: user.id, error: null };
+}
+
+// ─── Rate limiting ─────────────────────────────────────────────────────────────
+
+const _rateLimitStore = new Map<string, { count: number; resetAt: number }>();
+
+/**
+ * Simple in-memory rate limiter. Returns true if the request is allowed.
+ * key: typically `userId` or client IP. limit: max requests per window.
+ */
+export function checkRateLimit(key: string, limit = 20, windowMs = 60_000): boolean {
+  const now = Date.now();
+  const entry = _rateLimitStore.get(key);
+
+  if (!entry || now > entry.resetAt) {
+    _rateLimitStore.set(key, { count: 1, resetAt: now + windowMs });
+    return true;
+  }
+
+  if (entry.count >= limit) return false;
+  entry.count++;
+  return true;
 }

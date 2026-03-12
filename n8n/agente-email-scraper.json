@@ -1,0 +1,382 @@
+{
+  "name": "Agente Email Scrapper B2B",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 15
+            }
+          ]
+        }
+      },
+      "id": "1",
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "chat",
+        "operation": "create",
+        "prompt": {
+          "messages": [
+            {
+              "role": "system",
+              "content": "Eres un asistente de prospección B2B. Responde de forma muy directa, sin texto introductorio, solo la frase solicitada."
+            },
+            {
+              "role": "user",
+              "content": "Genera UNA sola búsqueda que diga: 'Búscame [negocio] en [provincia española]'. Negocios: médicos, abogados, clínicas dentales, inmobiliarias, asesorías, clínicas de belleza, fisioterapeutas, masajistas, osteópatas. Provincias: Madrid, Barcelona, Valencia, Sevilla, Málaga. Responde solo con la frase, nada más."
+            }
+          ]
+        }
+      },
+      "id": "2",
+      "name": "OpenAI",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [
+        220,
+        0
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "openAiApi",
+          "name": "OpenAI account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://places.googleapis.com/v1/places:searchText",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-Goog-Api-Key",
+              "value": "PON_AQUI_TU_API_KEY_DE_GOOGLE"
+            },
+            {
+              "name": "X-Goog-FieldMask",
+              "value": "places.displayName,places.websiteUri"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"textQuery\": \"{{$json.message.content}}\"\n}",
+        "options": {}
+      },
+      "id": "3",
+      "name": "Scrapeo Google Maps1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        440,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "places",
+        "options": {}
+      },
+      "id": "4",
+      "name": "Item Lists",
+      "type": "n8n-nodes-base.itemLists",
+      "typeVersion": 3,
+      "position": [
+        660,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const validItems = [];\nconst excludedDomains = ['schema', 'google', 'gstatic', 'whatsapp', 'wa.link', 'wa.me', 'facebook', 'instagram', 'twitter', 'linkedin', 'youtube'];\n\nfor (const item of $input.all()) {\n  const url = item.json.websiteUri || '';\n  if (url) {\n    const isExcluded = excludedDomains.some(domain => url.toLowerCase().includes(domain.toLowerCase()));\n    if (!isExcluded) {\n      validItems.push({\n        json: {\n          ...item.json,\n          cleanUrl: url\n        }\n      });\n    }\n  }\n}\nreturn validItems;"
+      },
+      "id": "5",
+      "name": "Filtrar URLs Invalidas",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        880,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "amount": 1,
+        "unit": "seconds"
+      },
+      "id": "6",
+      "name": "Wait1",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1,
+      "position": [
+        1100,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "url": "={{$json.cleanUrl}}",
+        "options": {
+          "allowUnauthorizedCerts": true,
+          "response": {
+            "response": {
+              "responseFormat": "text"
+            }
+          }
+        }
+      },
+      "id": "7",
+      "name": "Scrapear página web",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        1320,
+        0
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "amount": 0.5,
+        "unit": "seconds"
+      },
+      "id": "8",
+      "name": "Wait2",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1,
+      "position": [
+        1540,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\nconst validItems = [];\nconst excludedPrefixes = ['info', 'contact', 'admin', 'support', 'noreply', 'no-reply', 'ventas', 'marketing', 'hello', 'service', 'help', 'mail', 'email', 'contacto', 'reservas', 'hola', 'webmaster', 'root', 'postmaster', 'hostmaster', 'abuse', 'newsletter', 'suscribe'];\nconst excludedDomains = ['example.com', 'test.com', 'domain.com', 'email.com', 'sentry.io', 'wixpress.com', 'mailchimp.com', 'sendgrid.net'];\nconst excludedExtensions = ['.jpg', '.png', '.gif', '.webp', '.svg', '.css', '.js'];\n\nfor (const item of items) {\n  const html = item.json.data || item.json.body || '';\n  const displayName = item.json.displayName?.text || '';\n  \n  // To ensure we have the url regardless of HTTP node version output shape\n  const url = item.json.cleanUrl || '';\n  \n  if (typeof html === 'string' && html.length > 0) {\n    // Match emails\n    const emailRegex = /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\\.[a-zA-Z]{2,})/gim;\n    const matches = html.match(emailRegex) || [];\n    \n    // Unique valid emails\n    const uniqueEmails = [...new Set(matches)];\n    \n    for (const email of uniqueEmails) {\n      let valid = true;\n      const emailLower = email.toLowerCase();\n      const parts = emailLower.split('@');\n      if(parts.length < 2) continue;\n      const [prefix, domain] = parts;\n      \n      if(excludedPrefixes.includes(prefix)) valid = false;\n      if(excludedDomains.includes(domain)) valid = false;\n      if(excludedExtensions.some(ext => emailLower.endsWith(ext))) valid = false;\n      \n      if(valid) {\n         validItems.push({\n            json: {\n              Web: url,\n              Correo: emailLower,\n              \"Correo Icebreaker\": \"\",\n              Estado: \"Sin enviar\",\n              Negocio: displayName\n            }\n         });\n      }\n    }\n  }\n}\n\nreturn validItems;"
+      },
+      "id": "9",
+      "name": "Extraer Emails",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1760,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "keepOnlySet": true,
+        "values": {
+          "string": [
+            {
+              "name": "Web",
+              "value": "={{$json.Web}}"
+            },
+            {
+              "name": "Correo",
+              "value": "={{$json.Correo}}"
+            },
+            {
+              "name": "Correo Icebreaker",
+              "value": "={{$json['Correo Icebreaker']}}"
+            },
+            {
+              "name": "Estado",
+              "value": "={{$json.Estado}}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "10",
+      "name": "Set fields",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [
+        1980,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "removeDuplicates",
+        "compare": "fields",
+        "fieldsToCompare": "Correo",
+        "options": {}
+      },
+      "id": "11",
+      "name": "Remove Duplicates",
+      "type": "n8n-nodes-base.itemLists",
+      "typeVersion": 3,
+      "position": [
+        2200,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "PON_AQUI_TU_SPREADSHEET_ID",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Hoja 1",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "id": "12",
+      "name": "Google Sheets2",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.1,
+      "position": [
+        2420,
+        0
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "googleSheetsOAuth2Api",
+          "name": "Google Sheets account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "OpenAI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI": {
+      "main": [
+        [
+          {
+            "node": "Scrapeo Google Maps1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Scrapeo Google Maps1": {
+      "main": [
+        [
+          {
+            "node": "Item Lists",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Item Lists": {
+      "main": [
+        [
+          {
+            "node": "Filtrar URLs Invalidas",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filtrar URLs Invalidas": {
+      "main": [
+        [
+          {
+            "node": "Wait1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait1": {
+      "main": [
+        [
+          {
+            "node": "Scrapear página web",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Scrapear página web": {
+      "main": [
+        [
+          {
+            "node": "Wait2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait2": {
+      "main": [
+        [
+          {
+            "node": "Extraer Emails",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extraer Emails": {
+      "main": [
+        [
+          {
+            "node": "Set fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set fields": {
+      "main": [
+        [
+          {
+            "node": "Remove Duplicates",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Remove Duplicates": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {}
+}

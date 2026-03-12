@@ -1,6 +1,6 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { runBrain } from "../_shared/agent-brain-v2.ts";
-import { errorResponse, handleCors, jsonResponse, readJson } from "../_shared/http.ts";
+import { checkRateLimit, errorResponse, handleCors, jsonResponse, readJson, requireBearerAuth } from "../_shared/http.ts";
 import { admin } from "../_shared/supabase.ts";
 
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -24,6 +24,15 @@ Deno.serve(async (req: Request) => {
 
   if (req.method !== "POST") {
     return errorResponse("Method not allowed", 405);
+  }
+
+  // ── Auth ──
+  const { userId, error: authError } = await requireBearerAuth(req);
+  if (authError) return authError;
+
+  // ── Rate limit: 10 agent runs/min per user ──
+  if (!checkRateLimit(userId!, 10, 60_000)) {
+    return errorResponse("Rate limit exceeded — max 10 agent runs per minute", 429);
   }
 
   const startTime = Date.now();

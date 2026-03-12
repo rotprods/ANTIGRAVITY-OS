@@ -1,0 +1,62 @@
+{
+  "version": "5",
+  "specifiers": {
+    "jsr:@supabase/functions-js@*": "2.99.1",
+    "jsr:@supabase/functions-js@^0.0.0-automated": "0.0.0-jsr-test.1",
+    "jsr:@supabase/supabase-js@2": "2.99.1"
+  },
+  "jsr": {
+    "@supabase/functions-js@0.0.0-jsr-test.1": {
+      "integrity": "b1b37924af1f0011b4753201e1585a37b030e996c6682492e02575eb27d902b2"
+    },
+    "@supabase/functions-js@2.99.1": {
+      "integrity": "6ef232d016e3fa13d3f58991295e02d42b5f2a4c3d283f406fcdd67d3f80b2a0"
+    },
+    "@supabase/supabase-js@2.99.1": {
+      "integrity": "7b3241edab12adf157ee8aed7004cd9291148f38af612b895a36b8d6606ade98",
+      "dependencies": [
+        "jsr:@supabase/functions-js@^0.0.0-automated"
+      ]
+    }
+  },
+  "workspace": {
+    "packageJson": {
+      "dependencies": [
+        "npm:@dnd-kit/core@^6.3.1",
+        "npm:@dnd-kit/utilities@^3.2.2",
+        "npm:@eslint/js@^9.39.1",
+        "npm:@heroicons/react@^2.2.0",
+        "npm:@playwright/test@^1.50.0",
+        "npm:@sentry/react@^10.43.0",
+        "npm:@supabase/supabase-js@^2.49.4",
+        "npm:@testing-library/jest-dom@^6.9.1",
+        "npm:@testing-library/react@^16.3.2",
+        "npm:@types/react-dom@^19.2.3",
+        "npm:@types/react@^19.2.7",
+        "npm:@vercel/analytics@2",
+        "npm:@vercel/speed-insights@2",
+        "npm:@vitejs/plugin-react@^5.1.1",
+        "npm:concurrently@^9.1.2",
+        "npm:electron-builder@^26.0.12",
+        "npm:electron@^35.1.5",
+        "npm:eslint-plugin-react-hooks@^7.0.1",
+        "npm:eslint-plugin-react-refresh@~0.4.24",
+        "npm:eslint@^9.39.1",
+        "npm:framer-motion@^12.35.2",
+        "npm:globals@^16.5.0",
+        "npm:jsdom@^26.1.0",
+        "npm:leaflet@^1.9.4",
+        "npm:puppeteer@^24.39.0",
+        "npm:react-dom@^19.2.0",
+        "npm:react-hot-toast@^2.6.0",
+        "npm:react-router-dom@^7.6.1",
+        "npm:react@^19.2.0",
+        "npm:supabase@^2.77.0",
+        "npm:vite@^7.3.1",
+        "npm:vitest@^3.2.4",
+        "npm:wait-on@^8.0.3",
+        "npm:zustand@^5.0.5"
+      ]
+    }
+  }
+}

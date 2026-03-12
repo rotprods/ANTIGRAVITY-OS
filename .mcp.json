@@ -9,6 +9,36 @@
       "type": "stdio",
       "command": "node",
       "args": ["scripts/gitnexus.mjs", "mcp"]
+    },
+    "n8n-mcp": {
+      "type": "stdio",
+      "command": "node",
+      "args": ["/Users/robertoortega/Documents/AI OPS/github-repos/n8n-mcp/dist/index.js"],
+      "env": {
+        "MCP_MODE": "stdio",
+        "LOG_LEVEL": "error",
+        "DISABLE_CONSOLE_OUTPUT": "true",
+        "N8N_API_URL": "https://rotprods.app.n8n.cloud/api/v1",
+        "N8N_API_KEY": "${N8N_API_KEY}"
+      }
+    },
+    "n8n-workflow-builder": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["@kernel.salacoste/n8n-workflow-builder"],
+      "env": {
+        "N8N_HOST": "https://rotprods.app.n8n.cloud",
+        "N8N_API_KEY": "${N8N_API_KEY}"
+      }
+    },
+    "stitch-mcp": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["@_davideast/stitch-mcp", "proxy", "--transport", "stdio"],
+      "env": {
+        "STITCH_API_KEY": "${STITCH_API_KEY}",
+        "STITCH_PROJECT_ID": "${STITCH_PROJECT_ID}"
+      }
     }
   }
 }
