@@ -4,6 +4,194 @@ import { useCreativeAssets } from '../../hooks/useCreativeAssets'
 import { useCreativeBriefs } from '../../hooks/useCreativeBriefs'
 import './CreativeStudio.css'
 
+const PLATFORM_TEMPLATES = {
+  'ig-post':   { label: 'IG Post',        maxChars: 2200, hashtagCount: 15, tone: 'visual-first', icon: '📸' },
+  'ig-story':  { label: 'IG Story',       maxChars: 200,  hashtagCount: 5,  tone: 'punchy',       icon: '⚡' },
+  'tiktok':    { label: 'TikTok Script',  maxChars: 300,  format: 'hook + body + cta', tone: 'gen-z', icon: '🎵' },
+  'x-thread':  { label: 'X Thread',       maxChars: 280,  tweets: 5,        tone: 'sharp',        icon: '𝕏' },
+  'linkedin':  { label: 'LinkedIn Post',  maxChars: 3000, format: 'story-insight-cta', tone: 'professional', icon: '💼' },
+}
+
+const TONE_OPTIONS = ['bold', 'professional', 'casual', 'urgent', 'playful']
+const GOAL_OPTIONS = ['awareness', 'conversion', 'engagement', 'retention']
+
+function SocialOpsTab({ generateCopy }) {
+  const [platform, setPlatform] = useState('ig-post')
+  const [brief, setBrief] = useState({ product: '', tone: 'bold', goal: 'awareness' })
+  const [output, setOutput] = useState(null)
+  const [generating, setGenerating] = useState(false)
+  const [error, setSocialError] = useState(null)
+
+  const tpl = PLATFORM_TEMPLATES[platform]
+
+  const buildPrompt = () => {
+    const p = PLATFORM_TEMPLATES[platform]
+    return [
+      `Platform: ${p.label}`,
+      `Max characters: ${p.maxChars}`,
+      `Tone: ${p.tone} / ${brief.tone}`,
+      `Goal: ${brief.goal}`,
+      p.hashtagCount ? `Include ${p.hashtagCount} relevant hashtags` : '',
+      p.format ? `Format: ${p.format}` : '',
+      p.tweets ? `Write ${p.tweets} tweets as a thread (numbered)` : '',
+      `Product/Service: ${brief.product}`,
+      'Write compelling copy optimized for this platform. Include character count at the end.',
+    ].filter(Boolean).join('\n')
+  }
+
+  const handleGenerate = async () => {
+    if (!brief.product.trim()) return
+    setGenerating(true)
+    setSocialError(null)
+    setOutput(null)
+    try {
+      const result = await generateCopy(buildPrompt())
+      const text = typeof result?.content === 'string' ? result.content : JSON.stringify(result?.content || '')
+      setOutput({ text, platform, charCount: text.length })
+    } catch (err) {
+      setSocialError(err.message || 'Generation failed')
+    } finally {
+      setGenerating(false)
+    }
+  }
+
+  const overLimit = output && output.charCount > tpl.maxChars
+
+  return (
+    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--space-4)', height: '100%' }}>
+      {/* Left: Config */}
+      <div className="cs-command-console">
+        <div className="cs-panel-header">/// PLATFORM PARAMETERS</div>
+        <div className="cs-command-body">
+
+          {/* Platform selector */}
+          <div className="cs-input-group">
+            <label className="mono cs-label">TARGET PLATFORM</label>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--space-2)' }}>
+              {Object.entries(PLATFORM_TEMPLATES).map(([key, p]) => (
+                <button
+                  key={key}
+                  onClick={() => setPlatform(key)}
+                  className={`cs-model-btn${platform === key ? ' cs-model-btn--active' : ''}`}
+                  style={{ fontSize: 'var(--text-xs)', justifyContent: 'flex-start', gap: 6 }}
+                >
+                  <span>{p.icon}</span> {p.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Brief inputs */}
+          <div className="cs-input-group">
+            <label className="mono cs-label">PRODUCT / SERVICE</label>
+            <textarea
+              className="input cs-prompt-input"
+              placeholder="What are you promoting? Describe your offer..."
+              value={brief.product}
+              rows={3}
+              onChange={e => setBrief(b => ({ ...b, product: e.target.value }))}
+            />
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--space-3)' }}>
+            <div className="cs-input-group">
+              <label className="mono cs-label">TONE</label>
+              <select
+                className="input mono"
+                style={{ fontSize: 'var(--text-xs)', padding: '6px var(--space-2)' }}
+                value={brief.tone}
+                onChange={e => setBrief(b => ({ ...b, tone: e.target.value }))}
+              >
+                {TONE_OPTIONS.map(t => <option key={t} value={t}>{t.toUpperCase()}</option>)}
+              </select>
+            </div>
+            <div className="cs-input-group">
+              <label className="mono cs-label">GOAL</label>
+              <select
+                className="input mono"
+                style={{ fontSize: 'var(--text-xs)', padding: '6px var(--space-2)' }}
+                value={brief.goal}
+                onChange={e => setBrief(b => ({ ...b, goal: e.target.value }))}
+              >
+                {GOAL_OPTIONS.map(g => <option key={g} value={g}>{g.toUpperCase()}</option>)}
+              </select>
+            </div>
+          </div>
+
+          <button
+            className={`btn btn-primary mono cs-execute-btn${generating ? ' cs-execute-btn--working' : ''}`}
+            onClick={handleGenerate}
+            disabled={generating || !brief.product.trim()}
+          >
+            {generating ? '[ GENERATING... ]' : '[ DEPLOY COPY ]'}
+          </button>
+
+          {error && <div className="cs-error-text mono" style={{ color: 'var(--color-danger)', fontSize: 'var(--text-xs)' }}>ERR: {error}</div>}
+        </div>
+      </div>
+
+      {/* Right: Output */}
+      <div className="cs-gallery-panel">
+        <div className="cs-panel-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <span>/// GENERATED COPY</span>
+          {output && (
+            <span className="mono" style={{ fontSize: 'var(--text-xs)', color: overLimit ? 'var(--color-danger)' : 'var(--color-success)' }}>
+              {output.charCount} / {tpl.maxChars} CHARS
+            </span>
+          )}
+        </div>
+        <div className="cs-gallery-body">
+          {!output && !generating && (
+            <div className="cs-empty-state">
+              <span className="mono cs-empty-text">CONFIGURE AND DEPLOY TO SEE OUTPUT.</span>
+            </div>
+          )}
+          {generating && (
+            <div className="cs-empty-state">
+              <div className="cs-loader-bar" style={{ width: '80%' }} />
+            </div>
+          )}
+          {output && (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)', height: '100%' }}>
+              <div style={{
+                flex: 1,
+                background: 'var(--surface-inset)',
+                border: `1px solid ${overLimit ? 'var(--color-danger)' : 'var(--border-default)'}`,
+                borderRadius: 'var(--radius-sm)',
+                padding: 'var(--space-4)',
+                fontFamily: 'var(--font-mono)',
+                fontSize: 'var(--text-xs)',
+                color: 'var(--text-secondary)',
+                whiteSpace: 'pre-wrap',
+                lineHeight: 'var(--leading-relaxed)',
+                overflowY: 'auto',
+              }}>
+                {output.text}
+              </div>
+              <div style={{ display: 'flex', gap: 'var(--space-2)' }}>
+                <button
+                  className="btn mono"
+                  style={{ flex: 1, fontSize: 'var(--text-xs)' }}
+                  onClick={() => navigator.clipboard.writeText(output.text)}
+                >
+                  COPY
+                </button>
+                <button
+                  className="btn mono"
+                  style={{ flex: 1, fontSize: 'var(--text-xs)' }}
+                  onClick={() => setOutput(null)}
+                >
+                  CLEAR
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  )
+}
+
 // Assembles filled brief sections into a plain-text prompt string.
 function buildBriefPrompt(template, values) {
   return [
@@ -85,7 +273,7 @@ function AssetPreview({ asset }) {
 }
 
 function CreativeStudio() {
-  const [view, setView] = useState('deploy') // 'deploy' | 'briefs'
+  const [view, setView] = useState('deploy') // 'deploy' | 'briefs' | 'social'
 
   // Media State
   const { generateImage, generateVideo, generateCopy, isGeneratingImage, isGeneratingVFX, isGeneratingCopy, error } = useGenerativeMedia()
@@ -191,6 +379,9 @@ function CreativeStudio() {
           </button>
           <button className={`cs-view-btn ${view === 'briefs' ? 'cs-view-btn--active' : ''}`} onClick={() => setView('briefs')}>
             [ BRIEF DB ]
+          </button>
+          <button className={`cs-view-btn ${view === 'social' ? 'cs-view-btn--active' : ''}`} onClick={() => setView('social')}>
+            [ SOCIAL OPS ]
           </button>
         </div>
       </div>
@@ -330,6 +521,13 @@ function CreativeStudio() {
                 ))}
               </div>
             </div>
+          </div>
+        )}
+
+        {/* ── VIEW: SOCIAL OPS ── */}
+        {view === 'social' && (
+          <div className="cs-deploy-grid">
+            <SocialOpsTab generateCopy={generateCopy} />
           </div>
         )}
 

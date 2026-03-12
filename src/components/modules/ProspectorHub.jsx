@@ -8,6 +8,7 @@ import { useState, useMemo } from 'react'
 import { useProspector } from '../../hooks/useProspector'
 import { useGeoSearch } from '../../hooks/useGeoSearch'
 import { useAtlasCRM } from '../../hooks/useAtlasCRM'
+import { useEdgeFunction } from '../../hooks/useEdgeFunction'
 
 import FlightDeck from './FlightDeck'
 import './ProspectorHub.css'
@@ -126,9 +127,127 @@ const TABS = [
     { id: 'map', label: 'GEO MAP' },
     { id: 'scanner', label: 'SCAN TRG' },
     { id: 'leads', label: 'LEADS DB' },
+    { id: 'pipeline', label: 'PIPELINE' },
     { id: 'outreach', label: 'OUTREACH' },
     { id: 'network', label: 'API NET' }
 ]
+
+const PIPELINE_STEPS = [
+    { key: 'resolve_lead', label: 'Resolve Lead' },
+    { key: 'scrape_analyze', label: 'Scrape & Analyze' },
+    { key: 'qualify', label: 'AI Qualify' },
+    { key: 'score', label: 'Score Deal' },
+]
+
+function PipelineTab() {
+    const { data, loading, error, execute } = useEdgeFunction('lead-enrichment-pipeline')
+    const [form, setForm] = useState({ company: '', url: '', location: '' })
+
+    const steps = data?.steps || []
+    const score = data?.score
+    const autoPromoted = data?.auto_promoted
+
+    const stepStatus = (key) => {
+        const s = steps.find(s => s.step === key)
+        return s?.status || 'pending'
+    }
+
+    const statusIcon = (status) => {
+        if (status === 'ok') return <span style={{ color: 'var(--color-success)' }}>✓</span>
+        if (status === 'error') return <span style={{ color: 'var(--color-danger)' }}>✗</span>
+        if (loading) return <span style={{ color: 'var(--accent-primary)', animation: 'spin 1s linear infinite', display: 'inline-block' }}>⟳</span>
+        return <span style={{ color: 'var(--text-quaternary)' }}>○</span>
+    }
+
+    const handleRun = () => {
+        if (!form.company && !form.url) return
+        execute({ company: form.company, url: form.url, location: form.location })
+    }
+
+    return (
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--space-4)', height: '100%' }}>
+            {/* Left: Form */}
+            <div style={{ background: 'var(--surface-elevated)', border: '1px solid var(--border-default)', borderRadius: 'var(--radius-md)', padding: 'var(--space-4)', display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
+                <div className="mono font-bold text-tertiary ph-history-title">/// ENRICHMENT PARAMETERS</div>
+                {[
+                    { label: 'COMPANY NAME', key: 'company', placeholder: 'Clínica Dental Madrid' },
+                    { label: 'WEBSITE URL', key: 'url', placeholder: 'https://example.com' },
+                    { label: 'LOCATION', key: 'location', placeholder: 'Madrid, España' },
+                ].map(f => (
+                    <div key={f.key} className="input-group">
+                        <label className="mono ph-scanner-label">{f.label}</label>
+                        <input
+                            className="input mono text-xs ph-scanner-input"
+                            placeholder={f.placeholder}
+                            value={form[f.key]}
+                            onChange={e => setForm(prev => ({ ...prev, [f.key]: e.target.value }))}
+                        />
+                    </div>
+                ))}
+                <button
+                    className="btn btn-primary mono text-xs mt-4 ph-scanner-btn"
+                    onClick={handleRun}
+                    disabled={loading || (!form.company && !form.url)}
+                >
+                    {loading ? '[ ENRICHING... ]' : '[ RUN PIPELINE ]'}
+                </button>
+                {error && (
+                    <div style={{ color: 'var(--color-danger)', fontFamily: 'var(--font-mono)', fontSize: 'var(--text-xs)' }}>
+                        ERR: {error}
+                    </div>
+                )}
+            </div>
+
+            {/* Right: Progress + Result */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
+                {/* Step tracker */}
+                <div style={{ background: 'var(--surface-elevated)', border: '1px solid var(--border-default)', borderRadius: 'var(--radius-md)', padding: 'var(--space-4)', display: 'flex', flexDirection: 'column', gap: 'var(--space-2)' }}>
+                    <div className="mono font-bold text-tertiary ph-history-title">/// PIPELINE STATUS</div>
+                    {PIPELINE_STEPS.map(step => {
+                        const status = stepStatus(step.key)
+                        return (
+                            <div key={step.key} style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)', padding: 'var(--space-2) 0', borderBottom: '1px solid var(--border-subtle)' }}>
+                                <span style={{ fontSize: 16, lineHeight: 1, width: 20, textAlign: 'center' }}>{statusIcon(status)}</span>
+                                <span style={{ fontFamily: 'var(--font-mono)', fontSize: 'var(--text-xs)', color: status === 'ok' ? 'var(--text-primary)' : 'var(--text-tertiary)' }}>
+                                    {step.label}
+                                </span>
+                                {status === 'ok' && steps.find(s => s.step === step.key)?.data?.score !== undefined && (
+                                    <span style={{ marginLeft: 'auto', fontFamily: 'var(--font-mono)', fontSize: 'var(--text-xs)', color: 'var(--accent-primary)' }}>
+                                        {steps.find(s => s.step === step.key).data.score}/100
+                                    </span>
+                                )}
+                            </div>
+                        )
+                    })}
+                </div>
+
+                {/* Score result */}
+                {data && (
+                    <div style={{ background: 'var(--surface-elevated)', border: `1px solid ${score >= 60 ? 'var(--color-success)' : 'var(--border-default)'}`, borderRadius: 'var(--radius-md)', padding: 'var(--space-4)', display: 'flex', flexDirection: 'column', gap: 'var(--space-2)' }}>
+                        <div className="mono font-bold text-tertiary ph-history-title">/// RESULT</div>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-4)' }}>
+                            <svg width="56" height="56">
+                                <circle cx="28" cy="28" r="24" fill="none" stroke="var(--border-subtle)" strokeWidth="3" />
+                                <circle cx="28" cy="28" r="24" fill="none" stroke={score >= 70 ? 'var(--color-success)' : score >= 40 ? 'var(--color-warning)' : 'var(--color-danger)'} strokeWidth="3" strokeDasharray={2 * Math.PI * 24} strokeDashoffset={2 * Math.PI * 24 * (1 - score / 100)} transform="rotate(-90 28 28)" />
+                                <text x="28" y="28" textAnchor="middle" dominantBaseline="middle" fill={score >= 70 ? 'var(--color-success)' : score >= 40 ? 'var(--color-warning)' : 'var(--color-danger)'} fontSize="11" fontFamily="var(--font-mono)" fontWeight="700">{score}</text>
+                            </svg>
+                            <div style={{ flex: 1 }}>
+                                {autoPromoted && (
+                                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: 'var(--text-xs)', color: 'var(--color-success)', fontWeight: 'var(--weight-semibold)', marginBottom: 4 }}>
+                                        ✓ AUTO-PROMOTED TO CRM
+                                    </div>
+                                )}
+                                <div style={{ fontFamily: 'var(--font-mono)', fontSize: 'var(--text-xs)', color: 'var(--text-secondary)', lineHeight: 'var(--leading-relaxed)' }}>
+                                    {data.reasoning}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
+            </div>
+        </div>
+    )
+}
 
 function ProspectorHub() {
     const { leads, scans, loading, byStatus, avgScore, recordScan, promoteLead } = useProspector()
@@ -431,6 +550,12 @@ function ProspectorHub() {
                                 </div>
                             </div>
                         ))}
+                    </div>
+                )}
+
+                {tab === 'pipeline' && (
+                    <div className="ph-view-container" style={{ height: '100%' }}>
+                        <PipelineTab />
                     </div>
                 )}
 

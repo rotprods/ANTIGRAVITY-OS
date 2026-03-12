@@ -67,6 +67,7 @@ const Markets        = lazy(() => import('./components/modules/Markets'))
 const FlightDeck     = lazy(() => import('./components/modules/FlightDeck'))
 const CommandCenter  = lazy(() => import('./components/modules/CommandCenter'))
 const PixelOffice    = lazy(() => import('./components/modules/PixelOffice'))
+const Marketplace    = lazy(() => import('./components/modules/Marketplace'))
 
 // ─── Loading screen ───────────────────────────────────────────────────────────
 function LoadingOS() {
@@ -236,6 +237,7 @@ function AppContent() {
               <Route path="/automation"     element={guard(Automation)} />
               <Route path="/flight-deck"    element={guard(FlightDeck)} />
               <Route path="/pixel-office"   element={guard(PixelOffice)} />
+              <Route path="/marketplace"    element={guard(Marketplace)} />
 
               {/* Growth */}
               <Route path="/gtm"            element={guard(GTM)} />

@@ -11,6 +11,7 @@ import { useActivities } from '../../hooks/useActivities'
 import { useSignals } from '../../hooks/useSignals'
 import useAgents from '../../hooks/useAgents'
 import { usePipelineRuns } from '../../hooks/usePipelineRuns'
+import { useAlerts } from '../../hooks/useAlerts'
 import {
     UserGroupIcon,
     BuildingOfficeIcon,
@@ -22,6 +23,8 @@ import {
     ExclamationTriangleIcon,
     CheckCircleIcon,
     RocketLaunchIcon,
+    BellAlertIcon,
+    XMarkIcon,
 } from '@heroicons/react/24/outline'
 import './ControlTower.css'
 
@@ -64,6 +67,62 @@ function HealthRing({ score, size = 120, strokeWidth = 6 }) {
     )
 }
 
+const ALERT_SEVERITY_STYLES = {
+    3: { color: 'var(--color-danger)', bg: 'var(--color-danger-muted)', label: 'CRITICAL' },
+    2: { color: 'var(--color-warning)', bg: 'var(--color-warning-muted)', label: 'WARNING' },
+    1: { color: 'var(--color-info)', bg: 'var(--color-info-muted)', label: 'INFO' },
+}
+
+function AlertsSection({ alerts, resolveAlert }) {
+    const topAlerts = [...alerts]
+        .sort((a, b) => (b.severity || 0) - (a.severity || 0))
+        .slice(0, 5)
+
+    if (topAlerts.length === 0) return null
+
+    return (
+        <div className="ct-section">
+            <div className="ct-section-header">
+                <span className="ct-section-title" style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                    <BellAlertIcon width={14} height={14} style={{ color: 'var(--color-warning)' }} />
+                    Anomaly alerts
+                </span>
+                <span style={{ fontSize: 'var(--text-xs)', color: 'var(--text-quaternary)' }}>
+                    {topAlerts.length} active
+                </span>
+            </div>
+            <div className="ct-section-body stagger-children">
+                {topAlerts.map(alert => {
+                    const sev = ALERT_SEVERITY_STYLES[alert.severity] || ALERT_SEVERITY_STYLES[2]
+                    return (
+                        <div key={alert.id} className="ct-agent-row" style={{ borderLeft: `2px solid ${sev.color}` }}>
+                            <div className="ct-agent-status-icon" style={{ background: sev.bg }}>
+                                <ExclamationTriangleIcon width={18} height={18} style={{ color: sev.color }} />
+                            </div>
+                            <div className="ct-agent-info">
+                                <div className="ct-agent-name">{alert.title}</div>
+                                <div className="ct-agent-desc">{alert.description}</div>
+                            </div>
+                            <div className="ct-agent-badges">
+                                <span className="badge" style={{ color: sev.color, borderColor: sev.color, background: sev.bg }}>
+                                    {sev.label}
+                                </span>
+                                <button
+                                    onClick={() => resolveAlert(alert.id)}
+                                    title="Dismiss"
+                                    style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 2, color: 'var(--text-quaternary)' }}
+                                >
+                                    <XMarkIcon width={12} height={12} />
+                                </button>
+                            </div>
+                        </div>
+                    )
+                })}
+            </div>
+        </div>
+    )
+}
+
 function ControlTower() {
     const { contacts, loading: contactsLoading } = useContacts()
     const { companies, loading: companiesLoading } = useCompanies()
@@ -72,6 +131,7 @@ function ControlTower() {
     const { signals, activeSignals, loading: signalsLoading } = useSignals()
     const { agents, stats: agentStats } = useAgents()
     const { runs: pipelineRuns, stats: pipelineStats } = usePipelineRuns()
+    const { active: activeAlerts, resolveAlert } = useAlerts()
 
     const loading = contactsLoading || companiesLoading || dealsLoading || activitiesLoading || signalsLoading
 
@@ -176,6 +236,11 @@ function ControlTower() {
                         <HealthRing score={healthScore} />
                         <span className="ct-health-label">System health</span>
                     </div>
+
+                    {/* Anomaly Alerts */}
+                    {activeAlerts.length > 0 && (
+                        <AlertsSection alerts={activeAlerts} resolveAlert={resolveAlert} />
+                    )}
 
                     {/* Critical Signals */}
                     <div className="ct-section" style={{ flex: 1 }}>
