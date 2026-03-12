@@ -17,12 +17,6 @@ const DARK = '#111122'
 function tx(col) { return col * S }
 function ty(row) { return row * S }
 
-function darken(hex, factor) {
-  const r = parseInt(hex.slice(1, 3), 16)
-  const g = parseInt(hex.slice(3, 5), 16)
-  const b = parseInt(hex.slice(5, 7), 16)
-  return `rgb(${Math.floor(r * factor)},${Math.floor(g * factor)},${Math.floor(b * factor)})`
-}
 
 function ease(t) {
   return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t
@@ -195,7 +189,7 @@ function drawTripleMonitor(ctx, ox, oy, active, tick, rgb, label) {
   }
 }
 
-function drawStatusBoard(ctx, ox, oy, active, tick, rgb, label) {
+function drawStatusBoard(ctx, ox, oy, active, tick, rgb, _label) {
   const [r, g, b] = rgb
   const bw = S * 2
   const bh = S * 3
@@ -242,7 +236,7 @@ function drawRoundTable(ctx, ox, oy, active, tick, rgb) {
   ctx.fillRect(ox + tw - 12, oy + th - 6, 8, 4)
 }
 
-function drawDataScreen(ctx, ox, oy, active, tick, rgb, label) {
+function drawDataScreen(ctx, ox, oy, active, tick, rgb, _label) {
   const [r, g, b] = rgb
   const sw = S * 2
   const sh = S * 3
@@ -387,7 +381,7 @@ function drawTypewriter(ctx, ox, oy, active, tick, rgb) {
   }
 }
 
-function drawContentBoard(ctx, ox, oy, active, tick, rgb, label) {
+function drawContentBoard(ctx, ox, oy, active, tick, rgb, _label) {
   const [r, g, b] = rgb
   const bw = S * 3
   const bh = S * 3
@@ -474,7 +468,7 @@ function drawRadioTower(ctx, ox, oy, active, tick, rgb) {
   }
 }
 
-function drawCommsBoard(ctx, ox, oy, active, tick, rgb, label) {
+function drawCommsBoard(ctx, ox, oy, active, tick, rgb, _label) {
   const [r, g, b] = rgb
   const bw = S * 4
   const bh = S * 3

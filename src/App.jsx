@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef, Suspense, lazy } from 'react'
+import React, { useState, useEffect, useCallback, Suspense, lazy } from 'react'
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import { useAuth } from './hooks/useAuth'
 import { useOrg } from './hooks/useOrg'
@@ -95,14 +95,12 @@ function AppContent() {
   // Track if user explicitly completed/skipped onboarding this session.
   // Use a ref so it doesn't cause re-renders, and localStorage so it survives
   // brief unmounts during auth state transitions.
-  const onboardingDoneRef = useRef(
-    typeof window !== 'undefined' && localStorage.getItem('oculops_onboarding_done') === '1'
+  const [onboardingDone, setOnboardingDoneState] = useState(
+    () => typeof window !== 'undefined' && localStorage.getItem('oculops_onboarding_done') === '1'
   )
-  const [onboardingDone, setOnboardingDoneState] = useState(onboardingDoneRef.current)
 
   const markOnboardingDone = useCallback(() => {
     localStorage.setItem('oculops_onboarding_done', '1')
-    onboardingDoneRef.current = true
     setOnboardingDoneState(true)
   }, [])
 
@@ -110,7 +108,6 @@ function AppContent() {
   useEffect(() => {
     if (!session) {
       localStorage.removeItem('oculops_onboarding_done')
-      onboardingDoneRef.current = false
       setOnboardingDoneState(false)
     }
   }, [session])

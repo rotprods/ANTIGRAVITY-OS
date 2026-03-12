@@ -3,7 +3,7 @@
 // Real-time pixel world of OCULOPS agents
 // ═══════════════════════════════════════════════════
 
-import { useEffect, useRef, useCallback, useState } from 'react'
+import { useEffect, useRef, useCallback, useState, useMemo } from 'react'
 import { COLS, ROWS, TILE, SCALE, ROOMS, AGENT_CONFIG } from '../../pixel/officeConfig'
 import { draw } from '../../pixel/officeRenderer'
 import { usePixelOffice } from '../../pixel/usePixelOffice'
@@ -202,8 +202,11 @@ export default function PixelOffice() {
   }, [])
 
   // Derived stats (re-computed every 60 frames via renderTick)
-  const activeCount = Object.values(agentStatesRef.current)
-    .filter(s => ['walking', 'working'].includes(s?.state)).length
+  // agentStatesRef is stable (never reassigned) — renderTick is the actual trigger
+  const activeCount = useMemo(() =>
+    Object.values(agentStatesRef.current).filter(s => ['walking', 'working'].includes(s?.state)).length
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  , [renderTick])
 
   const successRate = stats.total > 0
     ? Math.round(((stats.total - stats.errors) / stats.total) * 100)

@@ -77,7 +77,7 @@ export function usePixelOffice() {
   const [stats, setStats] = useState({ active: 0, total: 0, errors: 0 })
 
   const { subscribe } = useEventBus()
-  const { runningAgents, agentHealth, recentRuns } = useAgentState()
+  const { runningAgents } = useAgentState()
 
   // ── Helpers ──────────────────────────────────────────────────────────────────
 

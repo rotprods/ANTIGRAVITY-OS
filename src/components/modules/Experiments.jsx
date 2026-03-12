@@ -3,7 +3,7 @@
 // Premium Ivory/Gold Design System
 // ═══════════════════════════════════════════════════
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useExperiments } from '../../hooks/useExperiments'
 import VaultAgentPanel from '../ui/VaultAgentPanel'
 import ModuleSkeleton from '../ui/ModuleSkeleton'
@@ -17,16 +17,7 @@ function EvolverSection() {
     const [loading, setLoading] = useState(true)
     const [applying, setApplying] = useState(null)
 
-    useEffect(() => {
-        fetchExperiments()
-        // Realtime subscription
-        const sub = supabase.channel('evolver_experiments')
-            .on('postgres_changes', { event: '*', schema: 'public', table: 'agent_experiments' }, fetchExperiments)
-            .subscribe()
-        return () => supabase.removeChannel(sub)
-    }, [])
-
-    const fetchExperiments = async () => {
+    const fetchExperiments = useCallback(async () => {
         const { data } = await supabase
             .from('agent_experiments')
             .select('*')
@@ -34,7 +25,16 @@ function EvolverSection() {
             .limit(50)
         setExps(data || [])
         setLoading(false)
-    }
+    }, [])
+
+    useEffect(() => {
+        fetchExperiments()
+        // Realtime subscription
+        const sub = supabase.channel('evolver_experiments')
+            .on('postgres_changes', { event: '*', schema: 'public', table: 'agent_experiments' }, fetchExperiments)
+            .subscribe()
+        return () => supabase.removeChannel(sub)
+    }, [fetchExperiments])
 
     const applyMutation = async (exp) => {
         setApplying(exp.id)
@@ -57,9 +57,8 @@ function EvolverSection() {
 
     if (loading) return <div className="mono text-xs text-tertiary" style={{ padding: '32px', textAlign: 'center' }}>Loading evolver data...</div>
 
-    const kept      = exps.filter(e => e.status === 'kept')
-    const shadow    = exps.filter(e => e.status === 'shadow')
-    const discarded = exps.filter(e => e.status === 'discarded')
+    const kept   = exps.filter(e => e.status === 'kept')
+    const shadow = exps.filter(e => e.status === 'shadow')
 
     const avgDelta = exps.length
         ? (exps.reduce((s, e) => s + (e.delta || 0), 0) / exps.length * 100).toFixed(1)

@@ -2,7 +2,7 @@
 // Kill-switches for agents, modules, and integrations.
 // Flags are loaded once per session and cached in memory.
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabase'
 import { useOrg } from './useOrg'
 

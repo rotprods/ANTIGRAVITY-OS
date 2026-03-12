@@ -23,24 +23,6 @@ export function useAnalytics() {
   const [pipelineVelocity, setPipelineVelocity] = useState([]) // [{stage, avgDays, count}]
   const [loading, setLoading]                 = useState(true)
 
-  useEffect(() => {
-    let cancelled = false
-
-    async function load() {
-      setLoading(true)
-      await Promise.all([
-        fetchRevenueTrend(cancelled),
-        fetchContactTrend(cancelled),
-        fetchAgentActivity(cancelled),
-        fetchPipelineVelocity(cancelled),
-      ])
-      if (!cancelled) setLoading(false)
-    }
-
-    load()
-    return () => { cancelled = true }
-  }, [])
-
   // ─── Revenue trend — last 6 months of closed_won deals ─────────────────────
   async function fetchRevenueTrend(cancelled) {
     const since = new Date()
@@ -172,6 +154,24 @@ export function useAnalytics() {
 
     if (!cancelled) setPipelineVelocity(velocity)
   }
+
+  useEffect(() => {
+    let cancelled = false
+
+    async function load() {
+      setLoading(true)
+      await Promise.all([
+        fetchRevenueTrend(cancelled),
+        fetchContactTrend(cancelled),
+        fetchAgentActivity(cancelled),
+        fetchPipelineVelocity(cancelled),
+      ])
+      if (!cancelled) setLoading(false)
+    }
+
+    load()
+    return () => { cancelled = true }
+  }, [])
 
   return { revenueTrend, contactTrend, agentActivity, pipelineVelocity, loading }
 }
