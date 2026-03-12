@@ -1132,22 +1132,30 @@ function drawParticles(ctx, particles) {
 
 // ─── Scanlines ────────────────────────────────────────────────────────────────
 
-function drawScanlines(ctx, tick) {
-  const W = tx(COLS)
-  const H = ty(ROWS)
-  ctx.globalAlpha = 0.03
-  ctx.fillStyle = '#000000'
-  for (let y = 0; y < H; y += 3) {
-    ctx.fillRect(0, y, W, 1)
-  }
-  ctx.globalAlpha = 1
-
-  // Subtle vignette
-  const grad = ctx.createRadialGradient(W / 2, H / 2, H * 0.3, W / 2, H / 2, H * 0.8)
+// Cached scanline+vignette overlay — built once, drawn as single image
+let _overlayCache = null
+function getOverlay(W, H) {
+  if (_overlayCache) return _overlayCache
+  const oc = document.createElement('canvas')
+  oc.width = W; oc.height = H
+  const oc2d = oc.getContext('2d')
+  oc2d.globalAlpha = 0.03
+  oc2d.fillStyle = '#000000'
+  for (let y = 0; y < H; y += 3) oc2d.fillRect(0, y, W, 1)
+  oc2d.globalAlpha = 1
+  const grad = oc2d.createRadialGradient(W / 2, H / 2, H * 0.3, W / 2, H / 2, H * 0.8)
   grad.addColorStop(0, 'rgba(0,0,0,0)')
   grad.addColorStop(1, 'rgba(0,0,0,0.35)')
-  ctx.fillStyle = grad
-  ctx.fillRect(0, 0, W, H)
+  oc2d.fillStyle = grad
+  oc2d.fillRect(0, 0, W, H)
+  _overlayCache = oc
+  return oc
+}
+
+function drawScanlines(ctx) {
+  const W = tx(COLS)
+  const H = ty(ROWS)
+  ctx.drawImage(getOverlay(W, H), 0, 0)
 }
 
 // ─── Main Draw ────────────────────────────────────────────────────────────────
@@ -1189,5 +1197,5 @@ export function draw(ctx, { tick, agentStates, particles, activeLinks }) {
   drawParticles(ctx, particles)
 
   // Atmospheric overlay
-  drawScanlines(ctx, tick)
+  drawScanlines(ctx)
 }

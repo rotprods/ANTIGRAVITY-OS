@@ -146,12 +146,18 @@ export default function PixelOffice() {
     errorAgent,
   } = usePixelOffice()
 
-  // ── RAF render loop ──────────────────────────────────────────────────────────
+  // ── RAF render loop (capped at 30fps) ────────────────────────────────────────
 
   useEffect(() => {
     let rafId
+    let lastTime = 0
+    const FRAME_MS = 1000 / 30  // 30fps cap
 
-    const loop = () => {
+    const loop = (now) => {
+      rafId = requestAnimationFrame(loop)
+      if (now - lastTime < FRAME_MS) return
+      lastTime = now
+
       tick()
 
       const canvas = canvasRef.current
@@ -165,12 +171,10 @@ export default function PixelOffice() {
         })
       }
 
-      // Sync active count to React state every 60 frames
-      if (tickRef.current % 60 === 0) {
+      // Sync active count to React state every 30 frames
+      if (tickRef.current % 30 === 0) {
         setRenderTick(t => t + 1)
       }
-
-      rafId = requestAnimationFrame(loop)
     }
 
     rafId = requestAnimationFrame(loop)
