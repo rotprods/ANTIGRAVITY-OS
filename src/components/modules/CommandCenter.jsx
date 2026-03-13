@@ -3,9 +3,14 @@
 // TouchDesigner bridge control surface
 // ═══════════════════════════════════════════════════
 
-import { useState, useEffect, useCallback, useRef } from 'react'
+import { useState, useEffect, useCallback, useRef, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../../lib/supabase'
+import {
+    N8N_AI_STACK_SERVICES,
+    N8N_AIRDROP_INTEL,
+    N8N_SUGGESTED_COMBOS,
+} from '../../data/n8nAirdropIntel'
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || ''
 
@@ -30,6 +35,29 @@ async function fetchSystemSnapshot(serviceKey, view = 'system') {
         if (!res.ok) return null
         return await res.json()
     } catch { return null }
+}
+
+function normalizeBaseUrl(value) {
+    const raw = String(value || '').trim()
+    return raw.endsWith('/') ? raw.slice(0, -1) : raw
+}
+
+function buildEndpoint(baseUrl, healthPath) {
+    const path = healthPath.startsWith('/') ? healthPath : `/${healthPath}`
+    return `${baseUrl}${path}`
+}
+
+async function fetchServiceProbe(endpoint) {
+    const controller = new AbortController()
+    const timeout = setTimeout(() => controller.abort(), 4000)
+    try {
+        const response = await fetch(endpoint, { method: 'GET', signal: controller.signal })
+        return { online: response.ok, statusCode: response.status }
+    } catch {
+        return { online: false, statusCode: null }
+    } finally {
+        clearTimeout(timeout)
+    }
 }
 
 function asRecord(value) {
@@ -80,9 +108,12 @@ export default function CommandCenter() {
     const [commandLog, setCommandLog] = useState([])
     const [eventStream, setEventStream] = useState([])
     const [traceEvents, setTraceEvents] = useState([])
+    const [stackStatus, setStackStatus] = useState([])
+    const [stackRefreshedAt, setStackRefreshedAt] = useState(null)
     const [_loading, setLoading] = useState(false)
     const [activeTab, setActiveTab] = useState('overview')
     const refreshRef = useRef(null)
+    const stackRefreshRef = useRef(null)
 
     // Load service key from localStorage
     useEffect(() => {
@@ -108,6 +139,30 @@ export default function CommandCenter() {
         refreshRef.current = setInterval(refresh, 15000) // Poll every 15s
         return () => clearInterval(refreshRef.current)
     }, [refresh])
+
+    const refreshStack = useCallback(async () => {
+        const statuses = await Promise.all(
+            N8N_AI_STACK_SERVICES.map(async (service) => {
+                const baseUrl = normalizeBaseUrl(import.meta.env[service.envKey] || service.defaultBaseUrl)
+                const endpoint = buildEndpoint(baseUrl, service.healthPath)
+                const probe = await fetchServiceProbe(endpoint)
+                return {
+                    ...service,
+                    baseUrl,
+                    endpoint,
+                    ...probe,
+                }
+            })
+        )
+        setStackStatus(statuses)
+        setStackRefreshedAt(new Date().toISOString())
+    }, [])
+
+    useEffect(() => {
+        refreshStack()
+        stackRefreshRef.current = setInterval(refreshStack, 20000)
+        return () => clearInterval(stackRefreshRef.current)
+    }, [refreshStack])
 
     // Fetch recent TD commands from event_log
     useEffect(() => {
@@ -144,9 +199,11 @@ export default function CommandCenter() {
 
     const clients = bridgeStatus?.connectedClients || []
     const health = bridgeStatus?.systemHealth || systemSnapshot || {}
+    const onlineStackCount = useMemo(() => stackStatus.filter(service => service.online).length, [stackStatus])
 
     const tabs = [
         { id: 'overview', label: 'OVERVIEW' },
+        { id: 'stack', label: 'CORE STACK' },
         { id: 'clients', label: 'CLIENTS' },
         { id: 'events', label: 'EVENT STREAM' },
         { id: 'commands', label: 'COMMAND LOG' },
@@ -181,6 +238,12 @@ export default function CommandCenter() {
                     <div className="mono text-xs" style={{ borderLeft: '1px solid var(--border-subtle)', paddingLeft: 16 }}>
                         <span style={{ color: 'var(--text-tertiary)' }}>CLIENTS:</span>
                         <span style={{ color: 'var(--accent-primary)', fontWeight: 'bold', marginLeft: 8 }}>{clients.length}</span>
+                    </div>
+                    <div className="mono text-xs" style={{ borderLeft: '1px solid var(--border-subtle)', paddingLeft: 16 }}>
+                        <span style={{ color: 'var(--text-tertiary)' }}>AI STACK:</span>
+                        <span style={{ color: onlineStackCount > 0 ? 'var(--color-success)' : 'var(--text-tertiary)', fontWeight: 'bold', marginLeft: 8 }}>
+                            {onlineStackCount}/{N8N_AI_STACK_SERVICES.length}
+                        </span>
                     </div>
                     <div className={`status-dot ${clients.length > 0 ? 'active' : ''}`}></div>
                 </div>
@@ -227,6 +290,34 @@ export default function CommandCenter() {
                                 <span className="mono" style={{ fontSize: 32, fontWeight: 800, lineHeight: 1, color: kpi.color }}>{kpi.value}</span>
                             </div>
                         ))}
+                    </div>
+                )}
+
+                {activeTab === 'overview' && (
+                    <div style={{ border: '1px solid var(--border-default)', background: 'var(--surface-raised)', marginBottom: 16 }}>
+                        <div className="mono text-xs font-bold" style={{ padding: '12px 16px', background: 'var(--border-subtle)', borderBottom: '1px solid var(--border-default)', color: 'var(--accent-primary)', display: 'flex', justifyContent: 'space-between' }}>
+                            <span>Core AI stack</span>
+                            <span style={{ color: 'var(--text-tertiary)' }}>
+                                {N8N_AIRDROP_INTEL.stats.uniqueWorkflows} workflows ready · {N8N_AIRDROP_INTEL.stats.expertPacks} expert packs
+                            </span>
+                        </div>
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: 1, background: 'var(--border-default)' }}>
+                            {stackStatus.map((service) => (
+                                <div key={service.key} style={{ background: 'var(--surface-raised)', padding: 16, display: 'flex', flexDirection: 'column', gap: 8 }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                        <span className="mono text-xs font-bold" style={{ color: 'var(--text-primary)' }}>{service.label}</span>
+                                        <span className="mono text-xs" style={{ color: service.online ? 'var(--color-success)' : 'var(--color-danger)' }}>
+                                            {service.online ? 'ONLINE' : 'OFFLINE'}
+                                        </span>
+                                    </div>
+                                    <span className="mono text-xs text-tertiary">{service.role}</span>
+                                    <span className="mono text-xs text-tertiary">{service.endpoint}</span>
+                                    <span className="mono text-xs" style={{ color: 'var(--accent-primary)' }}>
+                                        {service.statusCode ? `HTTP ${service.statusCode}` : 'NO RESPONSE'}
+                                    </span>
+                                </div>
+                            ))}
+                        </div>
                     </div>
                 )}
 
@@ -298,6 +389,60 @@ export default function CommandCenter() {
                                 {traceEvents.length === 0 && (
                                     <div className="mono text-xs text-tertiary" style={{ padding: 32, textAlign: 'center' }}>NO CORRELATED EVENTS YET</div>
                                 )}
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {/* CORE STACK TAB */}
+                {activeTab === 'stack' && (
+                    <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: 16 }}>
+                        <div style={{ border: '1px solid var(--border-default)', background: 'var(--surface-raised)' }}>
+                            <div className="mono text-xs font-bold" style={{ padding: '12px 16px', background: 'var(--border-subtle)', borderBottom: '1px solid var(--border-default)', color: 'var(--accent-primary)' }}>
+                                Service health
+                            </div>
+                            <div style={{ padding: 12, display: 'flex', flexDirection: 'column', gap: 10 }}>
+                                {stackStatus.map((service) => (
+                                    <div key={service.key} style={{ border: '1px solid var(--border-subtle)', padding: 10, display: 'flex', alignItems: 'center', gap: 12 }}>
+                                        <StatusDot status={service.online ? 'connected' : 'disconnected'} />
+                                        <div style={{ flex: 1 }}>
+                                            <div className="mono text-xs font-bold" style={{ color: 'var(--text-primary)' }}>{service.label}</div>
+                                            <div className="mono text-xs text-tertiary">{service.role}</div>
+                                            <div className="mono text-xs text-tertiary">{service.baseUrl}</div>
+                                        </div>
+                                        <div className="mono text-xs" style={{ color: service.online ? 'var(--color-success)' : 'var(--color-danger)' }}>
+                                            {service.online ? `HTTP ${service.statusCode}` : 'UNREACHABLE'}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+                            <div style={{ border: '1px solid var(--border-default)', background: 'var(--surface-raised)' }}>
+                                <div className="mono text-xs font-bold" style={{ padding: '12px 16px', background: 'var(--border-subtle)', borderBottom: '1px solid var(--border-default)', color: 'var(--accent-primary)' }}>
+                                    Airdrop telemetry
+                                </div>
+                                <div style={{ padding: 14, display: 'flex', flexDirection: 'column', gap: 8 }}>
+                                    <div className="mono text-xs text-tertiary">Last refresh: {stackRefreshedAt ? new Date(stackRefreshedAt).toLocaleTimeString() : '—'}</div>
+                                    <div className="mono text-xs text-tertiary">Expert packs: {N8N_AIRDROP_INTEL.stats.expertPacks}</div>
+                                    <div className="mono text-xs text-tertiary">Unique workflows: {N8N_AIRDROP_INTEL.stats.uniqueWorkflows}</div>
+                                    <div className="mono text-xs text-tertiary">Workflow JSONs: {N8N_AIRDROP_INTEL.stats.workflowJsons}</div>
+                                </div>
+                            </div>
+
+                            <div style={{ border: '1px solid var(--border-default)', background: 'var(--surface-raised)' }}>
+                                <div className="mono text-xs font-bold" style={{ padding: '12px 16px', background: 'var(--border-subtle)', borderBottom: '1px solid var(--border-default)', color: 'var(--accent-primary)' }}>
+                                    Suggested combos
+                                </div>
+                                <div style={{ padding: 10, display: 'flex', flexDirection: 'column', gap: 8 }}>
+                                    {N8N_SUGGESTED_COMBOS.slice(0, 3).map((combo) => (
+                                        <div key={combo.task} style={{ border: '1px solid var(--border-subtle)', padding: 8 }}>
+                                            <div className="mono text-xs font-bold" style={{ color: 'var(--text-primary)' }}>{combo.task}</div>
+                                            <div className="mono text-xs text-tertiary" style={{ marginTop: 4 }}>{combo.skills.join(' + ')}</div>
+                                        </div>
+                                    ))}
+                                </div>
                             </div>
                         </div>
                     </div>

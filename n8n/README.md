@@ -4,6 +4,33 @@
 
 All workflows are pre-configured with your Supabase endpoints and OpenAI API key. Just import and activate.
 
+## 🧩 Full n8n Template Catalog (8k+)
+
+OCULOPS now supports syncing the full public n8n workflow catalog into the app for search, skills/action tagging, and install-ready selection.
+
+```bash
+npm run sync:n8n-templates
+```
+
+This writes:
+
+- `src/data/n8nTemplateCatalog.seed.json`
+- `public/n8n-template-catalog/index.json`
+- `public/n8n-template-catalog/shards/*.json`
+
+To install one or more templates into your n8n instance:
+
+```bash
+# dry run
+npm run n8n:install-template -- --id 6902
+
+# install into n8n
+npm run n8n:install-template -- --id 6902 --apply
+
+# install top install-ready templates from seed
+npm run n8n:install-template -- --all-install-ready --top 20 --apply
+```
+
 ### Quick Setup
 
 1. Open n8n → **Workflows** → **Import from File**

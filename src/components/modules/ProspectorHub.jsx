@@ -6,6 +6,7 @@ import { useProspector } from '../../hooks/useProspector'
 import { useGeoSearch } from '../../hooks/useGeoSearch'
 import { useAtlasCRM } from '../../hooks/useAtlasCRM'
 import { useEdgeFunction } from '../../hooks/useEdgeFunction'
+import { useConnectorInfrastructure } from '../../hooks/useConnectorInfrastructure'
 
 import FlightDeck from './FlightDeck'
 import './ProspectorHub.css'
@@ -250,6 +251,13 @@ function ProspectorHub() {
     const { leads, scans, loading, byStatus, avgScore, recordScan, promoteLead } = useProspector()
     const { results, scanning, searchPlaces, qualifyLead: aiQualify, qualifying } = useGeoSearch()
     const {
+        liveConnectors: prospectorConnectors,
+        runByCapability,
+        runningConnectorId,
+        latestByConnector,
+        errorByConnector,
+    } = useConnectorInfrastructure({ moduleTarget: 'prospector' })
+    const {
         importLead: syncLeadToCRM,
         importLeads: syncLeadsToCRM,
         stageOutreach,
@@ -263,9 +271,16 @@ function ProspectorHub() {
     const [form, setForm] = useState({ query: '', location: 'Madrid, España', radius: 5000 })
     const [selectedLead, setSelectedLead] = useState(null)
     const [flightIntel, setFlightIntel] = useState(null)
+    const [activeEnrichmentConnectorId, setActiveEnrichmentConnectorId] = useState(null)
 
     const activeLeads = byStatus.active || []
     const selected = leads.find(l => l.id === selectedLead)
+    const selectedConnectorResult = activeEnrichmentConnectorId
+        ? latestByConnector[activeEnrichmentConnectorId]
+        : null
+    const selectedConnectorError = activeEnrichmentConnectorId
+        ? errorByConnector[activeEnrichmentConnectorId]
+        : null
 
     const resolvePersistedLeadId = (lead) => leads.find(item =>
         (lead?.place_id && item.place_id === lead.place_id) ||
@@ -369,6 +384,48 @@ function ProspectorHub() {
 
     const handleScan = async () => {
         await handleScanAirspace({ query: form.query, location: form.location, radius: form.radius, source: 'scanner' })
+    }
+
+    const runProspectorEnrichment = async (mode) => {
+        if (!selected) return
+
+        if (mode === 'address') {
+            const addressPayload = {
+                q: selected.address || selected.city || selected.name,
+                limit: '5',
+            }
+            const result = await runByCapability('address_lookup', { params: addressPayload })
+            if (result?.connector_id) setActiveEnrichmentConnectorId(result.connector_id)
+            return
+        }
+
+        if (mode === 'route') {
+            const origin = flightIntel?.search_center?.lat && flightIntel?.search_center?.lng
+                ? `${flightIntel.search_center.lat},${flightIntel.search_center.lng}`
+                : '40.4168,-3.7038'
+            const destination = selected.lat && selected.lng
+                ? `${selected.lat},${selected.lng}`
+                : null
+            if (!destination) return
+            const result = await runByCapability('routing', {
+                params: { points: [origin, destination], profile: 'car', instructions: 'false' },
+            })
+            if (result?.connector_id) setActiveEnrichmentConnectorId(result.connector_id)
+            return
+        }
+
+        if (mode === 'email') {
+            if (!selected.email) return
+            const result = await runByCapability('email_validation', { params: { email: selected.email } })
+            if (result?.connector_id) setActiveEnrichmentConnectorId(result.connector_id)
+            return
+        }
+
+        if (mode === 'website') {
+            if (!selected.website) return
+            const result = await runByCapability('website_preview', { params: { url: selected.website } })
+            if (result?.connector_id) setActiveEnrichmentConnectorId(result.connector_id)
+        }
     }
 
     const crmSyncState = {
@@ -522,6 +579,20 @@ function ProspectorHub() {
                                 <button className="btn btn-primary mono text-xs mb-6 ph-lead-detail-btn" onClick={() => aiQualify(selected.id)} disabled={qualifying === selected.id}>
                                     {qualifying === selected.id ? 'Qualifying...' : 'Run AI Qualification'}
                                 </button>
+                                <div className="mono font-bold text-primary mb-3 ph-cortex-title">Connector Enrichment</div>
+                                <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginBottom: '12px' }}>
+                                    <button className="btn btn-ghost mono text-xs" onClick={() => runProspectorEnrichment('address')} disabled={Boolean(runningConnectorId)}>Address enrich</button>
+                                    <button className="btn btn-ghost mono text-xs" onClick={() => runProspectorEnrichment('route')} disabled={Boolean(runningConnectorId) || !(selected.lat && selected.lng)}>Route check</button>
+                                    <button className="btn btn-ghost mono text-xs" onClick={() => runProspectorEnrichment('email')} disabled={Boolean(runningConnectorId) || !selected.email}>Email validate</button>
+                                    <button className="btn btn-ghost mono text-xs" onClick={() => runProspectorEnrichment('website')} disabled={Boolean(runningConnectorId) || !selected.website}>Website preview</button>
+                                </div>
+                                {(selectedConnectorResult || selectedConnectorError) && (
+                                    <pre className="mono text-xs ph-cortex-record" style={{ maxHeight: '140px', overflow: 'auto', marginBottom: '12px' }}>
+                                        {selectedConnectorError
+                                            ? selectedConnectorError
+                                            : JSON.stringify(selectedConnectorResult?.normalized ?? selectedConnectorResult, null, 2)}
+                                    </pre>
+                                )}
                                 <div className="mono font-bold text-primary mb-3 ph-cortex-title">Intelligence Record</div>
                                 <div className="mono text-secondary ph-cortex-record">
                                     {selected.ai_reasoning || 'No AI analysis yet.'}
@@ -544,6 +615,16 @@ function ProspectorHub() {
                                     <div className="api-node-name">{app.name}</div>
                                     <div className="api-node-desc">{app.type} PROTOCOL</div>
                                     <div className="api-node-status">{app.status}</div>
+                                </div>
+                            </div>
+                        ))}
+                        {prospectorConnectors.map(app => (
+                            <div key={app.connectorId} className="api-node">
+                                <div className="api-node-icon">[C]</div>
+                                <div className="api-node-info">
+                                    <div className="api-node-name">{app.name}</div>
+                                    <div className="api-node-desc">{(app.capabilities || []).slice(0, 3).join(', ') || 'connector proxy'}</div>
+                                    <div className="api-node-status">{app.connectorStatus === 'live' ? 'active' : app.connectorStatus}</div>
                                 </div>
                             </div>
                         ))}

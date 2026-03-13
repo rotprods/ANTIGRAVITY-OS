@@ -6,8 +6,7 @@
 import { useState } from 'react'
 import { useAlerts } from '../../hooks/useAlerts'
 import { useAgents } from '../../hooks/useAgents'
-import { useApiCatalog } from '../../hooks/useApiCatalog'
-import { useConnectorProxy } from '../../hooks/useConnectorProxy'
+import { useConnectorInfrastructure } from '../../hooks/useConnectorInfrastructure'
 import { useAgentVault } from '../../hooks/useAgentVault'
 import ModuleSkeleton from '../ui/ModuleSkeleton'
 
@@ -24,12 +23,20 @@ function Watchtower() {
     const { alerts, loading, addAlert, resolveAlert } = useAlerts()
     const { agents: oculopsAgents, stats: agentStats } = useAgents()
     const { totalAgents: vaultTotal, canonicalCount: vaultCanonical, namespaces: vaultNamespaces } = useAgentVault()
-    const { installedApps: watchtowerApps } = useApiCatalog({ moduleTarget: 'watchtower' })
-    const { execute: executeConnector, data: feedData, loading: feedLoading, error: feedError } = useConnectorProxy({}, { cacheTTL: 30000 })
+    const {
+        liveConnectors: watchtowerApps,
+        runConnector,
+        runningConnectorId,
+        latestByConnector,
+        errorByConnector,
+        toggleSavedFeed,
+        isSavedFeed,
+    } = useConnectorInfrastructure({ moduleTarget: 'watchtower' })
     const [form, setForm] = useState(emptyForm)
     const [saving, setSaving] = useState(false)
     const [filter, setFilter] = useState('active')
-    const liveFeeds = watchtowerApps.filter(app => app.connectorStatus === 'live')
+    const [activeFeedId, setActiveFeedId] = useState(null)
+    const liveFeeds = watchtowerApps
 
     const handleAdd = async () => {
         if (!form.description.trim()) return
@@ -44,8 +51,8 @@ function Watchtower() {
     }
 
     const runFeed = async (app) => {
-        await executeConnector({
-            connectorId: app.connectorId,
+        setActiveFeedId(app.connectorId)
+        await runConnector(app, {
             endpointName: app.endpointName,
             params: app.sampleParams,
         })
@@ -138,26 +145,40 @@ function Watchtower() {
                                 <button
                                     key={app.connectorId}
                                     className="mono font-bold"
-                                    style={{ background: 'var(--surface-raised)', border: '1px solid var(--border-default)', color: 'var(--text-primary)', fontSize: '10px', padding: '10px 16px', cursor: 'pointer' }}
+                                    style={{ background: isSavedFeed(app.connectorId) ? 'var(--surface-inset)' : 'var(--surface-raised)', border: '1px solid var(--border-default)', color: 'var(--text-primary)', fontSize: '10px', padding: '10px 16px', cursor: 'pointer' }}
                                     onClick={() => runFeed(app)}
-                                    disabled={feedLoading}
+                                    disabled={runningConnectorId === app.connectorId}
                                 >
-                                    {feedLoading ? 'Syncing...' : `Sync ${app.name}`}
+                                    {runningConnectorId === app.connectorId ? 'Syncing...' : `Sync ${app.name}`}
                                 </button>
                             ))}
                         </div>
-                        {(feedData || feedError) && (
+                        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '12px' }}>
+                            {liveFeeds.map(app => (
+                                <button
+                                    key={`save-${app.connectorId}`}
+                                    className="mono"
+                                    style={{ background: 'transparent', border: '1px solid var(--border-subtle)', color: isSavedFeed(app.connectorId) ? 'var(--accent-primary)' : 'var(--text-tertiary)', fontSize: '9px', padding: '4px 8px', cursor: 'pointer' }}
+                                    onClick={() => toggleSavedFeed(app.connectorId)}
+                                >
+                                    {isSavedFeed(app.connectorId) ? '[SAVED]' : '[SAVE]'} {app.name.toUpperCase()}
+                                </button>
+                            ))}
+                        </div>
+                        {(activeFeedId && (latestByConnector[activeFeedId] || errorByConnector[activeFeedId])) && (
                             <pre style={{
                                 padding: '16px',
                                 background: 'var(--surface-inset)',
                                 border: '1px solid var(--border-subtle)',
                                 fontSize: '10px',
-                                color: feedError ? 'var(--color-danger)' : 'var(--text-secondary)',
+                                color: errorByConnector[activeFeedId] ? 'var(--color-danger)' : 'var(--text-secondary)',
                                 whiteSpace: 'pre-wrap',
                                 fontFamily: 'var(--font-mono)',
                                 margin: 0
                             }}>
-                                {feedError ? feedError : JSON.stringify(feedData?.normalized ?? feedData, null, 2)}
+                                {errorByConnector[activeFeedId]
+                                    ? errorByConnector[activeFeedId]
+                                    : JSON.stringify(latestByConnector[activeFeedId]?.normalized ?? latestByConnector[activeFeedId], null, 2)}
                             </pre>
                         )}
                     </div>

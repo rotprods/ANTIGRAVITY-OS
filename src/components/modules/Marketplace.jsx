@@ -5,6 +5,12 @@
 
 import { useState, useMemo } from 'react'
 import { useAgentVault } from '../../hooks/useAgentVault'
+import {
+  N8N_AIRDROP_INTEL,
+  N8N_EXPERT_PACKS,
+  N8N_SUGGESTED_COMBOS,
+  N8N_TOP_WORKFLOW_CATEGORIES,
+} from '../../data/n8nAirdropIntel'
 
 const SEVERITY_COLOR = { critical: 'var(--color-danger)', warning: 'var(--color-warning)', info: 'var(--color-info)' }
 
@@ -225,6 +231,7 @@ export default function Marketplace() {
   const [selectedAgent, setSelectedAgent] = useState(null)
   const [runResult, setRunResult] = useState(null)
   const [running, setRunning] = useState(false)
+  const [copiedSkill, setCopiedSkill] = useState('')
 
   const namespaceCounts = useMemo(() => {
     const counts = {}
@@ -242,6 +249,18 @@ export default function Marketplace() {
     const result = await runAgent(codeName, goal)
     setRunResult(result)
     setRunning(false)
+  }
+
+  const copySkillInvoke = async (invoke) => {
+    const prompt = `Use ${invoke} to`
+    try {
+      await navigator.clipboard.writeText(prompt)
+      setCopiedSkill(invoke)
+      window.setTimeout(() => setCopiedSkill(''), 1400)
+    } catch {
+      // Clipboard availability differs per browser context.
+      setCopiedSkill('')
+    }
   }
 
   return (
@@ -300,6 +319,112 @@ export default function Marketplace() {
           width: '100%', boxSizing: 'border-box',
         }}
       />
+
+      {/* n8n Airdrop Intel */}
+      <div style={{
+        background: 'var(--surface-elevated)',
+        border: '1px solid var(--border-default)',
+        borderRadius: 'var(--radius-md)',
+        padding: 'var(--space-4)',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 'var(--space-4)',
+      }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', gap: 'var(--space-3)', flexWrap: 'wrap' }}>
+          <div>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 'var(--text-sm)', fontWeight: 'var(--weight-semibold)', color: 'var(--text-primary)' }}>
+              N8N AIRDROP INTEL
+            </div>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 'var(--text-2xs)', color: 'var(--text-tertiary)', marginTop: 2 }}>
+              MAP DATE {N8N_AIRDROP_INTEL.generatedAt}
+            </div>
+          </div>
+          <div style={{ display: 'flex', gap: 'var(--space-2)', flexWrap: 'wrap' }}>
+            {[
+              { label: 'EXPERT PACKS', value: N8N_AIRDROP_INTEL.stats.expertPacks },
+              { label: 'UNIQUE FLOWS', value: N8N_AIRDROP_INTEL.stats.uniqueWorkflows },
+              { label: 'JSON TOTAL', value: N8N_AIRDROP_INTEL.stats.workflowJsons },
+            ].map((stat) => (
+              <div
+                key={stat.label}
+                style={{
+                  border: '1px solid var(--border-default)',
+                  borderRadius: 'var(--radius-sm)',
+                  padding: '6px 10px',
+                  minWidth: 94,
+                  textAlign: 'center',
+                  background: 'var(--surface-raised)',
+                }}
+              >
+                <div style={{ fontFamily: 'var(--font-mono)', fontSize: 'var(--text-sm)', fontWeight: 'var(--weight-bold)', color: 'var(--accent-primary)' }}>
+                  {stat.value}
+                </div>
+                <div style={{ fontFamily: 'var(--font-mono)', fontSize: 'var(--text-2xs)', color: 'var(--text-tertiary)' }}>
+                  {stat.label}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0,1.2fr) minmax(0,1fr) minmax(0,1fr)', gap: 'var(--space-3)' }}>
+          <div style={{ border: '1px solid var(--border-default)', borderRadius: 'var(--radius-sm)', padding: 'var(--space-3)', background: 'var(--surface-raised)' }}>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 'var(--text-2xs)', color: 'var(--text-quaternary)', marginBottom: 'var(--space-2)' }}>
+              7 EXPERT SKILL PACKS
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+              {N8N_EXPERT_PACKS.map((pack) => (
+                <button
+                  key={pack.invoke}
+                  onClick={() => copySkillInvoke(pack.invoke)}
+                  style={{
+                    border: '1px solid var(--border-subtle)',
+                    background: copiedSkill === pack.invoke ? 'var(--accent-primary-muted)' : 'transparent',
+                    borderRadius: 'var(--radius-xs)',
+                    padding: '6px 8px',
+                    textAlign: 'left',
+                    cursor: 'pointer',
+                  }}
+                >
+                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: 'var(--text-xs)', color: 'var(--accent-primary)' }}>{pack.invoke}</div>
+                  <div style={{ fontSize: 'var(--text-2xs)', color: 'var(--text-tertiary)', marginTop: 2 }}>{pack.teaches}</div>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div style={{ border: '1px solid var(--border-default)', borderRadius: 'var(--radius-sm)', padding: 'var(--space-3)', background: 'var(--surface-raised)' }}>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 'var(--text-2xs)', color: 'var(--text-quaternary)', marginBottom: 'var(--space-2)' }}>
+              TOP WORKFLOW CATEGORIES
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+              {N8N_TOP_WORKFLOW_CATEGORIES.slice(0, 6).map((item) => (
+                <div key={item.name} style={{ display: 'flex', alignItems: 'center', gap: 8, borderBottom: '1px solid var(--border-subtle)', paddingBottom: 5 }}>
+                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: 'var(--text-xs)', color: 'var(--text-primary)', minWidth: 74 }}>{item.name}</span>
+                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: 'var(--text-xs)', color: 'var(--accent-primary)' }}>{item.count}</span>
+                  <span style={{ fontSize: 'var(--text-2xs)', color: 'var(--text-tertiary)', marginLeft: 'auto' }}>{item.bestUse}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div style={{ border: '1px solid var(--border-default)', borderRadius: 'var(--radius-sm)', padding: 'var(--space-3)', background: 'var(--surface-raised)' }}>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 'var(--text-2xs)', color: 'var(--text-quaternary)', marginBottom: 'var(--space-2)' }}>
+              RECOMMENDED COMBOS
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+              {N8N_SUGGESTED_COMBOS.map((combo) => (
+                <div key={combo.task} style={{ border: '1px solid var(--border-subtle)', borderRadius: 'var(--radius-xs)', padding: '6px 8px' }}>
+                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: 'var(--text-xs)', color: 'var(--text-primary)' }}>{combo.task}</div>
+                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: 'var(--text-2xs)', color: 'var(--text-tertiary)', marginTop: 3 }}>
+                    {combo.skills.join(' + ')}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
 
       {/* Two-panel layout */}
       <div style={{ flex: 1, display: 'flex', gap: 'var(--space-4)', minHeight: 0 }}>

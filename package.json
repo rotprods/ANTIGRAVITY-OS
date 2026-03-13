@@ -23,6 +23,9 @@
     "n8n:repair": "node scripts/repair-n8n.mjs --local --live --export-live",
     "n8n:repair:local": "node scripts/repair-n8n.mjs --local",
     "n8n:repair:live": "node scripts/repair-n8n.mjs --live --export-live",
+    "sync:n8n-templates": "node scripts/sync-n8n-templates.mjs",
+    "audit:n8n-workflows": "node scripts/audit-n8n-workflows.mjs",
+    "n8n:install-template": "node scripts/install-n8n-template.mjs",
     "gws": "node scripts/gws.mjs",
     "gws:auth:setup": "node scripts/gws.mjs auth setup",
     "gws:auth:login": "node scripts/gws.mjs auth login",
@@ -40,13 +43,16 @@
     "electron:preview": "vite build && electron .",
     "test:e2e": "playwright test",
     "smoke:agentic-core": "node scripts/smoke-agentic-core.mjs",
+    "smoke:control-plane": "node scripts/smoke-control-plane.mjs",
     "design:factory": "node scripts/design-factory.mjs",
     "design:factory:images": "node scripts/design-factory.mjs --only images",
     "design:factory:code": "node scripts/design-factory.mjs --only code",
     "design:factory:screen": "node scripts/design-factory.mjs --screen",
     "design:factory:list": "node scripts/design-factory.mjs --list",
     "design:factory:py": "python3 scripts/design-factory.py",
-    "design:factory:py:screen": "python3 scripts/design-factory.py --screen"
+    "design:factory:py:screen": "python3 scripts/design-factory.py --screen",
+    "sync:public-apis": "node scripts/sync-public-apis.mjs",
+    "smoke:public-connectors": "node scripts/smoke-public-connectors.mjs"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",

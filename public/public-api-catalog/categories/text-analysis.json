@@ -39,8 +39,8 @@
       "business_fit_score": 65,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "text-analysis-aylien-text-analysis-docs-aylien-com",
@@ -78,8 +78,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "text-analysis-cloudmersive-natural-language-processing-cloudmersive-com",
@@ -117,8 +117,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "text-analysis-detect-language-detectlanguage-com",
@@ -156,8 +156,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "text-analysis-eli-nlp-insightera-co-th",
@@ -195,8 +195,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "text-analysis-google-cloud-natural-cloud-google-com",
@@ -234,8 +234,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "text-analysis-hirak-ocr-ocr-hirak-site",
@@ -273,8 +273,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "text-analysis-hirak-translation-translate-hirak-site",
@@ -312,8 +312,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "text-analysis-lecto-translation-rapidapi-com",
@@ -351,8 +351,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "text-analysis-sentiment-analysis-meaningcloud-com",
@@ -390,8 +390,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "text-analysis-apilayer-languagelayer-languagelayer-com",
@@ -429,8 +429,8 @@
       "business_fit_score": 55,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "text-analysis-code-detection-api-codedetectionapi-runtime-dev",
@@ -468,8 +468,8 @@
       "business_fit_score": 55,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "text-analysis-semantria-semantria-readme-io",
@@ -507,8 +507,8 @@
       "business_fit_score": 55,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "text-analysis-tisane-tisane-ai",
@@ -546,8 +546,8 @@
       "business_fit_score": 55,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "text-analysis-watson-natural-language-understanding-cloud-ibm-com",
@@ -585,8 +585,8 @@
       "business_fit_score": 55,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     }
   ]
 }

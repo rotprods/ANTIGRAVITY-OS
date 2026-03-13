@@ -67,3 +67,69 @@ URL directa: https://console.cloud.google.com/apis/credentials?project=hale-carp
 ## n8n
 - [ ] Regenerar API key antes de 2026-04-07
 - [ ] Limpiar secret stray: `supabase secrets unset FEPGQ5TC1RSITP`
+
+---
+
+## AG2-C6 (estado actual + siguiente)
+
+### Cerrado (sin credenciales de provider)
+- [x] Harness sintético AG2-C6 validado:
+  - `outbound -> inbound -> outreach_queue.status=replied`
+  - `outreach_queue.provider_status=replied`
+  - `outreach_queue.message_id` enlazado al inbound
+  - `conversations.last_inbound_at` actualizado
+- Evidencia:
+  - `docs/runbooks/ag2-c6-synthetic-smoke.md`
+  - `docs/runbooks/ag2-c6-synthetic-smoke.latest.json`
+
+### Lo que va después (bloque real)
+- [ ] AG2-C6 live round-trip con provider real (Gmail/WhatsApp): outbound real -> inbound real -> `outreach_queue.status=replied`
+- [ ] Smoke operador provider-backed completo: `docs/smoke-operator-loop.md` (secciones 5 y 6)
+- [ ] Integration deploy gate final: deploy de edge functions + deploy app + smoke post-deploy
+
+### Orden operativo siguiente (ejecución)
+1. [ ] Cerrar AG2-C2 real:
+   - Gmail reconnect (OAuth en app)
+   - Cargar secretos WhatsApp outbound: `WHATSAPP_TOKEN`, `WHATSAPP_PHONE_NUMBER_ID`
+   - Cargar secretos WhatsApp inbound: `WHATSAPP_VERIFY_TOKEN`, `META_APP_SECRET`
+2. [ ] Ejecutar AG2-C6 live round-trip real:
+   - outbound real (`messaging-dispatch`)
+   - inbound real (`gmail-inbound` o `whatsapp-webhook`)
+   - verificar `outreach_queue.status = replied`
+3. [ ] Ejecutar smoke operador provider-backed:
+   - `docs/smoke-operator-loop.md` secciones 5 y 6
+4. [ ] Integration gate final:
+   - deploy funciones
+   - `lint + test + build`
+   - deploy app
+   - smoke post-deploy
+
+---
+
+## Registro vivo — pendientes y errores detectados (no omitir)
+
+### Estado técnico de enforcement (AG2)
+- [x] `compose_message sendLive` rerouteado a `control-plane -> tool_dispatch -> tool-bus -> messaging-dispatch`
+- [x] `run_connector` con riesgo `high/critical` rerouteado a `control-plane -> tool_dispatch -> tool-bus -> api-proxy`
+- [x] `run_api` con riesgo `high/critical` rerouteado a `control-plane -> tool_dispatch -> tool-bus -> endpoint`
+- [x] Hard-block server-side en `messaging-dispatch` para rutas legacy `high/critical` sin evidencia `control-plane + tool-bus`
+- [x] Hard-block server-side en `api-proxy` para rutas legacy `high/critical` sin evidencia `control-plane + tool-bus`
+
+### Pendientes inmediatos (validación operativa real)
+- [ ] Smoke remoto de bloqueo esperado:
+  - llamada legacy directa `high` a `api-proxy` debe responder `409` (`legacy_high_risk_route_required`)
+  - llamada legacy directa `high` a `messaging-dispatch` debe responder `409` (`legacy_high_risk_route_required`)
+- [ ] Smoke remoto de ruta permitida:
+  - workflow legacy `run_connector` con `risk_class=high` debe ejecutar por `tool_dispatch` sin bloqueo
+  - workflow legacy `run_api` con `risk_class=high` debe ejecutar por `tool_dispatch` sin bloqueo
+- [ ] Verificar en `event_log` correlación completa:
+  - `tool_bus.invocation` existente para `correlation_id`
+  - evento final del endpoint con resultado esperado
+
+### Riesgos/errores detectados (registrados)
+- [ ] `run_api` high/critical depende de permisos en `agent_tool_permissions` y/o `tool_registry` para el `endpoint` usado como `tool_code_name`; si falta permiso, `tool-bus` bloqueará (esperado por política, pero requiere configuración).
+- [ ] En entorno local faltan secretos para smoke de control-plane:
+  - `SUPABASE_URL`
+  - `SUPABASE_SERVICE_ROLE_KEY`
+- [ ] CLI actual de Supabase no incluye `functions invoke`; el smoke remoto debe hacerse con cliente HTTP (curl/Postman) o desde la app.
+- [ ] `deno` no está instalado localmente, por lo que no se puede ejecutar `deno check` local de edge functions (deploy remoto sí funciona).

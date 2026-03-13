@@ -6,11 +6,13 @@
 import { useMemo, useState } from 'react'
 import { useAppStore } from '../../stores/useAppStore'
 import { useApiCatalog } from '../../hooks/useApiCatalog'
+import { useN8nTemplateCatalog } from '../../hooks/useN8nTemplateCatalog'
 import { useAutomation } from '../../hooks/useAutomation'
 import { useAgentVault } from '../../hooks/useAgentVault'
 import { AGENT_AUTOMATION_PACKS } from '../../data/agentAutomationPacks'
+import { toN8nTemplateOption } from '../../lib/n8nTemplateCatalog'
 import { CORE_MINI_APPS } from '../miniapps/MiniAppRegistry'
-import { BoltIcon, PlusIcon } from '@heroicons/react/24/outline'
+import { PlusIcon } from '@heroicons/react/24/outline'
 import ModulePage from '../ui/ModulePage'
 import ModuleSkeleton from '../ui/ModuleSkeleton'
 import './Automation.css'
@@ -67,14 +69,26 @@ function Automation() {
     const { installedApps } = useApiCatalog()
     const { workflows, runs, loading, runningWorkflowId, addWorkflow, toggleWorkflow, removeWorkflow, runWorkflow, loadRuns, activeCount, totalRuns } = useAutomation()
     const { agents: vaultAgents, loading: vaultLoading } = useAgentVault()
+    const [templateSearch, setTemplateSearch] = useState('')
     const liveConnectorApps = installedApps.filter(app => app.runMode === 'connector_proxy' && app.connectorStatus === 'live')
     const liveApiApps = useMemo(() => CORE_MINI_APPS.filter(app => app.runMode === 'edge_function' && app.status !== 'planned'), [])
     const agentOptions = useMemo(() => unique([...liveApiApps.flatMap(app => app.agentTargets || []), ...AGENT_AUTOMATION_PACKS.map(p => p.agentCodeName)]), [liveApiApps])
+    const {
+        entries: n8nCatalogEntries,
+        loading: n8nCatalogLoading,
+        stats: n8nCatalogStats,
+        source: n8nCatalogSource,
+    } = useN8nTemplateCatalog({
+        search: templateSearch,
+        installableOnly: true,
+        limit: 240,
+    })
 
     const n8nOptions = useMemo(() => uniqueBy([
         ...liveApiApps.flatMap(app => (app.n8nTemplates || []).map(t => ({ value: t, label: t, pageUrl: null, downloadUrl: null, source: 'product_registry' }))),
         ...AGENT_AUTOMATION_PACKS.flatMap(pack => pack.templates.map(t => ({ value: String(t.id), label: `#${t.id} · ${t.name}`, pageUrl: t.pageUrl, downloadUrl: t.downloadUrl, source: pack.agentCodeName }))),
-    ], item => item.value), [liveApiApps])
+        ...n8nCatalogEntries.map(toN8nTemplateOption).filter(Boolean),
+    ], item => item.value), [liveApiApps, n8nCatalogEntries])
 
     const templateLookup = useMemo(() => Object.fromEntries(n8nOptions.map(o => [o.value, o])), [n8nOptions])
     const defaultForm = { name: '', description: '', trigger: 'atlas_import', actions: [], connectorId: '', apiId: '', agentCodeName: '', workflowTemplate: '' }
@@ -102,6 +116,7 @@ function Automation() {
         if (form.actions.includes('launch_n8n') && !form.workflowTemplate) return toast('Select n8n template', 'warning')
 
         const selectedApi = liveApiApps.find(app => app.id === form.apiId) || null
+        const selectedConnector = liveConnectorApps.find(app => app.connectorId === form.connectorId) || null
         const selectedTemplate = templateLookup[form.workflowTemplate] || null
         const trigger = getTriggerMeta(form.trigger)
 
@@ -111,10 +126,26 @@ function Automation() {
             metadata: { agent_code_name: form.agentCodeName || null, n8n_template_id: form.workflowTemplate || null },
             steps: form.actions.map((action, i) => ({
                 id: `step-${i + 1}`, type: action,
-                config: action === 'run_connector' ? { connectorId: form.connectorId }
+                config: action === 'run_connector' ? {
+                    connectorId: form.connectorId,
+                    endpointName: selectedConnector?.endpointName || null,
+                    params: selectedConnector?.sampleParams || {},
+                    body: {},
+                }
                     : action === 'run_api' ? { apiId: form.apiId, endpoint: selectedApi?.endpoint || null, label: selectedApi?.name || null, payload: selectedApi?.healthcheckPayload || {} }
                     : action === 'run_agent' ? { agentCodeName: form.agentCodeName, action: 'cycle' }
-                    : action === 'launch_n8n' ? { agentCodeName: form.agentCodeName || null, workflowTemplate: form.workflowTemplate, workflowTemplateLabel: selectedTemplate?.label || form.workflowTemplate, workflowTemplateUrl: selectedTemplate?.pageUrl || null, workflowTemplateDownloadUrl: selectedTemplate?.downloadUrl || null, workflowTemplateSource: selectedTemplate?.source || null }
+                    : action === 'launch_n8n' ? {
+                        agentCodeName: form.agentCodeName || null,
+                        workflowTemplate: form.workflowTemplate,
+                        workflowTemplateLabel: selectedTemplate?.label || form.workflowTemplate,
+                        workflowTemplateUrl: selectedTemplate?.pageUrl || null,
+                        workflowTemplateDownloadUrl: selectedTemplate?.downloadUrl || null,
+                        workflowTemplateSource: selectedTemplate?.source || null,
+                        workflowTemplateActions: selectedTemplate?.actionKeys || [],
+                        workflowTemplateSkills: selectedTemplate?.skillTags || [],
+                        workflowTemplateModules: selectedTemplate?.moduleTargets || [],
+                        workflowTemplateInstallTier: selectedTemplate?.installTier || null,
+                    }
                     : {},
             })),
             is_active: false,
@@ -145,6 +176,7 @@ function Automation() {
     }
 
     const statusColor = (status) => status === 'completed' ? 'var(--color-success)' : status === 'failed' ? 'var(--color-danger)' : 'var(--color-warning)'
+    const selectedTemplateMeta = form.workflowTemplate ? templateLookup[form.workflowTemplate] || null : null
 
     return (
         <ModulePage
@@ -187,7 +219,32 @@ function Automation() {
                         {form.actions.includes('run_connector') && <div className="form-field"><label className="form-label">Connector</label><select className="form-input" value={form.connectorId} onChange={e => setForm({ ...form, connectorId: e.target.value })}><option value="">Select connector...</option>{liveConnectorApps.map(app => <option key={app.connectorId} value={app.connectorId}>{app.name}</option>)}</select></div>}
                         {form.actions.includes('run_api') && <div className="form-field"><label className="form-label">API</label><select className="form-input" value={form.apiId} onChange={e => setForm({ ...form, apiId: e.target.value })}><option value="">Select API...</option>{liveApiApps.map(app => <option key={app.id} value={app.id}>{app.name}</option>)}</select></div>}
                         {form.actions.includes('run_agent') && <div className="form-field"><label className="form-label">AI agent</label><select className="form-input" value={form.agentCodeName} onChange={e => setForm({ ...form, agentCodeName: e.target.value })}><option value="">Select agent...</option>{agentOptions.map(a => <option key={a} value={a}>{a}</option>)}</select></div>}
-                        {form.actions.includes('launch_n8n') && <div className="form-field"><label className="form-label">n8n template</label><select className="form-input" value={form.workflowTemplate} onChange={e => setForm({ ...form, workflowTemplate: e.target.value })}><option value="">Select template...</option>{n8nOptions.map(t => <option key={t.value} value={t.value}>{t.label}</option>)}</select></div>}
+                        {form.actions.includes('launch_n8n') && (
+                            <div className="form-field">
+                                <label className="form-label">n8n template</label>
+                                <input
+                                    className="form-input"
+                                    placeholder="Search 8k+ n8n workflows by name, action, skill..."
+                                    value={templateSearch}
+                                    onChange={e => setTemplateSearch(e.target.value)}
+                                    style={{ marginBottom: 'var(--space-2)' }}
+                                />
+                                <select className="form-input" value={form.workflowTemplate} onChange={e => setForm({ ...form, workflowTemplate: e.target.value })}>
+                                    <option value="">Select template...</option>
+                                    {n8nOptions.map(t => <option key={t.value} value={t.value}>{t.label}</option>)}
+                                </select>
+                                <div className="mono text-xs text-tertiary" style={{ marginTop: 6 }}>
+                                    Catalog source: {n8nCatalogSource} · matches: {n8nOptions.length} · installable: {n8nCatalogStats.installable || 0} {n8nCatalogLoading ? '· loading...' : ''}
+                                </div>
+                                {selectedTemplateMeta && (
+                                    <div className="mono text-xs text-secondary" style={{ marginTop: 6 }}>
+                                        Tier: {selectedTemplateMeta.installTier || 'n/a'}
+                                        {selectedTemplateMeta?.actionKeys?.length > 0 ? ` · actions: ${selectedTemplateMeta.actionKeys.join(', ')}` : ''}
+                                        {selectedTemplateMeta?.skillTags?.length > 0 ? ` · skills: ${selectedTemplateMeta.skillTags.slice(0, 6).join(', ')}` : ''}
+                                    </div>
+                                )}
+                            </div>
+                        )}
 
                         {form.trigger && form.actions.length > 0 && (
                             <div className="auto-sequence-preview">
@@ -327,6 +384,12 @@ function Automation() {
                                                     {step.config?.endpoint && <div className="mono text-xs text-tertiary">API: {step.config.label || step.config.endpoint}</div>}
                                                     {step.config?.agentCodeName && <div className="mono text-xs text-tertiary">Agent: {step.config.agentCodeName}</div>}
                                                     {step.config?.workflowTemplate && <div className="mono text-xs text-tertiary">Template: {step.config.workflowTemplateLabel || step.config.workflowTemplate}{step.config?.workflowTemplateUrl && <a href={step.config.workflowTemplateUrl} target="_blank" rel="noreferrer" style={{ marginLeft: 8, color: 'var(--color-primary)' }}>Docs</a>}</div>}
+                                                    {Array.isArray(step.config?.workflowTemplateActions) && step.config.workflowTemplateActions.length > 0 && (
+                                                        <div className="mono text-xs text-tertiary">Actions: {step.config.workflowTemplateActions.join(', ')}</div>
+                                                    )}
+                                                    {Array.isArray(step.config?.workflowTemplateSkills) && step.config.workflowTemplateSkills.length > 0 && (
+                                                        <div className="mono text-xs text-tertiary">Skills: {step.config.workflowTemplateSkills.slice(0, 8).join(', ')}</div>
+                                                    )}
                                                 </div>
                                             ))}
                                         </div>

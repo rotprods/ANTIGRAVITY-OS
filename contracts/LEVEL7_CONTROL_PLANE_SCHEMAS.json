@@ -1,0 +1,155 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "oculops://contracts/level7-control-plane-schemas",
+  "title": "OCULOPS Level-7 Control Plane Schemas",
+  "type": "object",
+  "properties": {
+    "GoalSpec": {
+      "type": "object",
+      "required": [
+        "goal_type",
+        "goal_priority",
+        "goal_scope",
+        "goal_complexity",
+        "goal_dependencies",
+        "goal_risk_level",
+        "goal_expected_outcome",
+        "goal_text"
+      ],
+      "properties": {
+        "goal_type": { "type": "string" },
+        "goal_priority": { "type": "string", "enum": ["low", "medium", "high", "critical"] },
+        "goal_scope": { "type": "string" },
+        "goal_complexity": { "type": "integer", "minimum": 1, "maximum": 10 },
+        "goal_dependencies": { "type": "array", "items": { "type": "string" } },
+        "goal_deadline": { "type": ["string", "null"] },
+        "goal_risk_level": { "type": "string", "enum": ["low", "medium", "high", "critical"] },
+        "goal_expected_outcome": { "type": "string" },
+        "goal_text": { "type": "string" }
+      }
+    },
+    "TaskNode": {
+      "type": "object",
+      "required": ["id", "key", "title", "step_type", "depends_on"],
+      "properties": {
+        "id": { "type": "string" },
+        "key": { "type": "string" },
+        "title": { "type": "string" },
+        "step_type": { "type": "string", "enum": ["agent", "workflow", "task", "event", "manual"] },
+        "depends_on": { "type": "array", "items": { "type": "string" } },
+        "agent_id": { "type": ["string", "null"] },
+        "workflow_id": { "type": ["string", "null"] },
+        "tool_id": { "type": ["string", "null"] },
+        "metadata": { "type": "object" }
+      }
+    },
+    "WorkflowNode": {
+      "type": "object",
+      "required": [
+        "workflow_id",
+        "workflow_type",
+        "workflow_inputs",
+        "workflow_outputs",
+        "workflow_tools",
+        "workflow_agents",
+        "workflow_dependencies",
+        "workflow_success_rate"
+      ],
+      "properties": {
+        "workflow_id": { "type": "string" },
+        "workflow_type": { "type": "string", "enum": ["native_pipeline", "n8n_template", "custom"] },
+        "workflow_inputs": { "type": "array", "items": { "type": "string" } },
+        "workflow_outputs": { "type": "array", "items": { "type": "string" } },
+        "workflow_tools": { "type": "array", "items": { "type": "string" } },
+        "workflow_agents": { "type": "array", "items": { "type": "string" } },
+        "workflow_dependencies": { "type": "array", "items": { "type": "string" } },
+        "workflow_success_rate": { "type": "number", "minimum": 0, "maximum": 1 },
+        "description": { "type": "string" }
+      }
+    },
+    "ToolCapability": {
+      "type": "object",
+      "required": [
+        "tool_id",
+        "tool_type",
+        "tool_provider",
+        "tool_permissions",
+        "tool_latency",
+        "tool_cost",
+        "tool_security_level"
+      ],
+      "properties": {
+        "tool_id": { "type": "string" },
+        "tool_type": { "type": "string" },
+        "tool_provider": { "type": "string" },
+        "tool_permissions": { "type": "array", "items": { "type": "string" } },
+        "tool_latency": { "type": "number", "minimum": 0 },
+        "tool_cost": { "type": "number", "minimum": 0 },
+        "tool_security_level": { "type": "string", "enum": ["low", "medium", "high", "critical"] }
+      }
+    },
+    "EvaluationResult": {
+      "type": "object",
+      "required": ["output_score", "execution_time", "cost_estimate", "risk_level", "retry_needed", "decision", "explanation"],
+      "properties": {
+        "output_score": { "type": "number", "minimum": 0, "maximum": 100 },
+        "execution_time": { "type": "number", "minimum": 0 },
+        "cost_estimate": { "type": "number", "minimum": 0 },
+        "risk_level": { "type": "string", "enum": ["low", "medium", "high", "critical"] },
+        "retry_needed": { "type": "boolean" },
+        "decision": { "type": "string", "enum": ["pass", "retry", "reject", "escalate"] },
+        "explanation": { "type": "string" }
+      }
+    },
+    "MemoryRecord": {
+      "type": "object",
+      "required": ["id", "scope", "namespace", "content", "importance", "created_at"],
+      "properties": {
+        "id": { "type": "string" },
+        "scope": { "type": "string", "enum": ["task", "shared_ops", "long_term"] },
+        "namespace": { "type": "string" },
+        "summary": { "type": ["string", "null"] },
+        "content": { "type": "object" },
+        "correlation_id": { "type": ["string", "null"] },
+        "importance": { "type": "number", "minimum": 0, "maximum": 100 },
+        "created_at": { "type": "string" }
+      }
+    },
+    "GovernanceDecision": {
+      "type": "object",
+      "required": ["allowed", "decision", "reason", "requires_approval", "applied_policies"],
+      "properties": {
+        "allowed": { "type": "boolean" },
+        "decision": { "type": "string", "enum": ["allow", "soft_block", "hard_block"] },
+        "reason": { "type": "string" },
+        "requires_approval": { "type": "boolean" },
+        "applied_policies": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "SimulationResult": {
+      "type": "object",
+      "required": ["simulation_id", "mode", "status", "score", "recommended_action", "policy_gate_passed"],
+      "properties": {
+        "simulation_id": { "type": "string" },
+        "mode": { "type": "string", "enum": ["dry_run", "shadow", "replay"] },
+        "status": { "type": "string", "enum": ["passed", "failed"] },
+        "score": { "type": "number", "minimum": 0, "maximum": 100 },
+        "recommended_action": { "type": "string" },
+        "policy_gate_passed": { "type": "boolean" }
+      }
+    },
+    "ImprovementPatch": {
+      "type": "object",
+      "required": ["patch_id", "issue_type", "issue_summary", "proposal", "risk_level", "status", "created_at"],
+      "properties": {
+        "patch_id": { "type": "string" },
+        "issue_type": { "type": "string" },
+        "issue_summary": { "type": "string" },
+        "proposal": { "type": "string" },
+        "risk_level": { "type": "string", "enum": ["low", "medium", "high", "critical"] },
+        "status": { "type": "string", "enum": ["proposed", "simulated", "approved", "rejected", "blocked"] },
+        "created_at": { "type": "string" }
+      }
+    }
+  }
+}

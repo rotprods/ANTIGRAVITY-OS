@@ -218,6 +218,10 @@ export function useApiCatalog(filters = {}) {
     const entry = entriesWithConnectorState.find(candidate => candidate.slug === slug)
     if (!entry) return { error: 'Catalog entry not found' }
 
+    if (entry.activation_tier !== 'adapter_ready') {
+      return { error: 'Only adapter-ready catalog entries can be installed' }
+    }
+
     const existing = connectors.find(connector => connector.catalog_slug === slug)
     if (existing) return { data: existing, existing: true }
 

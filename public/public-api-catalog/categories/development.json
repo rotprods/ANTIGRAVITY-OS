@@ -43,8 +43,8 @@
       "business_fit_score": 65,
       "activation_tier": "adapter_ready",
       "is_listed": false,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-changelogs-md-changelogs-md",
@@ -86,8 +86,8 @@
       "business_fit_score": 65,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-cloudflare-trace-github-com",
@@ -129,8 +129,8 @@
       "business_fit_score": 65,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-codex-github-com",
@@ -172,8 +172,8 @@
       "business_fit_score": 65,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-domaindb-info-api-domainsdb-info",
@@ -215,8 +215,8 @@
       "business_fit_score": 65,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-icanhazip-major-io",
@@ -258,8 +258,8 @@
       "business_fit_score": 65,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-ip-fast-com-ip-fast-com",
@@ -301,8 +301,8 @@
       "business_fit_score": 65,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-ipify-ipify-org",
@@ -344,8 +344,8 @@
       "business_fit_score": 65,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-ipinfo-ipinfo-io",
@@ -387,8 +387,8 @@
       "business_fit_score": 65,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-json-2-jsonp-json2jsonp-com",
@@ -430,8 +430,8 @@
       "business_fit_score": 65,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-kroki-kroki-io",
@@ -473,8 +473,8 @@
       "business_fit_score": 65,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-my-ip-myip-com",
@@ -516,8 +516,8 @@
       "business_fit_score": 65,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-oyyi-oyyi-xyz",
@@ -559,8 +559,8 @@
       "business_fit_score": 65,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-serialif-color-color-serialif-com",
@@ -602,8 +602,8 @@
       "business_fit_score": 65,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-wandbox-github-com",
@@ -645,8 +645,8 @@
       "business_fit_score": 65,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-contentful-images-contentful-com",
@@ -688,8 +688,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-databricks-docs-databricks-com",
@@ -731,8 +731,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-geekflare-apidocs-geekflare-com",
@@ -774,8 +774,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-getping-getping-info",
@@ -817,8 +817,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-ghost-ghost-org",
@@ -860,8 +860,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-google-fonts-developers-google-com",
@@ -903,8 +903,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-host-io-host-io",
@@ -946,8 +946,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-hunter-hunter-io",
@@ -989,8 +989,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-ibm-text-to-speech-cloud-ibm-com",
@@ -1032,8 +1032,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-import-io-api-docs-import-io",
@@ -1075,8 +1075,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-ipfind-io-ipfind-io",
@@ -1118,8 +1118,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-jsonbin-io-jsonbin-io",
@@ -1161,8 +1161,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-mac-address-vendor-lookup-macaddress-io",
@@ -1204,8 +1204,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-micro-db-m3o-com",
@@ -1247,8 +1247,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-onesignal-documentation-onesignal-com",
@@ -1290,8 +1290,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-open-page-rank-domcop-com",
@@ -1333,8 +1333,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-openapihub-hub-openapihub-com",
@@ -1376,8 +1376,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-opengraphr-opengraphr-com",
@@ -1419,8 +1419,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-savepage-io-savepage-io",
@@ -1462,8 +1462,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-screenshot-abstractapi-com",
@@ -1505,8 +1505,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-screenshotapi-net-screenshotapi-net",
@@ -1548,8 +1548,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-serpstack-serpstack-com",
@@ -1591,8 +1591,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-google-docs-developers-google-com",
@@ -1634,8 +1634,8 @@
       "business_fit_score": 55,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-google-sheets-developers-google-com",
@@ -1677,8 +1677,8 @@
       "business_fit_score": 55,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-24-pull-requests-24pullrequests-com",
@@ -1720,8 +1720,8 @@
       "business_fit_score": 45,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-agify-io-agify-io",
@@ -1763,8 +1763,8 @@
       "business_fit_score": 45,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-api-gratis-apigratis-com-br",
@@ -1806,8 +1806,8 @@
       "business_fit_score": 45,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-apicagent-apicagent-com",
@@ -1849,8 +1849,8 @@
       "business_fit_score": 45,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-beeceptor-beeceptor-com",
@@ -1892,8 +1892,8 @@
       "business_fit_score": 45,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-bored-boredapi-com",
@@ -1935,8 +1935,8 @@
       "business_fit_score": 45,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-cdnjs-api-cdnjs-com",
@@ -1978,8 +1978,8 @@
       "business_fit_score": 45,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-ciprand-github-com",
@@ -2021,8 +2021,8 @@
       "business_fit_score": 45,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-cors-proxy-github-com",
@@ -2064,8 +2064,8 @@
       "business_fit_score": 45,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-countapi-countapi-xyz",
@@ -2107,8 +2107,8 @@
       "business_fit_score": 45,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-digitalocean-status-status-digitalocean-com",
@@ -2150,8 +2150,8 @@
       "business_fit_score": 45,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-extendsclass-json-storage-extendsclass-com",
@@ -2193,8 +2193,8 @@
       "business_fit_score": 45,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-genderize-io-genderize-io",
@@ -2236,8 +2236,8 @@
       "business_fit_score": 45,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-host-t-com-host-t-com",
@@ -2279,8 +2279,8 @@
       "business_fit_score": 45,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-http2-pro-http2-pro",
@@ -2322,8 +2322,8 @@
       "business_fit_score": 45,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-httpbin-httpbin-org",
@@ -2365,8 +2365,8 @@
       "business_fit_score": 45,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-httpbin-cloudflare-cloudflare-quic-com",
@@ -2408,8 +2408,8 @@
       "business_fit_score": 45,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-icanhazepoch-icanhazepoch-com",
@@ -2451,8 +2451,8 @@
       "business_fit_score": 45,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-ifttt-platform-ifttt-com",
@@ -2494,8 +2494,8 @@
       "business_fit_score": 45,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-image-charts-documentation-image-charts-com",
@@ -2537,8 +2537,8 @@
       "business_fit_score": 45,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-jsdelivr-github-com",
@@ -2580,8 +2580,8 @@
       "business_fit_score": 45,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-license-api-github-com",
@@ -2623,8 +2623,8 @@
       "business_fit_score": 45,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-lua-decompiler-lua-decompiler-ferib-dev",
@@ -2666,8 +2666,8 @@
       "business_fit_score": 45,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-microenv-microenv-com",
@@ -2709,8 +2709,8 @@
       "business_fit_score": 45,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-mocky-designer-mocky-io",
@@ -2752,8 +2752,8 @@
       "business_fit_score": 45,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-nationalize-io-nationalize-io",
@@ -2795,8 +2795,8 @@
       "business_fit_score": 45,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-networkcalc-networkcalc-com",
@@ -2838,8 +2838,8 @@
       "business_fit_score": 45,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-npm-registry-github-com",
@@ -2881,8 +2881,8 @@
       "business_fit_score": 45,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-qr-code-qrtag-net",
@@ -2924,8 +2924,8 @@
       "business_fit_score": 45,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-qr-code-goqr-me",
@@ -2967,8 +2967,8 @@
       "business_fit_score": 45,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-qrcode-monkey-qrcode-monkey-com",
@@ -3010,8 +3010,8 @@
       "business_fit_score": 45,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-quickchart-quickchart-io",
@@ -3053,8 +3053,8 @@
       "business_fit_score": 45,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-reqres-reqres-in",
@@ -3096,8 +3096,8 @@
       "business_fit_score": 45,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-rss-feed-to-json-rss-to-json-serverless-api-vercel-app",
@@ -3139,8 +3139,8 @@
       "business_fit_score": 45,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-sonar-github-com",
@@ -3182,8 +3182,8 @@
       "business_fit_score": 45,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-statically-statically-io",
@@ -3225,8 +3225,8 @@
       "business_fit_score": 45,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-apiflash-apiflash-com",
@@ -3268,8 +3268,8 @@
       "business_fit_score": 40,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-azure-devops-docs-microsoft-com",
@@ -3311,8 +3311,8 @@
       "business_fit_score": 40,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-base-base-api-io",
@@ -3354,8 +3354,8 @@
       "business_fit_score": 40,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-blague-xyz-blague-xyz",
@@ -3397,8 +3397,8 @@
       "business_fit_score": 40,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-blitapp-blitapp-com",
@@ -3440,8 +3440,8 @@
       "business_fit_score": 40,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-brainshop-ai-brainshop-ai",
@@ -3483,8 +3483,8 @@
       "business_fit_score": 40,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-browshot-browshot-com",
@@ -3526,8 +3526,8 @@
       "business_fit_score": 40,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-docker-hub-docs-docker-com",
@@ -3569,8 +3569,8 @@
       "business_fit_score": 40,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-glitterly-developers-glitterly-app",
@@ -3612,8 +3612,8 @@
       "business_fit_score": 40,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-google-firebase-firebase-google-com",
@@ -3655,8 +3655,8 @@
       "business_fit_score": 40,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-hasura-hasura-io",
@@ -3698,8 +3698,8 @@
       "business_fit_score": 40,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-ip2whois-information-lookup-ip2whois-com",
@@ -3741,8 +3741,8 @@
       "business_fit_score": 40,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-logs-to-logs-to",
@@ -3784,8 +3784,8 @@
       "business_fit_score": 40,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-pagecdn-pagecdn-com",
@@ -3827,8 +3827,8 @@
       "business_fit_score": 40,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-postman-postman-com",
@@ -3870,8 +3870,8 @@
       "business_fit_score": 40,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-proxycrawl-proxycrawl-com",
@@ -3913,8 +3913,8 @@
       "business_fit_score": 40,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-proxykingdom-proxykingdom-com",
@@ -3956,8 +3956,8 @@
       "business_fit_score": 40,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-pusher-beams-pusher-com",
@@ -3999,8 +3999,8 @@
       "business_fit_score": 40,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-random-stuff-api-docs-pgamerx-com",
@@ -4042,8 +4042,8 @@
       "business_fit_score": 40,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-rejax-rejax-io",
@@ -4085,8 +4085,8 @@
       "business_fit_score": 40,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-scrapeninja-scrapeninja-net",
@@ -4128,8 +4128,8 @@
       "business_fit_score": 40,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-scraperapi-scraperapi-com",
@@ -4171,8 +4171,8 @@
       "business_fit_score": 40,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-scraperbox-scraperbox-com",
@@ -4214,8 +4214,8 @@
       "business_fit_score": 40,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-scrapestack-scrapestack-com",
@@ -4257,8 +4257,8 @@
       "business_fit_score": 40,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-scrapingant-scrapingant-com",
@@ -4300,8 +4300,8 @@
       "business_fit_score": 40,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-scrapingdog-scrapingdog-com",
@@ -4343,8 +4343,8 @@
       "business_fit_score": 40,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-sheetsu-sheetsu-com",
@@ -4386,8 +4386,8 @@
       "business_fit_score": 40,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-supportivekoala-developers-supportivekoala-com",
@@ -4429,8 +4429,8 @@
       "business_fit_score": 40,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-tyk-tyk-io",
@@ -4472,8 +4472,8 @@
       "business_fit_score": 40,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-webscraping-ai-webscraping-ai",
@@ -4515,8 +4515,8 @@
       "business_fit_score": 40,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-zenrows-zenrows-com",
@@ -4558,8 +4558,8 @@
       "business_fit_score": 40,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-apilayer-userstack-userstack-com",
@@ -4601,8 +4601,8 @@
       "business_fit_score": 35,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-bitbucket-developer-atlassian-com",
@@ -4644,8 +4644,8 @@
       "business_fit_score": 35,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-github-docs-github-com",
@@ -4687,8 +4687,8 @@
       "business_fit_score": 35,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-gitlab-docs-gitlab-com",
@@ -4730,8 +4730,8 @@
       "business_fit_score": 35,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-gitter-developer-gitter-im",
@@ -4773,8 +4773,8 @@
       "business_fit_score": 35,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-google-keep-developers-google-com",
@@ -4816,8 +4816,8 @@
       "business_fit_score": 35,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-google-slides-developers-google-com",
@@ -4859,8 +4859,8 @@
       "business_fit_score": 35,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-gorest-gorest-co-in",
@@ -4902,8 +4902,8 @@
       "business_fit_score": 35,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-heroku-devcenter-heroku-com",
@@ -4945,8 +4945,8 @@
       "business_fit_score": 35,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-netlify-docs-netlify-com",
@@ -4988,8 +4988,8 @@
       "business_fit_score": 35,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-sonarqube-sonarcloud-io",
@@ -5031,8 +5031,8 @@
       "business_fit_score": 35,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-stackexchange-api-stackexchange-com",
@@ -5074,8 +5074,8 @@
       "business_fit_score": 35,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-shoutcloud-shoutcloud-io",
@@ -5117,8 +5117,8 @@
       "business_fit_score": 5,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "development-blynk-cloud-blynkapi-docs-apiary-io",
@@ -5160,8 +5160,8 @@
       "business_fit_score": 0,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     }
   ]
 }

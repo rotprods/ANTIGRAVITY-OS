@@ -1,0 +1,477 @@
+{
+  "summary": {
+    "generatedAt": "2026-03-13T07:06:09.600Z",
+    "totalWorkflowsInN8n": 26,
+    "auditedWorkflows": 26,
+    "recentHours": 48,
+    "runnableNow": 17,
+    "activatableNow": 16,
+    "activeNow": 13,
+    "blockedByCredentials": 9,
+    "missingCredentialTypes": [
+      "googleSheetsOAuth2Api",
+      "openAiApi",
+      "httpHeaderAuth",
+      "perplexityApi",
+      "blotatoApi",
+      "googleDriveOAuth2Api",
+      "githubApi",
+      "openRouterApi",
+      "postizApi",
+      "httpBearerAuth"
+    ]
+  },
+  "details": [
+    {
+      "id": "uPSDrhgXNz4UtYNL",
+      "name": "Automate video creation with Veo3 and auto-post to Instagram, TikTok via Blotato - vide",
+      "active": false,
+      "updatedAt": "2026-03-13T06:58:23.045Z",
+      "triggers": [
+        "schedule"
+      ],
+      "nodeCount": 29,
+      "requiredCredentialTypes": [
+        "googleSheetsOAuth2Api",
+        "openAiApi",
+        "httpHeaderAuth"
+      ],
+      "missingCredentialTypes": [
+        "googleSheetsOAuth2Api",
+        "openAiApi",
+        "httpHeaderAuth"
+      ],
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "w1zjD0xMsGXsFzXg",
+      "name": "Create Video with Google Veo3 and Upload to Youtube",
+      "active": false,
+      "updatedAt": "2026-03-13T06:58:22.902Z",
+      "triggers": [
+        "manual",
+        "schedule"
+      ],
+      "nodeCount": 23,
+      "requiredCredentialTypes": [],
+      "missingCredentialTypes": [],
+      "runnableNow": true,
+      "activatableNow": true
+    },
+    {
+      "id": "atz5X3DYUeN8x6mX",
+      "name": "💥 Viral TikTok Video Machine: Auto-Create UGC with VEED Avatars -vide",
+      "active": false,
+      "updatedAt": "2026-03-13T06:58:22.693Z",
+      "triggers": [],
+      "nodeCount": 35,
+      "requiredCredentialTypes": [
+        "telegramApi",
+        "perplexityApi",
+        "openAiApi",
+        "googleSheetsOAuth2Api",
+        "blotatoApi"
+      ],
+      "missingCredentialTypes": [
+        "perplexityApi",
+        "openAiApi",
+        "googleSheetsOAuth2Api",
+        "blotatoApi"
+      ],
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "8vac8DPRTi5P7JdX",
+      "name": "💥 Generate AI viral videos with NanoBanana & VEO3, shared on socials via Blotato - vide",
+      "active": false,
+      "updatedAt": "2026-03-13T06:58:22.443Z",
+      "triggers": [],
+      "nodeCount": 47,
+      "requiredCredentialTypes": [
+        "blotatoApi",
+        "googleSheetsOAuth2Api",
+        "openAiApi",
+        "telegramApi",
+        "httpHeaderAuth",
+        "googleDriveOAuth2Api"
+      ],
+      "missingCredentialTypes": [
+        "blotatoApi",
+        "googleSheetsOAuth2Api",
+        "openAiApi",
+        "httpHeaderAuth",
+        "googleDriveOAuth2Api"
+      ],
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "IQB6I9mXuF34dhuS",
+      "name": "💥 Generate AI Videos with Seedance & Blotato and Upload to TikTok, YouTube & Instagram - version II - vide",
+      "active": false,
+      "updatedAt": "2026-03-13T06:58:22.275Z",
+      "triggers": [
+        "schedule"
+      ],
+      "nodeCount": 40,
+      "requiredCredentialTypes": [
+        "googleSheetsOAuth2Api",
+        "openAiApi",
+        "httpHeaderAuth",
+        "blotatoApi"
+      ],
+      "missingCredentialTypes": [
+        "googleSheetsOAuth2Api",
+        "openAiApi",
+        "httpHeaderAuth",
+        "blotatoApi"
+      ],
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "DkqoOmkeSgRgy4o3",
+      "name": "Use skills In n8n agent node",
+      "active": false,
+      "updatedAt": "2026-03-13T06:58:22.077Z",
+      "triggers": [],
+      "nodeCount": 21,
+      "requiredCredentialTypes": [
+        "githubApi",
+        "openRouterApi"
+      ],
+      "missingCredentialTypes": [
+        "githubApi",
+        "openRouterApi"
+      ],
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "5IOOWvQ4UP4d5X0K",
+      "name": "n8n Basics",
+      "active": false,
+      "updatedAt": "2026-03-13T06:58:21.931Z",
+      "triggers": [
+        "schedule",
+        "manual"
+      ],
+      "nodeCount": 25,
+      "requiredCredentialTypes": [
+        "gmailOAuth2"
+      ],
+      "missingCredentialTypes": [],
+      "runnableNow": true,
+      "activatableNow": true
+    },
+    {
+      "id": "9o84jdBGlA6IQ4Sh",
+      "name": "💥 Generate AI Viral Videos with VEO 3 and Upload to TikTok ",
+      "active": false,
+      "updatedAt": "2026-03-13T06:58:21.319Z",
+      "triggers": [
+        "schedule"
+      ],
+      "nodeCount": 24,
+      "requiredCredentialTypes": [
+        "googleSheetsOAuth2Api",
+        "openAiApi",
+        "httpHeaderAuth",
+        "blotatoApi"
+      ],
+      "missingCredentialTypes": [
+        "googleSheetsOAuth2Api",
+        "openAiApi",
+        "httpHeaderAuth",
+        "blotatoApi"
+      ],
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "BW4CdXZhSEshfC7W",
+      "name": "Analyze contract risk from PDFs with OpenAI, Supabase and Slack alerts",
+      "active": false,
+      "updatedAt": "2026-03-13T06:58:20.701Z",
+      "triggers": [
+        "manual"
+      ],
+      "nodeCount": 31,
+      "requiredCredentialTypes": [
+        "openAiApi"
+      ],
+      "missingCredentialTypes": [
+        "openAiApi"
+      ],
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "bmfRyG1Or1PXjiKE",
+      "name": "Claude Canva Files → Blotato",
+      "active": false,
+      "updatedAt": "2026-03-13T06:58:20.467Z",
+      "triggers": [
+        "webhook"
+      ],
+      "nodeCount": 15,
+      "requiredCredentialTypes": [],
+      "missingCredentialTypes": [],
+      "runnableNow": true,
+      "activatableNow": true
+    },
+    {
+      "id": "zFu72IiAMJXM1eLw",
+      "name": "💥 Generate AI videos and carousels with Blotato and publish to Instagram & TikTok",
+      "active": false,
+      "updatedAt": "2026-03-13T06:58:20.255Z",
+      "triggers": [],
+      "nodeCount": 13,
+      "requiredCredentialTypes": [
+        "blotatoApi",
+        "openAiApi",
+        "telegramApi"
+      ],
+      "missingCredentialTypes": [
+        "blotatoApi",
+        "openAiApi"
+      ],
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "RvGMut9HRR7PQPc3",
+      "name": "Automated Long Video Creator",
+      "active": false,
+      "updatedAt": "2026-03-13T06:57:40.822Z",
+      "triggers": [
+        "manual"
+      ],
+      "nodeCount": 35,
+      "requiredCredentialTypes": [
+        "googleDriveOAuth2Api",
+        "httpHeaderAuth",
+        "postizApi",
+        "googleSheetsOAuth2Api",
+        "httpBearerAuth"
+      ],
+      "missingCredentialTypes": [
+        "googleDriveOAuth2Api",
+        "httpHeaderAuth",
+        "postizApi",
+        "googleSheetsOAuth2Api",
+        "httpBearerAuth"
+      ],
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "mzW6Gywl0JhIo2Ld",
+      "name": "OCULOPS — Lead to CRM Pipeline",
+      "active": true,
+      "updatedAt": "2026-03-12T16:02:12.857Z",
+      "triggers": [
+        "webhook"
+      ],
+      "nodeCount": 7,
+      "requiredCredentialTypes": [],
+      "missingCredentialTypes": [],
+      "runnableNow": true,
+      "activatableNow": true
+    },
+    {
+      "id": "Cb3QWkIdcEExqXHN",
+      "name": "OCULOPS — Drip Outreach Sequence",
+      "active": true,
+      "updatedAt": "2026-03-12T16:02:12.117Z",
+      "triggers": [
+        "schedule"
+      ],
+      "nodeCount": 6,
+      "requiredCredentialTypes": [],
+      "missingCredentialTypes": [],
+      "runnableNow": true,
+      "activatableNow": true
+    },
+    {
+      "id": "B3POqt2YaDDL9apO",
+      "name": "OCULOPS — Lead to CRM Pipeline",
+      "active": true,
+      "updatedAt": "2026-03-12T16:02:11.512Z",
+      "triggers": [
+        "webhook"
+      ],
+      "nodeCount": 5,
+      "requiredCredentialTypes": [],
+      "missingCredentialTypes": [],
+      "runnableNow": true,
+      "activatableNow": true
+    },
+    {
+      "id": "xx7yig8aOh7TgzJF",
+      "name": "🎯 Speed-to-Lead — Instant Lead Response Pipeline",
+      "active": true,
+      "updatedAt": "2026-03-12T14:48:52.029Z",
+      "triggers": [
+        "webhook"
+      ],
+      "nodeCount": 5,
+      "requiredCredentialTypes": [],
+      "missingCredentialTypes": [],
+      "runnableNow": true,
+      "activatableNow": true
+    },
+    {
+      "id": "t09HSa4rUgqw3YBj",
+      "name": "🔄 Master Multi-Agent Full Cycle (Daily 7AM)",
+      "active": true,
+      "updatedAt": "2026-03-12T14:48:51.589Z",
+      "triggers": [
+        "schedule"
+      ],
+      "nodeCount": 11,
+      "requiredCredentialTypes": [
+        "gmailOAuth2"
+      ],
+      "missingCredentialTypes": [],
+      "runnableNow": true,
+      "activatableNow": true
+    },
+    {
+      "id": "nEcKl1IBscyiupYX",
+      "name": "FORGE — Content Generation (On Webhook)",
+      "active": true,
+      "updatedAt": "2026-03-12T14:48:50.982Z",
+      "triggers": [
+        "webhook"
+      ],
+      "nodeCount": 3,
+      "requiredCredentialTypes": [],
+      "missingCredentialTypes": [],
+      "runnableNow": true,
+      "activatableNow": true
+    },
+    {
+      "id": "jlorHoQTi8WYIzpR",
+      "name": "STRATEGIST — Decision Evaluation (On Webhook)",
+      "active": true,
+      "updatedAt": "2026-03-12T14:48:50.448Z",
+      "triggers": [
+        "webhook"
+      ],
+      "nodeCount": 3,
+      "requiredCredentialTypes": [],
+      "missingCredentialTypes": [],
+      "runnableNow": true,
+      "activatableNow": true
+    },
+    {
+      "id": "fytMConk15YogJzE",
+      "name": "HERALD — Daily Telegram Briefing (8AM)",
+      "active": true,
+      "updatedAt": "2026-03-12T14:48:50.030Z",
+      "triggers": [
+        "schedule"
+      ],
+      "nodeCount": 3,
+      "requiredCredentialTypes": [],
+      "missingCredentialTypes": [],
+      "runnableNow": true,
+      "activatableNow": true
+    },
+    {
+      "id": "EB8LpcVZ3A5KNq04",
+      "name": "SCRIBE — Weekly Intelligence Email Report",
+      "active": true,
+      "updatedAt": "2026-03-12T14:48:49.559Z",
+      "triggers": [
+        "schedule"
+      ],
+      "nodeCount": 5,
+      "requiredCredentialTypes": [
+        "gmailOAuth2"
+      ],
+      "missingCredentialTypes": [],
+      "runnableNow": true,
+      "activatableNow": true
+    },
+    {
+      "id": "Aj2QYpoK9gPF4ss3",
+      "name": "📧 OUTREACH — Gmail Sender (Approved Emails)",
+      "active": true,
+      "updatedAt": "2026-03-12T14:48:48.986Z",
+      "triggers": [
+        "schedule"
+      ],
+      "nodeCount": 9,
+      "requiredCredentialTypes": [
+        "gmailOAuth2"
+      ],
+      "missingCredentialTypes": [],
+      "runnableNow": true,
+      "activatableNow": true
+    },
+    {
+      "id": "3MjuRbcZNCfCgSdF",
+      "name": "CORTEX — Full Orchestration Cycle (Every Hour)",
+      "active": true,
+      "updatedAt": "2026-03-12T14:48:48.617Z",
+      "triggers": [
+        "schedule"
+      ],
+      "nodeCount": 6,
+      "requiredCredentialTypes": [],
+      "missingCredentialTypes": [],
+      "runnableNow": true,
+      "activatableNow": true
+    },
+    {
+      "id": "0DZ85XMTdbaprhn6",
+      "name": "🔭 HUNTER — Daily Lead Prospection (Autopilot)",
+      "active": true,
+      "updatedAt": "2026-03-12T14:48:48.192Z",
+      "triggers": [
+        "schedule"
+      ],
+      "nodeCount": 3,
+      "requiredCredentialTypes": [
+        "gmailOAuth2"
+      ],
+      "missingCredentialTypes": [],
+      "runnableNow": true,
+      "activatableNow": true
+    },
+    {
+      "id": "p8JXWxdpyJ7BM96U",
+      "name": "ARCHITECT OS - Auto Handoff",
+      "active": true,
+      "updatedAt": "2026-03-12T14:37:46.333Z",
+      "triggers": [
+        "webhook"
+      ],
+      "nodeCount": 6,
+      "requiredCredentialTypes": [
+        "gmailOAuth2"
+      ],
+      "missingCredentialTypes": [],
+      "runnableNow": true,
+      "activatableNow": true
+    },
+    {
+      "id": "JO8SZ6BKp3z8hBI6",
+      "name": "Transformador de Fotos a Lujo",
+      "active": false,
+      "updatedAt": "2026-03-12T13:10:59.598Z",
+      "triggers": [],
+      "nodeCount": 12,
+      "requiredCredentialTypes": [
+        "telegramApi"
+      ],
+      "missingCredentialTypes": [],
+      "runnableNow": true,
+      "activatableNow": false
+    }
+  ]
+}

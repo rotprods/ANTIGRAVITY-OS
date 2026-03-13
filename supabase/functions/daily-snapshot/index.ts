@@ -14,10 +14,82 @@ const corsHeaders = {
     "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
+const INTERNAL_AUTH_HEADER = `Bearer ${Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!}`;
+const PUBLIC_FUNCTIONS_BASE = `${Deno.env.get("SUPABASE_URL")!}/functions/v1`;
+
 const supabase = createClient(
     Deno.env.get("SUPABASE_URL")!,
     Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
 );
+
+type ConnectorFeed = {
+    id: string;
+    name: string;
+    endpoint_name: string | null;
+    capabilities: string[];
+    sample_params: Record<string, unknown>;
+};
+
+function pickFeedConnector(connectors: ConnectorFeed[], capabilities: string[]) {
+    const normalized = new Set(capabilities.map(item => item.toLowerCase()));
+    return connectors.find(connector =>
+        (connector.capabilities || []).some(cap => normalized.has(String(cap).toLowerCase()))
+    ) || null;
+}
+
+function summarizeFeedPayload(payload: any) {
+    const normalized = payload?.normalized ?? payload?.raw ?? payload;
+
+    if (normalized == null) return null;
+    if (Array.isArray(normalized)) return normalized.slice(0, 5);
+    if (typeof normalized !== "object") return normalized;
+
+    const summary: Record<string, unknown> = {};
+    const keys = ["total", "routes", "distanceKm", "durationMinutes", "seriesId", "latest", "timezone", "next", "totalProviders"];
+    for (const key of keys) {
+        if (normalized[key] !== undefined) summary[key] = normalized[key];
+    }
+
+    if (Array.isArray(normalized.items)) summary.items = normalized.items.slice(0, 5);
+    if (Array.isArray(normalized.jobs)) summary.jobs = normalized.jobs.slice(0, 5);
+    if (Array.isArray(normalized.records)) summary.records = normalized.records.slice(0, 5);
+    if (Array.isArray(normalized.observations)) summary.observations = normalized.observations.slice(0, 5);
+    if (Array.isArray(normalized.providers)) summary.providers = normalized.providers.slice(0, 5);
+    if (normalized.current) summary.current = normalized.current;
+
+    return Object.keys(summary).length > 0 ? summary : normalized;
+}
+
+async function runConnectorFeed(connector: ConnectorFeed | null) {
+    if (!connector) return { ok: false, reason: "connector_unavailable" };
+
+    const response = await fetch(`${PUBLIC_FUNCTIONS_BASE}/api-proxy`, {
+        method: "POST",
+        headers: {
+            ...corsHeaders,
+            "Content-Type": "application/json",
+            "Authorization": INTERNAL_AUTH_HEADER,
+        },
+        body: JSON.stringify({
+            connector_id: connector.id,
+            endpoint_name: connector.endpoint_name,
+            params: connector.sample_params || {},
+            healthcheck: false,
+        }),
+    });
+
+    const payload = await response.json().catch(() => ({}));
+    return {
+        ok: response.ok && payload?.ok === true,
+        status: response.status,
+        connector_id: connector.id,
+        connector_name: connector.name,
+        endpoint_name: connector.endpoint_name,
+        summary: summarizeFeedPayload(payload),
+        error: payload?.error || null,
+        meta: payload?.meta || null,
+    };
+}
 
 Deno.serve(async (req: Request) => {
     if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
@@ -101,9 +173,33 @@ Deno.serve(async (req: Request) => {
 
             const { data: connectors } = await supabase
                 .from("api_connectors")
-                .select("name, catalog_slug, template_key, capabilities, health_status, last_healthcheck_at")
+                .select("id, name, catalog_slug, template_key, capabilities, health_status, last_healthcheck_at, endpoints")
                 .eq("is_active", true)
                 .eq("health_status", "live");
+
+            const connectorFeeds: ConnectorFeed[] = (connectors || []).map((connector: any) => ({
+                id: connector.id,
+                name: connector.name,
+                capabilities: connector.capabilities || [],
+                endpoint_name: Array.isArray(connector.endpoints) ? connector.endpoints[0]?.name || null : null,
+                sample_params: Array.isArray(connector.endpoints) ? connector.endpoints[0]?.sampleParams || {} : {},
+            }));
+
+            const feedConfig = {
+                weather: ["weather", "forecast", "spain_weather"],
+                macro: ["macro_data"],
+                treasury: ["treasury_data"],
+                jobs: ["jobs", "hiring_signals"],
+                news: ["news"],
+            };
+
+            const [weatherFeed, macroFeed, treasuryFeed, jobsFeed, newsFeed] = await Promise.all([
+                runConnectorFeed(pickFeedConnector(connectorFeeds, feedConfig.weather)),
+                runConnectorFeed(pickFeedConnector(connectorFeeds, feedConfig.macro)),
+                runConnectorFeed(pickFeedConnector(connectorFeeds, feedConfig.treasury)),
+                runConnectorFeed(pickFeedConnector(connectorFeeds, feedConfig.jobs)),
+                runConnectorFeed(pickFeedConnector(connectorFeeds, feedConfig.news)),
+            ]);
 
             const today = new Date().toISOString().split("T")[0];
             const { data: existing } = await supabase
@@ -136,6 +232,13 @@ Deno.serve(async (req: Request) => {
                             capabilities: connector.capabilities || [],
                             last_healthcheck_at: connector.last_healthcheck_at,
                         })),
+                        saved_feeds: {
+                            weather: weatherFeed,
+                            macro: macroFeed,
+                            treasury: treasuryFeed,
+                            jobs: jobsFeed,
+                            news: newsFeed,
+                        },
                     },
                 },
             };

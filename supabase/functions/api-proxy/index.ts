@@ -23,6 +23,80 @@ function isRecord(value: unknown): value is JsonRecord {
     return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 
+const LEGACY_HIGH_RISK_SOURCES = new Set([
+    "automation",
+    "automation_ui",
+    "automation_trigger",
+    "automation_workflow",
+    "event_dispatcher",
+    "manual",
+]);
+
+function compactValue(value: unknown) {
+    if (typeof value === "string") return value.trim();
+    if (value == null) return "";
+    return String(value).trim();
+}
+
+function normalizeRiskClass(value: unknown): "low" | "medium" | "high" | "critical" {
+    const normalized = compactValue(value).toLowerCase();
+    if (normalized === "critical") return "critical";
+    if (normalized === "high") return "high";
+    if (normalized === "medium") return "medium";
+    return "low";
+}
+
+function isHighRisk(riskClass: "low" | "medium" | "high" | "critical") {
+    return riskClass === "high" || riskClass === "critical";
+}
+
+function resolveRiskClass(payload: JsonRecord) {
+    const policy = isRecord(payload.policy) ? payload.policy : {};
+    const metadata = isRecord(payload.metadata) ? payload.metadata : {};
+    const route = isRecord(metadata.route) ? metadata.route : {};
+
+    return normalizeRiskClass(
+        payload.risk_class
+        || payload.risk_level
+        || policy.risk_class
+        || policy.risk_level
+        || metadata.risk_class
+        || metadata.risk_level
+        || route.risk_class
+        || "medium",
+    );
+}
+
+function resolveRequestSource(payload: JsonRecord) {
+    const metadata = isRecord(payload.metadata) ? payload.metadata : {};
+    const route = isRecord(metadata.route) ? metadata.route : {};
+    return compactValue(
+        metadata.source
+        || route.source
+        || payload.source
+        || "manual",
+    ).toLowerCase();
+}
+
+async function hasToolBusInvocationEvidence(correlationId: string, toolCodeName: string) {
+    const normalizedCorrelationId = compactValue(correlationId);
+    if (!normalizedCorrelationId) return false;
+
+    const { count, error } = await supabase
+        .from("event_log")
+        .select("id", { count: "exact", head: true })
+        .eq("event_type", "tool_bus.invocation")
+        .eq("correlation_id", normalizedCorrelationId)
+        .contains("metadata", { tool_code_name: toolCodeName });
+
+    if (error) {
+        console.error("[api-proxy] unable to verify tool-bus evidence", error);
+        return false;
+    }
+
+    return Number(count || 0) > 0;
+}
+
 function getNestedValue(source: JsonRecord, path: string | undefined) {
     if (!path) return undefined;
     return path.split(".").reduce((value: any, segment) => {
@@ -307,21 +381,28 @@ Deno.serve(async (req: Request) => {
         );
     }
 
-    const supabaseUser = createClient(
-        SUPABASE_URL,
-        SUPABASE_ANON_KEY,
-        { global: { headers: { Authorization: authHeader } } }
-    );
-    const { data: { user }, error: authError } = await supabaseUser.auth.getUser();
-    if (authError || !user) {
-        return new Response(
-            JSON.stringify({ ok: false, error: "Unauthorized" }),
-            { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+    const rawToken = authHeader.replace(/^Bearer\s+/i, "").trim();
+    const isInternalServiceCall = rawToken.length > 0 && rawToken === SERVICE_ROLE_KEY;
+
+    if (!isInternalServiceCall) {
+        const supabaseUser = createClient(
+            SUPABASE_URL,
+            SUPABASE_ANON_KEY,
+            { global: { headers: { Authorization: authHeader } } }
         );
+        const { data: { user }, error: authError } = await supabaseUser.auth.getUser();
+        if (authError || !user) {
+            return new Response(
+                JSON.stringify({ ok: false, error: "Unauthorized" }),
+                { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+            );
+        }
     }
 
     try {
-        const { connector_id, endpoint_name, params, body: requestBody, healthcheck } = await req.json();
+        const rawInput = await req.json();
+        const payload = isRecord(rawInput) ? rawInput : {};
+        const { connector_id, endpoint_name, params, body: requestBody, healthcheck } = payload;
         if (!connector_id) {
             return new Response(
                 JSON.stringify({ ok: false, error: "connector_id is required" }),
@@ -348,6 +429,72 @@ Deno.serve(async (req: Request) => {
             return new Response(
                 JSON.stringify({ ok: false, error: "Connector is disabled" }),
                 { status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+            );
+        }
+
+        const requestMetadata = isRecord(payload.metadata) ? payload.metadata : {};
+        const requestPolicy = isRecord(payload.policy) ? payload.policy : {};
+        const requestRoute = isRecord(requestMetadata.route) ? requestMetadata.route : {};
+        const riskClass = resolveRiskClass(payload);
+        const source = resolveRequestSource(payload);
+        const viaControlPlane = requestRoute.via_control_plane === true
+            || requestPolicy.via_control_plane === true
+            || Boolean(compactValue(requestMetadata.control_plane_trace_id));
+        const viaToolBus = requestRoute.via_tool_bus === true
+            || requestPolicy.via_tool_bus === true;
+        const routeCorrelationId = compactValue(
+            requestRoute.correlation_id
+            || requestMetadata.control_plane_correlation_id
+            || payload.correlation_id,
+        ) || null;
+
+        if (isHighRisk(riskClass) && LEGACY_HIGH_RISK_SOURCES.has(source)) {
+            if (!(viaControlPlane && viaToolBus)) {
+                return new Response(
+                    JSON.stringify({
+                        ok: false,
+                        error: "High-risk legacy connector execution is blocked. Route through control-plane tool_dispatch (control-plane + tool-bus).",
+                        code: "legacy_high_risk_route_required",
+                        source,
+                        risk_class: riskClass,
+                        routing: {
+                            via_control_plane: viaControlPlane,
+                            via_tool_bus: viaToolBus,
+                            correlation_id: routeCorrelationId,
+                        },
+                    }),
+                    { status: 409, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+                );
+            }
+
+            const toolCodeName = compactValue(payload.tool_code_name) || "api-proxy";
+            const hasEvidence = routeCorrelationId
+                ? await hasToolBusInvocationEvidence(routeCorrelationId, toolCodeName)
+                : false;
+            if (!hasEvidence) {
+                return new Response(
+                    JSON.stringify({
+                        ok: false,
+                        error: "High-risk connector execution requires verifiable tool-bus invocation trace.",
+                        code: "legacy_high_risk_missing_tool_bus_trace",
+                        source,
+                        risk_class: riskClass,
+                        correlation_id: routeCorrelationId,
+                    }),
+                    { status: 409, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+                );
+            }
+        }
+
+        if (!Boolean(healthcheck) && connector.health_status !== "live") {
+            return new Response(
+                JSON.stringify({
+                    ok: false,
+                    error: "Connector is not live yet. Run a healthcheck first.",
+                    connector_id,
+                    health_status: connector.health_status || "pending",
+                }),
+                { status: 409, headers: { ...corsHeaders, "Content-Type": "application/json" } }
             );
         }
 

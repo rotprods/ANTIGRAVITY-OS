@@ -34,6 +34,35 @@ function getFirstCompact(...values: Array<unknown>) {
   return "";
 }
 
+function normalizeRiskClass(value: unknown): "low" | "medium" | "high" | "critical" {
+  const normalized = compact(value).toLowerCase();
+  if (normalized === "critical") return "critical";
+  if (normalized === "high") return "high";
+  if (normalized === "medium") return "medium";
+  return "low";
+}
+
+function isHighRisk(riskClass: "low" | "medium" | "high" | "critical") {
+  return riskClass === "high" || riskClass === "critical";
+}
+
+function extractControlPlaneDispatchResult(controlPlaneDispatch: JsonRecord, fallbackCorrelationId: string | null) {
+  const controlPlaneData = asRecord(controlPlaneDispatch.data);
+  const dispatchResult = asRecord(controlPlaneData.dispatch_result);
+  if (Object.keys(dispatchResult).length === 0) {
+    return controlPlaneDispatch;
+  }
+
+  return {
+    ...dispatchResult,
+    control_plane: {
+      action: compact(controlPlaneDispatch.action) || "tool_dispatch",
+      trace_id: compact(controlPlaneDispatch.trace_id) || null,
+      correlation_id: compact(controlPlaneDispatch.correlation_id) || fallbackCorrelationId,
+    },
+  };
+}
+
 function inferWorkflowSteps(workflow: JsonRecord) {
   const steps = asArray<JsonRecord>(workflow.steps);
   if (steps.length > 0) return steps;
@@ -516,20 +545,65 @@ async function executeComposeStep({
 
   let dispatch = null;
   if (sendLive && ["email", "whatsapp"].includes(channel)) {
-    dispatch = await callEdgeFunction("messaging-dispatch", {
-      message_id: message.id,
-      conversation_id: conversation.id,
-      channel,
-      subject,
-      body,
-      metadata: {
-        launch_url: launchUrl || null,
+    const correlationId = getFirstCompact(
+      asRecord(context.trace).correlation_id,
+      context.correlation_id,
+      asRecord(context.metadata).correlation_id,
+    ) || null;
+    const orgId = getFirstCompact(
+      workflow.org_id,
+      context.org_id,
+      asRecord(context.trace).org_id,
+    ) || null;
+    const workflowAgentCodeName = resolveWorkflowAgentCodeName(step, workflow, context) || "outreach";
+
+    const controlPlaneDispatch = await callEdgeFunction("control-plane", {
+      action: "tool_dispatch",
+      org_id: orgId,
+      user_id: userId,
+      source_agent: workflowAgentCodeName,
+      source: "automation_workflow",
+      target_type: "agent_action",
+      target_ref: "messaging-dispatch",
+      risk_class: "high",
+      correlation_id: correlationId,
+      context: {
+        workflow_id: workflow.id,
+        workflow_name: workflow.name,
+        workflow_step_id: compact(step.id) || null,
+        channel,
+        send_live: true,
+      },
+      tool_code_name: "messaging-dispatch",
+      payload: {
+        message_id: message.id,
+        conversation_id: conversation.id,
+        channel,
+        subject,
+        body,
+        metadata: {
+          launch_url: launchUrl || null,
+          source: "automation_workflow",
+          workflow_id: workflow.id,
+          workflow_name: workflow.name,
+          workflow_step_id: compact(step.id) || null,
+          risk_class: "high",
+        },
       },
     }, authHeader || null);
+
+    dispatch = extractControlPlaneDispatchResult(controlPlaneDispatch, correlationId);
   }
 
+  const dispatchStatus = compact(asRecord(dispatch).status).toLowerCase();
+  const workflowStatus = dispatchStatus === "waiting_approval"
+    ? "awaiting_approval"
+    : dispatch
+      ? "sent"
+      : "drafted";
+
   return {
-    status: dispatch ? "sent" : "drafted",
+    status: workflowStatus,
     channel,
     conversation_id: conversation.id,
     message_id: message.id,
@@ -621,23 +695,99 @@ async function executeUpdateContactStep(step: JsonRecord, context: JsonRecord) {
   };
 }
 
-async function executeConnectorStep(step: JsonRecord, context: JsonRecord, authHeader?: string | null) {
+async function executeConnectorStep(step: JsonRecord, workflow: JsonRecord, context: JsonRecord, authHeader?: string | null) {
   const config = asRecord(step.config);
   if (!authHeader) {
     throw new Error("run_connector requires an authenticated session");
   }
 
-  if (!compact(config.connectorId)) {
+  const connectorId = compact(config.connectorId) || compact(config.connector_id);
+  if (!connectorId) {
     throw new Error("run_connector requires connectorId");
   }
 
-  return await callEdgeFunction("api-proxy", {
-    connector_id: compact(config.connectorId),
-    endpoint_name: compact(config.endpoint_name) || null,
+  const healthcheck = Boolean(config.healthcheck);
+  const { data: connector, error: connectorError } = await admin
+    .from("api_connectors")
+    .select("id,health_status,is_active")
+    .eq("id", connectorId)
+    .maybeSingle();
+
+  if (connectorError) throw connectorError;
+  if (!connector) {
+    throw new Error("run_connector target connector was not found");
+  }
+  if (!connector.is_active) {
+    throw new Error("run_connector target connector is disabled");
+  }
+  if (!healthcheck && compact(connector.health_status) !== "live") {
+    throw new Error("run_connector target connector is not live");
+  }
+
+  const riskClass = normalizeRiskClass(
+    config.risk_class
+      || config.risk_level
+      || context.risk_class
+      || context.risk_level
+      || "medium",
+  );
+  const correlationId = getFirstCompact(
+    asRecord(context.trace).correlation_id,
+    context.correlation_id,
+    asRecord(context.metadata).correlation_id,
+  ) || null;
+  const orgId = getFirstCompact(
+    workflow.org_id,
+    context.org_id,
+    asRecord(context.trace).org_id,
+  ) || null;
+  const workflowAgentCodeName = resolveWorkflowAgentCodeName(step, workflow, context) || "outreach";
+  const dispatchPayload = {
+    connector_id: connectorId,
+    endpoint_name: compact(config.endpointName) || compact(config.endpoint_name) || null,
     params: mergeRecords(config.params, asRecord(context.params)),
     body: mergeRecords(config.body, asRecord(context.body_payload)),
-    healthcheck: Boolean(config.healthcheck),
-  }, authHeader);
+    healthcheck,
+    risk_class: riskClass,
+    metadata: {
+      source: "automation_workflow",
+      workflow_id: workflow.id,
+      workflow_name: workflow.name,
+      workflow_step_id: compact(step.id) || null,
+      connector_id: connectorId,
+      endpoint_name: compact(config.endpointName) || compact(config.endpoint_name) || null,
+      risk_class: riskClass,
+    },
+  };
+
+  if (!isHighRisk(riskClass)) {
+    return await callEdgeFunction("api-proxy", dispatchPayload, authHeader);
+  }
+
+  const controlPlaneDispatch = await callEdgeFunction("control-plane", {
+    action: "tool_dispatch",
+    org_id: orgId,
+    user_id: compact(workflow.user_id) || compact(context.user_id) || null,
+    source_agent: workflowAgentCodeName,
+    source: "automation_workflow",
+    target_type: "agent_action",
+    target_ref: "api-proxy",
+    risk_class: riskClass,
+    correlation_id: correlationId,
+    context: {
+      workflow_id: workflow.id,
+      workflow_name: workflow.name,
+      workflow_step_id: compact(step.id) || null,
+      connector_id: connectorId,
+      endpoint_name: compact(config.endpointName) || compact(config.endpoint_name) || null,
+      high_risk_legacy_reroute: true,
+    },
+    tool_code_name: "api-proxy",
+    function_name: "api-proxy",
+    payload: dispatchPayload,
+  }, authHeader || null);
+
+  return extractControlPlaneDispatchResult(controlPlaneDispatch, correlationId);
 }
 
 async function executeApiStep(step: JsonRecord, workflow: JsonRecord, context: JsonRecord, authHeader?: string | null) {
@@ -647,9 +797,64 @@ async function executeApiStep(step: JsonRecord, workflow: JsonRecord, context: J
     throw new Error("run_api requires endpoint");
   }
 
-  return await callEdgeFunction(endpoint, mergeRecords(config.payload, context, {
+  const riskClass = normalizeRiskClass(
+    config.risk_class
+      || config.risk_level
+      || context.risk_class
+      || context.risk_level
+      || "medium",
+  );
+  const correlationId = getFirstCompact(
+    asRecord(context.trace).correlation_id,
+    context.correlation_id,
+    asRecord(context.metadata).correlation_id,
+  ) || null;
+  const orgId = getFirstCompact(
+    workflow.org_id,
+    context.org_id,
+    asRecord(context.trace).org_id,
+  ) || null;
+  const workflowAgentCodeName = resolveWorkflowAgentCodeName(step, workflow, context) || "outreach";
+  const dispatchPayload = mergeRecords(config.payload, context, {
     user_id: compact(workflow.user_id) || compact(context.user_id) || null,
-  }), authHeader || null);
+    risk_class: riskClass,
+    metadata: {
+      source: "automation_workflow",
+      workflow_id: workflow.id,
+      workflow_name: workflow.name,
+      workflow_step_id: compact(step.id) || null,
+      endpoint,
+      risk_class: riskClass,
+    },
+  });
+
+  if (!isHighRisk(riskClass)) {
+    return await callEdgeFunction(endpoint, dispatchPayload, authHeader || null);
+  }
+
+  const controlPlaneDispatch = await callEdgeFunction("control-plane", {
+    action: "tool_dispatch",
+    org_id: orgId,
+    user_id: compact(workflow.user_id) || compact(context.user_id) || null,
+    source_agent: workflowAgentCodeName,
+    source: "automation_workflow",
+    target_type: "agent_action",
+    target_ref: endpoint,
+    risk_class: riskClass,
+    correlation_id: correlationId,
+    context: {
+      workflow_id: workflow.id,
+      workflow_name: workflow.name,
+      workflow_step_id: compact(step.id) || null,
+      endpoint,
+      high_risk_legacy_reroute: true,
+    },
+    tool_code_name: endpoint,
+    function_name: endpoint,
+    payload: dispatchPayload,
+  }, authHeader || null);
+
+  return extractControlPlaneDispatchResult(controlPlaneDispatch, correlationId);
 }
 
 async function executeAgentStep(step: JsonRecord, workflow: JsonRecord, context: JsonRecord, authHeader?: string | null) {
@@ -767,7 +972,7 @@ async function executeStep({
     case "update_contact":
       return await executeUpdateContactStep(step, context);
     case "run_connector":
-      return await executeConnectorStep(step, context, authHeader);
+      return await executeConnectorStep(step, workflow, context, authHeader);
     case "run_api":
       return await executeApiStep(step, workflow, context, authHeader);
     case "run_agent":

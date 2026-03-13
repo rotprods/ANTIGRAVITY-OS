@@ -31,8 +31,8 @@
       "business_fit_score": 35,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "vehicle-helipaddy-sites-helipaddy-com",
@@ -62,8 +62,8 @@
       "business_fit_score": 30,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "vehicle-mercedes-benz-developer-mercedes-benz-com",
@@ -93,8 +93,8 @@
       "business_fit_score": 30,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "vehicle-smartcar-smartcar-com",
@@ -124,8 +124,8 @@
       "business_fit_score": 25,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "vehicle-nhtsa-vpic-nhtsa-dot-gov",
@@ -155,8 +155,8 @@
       "business_fit_score": 15,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     },
     {
       "slug": "vehicle-kelley-blue-book-developer-kbb-com",
@@ -186,8 +186,8 @@
       "business_fit_score": 10,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-08T18:02:15.427Z",
-      "last_seen_at": "2026-03-08T18:02:15.427Z"
+      "first_seen_at": "2026-03-13T06:24:26.526Z",
+      "last_seen_at": "2026-03-13T06:24:26.526Z"
     }
   ]
 }

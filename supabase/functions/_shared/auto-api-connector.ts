@@ -1,30 +1,31 @@
 /**
- * OCULOPS — Auto API Connector
+ * OCULOPS — Live Connector Router
  *
- * Allows any agent to autonomously find and call APIs from the catalog
- * (6,898+ APIs) based on a plain-text intent, with zero hardcoding.
- *
- * Flow:
- *   1. Search `api_catalog` table for matching APIs (prefer auth=none)
- *   2. Use OpenAI to pick the best match + build the endpoint URL
- *   3. Execute the HTTP call directly
- *   4. Return structured result
- *
- * Usage:
- *   import { autoConnectApi } from "../_shared/auto-api-connector.ts";
- *   const result = await autoConnectApi("current weather in Madrid");
+ * Routes plain-text intents to installed LIVE connectors only.
+ * Enforces connector health and executes through api-proxy.
  */
 
 import { admin } from "./supabase.ts";
 
-interface ApiCatalogEntry {
-  name: string;
-  url: string;
-  docs: string;
-  description: string;
+interface CatalogEntry {
+  slug: string;
+  auth_type: string;
   category: string;
-  auth: string;
-  source: string;
+  docs_url: string;
+}
+
+interface ConnectorEndpoint {
+  name?: string;
+  sampleParams?: Record<string, unknown>;
+}
+
+interface LiveConnector {
+  id: string;
+  name: string;
+  catalog_slug: string | null;
+  capabilities: string[];
+  endpoints: ConnectorEndpoint[];
+  catalog?: CatalogEntry | null;
 }
 
 export interface AutoApiResult {
@@ -32,160 +33,291 @@ export interface AutoApiResult {
   intent: string;
   api_used: string;
   endpoint_called: string;
+  endpoint_name?: string | null;
+  connector_id?: string | null;
+  capability?: string | null;
   data: unknown;
+  meta?: Record<string, unknown> | null;
   error?: string;
   candidates_found: number;
 }
 
-// ─── Step 1: Find candidate APIs from catalog ─────────────────────────────────
+const INTENT_HINTS: Array<{ match: RegExp; capabilities: string[] }> = [
+  { match: /\b(weather|forecast|temperature|rain|wind|storm)\b/i, capabilities: ["weather", "forecast", "spain_weather"] },
+  { match: /\b(news|headline|article|guardian|breaking)\b/i, capabilities: ["news"] },
+  { match: /\b(macro|gdp|inflation|unemployment|economic|fed funds)\b/i, capabilities: ["macro_data"] },
+  { match: /\b(treasury|yield|bond|rate[s]?)\b/i, capabilities: ["treasury_data"] },
+  { match: /\b(job|jobs|hiring|remote|vacancy)\b/i, capabilities: ["jobs", "hiring_signals"] },
+  { match: /\b(geocode|address|postcode|postal|city)\b/i, capabilities: ["address_lookup", "geocoding", "territory_lookup"] },
+  { match: /\b(route|travel|distance|eta|drive|car)\b/i, capabilities: ["routing", "travel_time"] },
+  { match: /\b(email|disposable|verify mail|mail validity)\b/i, capabilities: ["email_validation"] },
+  { match: /\b(website|preview|metadata|og:image|link card)\b/i, capabilities: ["website_preview"] },
+  { match: /\b(openapi|swagger|spec)\b/i, capabilities: ["openapi_discovery"] },
+];
 
-async function findCandidates(intent: string, preferFree: boolean): Promise<ApiCatalogEntry[]> {
-  const keywords = intent
-    .toLowerCase()
-    .replace(/[^a-z0-9 ]/g, " ")
-    .split(" ")
-    .filter((w) => w.length > 3)
-    .slice(0, 4);
-
-  const orFilter = keywords
-    .map((k) => `name.ilike.%${k}%,description.ilike.%${k}%,category.ilike.%${k}%`)
-    .join(",");
-
-  let q = admin
-    .from("api_catalog")
-    .select("name, url, docs, description, category, auth, source")
-    .or(orFilter);
-
-  if (preferFree) q = q.eq("auth", "none");
-
-  const { data } = await q.limit(20);
-
-  if (!data?.length) {
-    // Fallback: drop auth filter
-    const { data: fallback } = await admin
-      .from("api_catalog")
-      .select("name, url, docs, description, category, auth, source")
-      .or(orFilter)
-      .limit(20);
-    return (fallback as ApiCatalogEntry[]) || [];
-  }
-
-  return data as ApiCatalogEntry[];
+function unique(values: string[] = []) {
+  return [...new Set(values.filter(Boolean))];
 }
 
-// ─── Step 2: OpenAI picks best API + builds endpoint URL ─────────────────────
+function extractEmail(text: string) {
+  return text.match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i)?.[0] || null;
+}
 
-async function routeWithAI(
-  intent: string,
-  candidates: ApiCatalogEntry[],
-): Promise<{ api: ApiCatalogEntry; endpoint: string } | null> {
-  const apiKey = Deno.env.get("OPENAI_API_KEY");
-  if (!apiKey) return null;
+function extractUrl(text: string) {
+  return text.match(/https?:\/\/[^\s)]+/i)?.[0] || null;
+}
 
-  const candidateList = candidates
-    .map((c, i) => `${i + 1}. ${c.name} (${c.url}) — ${(c.description || "").slice(0, 100)}`)
-    .join("\n");
+function extractCoordinates(text: string): [string, string] | null {
+  const matches = [...text.matchAll(/-?\d{1,3}\.\d+/g)].map(match => match[0]);
+  if (matches.length >= 2) {
+    return [matches[0], matches[1]];
+  }
+  return null;
+}
 
-  const res = await fetch("https://api.openai.com/v1/chat/completions", {
+function inferCapabilities(intent: string) {
+  const hits = INTENT_HINTS.flatMap(hint => (hint.match.test(intent) ? hint.capabilities : []));
+  return unique(hits);
+}
+
+function scoreConnector(connector: LiveConnector, intent: string, capabilities: string[], preferFree: boolean) {
+  const haystack = `${connector.name} ${(connector.catalog?.category || "")} ${(connector.capabilities || []).join(" ")}`.toLowerCase();
+  let score = 0;
+
+  for (const capability of capabilities) {
+    if ((connector.capabilities || []).map(cap => cap.toLowerCase()).includes(capability.toLowerCase())) {
+      score += 25;
+    }
+  }
+
+  if (capabilities.length === 0) {
+    score += 5;
+  }
+
+  if (haystack.includes("weather") && /weather|forecast/i.test(intent)) score += 8;
+  if (haystack.includes("news") && /news|headline|article/i.test(intent)) score += 8;
+  if (haystack.includes("macro") && /macro|gdp|inflation|economic/i.test(intent)) score += 8;
+  if (haystack.includes("treasury") && /treasury|yield|rate/i.test(intent)) score += 8;
+  if (haystack.includes("jobs") && /jobs|hiring|remote/i.test(intent)) score += 8;
+
+  if (preferFree && connector.catalog?.auth_type === "none") score += 6;
+  return score;
+}
+
+async function loadLiveConnectors(preferFree: boolean): Promise<LiveConnector[]> {
+  const { data: connectors, error: connectorsError } = await admin
+    .from("api_connectors")
+    .select("id,name,catalog_slug,capabilities,endpoints")
+    .eq("is_active", true)
+    .eq("health_status", "live");
+
+  if (connectorsError) throw connectorsError;
+
+  const rows = (connectors || []) as LiveConnector[];
+  const slugs = rows.map(row => row.catalog_slug).filter(Boolean) as string[];
+  const catalogBySlug = new Map<string, CatalogEntry>();
+
+  if (slugs.length > 0) {
+    const { data: catalogRows } = await admin
+      .from("api_catalog_entries")
+      .select("slug,auth_type,category,docs_url")
+      .in("slug", slugs);
+
+    for (const row of (catalogRows || []) as CatalogEntry[]) {
+      catalogBySlug.set(row.slug, row);
+    }
+  }
+
+  const merged = rows.map(connector => ({
+    ...connector,
+    capabilities: Array.isArray(connector.capabilities) ? connector.capabilities : [],
+    endpoints: Array.isArray(connector.endpoints) ? connector.endpoints : [],
+    catalog: connector.catalog_slug ? catalogBySlug.get(connector.catalog_slug) || null : null,
+  }));
+
+  if (!preferFree) return merged;
+  return merged.sort((a, b) => {
+    const aFree = a.catalog?.auth_type === "none" ? 1 : 0;
+    const bFree = b.catalog?.auth_type === "none" ? 1 : 0;
+    return bFree - aFree;
+  });
+}
+
+function buildParams(intent: string, connector: LiveConnector, endpoint: ConnectorEndpoint | null, inferredCapabilities: string[]) {
+  const params: Record<string, unknown> = { ...(endpoint?.sampleParams || {}) };
+  const email = extractEmail(intent);
+  const url = extractUrl(intent);
+  const coordinates = extractCoordinates(intent);
+  const lower = intent.toLowerCase();
+
+  if (inferredCapabilities.includes("email_validation") && email) {
+    params.email = email;
+  }
+
+  if (inferredCapabilities.includes("website_preview") && url) {
+    params.url = url;
+  }
+
+  if ((inferredCapabilities.includes("address_lookup") || inferredCapabilities.includes("geocoding"))) {
+    const query = intent.replace(/\b(geocode|address|lookup|find|search)\b/gi, "").trim();
+    params.q = query || params.q || "Madrid, Spain";
+    params.limit = params.limit || "5";
+  }
+
+  if (inferredCapabilities.includes("routing")) {
+    if (coordinates) {
+      params.points = [coordinates.join(","), "40.4168,-3.7038"];
+    } else if (!params.points) {
+      params.points = ["40.4168,-3.7038", "41.3874,2.1686"];
+    }
+    params.profile = params.profile || "car";
+    params.instructions = params.instructions || "false";
+  }
+
+  if (inferredCapabilities.includes("news")) {
+    if (!params.q) {
+      params.q = lower.includes("technology") ? "technology" : "business";
+    }
+    params["page-size"] = params["page-size"] || "5";
+  }
+
+  if (inferredCapabilities.includes("macro_data")) {
+    params.series_id = params.series_id || "FEDFUNDS";
+    params.file_type = params.file_type || "json";
+    params.limit = params.limit || "10";
+    params.sort_order = params.sort_order || "desc";
+  }
+
+  if (inferredCapabilities.includes("weather")) {
+    params.latitude = params.latitude || coordinates?.[0] || "40.4168";
+    params.longitude = params.longitude || coordinates?.[1] || "-3.7038";
+  }
+
+  if (inferredCapabilities.includes("jobs")) {
+    params.page = params.page || "1";
+  }
+
+  return params;
+}
+
+async function executeViaProxy(connector: LiveConnector, endpointName: string, params: Record<string, unknown>) {
+  const supabaseUrl = Deno.env.get("SUPABASE_URL");
+  const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+  if (!supabaseUrl || !serviceKey) {
+    throw new Error("SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY required");
+  }
+
+  const response = await fetch(`${supabaseUrl}/functions/v1/api-proxy`, {
     method: "POST",
-    headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
+    headers: {
+      "Authorization": `Bearer ${serviceKey}`,
+      "Content-Type": "application/json",
+    },
     body: JSON.stringify({
-      model: "gpt-4o-mini",
-      response_format: { type: "json_object" },
-      messages: [
-        {
-          role: "system",
-          content: `You are an API routing expert. Given a user intent and candidate APIs, pick the BEST match and construct a working GET endpoint URL.
-Return JSON: { "index": <1-based int>, "endpoint": "<absolute https:// URL>", "reason": "<brief>" }
-Rules: endpoint must start with https://, no auth params, use common REST patterns if guessing.`,
-        },
-        {
-          role: "user",
-          content: `Intent: "${intent}"\n\nCandidates:\n${candidateList}`,
-        },
-      ],
+      connector_id: connector.id,
+      endpoint_name: endpointName,
+      params,
+      body: {},
+      healthcheck: false,
     }),
   });
 
-  if (!res.ok) return null;
-
-  try {
-    const json = await res.json();
-    const parsed = JSON.parse(json.choices?.[0]?.message?.content || "{}");
-    const idx = Math.max(0, (parsed.index || 1) - 1);
-    const api = candidates[idx] || candidates[0];
-    const endpoint = parsed.endpoint || api.url;
-    if (!endpoint?.startsWith("http")) return null;
-    return { api, endpoint };
-  } catch {
-    return null;
-  }
+  const payload = await response.json().catch(() => ({}));
+  return { response, payload };
 }
 
-// ─── Step 3: Execute the API call ────────────────────────────────────────────
-
-async function executeCall(endpoint: string): Promise<{ data: unknown; ok: boolean; status: number }> {
-  try {
-    const res = await fetch(endpoint, {
-      headers: { Accept: "application/json", "User-Agent": "oculops-agent/1.0" },
-      signal: AbortSignal.timeout(10000),
-    });
-    const text = await res.text();
-    let data: unknown;
-    try { data = JSON.parse(text); } catch { data = { raw: text.slice(0, 1000) }; }
-    return { data, ok: res.ok, status: res.status };
-  } catch {
-    return { data: null, ok: false, status: 0 };
+function getMatchedCapability(connector: LiveConnector, inferredCapabilities: string[]) {
+  for (const capability of inferredCapabilities) {
+    if ((connector.capabilities || []).map(cap => cap.toLowerCase()).includes(capability.toLowerCase())) {
+      return capability;
+    }
   }
+  return connector.capabilities?.[0] || null;
 }
-
-// ─── Main export ─────────────────────────────────────────────────────────────
 
 export async function autoConnectApi(
   intent: string,
   opts: { preferFree?: boolean; agentName?: string } = {},
 ): Promise<AutoApiResult> {
   const { preferFree = true, agentName } = opts;
+  const connectors = await loadLiveConnectors(preferFree);
 
-  const candidates = await findCandidates(intent, preferFree);
-
-  if (!candidates.length) {
-    return { ok: false, intent, api_used: "none", endpoint_called: "", data: null, error: "No matching APIs in catalog", candidates_found: 0 };
+  if (connectors.length === 0) {
+    return {
+      ok: false,
+      intent,
+      api_used: "none",
+      endpoint_called: "",
+      endpoint_name: null,
+      connector_id: null,
+      capability: null,
+      data: null,
+      error: "No live connectors are available",
+      candidates_found: 0,
+      meta: null,
+    };
   }
 
-  const route = await routeWithAI(intent, candidates);
+  const inferredCapabilities = inferCapabilities(intent);
+  const ranked = connectors
+    .map(connector => ({
+      connector,
+      score: scoreConnector(connector, intent, inferredCapabilities, preferFree),
+    }))
+    .sort((a, b) => b.score - a.score);
 
-  const target = route
-    ? { api: route.api, endpoint: route.endpoint }
-    : { api: candidates[0], endpoint: candidates[0].url };
+  const selected = ranked[0]?.connector || connectors[0];
+  const endpoint = selected.endpoints?.[0] || null;
+  const endpointName = endpoint?.name || null;
 
-  const call = await executeCall(target.endpoint);
+  if (!endpointName) {
+    return {
+      ok: false,
+      intent,
+      api_used: selected.name,
+      endpoint_called: "",
+      endpoint_name: null,
+      connector_id: selected.id,
+      capability: getMatchedCapability(selected, inferredCapabilities),
+      data: null,
+      error: "Selected connector has no endpoint configuration",
+      candidates_found: connectors.length,
+      meta: null,
+    };
+  }
+
+  const params = buildParams(intent, selected, endpoint, inferredCapabilities);
+  const { response, payload } = await executeViaProxy(selected, endpointName, params);
+  const ok = response.ok && payload?.ok === true;
 
   if (agentName) {
     admin.from("agent_logs").insert({
       agent_code_name: agentName,
       action: "auto_api_connect",
-      input: { intent, candidates_found: candidates.length },
-      output: { api: target.api.name, endpoint: target.endpoint, ok: call.ok },
-      status: call.ok ? "success" : "error",
+      input: { intent, candidates_found: connectors.length, connector_id: selected.id },
+      output: { ok, endpoint_name: endpointName, status: response.status },
+      status: ok ? "success" : "error",
     }).then(() => {}, () => {});
   }
 
   return {
-    ok: call.ok,
+    ok,
     intent,
-    api_used: target.api.name,
-    endpoint_called: target.endpoint,
-    data: call.data,
-    error: call.ok ? undefined : `HTTP ${call.status} from ${target.api.name}`,
-    candidates_found: candidates.length,
+    api_used: selected.name,
+    endpoint_called: endpointName,
+    endpoint_name: endpointName,
+    connector_id: selected.id,
+    capability: getMatchedCapability(selected, inferredCapabilities),
+    data: payload?.normalized ?? payload?.raw ?? payload ?? null,
+    error: ok ? undefined : (payload?.error || `HTTP ${response.status}`),
+    candidates_found: connectors.length,
+    meta: payload?.meta || null,
   };
 }
 
-/** Resolve multiple intents in parallel */
 export async function autoConnectApiBatch(
   intents: string[],
   agentName?: string,
 ): Promise<AutoApiResult[]> {
-  return Promise.all(intents.map((i) => autoConnectApi(i, { agentName })));
+  return Promise.all(intents.map(intent => autoConnectApi(intent, { agentName })));
 }

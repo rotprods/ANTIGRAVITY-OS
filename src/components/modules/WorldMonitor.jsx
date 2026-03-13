@@ -6,8 +6,7 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
-import { useApiCatalog } from '../../hooks/useApiCatalog'
-import { useConnectorProxy } from '../../hooks/useConnectorProxy'
+import { useConnectorInfrastructure } from '../../hooks/useConnectorInfrastructure'
 import { useProspector } from '../../hooks/useProspector'
 import { useDeals } from '../../hooks/useDeals'
 import { useAlerts } from '../../hooks/useAlerts'
@@ -295,8 +294,15 @@ export default function WorldMonitor() {
     const mapRef = useRef(null)
     const mapInstance = useRef(null)
     const markersRef = useRef([])
-    const { installedApps: worldMonitorApps } = useApiCatalog({ moduleTarget: 'world_monitor' })
-    const { execute: executeConnector, data: connectorFeedData, loading: connectorFeedLoading, error: connectorFeedError } = useConnectorProxy({}, { cacheTTL: 30000 })
+    const {
+        liveConnectors: worldMonitorApps,
+        runConnector,
+        runningConnectorId,
+        latestByConnector,
+        errorByConnector,
+        toggleSavedFeed,
+        isSavedFeed,
+    } = useConnectorInfrastructure({ moduleTarget: 'world_monitor' })
     const { leads, scans, loading: prospectorLoading } = useProspector()
     const { deals } = useDeals()
     const { alerts } = useAlerts()
@@ -309,7 +315,8 @@ export default function WorldMonitor() {
     const [timeRange, setTimeRange] = useState('7D')
     const [selectedItem, setSelectedItem] = useState(null)
     const [panelExpanded, setPanelExpanded] = useState(true)
-    const liveWorldApps = worldMonitorApps.filter(app => app.connectorStatus === 'live')
+    const [activeFeedId, setActiveFeedId] = useState(null)
+    const liveWorldApps = worldMonitorApps
 
     const liveData = useMemo(
         () => buildLayerData({ scans, leads, deals, alerts, signals, socialSignals, timeRange }),
@@ -412,12 +419,12 @@ export default function WorldMonitor() {
     }, [])
 
     const runFeed = useCallback(async (app) => {
-        await executeConnector({
-            connectorId: app.connectorId,
+        setActiveFeedId(app.connectorId)
+        await runConnector(app, {
             endpointName: app.endpointName,
             params: app.sampleParams,
         })
-    }, [executeConnector])
+    }, [runConnector])
 
     return (
         <div className="wm-container fade-in">
@@ -530,26 +537,38 @@ export default function WorldMonitor() {
                                     <div className="wm-panel-title">API OVERRIDES</div>
                                     <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
                                         {liveWorldApps.map(app => (
-                                            <button key={app.connectorId} className="btn btn-ghost mono" style={{ fontSize: '10px', padding: '6px 12px', border: '1px solid var(--border-subtle)' }} onClick={() => runFeed(app)}>
-                                                {connectorFeedLoading ? '[...] ' : ''}{app.name.toUpperCase()}
+                                            <button key={app.connectorId} className="btn btn-ghost mono" style={{ fontSize: '10px', padding: '6px 12px', border: '1px solid var(--border-subtle)', color: isSavedFeed(app.connectorId) ? 'var(--accent-primary)' : 'var(--text-primary)' }} onClick={() => runFeed(app)}>
+                                                {runningConnectorId === app.connectorId ? '[...] ' : ''}{app.name.toUpperCase()}
                                             </button>
                                         ))}
                                     </div>
-                                    {(connectorFeedData || connectorFeedError) && (
+                                    <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginTop: '8px' }}>
+                                        {liveWorldApps.map(app => (
+                                            <button
+                                                key={`save-feed-${app.connectorId}`}
+                                                className="btn btn-ghost mono"
+                                                style={{ fontSize: '9px', padding: '4px 8px', border: '1px solid var(--border-subtle)' }}
+                                                onClick={() => toggleSavedFeed(app.connectorId)}
+                                            >
+                                                {isSavedFeed(app.connectorId) ? '[SAVED]' : '[SAVE]'} {app.name.toUpperCase()}
+                                            </button>
+                                        ))}
+                                    </div>
+                                    {(activeFeedId && (latestByConnector[activeFeedId] || errorByConnector[activeFeedId])) && (
                                         <pre style={{
                                             marginTop: '8px',
                                             padding: '12px',
                                             background: 'var(--border-subtle)',
                                             fontSize: '9px',
-                                            color: connectorFeedError ? 'var(--color-danger)' : 'var(--text-secondary)',
+                                            color: errorByConnector[activeFeedId] ? 'var(--color-danger)' : 'var(--text-secondary)',
                                             whiteSpace: 'pre-wrap',
                                             fontFamily: 'var(--font-mono)',
                                             maxHeight: '120px',
                                             overflow: 'auto',
                                         }}>
-                                            {connectorFeedError
-                                                ? connectorFeedError
-                                                : JSON.stringify(connectorFeedData?.normalized ?? connectorFeedData, null, 2)}
+                                            {errorByConnector[activeFeedId]
+                                                ? errorByConnector[activeFeedId]
+                                                : JSON.stringify(latestByConnector[activeFeedId]?.normalized ?? latestByConnector[activeFeedId], null, 2)}
                                         </pre>
                                     )}
                                 </div>

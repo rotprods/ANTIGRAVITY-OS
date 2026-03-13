@@ -13,6 +13,77 @@ function asRecord(value: unknown) {
     : {};
 }
 
+const LEGACY_HIGH_RISK_SOURCES = new Set([
+  "automation",
+  "automation_ui",
+  "automation_trigger",
+  "automation_workflow",
+  "event_dispatcher",
+  "manual",
+]);
+
+function normalizeRiskClass(value: unknown): "low" | "medium" | "high" | "critical" {
+  const normalized = compact(value).toLowerCase();
+  if (normalized === "critical") return "critical";
+  if (normalized === "high") return "high";
+  if (normalized === "medium") return "medium";
+  return "low";
+}
+
+function isHighRisk(riskClass: "low" | "medium" | "high" | "critical") {
+  return riskClass === "high" || riskClass === "critical";
+}
+
+function resolveDispatchRiskClass(body: Record<string, unknown>, existingMetadata: Record<string, unknown>) {
+  const policy = asRecord(body.policy);
+  const metadata = asRecord(body.metadata);
+  const route = asRecord(metadata.route);
+
+  return normalizeRiskClass(
+    body.risk_class
+      || body.risk_level
+      || policy.risk_class
+      || policy.risk_level
+      || metadata.risk_class
+      || metadata.risk_level
+      || route.risk_class
+      || existingMetadata.risk_class
+      || existingMetadata.risk_level
+      || "high",
+  );
+}
+
+function resolveDispatchSource(body: Record<string, unknown>, existingMetadata: Record<string, unknown>) {
+  const metadata = asRecord(body.metadata);
+  const route = asRecord(metadata.route);
+  return compact(
+    metadata.source
+      || route.source
+      || body.source
+      || existingMetadata.source
+      || "manual",
+  ).toLowerCase();
+}
+
+async function hasToolBusInvocationEvidence(correlationId: string) {
+  const normalizedCorrelationId = compact(correlationId);
+  if (!normalizedCorrelationId) return false;
+
+  const { count, error } = await admin
+    .from("event_log")
+    .select("id", { count: "exact", head: true })
+    .eq("event_type", "tool_bus.invocation")
+    .eq("correlation_id", normalizedCorrelationId)
+    .contains("metadata", { tool_code_name: "messaging-dispatch" });
+
+  if (error) {
+    console.error("[messaging-dispatch] unable to verify tool-bus evidence", error);
+    return false;
+  }
+
+  return Number(count || 0) > 0;
+}
+
 function inferChannelType({
   explicit,
   message,
@@ -202,6 +273,11 @@ Deno.serve(async (req: Request) => {
       subject?: string;
       body?: string;
       content?: string;
+      source?: string;
+      correlation_id?: string;
+      risk_class?: string;
+      risk_level?: string;
+      policy?: Record<string, unknown>;
       metadata?: Record<string, unknown>;
     }>(req);
 
@@ -268,6 +344,57 @@ Deno.serve(async (req: Request) => {
 
     if (!recipient) {
       return errorResponse(`No ${channelType === "email" ? "email" : "phone"} recipient found`);
+    }
+
+    const requestMetadata = asRecord(body.metadata);
+    const requestPolicy = asRecord(body.policy);
+    const requestRoute = asRecord(requestMetadata.route);
+    const dispatchRiskClass = resolveDispatchRiskClass(body as Record<string, unknown>, existingMetadata);
+    const dispatchSource = resolveDispatchSource(body as Record<string, unknown>, existingMetadata);
+    const viaControlPlane = requestRoute.via_control_plane === true
+      || requestPolicy.via_control_plane === true
+      || Boolean(compact(requestMetadata.control_plane_trace_id));
+    const viaToolBus = requestRoute.via_tool_bus === true
+      || requestPolicy.via_tool_bus === true;
+    const routeCorrelationId = compact(
+      requestRoute.correlation_id
+        || requestMetadata.control_plane_correlation_id
+        || body.correlation_id,
+    ) || null;
+
+    if (isHighRisk(dispatchRiskClass) && LEGACY_HIGH_RISK_SOURCES.has(dispatchSource)) {
+      if (!(viaControlPlane && viaToolBus)) {
+        return errorResponse(
+          "High-risk legacy dispatch is blocked. Route through control-plane tool_dispatch (control-plane + tool-bus).",
+          409,
+          {
+            code: "legacy_high_risk_route_required",
+            source: dispatchSource,
+            risk_class: dispatchRiskClass,
+            routing: {
+              via_control_plane: viaControlPlane,
+              via_tool_bus: viaToolBus,
+              correlation_id: routeCorrelationId,
+            },
+          },
+        );
+      }
+
+      const hasEvidence = routeCorrelationId
+        ? await hasToolBusInvocationEvidence(routeCorrelationId)
+        : false;
+      if (!hasEvidence) {
+        return errorResponse(
+          "High-risk dispatch requires verifiable tool-bus invocation trace.",
+          409,
+          {
+            code: "legacy_high_risk_missing_tool_bus_trace",
+            source: dispatchSource,
+            risk_class: dispatchRiskClass,
+            correlation_id: routeCorrelationId,
+          },
+        );
+      }
     }
 
     let sendResult: Record<string, unknown>;
