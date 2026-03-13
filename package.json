@@ -25,6 +25,8 @@
     "n8n:repair:live": "node scripts/repair-n8n.mjs --live --export-live",
     "sync:n8n-templates": "node scripts/sync-n8n-templates.mjs",
     "audit:n8n-workflows": "node scripts/audit-n8n-workflows.mjs",
+    "bootstrap:n8n-credentials": "node scripts/bootstrap-n8n-credentials.mjs",
+    "reconcile:n8n-oculops": "node scripts/reconcile-n8n-oculops.mjs",
     "n8n:install-template": "node scripts/install-n8n-template.mjs",
     "gws": "node scripts/gws.mjs",
     "gws:auth:setup": "node scripts/gws.mjs auth setup",

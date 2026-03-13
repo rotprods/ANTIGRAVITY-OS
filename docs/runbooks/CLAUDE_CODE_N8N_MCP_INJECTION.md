@@ -18,6 +18,14 @@ Make n8n templates truly operational inside OCULOPS:
 - Priority templates: **3389**.
 - Recent import audit: **12** recent workflows audited, **3 runnable now**, **9 blocked by missing credential types**.
 
+Latest full audit (2026-03-13):
+
+- 26 workflows scanned
+- 16 runnable now
+- 15 activatable now
+- 9 blocked by credentials
+- 6 blocked by missing community package support
+
 Blocking credential types observed:
 
 - `blotatoApi`
@@ -30,6 +38,10 @@ Blocking credential types observed:
 - `postizApi`
 - `httpBearerAuth`
 - `perplexityApi`
+
+Community node package blocker observed:
+
+- `@blotato/n8n-nodes-blotato`
 
 ## Required Secrets / Env
 
@@ -82,6 +94,14 @@ For each selected template:
    - `schedule` for periodic intelligence/report jobs.
 4. Bind credentials by type/name mapping.
 5. If install fails (HTTP 400), log and continue; do not abort whole batch.
+
+### Phase B.1 — Community node prerequisites
+
+Before activation, verify required community node packages exist in n8n runtime.
+If a package is missing (for example `@blotato/n8n-nodes-blotato`), either:
+
+1. install/enable it in n8n, or
+2. skip templates that require it and record them as blocked.
 
 ### Phase C — Wire to OCULOPS process bus
 
@@ -144,4 +164,3 @@ Claude run must output:
 - `missing_credential_types`
 - `new_event_routes`
 - `new_automation_workflow_ids`
-

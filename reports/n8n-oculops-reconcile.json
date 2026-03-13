@@ -1,0 +1,307 @@
+{
+  "summary": {
+    "generatedAt": "2026-03-13T09:32:57.523Z",
+    "mode": "apply",
+    "targetCount": 12,
+    "updatedCount": 0,
+    "activatedCount": 0,
+    "bridgeCreatedCount": 0,
+    "bridgeUpdatedCount": 0,
+    "runnableNowCount": 5,
+    "blockedCount": 0,
+    "blockedByCommunityNodesCount": 7,
+    "unresolvedCredentialTypes": [],
+    "unresolvedCommunityNodePackages": [
+      "@blotato/n8n-nodes-blotato",
+      "n8n-nodes-postiz"
+    ]
+  },
+  "items": [
+    {
+      "id": "5IOOWvQ4UP4d5X0K",
+      "name": "n8n Basics",
+      "updated": false,
+      "mappedCredentials": 0,
+      "unresolvedCredentialTypes": [],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "unresolvedCommunityNodePackages": [],
+      "triggers": [
+        "schedule",
+        "manual"
+      ],
+      "hasWebhook": false,
+      "hasSchedule": true,
+      "runnableNow": true,
+      "activatableNow": true,
+      "activation": "failed: POST /workflows/5IOOWvQ4UP4d5X0K/activate failed (400) {\"message\":\"Cannot publish workflow: 1 node have configuration issues:\\n\\nNode \\\"Connect your Gmail\\\":\\n  - Missing or invalid required parameters (1 issue)\"}",
+      "bridge": "no_webhook_trigger",
+      "bridgeEvent": null,
+      "bridgeWebhookUrl": null
+    },
+    {
+      "id": "8vac8DPRTi5P7JdX",
+      "name": "💥 Generate AI viral videos with NanoBanana & VEO3, shared on socials via Blotato - vide",
+      "updated": false,
+      "mappedCredentials": 0,
+      "unresolvedCredentialTypes": [],
+      "customNodePackages": [
+        "@blotato/n8n-nodes-blotato"
+      ],
+      "customNodeTypes": [
+        "@blotato/n8n-nodes-blotato.blotato"
+      ],
+      "unresolvedCommunityNodePackages": [
+        "@blotato/n8n-nodes-blotato"
+      ],
+      "triggers": [],
+      "hasWebhook": false,
+      "hasSchedule": false,
+      "runnableNow": false,
+      "activatableNow": false,
+      "activation": "skipped",
+      "bridge": "no_webhook_trigger",
+      "bridgeEvent": null,
+      "bridgeWebhookUrl": null
+    },
+    {
+      "id": "9o84jdBGlA6IQ4Sh",
+      "name": "💥 Generate AI Viral Videos with VEO 3 and Upload to TikTok ",
+      "updated": false,
+      "mappedCredentials": 0,
+      "unresolvedCredentialTypes": [],
+      "customNodePackages": [
+        "@blotato/n8n-nodes-blotato"
+      ],
+      "customNodeTypes": [
+        "@blotato/n8n-nodes-blotato.blotato"
+      ],
+      "unresolvedCommunityNodePackages": [
+        "@blotato/n8n-nodes-blotato"
+      ],
+      "triggers": [
+        "schedule"
+      ],
+      "hasWebhook": false,
+      "hasSchedule": true,
+      "runnableNow": false,
+      "activatableNow": false,
+      "activation": "skipped",
+      "bridge": "no_webhook_trigger",
+      "bridgeEvent": null,
+      "bridgeWebhookUrl": null
+    },
+    {
+      "id": "BW4CdXZhSEshfC7W",
+      "name": "Analyze contract risk from PDFs with OpenAI, Supabase and Slack alerts",
+      "updated": false,
+      "mappedCredentials": 0,
+      "unresolvedCredentialTypes": [],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "unresolvedCommunityNodePackages": [],
+      "triggers": [
+        "manual"
+      ],
+      "hasWebhook": false,
+      "hasSchedule": false,
+      "runnableNow": true,
+      "activatableNow": false,
+      "activation": "skipped",
+      "bridge": "no_webhook_trigger",
+      "bridgeEvent": null,
+      "bridgeWebhookUrl": null
+    },
+    {
+      "id": "DkqoOmkeSgRgy4o3",
+      "name": "Use skills In n8n agent node",
+      "updated": false,
+      "mappedCredentials": 0,
+      "unresolvedCredentialTypes": [],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "unresolvedCommunityNodePackages": [],
+      "triggers": [],
+      "hasWebhook": false,
+      "hasSchedule": false,
+      "runnableNow": true,
+      "activatableNow": false,
+      "activation": "skipped",
+      "bridge": "no_webhook_trigger",
+      "bridgeEvent": null,
+      "bridgeWebhookUrl": null
+    },
+    {
+      "id": "IQB6I9mXuF34dhuS",
+      "name": "💥 Generate AI Videos with Seedance & Blotato and Upload to TikTok, YouTube & Instagram - version II - vide",
+      "updated": false,
+      "mappedCredentials": 0,
+      "unresolvedCredentialTypes": [],
+      "customNodePackages": [
+        "@blotato/n8n-nodes-blotato"
+      ],
+      "customNodeTypes": [
+        "@blotato/n8n-nodes-blotato.blotato"
+      ],
+      "unresolvedCommunityNodePackages": [
+        "@blotato/n8n-nodes-blotato"
+      ],
+      "triggers": [
+        "schedule"
+      ],
+      "hasWebhook": false,
+      "hasSchedule": true,
+      "runnableNow": false,
+      "activatableNow": false,
+      "activation": "skipped",
+      "bridge": "no_webhook_trigger",
+      "bridgeEvent": null,
+      "bridgeWebhookUrl": null
+    },
+    {
+      "id": "JO8SZ6BKp3z8hBI6",
+      "name": "Transformador de Fotos a Lujo",
+      "updated": false,
+      "mappedCredentials": 0,
+      "unresolvedCredentialTypes": [],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "unresolvedCommunityNodePackages": [],
+      "triggers": [],
+      "hasWebhook": false,
+      "hasSchedule": false,
+      "runnableNow": true,
+      "activatableNow": false,
+      "activation": "skipped",
+      "bridge": "no_webhook_trigger",
+      "bridgeEvent": null,
+      "bridgeWebhookUrl": null
+    },
+    {
+      "id": "RvGMut9HRR7PQPc3",
+      "name": "Automated Long Video Creator",
+      "updated": false,
+      "mappedCredentials": 0,
+      "unresolvedCredentialTypes": [],
+      "customNodePackages": [
+        "n8n-nodes-postiz"
+      ],
+      "customNodeTypes": [
+        "n8n-nodes-postiz.postiz"
+      ],
+      "unresolvedCommunityNodePackages": [
+        "n8n-nodes-postiz"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "hasWebhook": false,
+      "hasSchedule": false,
+      "runnableNow": false,
+      "activatableNow": false,
+      "activation": "skipped",
+      "bridge": "no_webhook_trigger",
+      "bridgeEvent": null,
+      "bridgeWebhookUrl": null
+    },
+    {
+      "id": "atz5X3DYUeN8x6mX",
+      "name": "💥 Viral TikTok Video Machine: Auto-Create UGC with VEED Avatars -vide",
+      "updated": false,
+      "mappedCredentials": 0,
+      "unresolvedCredentialTypes": [],
+      "customNodePackages": [
+        "@blotato/n8n-nodes-blotato"
+      ],
+      "customNodeTypes": [
+        "@blotato/n8n-nodes-blotato.blotato"
+      ],
+      "unresolvedCommunityNodePackages": [
+        "@blotato/n8n-nodes-blotato"
+      ],
+      "triggers": [],
+      "hasWebhook": false,
+      "hasSchedule": false,
+      "runnableNow": false,
+      "activatableNow": false,
+      "activation": "skipped",
+      "bridge": "no_webhook_trigger",
+      "bridgeEvent": null,
+      "bridgeWebhookUrl": null
+    },
+    {
+      "id": "bmfRyG1Or1PXjiKE",
+      "name": "Claude Canva Files → Blotato",
+      "updated": false,
+      "mappedCredentials": 0,
+      "unresolvedCredentialTypes": [],
+      "customNodePackages": [
+        "@blotato/n8n-nodes-blotato"
+      ],
+      "customNodeTypes": [
+        "@blotato/n8n-nodes-blotato.blotato"
+      ],
+      "unresolvedCommunityNodePackages": [
+        "@blotato/n8n-nodes-blotato"
+      ],
+      "triggers": [
+        "webhook"
+      ],
+      "hasWebhook": true,
+      "hasSchedule": false,
+      "runnableNow": false,
+      "activatableNow": false,
+      "activation": "skipped",
+      "bridge": "skipped",
+      "bridgeEvent": null,
+      "bridgeWebhookUrl": null
+    },
+    {
+      "id": "w1zjD0xMsGXsFzXg",
+      "name": "Create Video with Google Veo3 and Upload to Youtube",
+      "updated": false,
+      "mappedCredentials": 0,
+      "unresolvedCredentialTypes": [],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "unresolvedCommunityNodePackages": [],
+      "triggers": [
+        "manual",
+        "schedule"
+      ],
+      "hasWebhook": false,
+      "hasSchedule": true,
+      "runnableNow": true,
+      "activatableNow": true,
+      "activation": "failed: POST /workflows/w1zjD0xMsGXsFzXg/activate failed (400) {\"message\":\"Cannot publish workflow: 5 nodes have configuration issues:\\n\\nNode \\\"Update result\\\":\\n  - Missing required credential: googleSheetsOAuth2Api\\n\\nNode \\\"Get new video\\\":\\n  - Missing required credential: googleSheetsOAuth2Api\\n\\nNode \\\"Upload Video\\\":\\n  - Missing required credential: googleDriveOAuth2Api\\n\\nNode \\\"Generate title\\\":\\n  - Missing required credential: openAiApi\\n\\nNode \\\"Update Youtube URL\\\":\\n  - Missing required credential: googleSheetsOAuth2Api\"}",
+      "bridge": "no_webhook_trigger",
+      "bridgeEvent": null,
+      "bridgeWebhookUrl": null
+    },
+    {
+      "id": "zFu72IiAMJXM1eLw",
+      "name": "💥 Generate AI videos and carousels with Blotato and publish to Instagram & TikTok",
+      "updated": false,
+      "mappedCredentials": 0,
+      "unresolvedCredentialTypes": [],
+      "customNodePackages": [
+        "@blotato/n8n-nodes-blotato"
+      ],
+      "customNodeTypes": [
+        "@blotato/n8n-nodes-blotato.blotatoTool"
+      ],
+      "unresolvedCommunityNodePackages": [
+        "@blotato/n8n-nodes-blotato"
+      ],
+      "triggers": [],
+      "hasWebhook": false,
+      "hasSchedule": false,
+      "runnableNow": false,
+      "activatableNow": false,
+      "activation": "skipped",
+      "bridge": "no_webhook_trigger",
+      "bridgeEvent": null,
+      "bridgeWebhookUrl": null
+    }
+  ]
+}

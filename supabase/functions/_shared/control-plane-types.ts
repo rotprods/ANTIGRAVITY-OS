@@ -3,6 +3,7 @@ import { compact, safeNumber } from "./http.ts";
 export type RiskLevel = "low" | "medium" | "high" | "critical";
 export type GoalPriority = "low" | "medium" | "high" | "critical";
 export type MemoryScope = "task" | "shared_ops" | "long_term";
+export type ReadinessState = "connected" | "simulated" | "degraded" | "offline" | "planned";
 
 export interface JsonRecord {
   [key: string]: unknown;
@@ -103,6 +104,50 @@ export interface ImprovementPatch {
   evaluation?: EvaluationResult;
   governance?: GovernanceDecision;
   created_at: string;
+}
+
+export interface EcosystemReadinessRecord {
+  module_key: string;
+  route: string;
+  backend_surface: string;
+  state: ReadinessState;
+  state_reason_code: string;
+  state_reason_text: string;
+  last_success_at: string | null;
+  last_checked_at: string;
+  correlation_id: string | null;
+  smoke_case_id: string | null;
+  remediation_action: string;
+}
+
+export interface GovernanceMetricSnapshot {
+  org_id: string | null;
+  window: string;
+  dispatch_total: number;
+  blocked_total: number;
+  approval_pending_total: number;
+  high_risk_routed_total: number;
+  tool_bus_trace_coverage: number;
+}
+
+export interface RunTraceView {
+  correlation_id: string;
+  run_id: string | null;
+  workflow_id: string | null;
+  steps: JsonRecord[];
+  governance_decisions: JsonRecord[];
+  tool_bus_events: JsonRecord[];
+  final_status: string;
+}
+
+export interface ReadinessArtifact {
+  generated_at: string;
+  version: string;
+  overall_state: "green" | "yellow" | "red";
+  records: EcosystemReadinessRecord[];
+  smokes: JsonRecord[];
+  failures: JsonRecord[];
+  governance_metrics: GovernanceMetricSnapshot;
 }
 
 export interface ControlPlaneEventV2 {

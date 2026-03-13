@@ -10,6 +10,8 @@ OCULOPS now supports syncing the full public n8n workflow catalog into the app f
 
 ```bash
 npm run sync:n8n-templates
+npm run audit:n8n-workflows
+npm run reconcile:n8n-oculops -- --apply --recent-hours 72
 ```
 
 This writes:

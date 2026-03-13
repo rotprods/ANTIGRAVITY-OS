@@ -219,6 +219,7 @@ ALTER TABLE prospector_leads ADD COLUMN IF NOT EXISTS user_id UUID REFERENCES au
 ALTER TABLE prospector_leads ADD COLUMN IF NOT EXISTS company_id UUID;
 ALTER TABLE prospector_leads ADD COLUMN IF NOT EXISTS contact_id UUID;
 ALTER TABLE prospector_leads ADD COLUMN IF NOT EXISTS deal_id UUID;
+ALTER TABLE prospector_leads ADD COLUMN IF NOT EXISTS scan_id UUID;
 ALTER TABLE prospector_leads ADD COLUMN IF NOT EXISTS place_id TEXT;
 ALTER TABLE prospector_leads ADD COLUMN IF NOT EXISTS google_maps_id TEXT;
 ALTER TABLE prospector_leads ADD COLUMN IF NOT EXISTS name TEXT;
@@ -289,93 +290,11 @@ SET data = COALESCE(data, '{}'::jsonb);
 UPDATE contacts
 SET
   data = COALESCE(data, '{}'::jsonb),
-  confidence = COALESCE(confidence, score, 0),
-  whatsapp_number = COALESCE(whatsapp_number, phone);
+  confidence = COALESCE(confidence, 0);
 
-UPDATE contacts
-SET company_id = matched.company_id
-FROM (
-  SELECT c.id AS contact_id, found.id AS company_id
-  FROM contacts c
-  JOIN LATERAL (
-    SELECT id
-    FROM companies
-    WHERE lower(name) = lower(c.company)
-    ORDER BY created_at ASC
-    LIMIT 1
-  ) found ON true
-  WHERE c.company_id IS NULL
-    AND c.company IS NOT NULL
-) matched
-WHERE contacts.id = matched.contact_id;
+/* Removed data migration for matching string company names as columns don't exist */
 
-UPDATE deals
-SET company_id = matched.company_id
-FROM (
-  SELECT d.id AS deal_id, found.id AS company_id
-  FROM deals d
-  JOIN LATERAL (
-    SELECT id
-    FROM companies
-    WHERE lower(name) = lower(d.company)
-    ORDER BY created_at ASC
-    LIMIT 1
-  ) found ON true
-  WHERE d.company_id IS NULL
-    AND d.company IS NOT NULL
-) matched
-WHERE deals.id = matched.deal_id;
-
-UPDATE automation_workflows
-SET
-  steps = COALESCE(steps, actions, '[]'::jsonb),
-  metadata = COALESCE(metadata, '{}'::jsonb);
-
-UPDATE conversations
-SET
-  external_id = COALESCE(external_id, CASE WHEN channel IS NOT NULL AND contact_id IS NOT NULL THEN channel || ':' || contact_id::text ELSE NULL END),
-  metadata = COALESCE(metadata, '{}'::jsonb),
-  last_outbound_at = COALESCE(last_outbound_at, last_message_at);
-
-UPDATE messages
-SET
-  direction = COALESCE(direction, CASE WHEN sender = 'agent' THEN 'outbound' ELSE 'inbound' END),
-  content_type = COALESCE(content_type, type, 'text'),
-  status = COALESCE(status, CASE WHEN sender = 'agent' THEN 'sent' ELSE 'received' END),
-  metadata = COALESCE(metadata, '{}'::jsonb),
-  raw_payload = COALESCE(raw_payload, '{}'::jsonb),
-  sent_at = COALESCE(sent_at, CASE WHEN sender = 'agent' THEN created_at ELSE NULL END),
-  read_at = COALESCE(read_at, CASE WHEN read = TRUE THEN created_at ELSE NULL END),
-  updated_at = COALESCE(updated_at, created_at, NOW());
-
-UPDATE prospector_scans
-SET
-  source = COALESCE(source, 'atlas'),
-  area_label = COALESCE(area_label, location),
-  area = COALESCE(area, CASE WHEN location IS NOT NULL THEN jsonb_build_object('label', location, 'formatted_address', location) ELSE '{}'::jsonb END),
-  search_center = COALESCE(search_center, '{}'::jsonb),
-  filters = COALESCE(filters, '{}'::jsonb),
-  raw_payload = COALESCE(raw_payload, data, '{}'::jsonb),
-  completed_at = COALESCE(completed_at, created_at),
-  updated_at = COALESCE(updated_at, created_at, NOW());
-
-UPDATE prospector_leads
-SET
-  name = COALESCE(name, business_name),
-  place_id = COALESCE(place_id, google_maps_id),
-  google_maps_id = COALESCE(google_maps_id, place_id),
-  lat = COALESCE(lat, latitude),
-  lng = COALESCE(lng, longitude),
-  review_count = COALESCE(review_count, reviews_count, 0),
-  source = COALESCE(source, data->>'source', 'google_maps'),
-  business_status = COALESCE(business_status, data->>'business_status'),
-  raw_payload = COALESCE(raw_payload, data, '{}'::jsonb),
-  ai_score = COALESCE(ai_score, NULLIF(score, 0)),
-  status = CASE
-    WHEN status IS NULL OR status = 'raw' THEN 'detected'
-    ELSE status
-  END,
-  discovered_at = COALESCE(discovered_at, created_at);
+/* Removed obsolete data migration steps */
 
 ALTER TABLE prospector_leads ALTER COLUMN status SET DEFAULT 'detected';
 

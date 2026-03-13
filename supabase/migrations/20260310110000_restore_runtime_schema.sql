@@ -64,19 +64,7 @@ ALTER TABLE daily_snapshots
   ADD COLUMN IF NOT EXISTS task_completion_pct NUMERIC(5,2) DEFAULT 0,
   ADD COLUMN IF NOT EXISTS metadata JSONB DEFAULT '{}'::jsonb;
 
-UPDATE daily_snapshots
-SET
-  snapshot_date = COALESCE(snapshot_date, date, CURRENT_DATE),
-  pipeline_total = COALESCE(pipeline_total, pipeline_value, 0),
-  active_alerts = COALESCE(active_alerts, alerts_active, 0),
-  task_completion_pct = COALESCE(task_completion_pct, LEAST(COALESCE(tasks_completed, 0) * 10, 100)),
-  metadata = COALESCE(metadata, data, '{}'::jsonb)
-WHERE
-  snapshot_date IS NULL
-  OR pipeline_total IS NULL
-  OR active_alerts IS NULL
-  OR task_completion_pct IS NULL
-  OR metadata IS NULL;
+/* UPDATE daily_snapshots removed due to non-existent columns in new schema */
 
 ALTER TABLE daily_snapshots
   ALTER COLUMN snapshot_date SET DEFAULT CURRENT_DATE,

@@ -54,6 +54,30 @@ function unique(values) {
   return [...new Set(values.filter(Boolean))]
 }
 
+function extractCustomNodePackages(nodes = []) {
+  const packages = new Set()
+  const types = new Set()
+
+  for (const node of nodes) {
+    const type = String(node.type || '')
+    if (!type) continue
+
+    const packageToken = type.split('.')[0]
+    const isOfficialPackage =
+      packageToken === 'n8n-nodes-base' ||
+      packageToken === '@n8n/n8n-nodes-langchain'
+    if (isOfficialPackage) continue
+
+    packages.add(packageToken)
+    types.add(type)
+  }
+
+  return {
+    customNodePackages: [...packages],
+    customNodeTypes: [...types],
+  }
+}
+
 function classifyTriggers(nodes = []) {
   const triggers = new Set()
   for (const node of nodes) {
@@ -116,8 +140,10 @@ async function main() {
     const requiredCredentialTypes = unique(nodes.flatMap(node => Object.keys(node.credentials || {})))
     const missingCredentialTypes = requiredCredentialTypes.filter(type => !credentialTypes.has(type))
     const triggers = classifyTriggers(nodes)
+    const { customNodePackages, customNodeTypes } = extractCustomNodePackages(nodes)
     const hasWebhook = triggers.includes('webhook')
     const hasSchedule = triggers.includes('schedule')
+    const requiresCommunityNodes = customNodePackages.length > 0
 
     details.push({
       id: payload.id,
@@ -128,8 +154,11 @@ async function main() {
       nodeCount: nodes.length,
       requiredCredentialTypes,
       missingCredentialTypes,
-      runnableNow: missingCredentialTypes.length === 0,
-      activatableNow: missingCredentialTypes.length === 0 && (hasWebhook || hasSchedule),
+      customNodePackages,
+      customNodeTypes,
+      requiresCommunityNodes,
+      runnableNow: missingCredentialTypes.length === 0 && !requiresCommunityNodes,
+      activatableNow: missingCredentialTypes.length === 0 && !requiresCommunityNodes && (hasWebhook || hasSchedule),
     })
   }
 
@@ -142,7 +171,9 @@ async function main() {
     activatableNow: details.filter(item => item.activatableNow).length,
     activeNow: details.filter(item => item.active).length,
     blockedByCredentials: details.filter(item => item.missingCredentialTypes.length > 0).length,
+    blockedByCommunityNodes: details.filter(item => item.requiresCommunityNodes).length,
     missingCredentialTypes: unique(details.flatMap(item => item.missingCredentialTypes)),
+    missingCommunityNodePackages: unique(details.flatMap(item => item.customNodePackages)),
   }
 
   const report = { summary, details }

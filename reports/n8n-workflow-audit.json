@@ -1,31 +1,30 @@
 {
   "summary": {
-    "generatedAt": "2026-03-13T07:06:09.600Z",
+    "generatedAt": "2026-03-13T09:32:55.885Z",
     "totalWorkflowsInN8n": 26,
     "auditedWorkflows": 26,
     "recentHours": 48,
-    "runnableNow": 17,
+    "runnableNow": 18,
     "activatableNow": 16,
-    "activeNow": 13,
-    "blockedByCredentials": 9,
+    "activeNow": 14,
+    "blockedByCredentials": 7,
+    "blockedByCommunityNodes": 7,
     "missingCredentialTypes": [
-      "googleSheetsOAuth2Api",
-      "openAiApi",
-      "httpHeaderAuth",
       "perplexityApi",
       "blotatoApi",
-      "googleDriveOAuth2Api",
-      "githubApi",
       "openRouterApi",
-      "postizApi",
-      "httpBearerAuth"
+      "postizApi"
+    ],
+    "missingCommunityNodePackages": [
+      "@blotato/n8n-nodes-blotato",
+      "n8n-nodes-postiz"
     ]
   },
   "details": [
     {
       "id": "uPSDrhgXNz4UtYNL",
       "name": "Automate video creation with Veo3 and auto-post to Instagram, TikTok via Blotato - vide",
-      "active": false,
+      "active": true,
       "updatedAt": "2026-03-13T06:58:23.045Z",
       "triggers": [
         "schedule"
@@ -36,13 +35,12 @@
         "openAiApi",
         "httpHeaderAuth"
       ],
-      "missingCredentialTypes": [
-        "googleSheetsOAuth2Api",
-        "openAiApi",
-        "httpHeaderAuth"
-      ],
-      "runnableNow": false,
-      "activatableNow": false
+      "missingCredentialTypes": [],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": true,
+      "activatableNow": true
     },
     {
       "id": "w1zjD0xMsGXsFzXg",
@@ -56,6 +54,9 @@
       "nodeCount": 23,
       "requiredCredentialTypes": [],
       "missingCredentialTypes": [],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
       "runnableNow": true,
       "activatableNow": true
     },
@@ -75,10 +76,15 @@
       ],
       "missingCredentialTypes": [
         "perplexityApi",
-        "openAiApi",
-        "googleSheetsOAuth2Api",
         "blotatoApi"
       ],
+      "customNodePackages": [
+        "@blotato/n8n-nodes-blotato"
+      ],
+      "customNodeTypes": [
+        "@blotato/n8n-nodes-blotato.blotato"
+      ],
+      "requiresCommunityNodes": true,
       "runnableNow": false,
       "activatableNow": false
     },
@@ -98,12 +104,15 @@
         "googleDriveOAuth2Api"
       ],
       "missingCredentialTypes": [
-        "blotatoApi",
-        "googleSheetsOAuth2Api",
-        "openAiApi",
-        "httpHeaderAuth",
-        "googleDriveOAuth2Api"
+        "blotatoApi"
       ],
+      "customNodePackages": [
+        "@blotato/n8n-nodes-blotato"
+      ],
+      "customNodeTypes": [
+        "@blotato/n8n-nodes-blotato.blotato"
+      ],
+      "requiresCommunityNodes": true,
       "runnableNow": false,
       "activatableNow": false
     },
@@ -123,11 +132,15 @@
         "blotatoApi"
       ],
       "missingCredentialTypes": [
-        "googleSheetsOAuth2Api",
-        "openAiApi",
-        "httpHeaderAuth",
         "blotatoApi"
       ],
+      "customNodePackages": [
+        "@blotato/n8n-nodes-blotato"
+      ],
+      "customNodeTypes": [
+        "@blotato/n8n-nodes-blotato.blotato"
+      ],
+      "requiresCommunityNodes": true,
       "runnableNow": false,
       "activatableNow": false
     },
@@ -143,9 +156,11 @@
         "openRouterApi"
       ],
       "missingCredentialTypes": [
-        "githubApi",
         "openRouterApi"
       ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
       "runnableNow": false,
       "activatableNow": false
     },
@@ -163,6 +178,9 @@
         "gmailOAuth2"
       ],
       "missingCredentialTypes": [],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
       "runnableNow": true,
       "activatableNow": true
     },
@@ -182,11 +200,15 @@
         "blotatoApi"
       ],
       "missingCredentialTypes": [
-        "googleSheetsOAuth2Api",
-        "openAiApi",
-        "httpHeaderAuth",
         "blotatoApi"
       ],
+      "customNodePackages": [
+        "@blotato/n8n-nodes-blotato"
+      ],
+      "customNodeTypes": [
+        "@blotato/n8n-nodes-blotato.blotato"
+      ],
+      "requiresCommunityNodes": true,
       "runnableNow": false,
       "activatableNow": false
     },
@@ -202,10 +224,11 @@
       "requiredCredentialTypes": [
         "openAiApi"
       ],
-      "missingCredentialTypes": [
-        "openAiApi"
-      ],
-      "runnableNow": false,
+      "missingCredentialTypes": [],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": true,
       "activatableNow": false
     },
     {
@@ -219,8 +242,15 @@
       "nodeCount": 15,
       "requiredCredentialTypes": [],
       "missingCredentialTypes": [],
-      "runnableNow": true,
-      "activatableNow": true
+      "customNodePackages": [
+        "@blotato/n8n-nodes-blotato"
+      ],
+      "customNodeTypes": [
+        "@blotato/n8n-nodes-blotato.blotato"
+      ],
+      "requiresCommunityNodes": true,
+      "runnableNow": false,
+      "activatableNow": false
     },
     {
       "id": "zFu72IiAMJXM1eLw",
@@ -235,9 +265,15 @@
         "telegramApi"
       ],
       "missingCredentialTypes": [
-        "blotatoApi",
-        "openAiApi"
+        "blotatoApi"
       ],
+      "customNodePackages": [
+        "@blotato/n8n-nodes-blotato"
+      ],
+      "customNodeTypes": [
+        "@blotato/n8n-nodes-blotato.blotatoTool"
+      ],
+      "requiresCommunityNodes": true,
       "runnableNow": false,
       "activatableNow": false
     },
@@ -258,12 +294,15 @@
         "httpBearerAuth"
       ],
       "missingCredentialTypes": [
-        "googleDriveOAuth2Api",
-        "httpHeaderAuth",
-        "postizApi",
-        "googleSheetsOAuth2Api",
-        "httpBearerAuth"
+        "postizApi"
       ],
+      "customNodePackages": [
+        "n8n-nodes-postiz"
+      ],
+      "customNodeTypes": [
+        "n8n-nodes-postiz.postiz"
+      ],
+      "requiresCommunityNodes": true,
       "runnableNow": false,
       "activatableNow": false
     },
@@ -278,6 +317,9 @@
       "nodeCount": 7,
       "requiredCredentialTypes": [],
       "missingCredentialTypes": [],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
       "runnableNow": true,
       "activatableNow": true
     },
@@ -292,6 +334,9 @@
       "nodeCount": 6,
       "requiredCredentialTypes": [],
       "missingCredentialTypes": [],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
       "runnableNow": true,
       "activatableNow": true
     },
@@ -306,6 +351,9 @@
       "nodeCount": 5,
       "requiredCredentialTypes": [],
       "missingCredentialTypes": [],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
       "runnableNow": true,
       "activatableNow": true
     },
@@ -320,6 +368,9 @@
       "nodeCount": 5,
       "requiredCredentialTypes": [],
       "missingCredentialTypes": [],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
       "runnableNow": true,
       "activatableNow": true
     },
@@ -336,6 +387,9 @@
         "gmailOAuth2"
       ],
       "missingCredentialTypes": [],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
       "runnableNow": true,
       "activatableNow": true
     },
@@ -350,6 +404,9 @@
       "nodeCount": 3,
       "requiredCredentialTypes": [],
       "missingCredentialTypes": [],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
       "runnableNow": true,
       "activatableNow": true
     },
@@ -364,6 +421,9 @@
       "nodeCount": 3,
       "requiredCredentialTypes": [],
       "missingCredentialTypes": [],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
       "runnableNow": true,
       "activatableNow": true
     },
@@ -378,6 +438,9 @@
       "nodeCount": 3,
       "requiredCredentialTypes": [],
       "missingCredentialTypes": [],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
       "runnableNow": true,
       "activatableNow": true
     },
@@ -394,6 +457,9 @@
         "gmailOAuth2"
       ],
       "missingCredentialTypes": [],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
       "runnableNow": true,
       "activatableNow": true
     },
@@ -410,6 +476,9 @@
         "gmailOAuth2"
       ],
       "missingCredentialTypes": [],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
       "runnableNow": true,
       "activatableNow": true
     },
@@ -424,6 +493,9 @@
       "nodeCount": 6,
       "requiredCredentialTypes": [],
       "missingCredentialTypes": [],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
       "runnableNow": true,
       "activatableNow": true
     },
@@ -440,6 +512,9 @@
         "gmailOAuth2"
       ],
       "missingCredentialTypes": [],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
       "runnableNow": true,
       "activatableNow": true
     },
@@ -456,6 +531,9 @@
         "gmailOAuth2"
       ],
       "missingCredentialTypes": [],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
       "runnableNow": true,
       "activatableNow": true
     },
@@ -470,6 +548,9 @@
         "telegramApi"
       ],
       "missingCredentialTypes": [],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
       "runnableNow": true,
       "activatableNow": false
     }
