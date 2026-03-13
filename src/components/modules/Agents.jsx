@@ -10,6 +10,7 @@ import { useAgents } from '../../hooks/useAgents'
 import { useAgentStudies } from '../../hooks/useAgentStudies'
 import { useAgentVault, ROLE_CAPABILITY_MAP } from '../../hooks/useAgentVault'
 import { useAgentState } from '../../hooks/useAgentState'
+import { useGoals } from '../../hooks/useGoals'
 import { useOutreachQueue } from '../../hooks/useOutreachQueue'
 import { useApprovals } from '../../hooks/useApprovals'
 import { AGENT_AUTOMATION_PACKS } from '../../data/agentAutomationPacks'
@@ -94,6 +95,7 @@ function Agents() {
   const { items: approvalItems, stats: approvalStats, statusFilter: approvalFilter, setStatusFilter: setApprovalFilter, loading: approvalLoading, error: approvalError, busyKey: approvalBusyKey, approveRequest, rejectRequest, reload: reloadApprovals } = useApprovals()
   const { filteredAgents: vaultAgents, namespaces: vaultNamespaces, loading: vaultLoading, error: vaultError, filters: vaultFilters, setNamespace: setVaultNamespace, setSearch: setVaultSearch, setRole: setVaultRole, suggestRole, toggleActive: toggleVaultAgent, runAgent: runVaultAgent, runningAgent: vaultRunning, totalAgents: vaultTotal, activeCount: vaultActive, } = useAgentVault()
   const { agentHealth, runningAgents } = useAgentState()
+  const { goals } = useGoals()
 
   const [triggering, setTriggering] = useState(null)
   const tabFromSearch = useMemo(() => {
@@ -331,17 +333,63 @@ function Agents() {
         )}
 
         {activeTab === 'queue' && (
-          <div className="ct-section">
-            <div className="ct-section-header"><span className="ct-section-title">Task queue</span><span style={{ fontSize: 'var(--text-xs)', color: 'var(--text-quaternary)' }}>{tasks.length} tasks</span></div>
-            <div className="ct-section-body">
-              {tasks.slice(0, 50).map(t => (
-                <div key={t.id} className="ag-log-row">
-                  <span className="ag-log-agent" style={{ color: AGENT_COLORS[t.agent_code_name] || 'var(--accent-primary)' }}>{t.agent_code_name}</span>
-                  <span className="ag-log-text">{t.title || t.type}</span>
-                  <span className={`badge badge-${t.status === 'completed' ? 'success' : t.status === 'failed' ? 'danger' : 'warning'}`}>{t.status}</span>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)' }}>
+            {/* Blocked goal steps — simulation gates */}
+            {(() => {
+              const blocked = (goals || []).flatMap(g =>
+                (g.goal_steps || []).filter(s => s.status === 'waiting_approval' || s.status === 'failed')
+                  .map(s => ({ ...s, goalTitle: g.title }))
+              )
+              if (blocked.length === 0) return null
+              return (
+                <div className="ct-section" style={{ borderColor: 'var(--color-warning)' }}>
+                  <div className="ct-section-header">
+                    <span className="ct-section-title" style={{ color: 'var(--color-warning)' }}>Blocked steps</span>
+                    <span style={{ fontSize: 'var(--text-xs)', color: 'var(--text-quaternary)' }}>{blocked.length} need attention</span>
+                  </div>
+                  <div className="ct-section-body">
+                    {blocked.map(step => {
+                      const simStatus = step.input?.pre_execution_simulation_status || step.output?.pre_execution_simulation_status
+                      const recommended = step.input?.recommended_action || step.output?.recommended_action
+                      return (
+                        <div key={step.id} className="ag-log-row" style={{ borderLeft: `2px solid ${step.status === 'waiting_approval' ? 'var(--color-warning)' : 'var(--color-danger)'}` }}>
+                          <span className="ag-log-agent" style={{ color: AGENT_COLORS[step.agent_code_name] || 'var(--accent-primary)' }}>{step.agent_code_name || step.step_type}</span>
+                          <span className="ag-log-text">
+                            {step.title}
+                            {simStatus && <span className="badge badge-default" style={{ marginLeft: 6 }}>sim: {simStatus}</span>}
+                            {recommended && <span style={{ marginLeft: 6, color: 'var(--color-info)', fontSize: 'var(--text-xs)' }}>{recommended}</span>}
+                          </span>
+                          <span className={`badge badge-${step.status === 'waiting_approval' ? 'warning' : 'danger'}`}>
+                            {step.status === 'waiting_approval' ? 'Simulation blocked' : step.status}
+                          </span>
+                          <div style={{ display: 'flex', gap: 'var(--space-2)' }}>
+                            {step.status === 'waiting_approval' && (
+                              <button className="btn btn-ghost btn-xs" onClick={() => navigate('/agents?tab=approvals')}>Approve</button>
+                            )}
+                            {step.pipeline_run_id && (
+                              <button className="btn btn-ghost btn-xs" onClick={() => navigate(`/control-tower?corr=${step.pipeline_run_id}`)}>Trace</button>
+                            )}
+                          </div>
+                        </div>
+                      )
+                    })}
+                  </div>
                 </div>
-              ))}
-              {tasks.length === 0 && <div className="crm-table-empty">No tasks in queue</div>}
+              )
+            })()}
+
+            <div className="ct-section">
+              <div className="ct-section-header"><span className="ct-section-title">Task queue</span><span style={{ fontSize: 'var(--text-xs)', color: 'var(--text-quaternary)' }}>{tasks.length} tasks</span></div>
+              <div className="ct-section-body">
+                {tasks.slice(0, 50).map(t => (
+                  <div key={t.id} className="ag-log-row">
+                    <span className="ag-log-agent" style={{ color: AGENT_COLORS[t.agent_code_name] || 'var(--accent-primary)' }}>{t.agent_code_name}</span>
+                    <span className="ag-log-text">{t.title || t.type}</span>
+                    <span className={`badge badge-${t.status === 'completed' ? 'success' : t.status === 'failed' ? 'danger' : 'warning'}`}>{t.status}</span>
+                  </div>
+                ))}
+                {tasks.length === 0 && <div className="crm-table-empty">No tasks in queue</div>}
+              </div>
             </div>
           </div>
         )}

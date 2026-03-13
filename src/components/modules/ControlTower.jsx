@@ -1,6 +1,7 @@
 // ═══════════════════════════════════════════════════
-// OCULOPS — Control Tower v11.0
+// OCULOPS — Control Tower v12.0
 // Main Dashboard — Autonomous Intelligence OS
+// AG1-P0: Simulation gate states + run-inspection
 // ═══════════════════════════════════════════════════
 
 import { useMemo, useEffect, useState } from 'react'
@@ -12,6 +13,7 @@ import { useActivities } from '../../hooks/useActivities'
 import { useSignals } from '../../hooks/useSignals'
 import useAgents from '../../hooks/useAgents'
 import { usePipelineRuns } from '../../hooks/usePipelineRuns'
+import { useGoals } from '../../hooks/useGoals'
 import { useAlerts } from '../../hooks/useAlerts'
 import { supabase } from '../../lib/supabase'
 import {
@@ -27,8 +29,20 @@ import {
     RocketLaunchIcon,
     BellAlertIcon,
     XMarkIcon,
+    ShieldExclamationIcon,
+    EyeIcon,
 } from '@heroicons/react/24/outline'
 import './ControlTower.css'
+
+// ── Simulation Gate Step Status Config ──
+const STEP_STATUS_CONFIG = {
+    waiting_approval: { label: 'Simulation blocked', color: 'var(--color-warning)', bg: 'var(--color-warning-muted)' },
+    pending:          { label: 'Pending',            color: 'var(--text-tertiary)',   bg: 'var(--surface-elevated)' },
+    running:          { label: 'Running',            color: 'var(--color-info)',      bg: 'var(--color-info-muted)' },
+    completed:        { label: 'Completed',          color: 'var(--color-success)',   bg: 'var(--color-success-muted)' },
+    failed:           { label: 'Failed',             color: 'var(--color-danger)',    bg: 'var(--color-danger-muted)' },
+    skipped:          { label: 'Skipped',            color: 'var(--text-quaternary)', bg: 'var(--surface-elevated)' },
+}
 
 // ── Sparkline ──
 function Sparkline({ data = [], color = 'var(--accent-primary)', width = 60, height = 20 }) {
@@ -151,6 +165,7 @@ function ControlTower() {
     const { signals, activeSignals, loading: signalsLoading } = useSignals()
     const { agents, stats: agentStats } = useAgents()
     const { runs: pipelineRuns, stats: pipelineStats } = usePipelineRuns()
+    const { goals } = useGoals()
     const { active: activeAlerts, resolveAlert } = useAlerts()
     const [traceEvents, setTraceEvents] = useState([])
     const [traceLoading, setTraceLoading] = useState(false)
@@ -196,6 +211,23 @@ function ControlTower() {
         { label: 'Activities (7d)', value: recentActivitiesCount, icon: ClockIcon, color: recentActivitiesCount > 0 ? 'var(--color-success)' : 'var(--color-warning)', target: '20+' },
         { label: 'Active signals', value: (activeSignals || []).length, icon: SignalIcon, color: 'var(--accent-primary)', target: '10+', subtitle: `Avg impact: ${avgSignalImpact}` },
     ]
+
+    // AG1-P0: Blocked goal steps (waiting_approval = simulation gate)
+    const blockedSteps = useMemo(() => {
+        const blocked = []
+        ;(goals || []).forEach(goal => {
+            ;(goal.goal_steps || []).forEach(step => {
+                if (step.status === 'waiting_approval' || step.status === 'failed') {
+                    blocked.push({ ...step, goalTitle: goal.title, goalId: goal.id })
+                }
+            })
+        })
+        return blocked.sort((a, b) => {
+            if (a.status === 'waiting_approval' && b.status !== 'waiting_approval') return -1
+            if (b.status === 'waiting_approval' && a.status !== 'waiting_approval') return 1
+            return new Date(b.updated_at || b.created_at) - new Date(a.updated_at || a.created_at)
+        })
+    }, [goals])
 
     const recentSignals = (signals || []).slice(-5).reverse()
     const visiblePipelineRuns = useMemo(() => {
@@ -416,6 +448,11 @@ function ControlTower() {
                         <RocketLaunchIcon width={12} height={12} style={{ display: 'inline', verticalAlign: 'middle'}} /> {pipelineStats.running} pipeline{pipelineStats.running > 1 ? 's' : ''} running
                     </span>
                 )}
+                {blockedSteps.length > 0 && (
+                    <span className="ct-agents-bar-summary" style={{ color: 'var(--color-danger)' }}>
+                        <ShieldExclamationIcon width={12} height={12} style={{ display: 'inline', verticalAlign: 'middle'}} /> {blockedSteps.length} blocked
+                    </span>
+                )}
             </div>
 
             {/* ── KPI Grid ── */}
@@ -544,6 +581,73 @@ function ControlTower() {
                     {/* Anomaly Alerts */}
                     {activeAlerts.length > 0 && (
                         <AlertsSection alerts={activeAlerts} resolveAlert={resolveAlert} />
+                    )}
+
+                    {/* AG1-P0: Blocked Steps — Simulation Gates */}
+                    {blockedSteps.length > 0 && (
+                        <div className="ct-section">
+                            <div className="ct-section-header">
+                                <span className="ct-section-title" style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                                    <ShieldExclamationIcon width={14} height={14} style={{ color: 'var(--color-warning)' }} />
+                                    Blocked steps
+                                </span>
+                                <span style={{ fontSize: 'var(--text-xs)', color: 'var(--text-quaternary)' }}>
+                                    {blockedSteps.length} action{blockedSteps.length !== 1 ? 's' : ''} needed
+                                </span>
+                            </div>
+                            <div className="ct-section-body stagger-children">
+                                {blockedSteps.slice(0, 8).map(step => {
+                                    const cfg = STEP_STATUS_CONFIG[step.status] || STEP_STATUS_CONFIG.pending
+                                    const simId = step.input?.pre_execution_simulation_id || step.output?.pre_execution_simulation_id
+                                    const simStatus = step.input?.pre_execution_simulation_status || step.output?.pre_execution_simulation_status
+                                    const recommended = step.input?.recommended_action || step.output?.recommended_action
+                                    return (
+                                        <div key={step.id} className="ct-agent-row" style={{ borderLeft: `2px solid ${cfg.color}` }}>
+                                            <div className="ct-agent-status-icon" style={{ background: cfg.bg }}>
+                                                {step.status === 'waiting_approval'
+                                                    ? <ShieldExclamationIcon width={18} height={18} style={{ color: cfg.color }} />
+                                                    : <ExclamationTriangleIcon width={18} height={18} style={{ color: cfg.color }} />}
+                                            </div>
+                                            <div className="ct-agent-info">
+                                                <div className="ct-agent-name">
+                                                    {step.title}
+                                                    <span className="badge" style={{ marginLeft: 6, color: cfg.color, borderColor: cfg.color, background: cfg.bg }}>
+                                                        {cfg.label}
+                                                    </span>
+                                                </div>
+                                                <div className="ct-agent-desc">
+                                                    {step.goalTitle} · Step {step.step_number} · {step.agent_code_name || step.step_type}
+                                                    {step.error && <span style={{ color: 'var(--color-danger)' }}> — {step.error}</span>}
+                                                </div>
+                                                {/* Simulation metadata */}
+                                                {(simId || simStatus || recommended) && (
+                                                    <div style={{ fontSize: 'var(--text-xs)', marginTop: 4, display: 'flex', gap: 'var(--space-3)', flexWrap: 'wrap', color: 'var(--text-tertiary)' }}>
+                                                        {simId && <span>Sim: {String(simId).slice(0, 12)}...</span>}
+                                                        {simStatus && <span className="badge badge-default">sim: {simStatus}</span>}
+                                                        {recommended && <span style={{ color: 'var(--color-info)' }}>Recommended: {recommended}</span>}
+                                                    </div>
+                                                )}
+                                            </div>
+                                            <div className="ct-agent-badges" style={{ display: 'flex', gap: 'var(--space-2)', flexWrap: 'wrap' }}>
+                                                {step.status === 'waiting_approval' && (
+                                                    <button className="btn btn-ghost btn-xs" onClick={() => openApprovals()}>
+                                                        Open approval
+                                                    </button>
+                                                )}
+                                                {step.pipeline_run_id && (
+                                                    <button className="btn btn-ghost btn-xs" onClick={() => openTrace(step.pipeline_run_id)}>
+                                                        Open run
+                                                    </button>
+                                                )}
+                                                <button className="btn btn-ghost btn-xs" onClick={() => navigate(`/agents?tab=queue`)}>
+                                                    Queue
+                                                </button>
+                                            </div>
+                                        </div>
+                                    )
+                                })}
+                            </div>
+                        </div>
                     )}
 
                     {/* Critical Signals */}
