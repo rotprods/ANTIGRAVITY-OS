@@ -268,13 +268,11 @@ into one execution matrix with strict ownership:
 
 ---
 
-## 6) Execution Order (Now)
-1. `AG2-C0` registries + contracts
-2. `AG2-C1` orchestration hardening
-3. `AG2-C4` evaluation baseline
-4. `AG2-C5` memory/simulation skeleton
-5. `AG1-P0` + `AG1-P2` UI diagnostics + E2E proof
-6. `INT-2` run three real workflows and score
+## 6) Execution Order (Next)
+1. `AG1-P0` + `AG1-P2` UI diagnostics + E2E operator proof
+2. `AG2-C2` provider auth/channel provisioning for full runtime path
+3. `AG2-C6` live outbound -> inbound reconciliation verification
+4. `INT-3` merge gate (`eslint + tests + build`) on unified branch
 
 ---
 
