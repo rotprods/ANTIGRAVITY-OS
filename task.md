@@ -170,6 +170,7 @@ into one execution matrix with strict ownership:
 
 ## AG2-C2 — Tool Bus / MCP Access Layer (48h Block 4)
 - Variables: `V2.4`, `V4.2`
+- Status: ✅ Completed backend pathing (runtime auth/channel provisioning still pending for full provider E2E)
 - Subvariables:
   - `AG2-C2.1` Standardize tool invocation envelope (auth, policy, trace metadata).
   - `AG2-C2.2` Enforce permissioned access per agent role.
