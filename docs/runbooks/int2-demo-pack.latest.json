@@ -1,0 +1,235 @@
+{
+  "generated_at": "2026-03-13T06:25:49.175Z",
+  "org_id": "a11b1e98-7fd9-4789-aab9-ab5a77494627",
+  "window_hours": 24,
+  "summary": {
+    "total_workflows": 3,
+    "completed": 3,
+    "failed": 0,
+    "waiting_approval": 0,
+    "evaluations_window_total": 11,
+    "simulations_window_total": 0
+  },
+  "workflows": [
+    {
+      "workflow_id": "INT-2.1",
+      "label": "bug -> patch -> test -> review",
+      "template_code_name": "self_improvement_patch_cycle",
+      "pipeline_run_id": "d461d175-562d-4611-acbb-3141d9c7eb6b",
+      "correlation_id": "2363e222-e6c9-480e-983c-c1b8f3151edb",
+      "run_status": "completed",
+      "taxonomy_class": "healthy",
+      "taxonomy_reason": "Run completed successfully.",
+      "duration_ms": 2623,
+      "evaluation_metrics": {
+        "org_id": "a11b1e98-7fd9-4789-aab9-ab5a77494627",
+        "generated_at": "2026-03-13T06:25:37.738Z",
+        "window_hours": 24,
+        "filters": {
+          "correlation_id": "2363e222-e6c9-480e-983c-c1b8f3151edb",
+          "artifact_type": null
+        },
+        "totals": {
+          "evaluations_window": 4,
+          "decision_distribution": {
+            "pass": 4,
+            "retry": 0,
+            "reject": 0,
+            "escalate": 0
+          }
+        },
+        "scores": {
+          "overall_average": 77.5,
+          "critics_average": {
+            "quality": 69.5,
+            "architecture": 77,
+            "risk": 86,
+            "cost": 85
+          }
+        },
+        "escalation": {
+          "escalations_total": 0,
+          "top_artifact_types": []
+        },
+        "warnings": []
+      },
+      "simulation_taxonomy": {
+        "org_id": "a11b1e98-7fd9-4789-aab9-ab5a77494627",
+        "generated_at": "2026-03-13T06:25:38.201Z",
+        "window_hours": 24,
+        "filters": {
+          "correlation_id": "2363e222-e6c9-480e-983c-c1b8f3151edb",
+          "target_type": null
+        },
+        "totals": {
+          "simulations_window": 0,
+          "status": {
+            "passed": 0,
+            "failed": 0,
+            "pass_ratio": 0
+          },
+          "policy_gate": {
+            "passed": 0,
+            "blocked": 0
+          }
+        },
+        "breakdown": {
+          "by_mode": {},
+          "by_target_type": {},
+          "by_recommended_action": {},
+          "top_recommended_action": null
+        },
+        "warnings": []
+      },
+      "simulation_latest_failures": []
+    },
+    {
+      "workflow_id": "INT-2.2",
+      "label": "feature -> implement -> evaluate",
+      "template_code_name": "feature_delivery_eval_cycle",
+      "pipeline_run_id": "aba73691-0bf9-4148-ab01-b74504e7fe26",
+      "correlation_id": "d69fcd49-1fc6-48bd-b06e-a91c52b158cd",
+      "run_status": "completed",
+      "taxonomy_class": "healthy",
+      "taxonomy_reason": "Run completed successfully.",
+      "duration_ms": 2138,
+      "evaluation_metrics": {
+        "org_id": "a11b1e98-7fd9-4789-aab9-ab5a77494627",
+        "generated_at": "2026-03-13T06:25:42.720Z",
+        "window_hours": 24,
+        "filters": {
+          "correlation_id": "d69fcd49-1fc6-48bd-b06e-a91c52b158cd",
+          "artifact_type": null
+        },
+        "totals": {
+          "evaluations_window": 3,
+          "decision_distribution": {
+            "pass": 3,
+            "retry": 0,
+            "reject": 0,
+            "escalate": 0
+          }
+        },
+        "scores": {
+          "overall_average": 78.33,
+          "critics_average": {
+            "quality": 72,
+            "architecture": 77,
+            "risk": 86,
+            "cost": 85
+          }
+        },
+        "escalation": {
+          "escalations_total": 0,
+          "top_artifact_types": []
+        },
+        "warnings": []
+      },
+      "simulation_taxonomy": {
+        "org_id": "a11b1e98-7fd9-4789-aab9-ab5a77494627",
+        "generated_at": "2026-03-13T06:25:43.089Z",
+        "window_hours": 24,
+        "filters": {
+          "correlation_id": "d69fcd49-1fc6-48bd-b06e-a91c52b158cd",
+          "target_type": null
+        },
+        "totals": {
+          "simulations_window": 0,
+          "status": {
+            "passed": 0,
+            "failed": 0,
+            "pass_ratio": 0
+          },
+          "policy_gate": {
+            "passed": 0,
+            "blocked": 0
+          }
+        },
+        "breakdown": {
+          "by_mode": {},
+          "by_target_type": {},
+          "by_recommended_action": {},
+          "top_recommended_action": null
+        },
+        "warnings": []
+      },
+      "simulation_latest_failures": []
+    },
+    {
+      "workflow_id": "INT-2.3",
+      "label": "campaign -> execute -> score -> improve",
+      "template_code_name": "campaign_execution_improvement_cycle",
+      "pipeline_run_id": "2f490e25-3f5e-4919-9960-6fd913966124",
+      "correlation_id": "fd06b0e3-311e-4d5c-a2b7-31f366bc526e",
+      "run_status": "completed",
+      "taxonomy_class": "healthy",
+      "taxonomy_reason": "Run completed successfully.",
+      "duration_ms": 2880,
+      "evaluation_metrics": {
+        "org_id": "a11b1e98-7fd9-4789-aab9-ab5a77494627",
+        "generated_at": "2026-03-13T06:25:48.520Z",
+        "window_hours": 24,
+        "filters": {
+          "correlation_id": "fd06b0e3-311e-4d5c-a2b7-31f366bc526e",
+          "artifact_type": null
+        },
+        "totals": {
+          "evaluations_window": 4,
+          "decision_distribution": {
+            "pass": 4,
+            "retry": 0,
+            "reject": 0,
+            "escalate": 0
+          }
+        },
+        "scores": {
+          "overall_average": 77.5,
+          "critics_average": {
+            "quality": 69.5,
+            "architecture": 77,
+            "risk": 86,
+            "cost": 85
+          }
+        },
+        "escalation": {
+          "escalations_total": 0,
+          "top_artifact_types": []
+        },
+        "warnings": []
+      },
+      "simulation_taxonomy": {
+        "org_id": "a11b1e98-7fd9-4789-aab9-ab5a77494627",
+        "generated_at": "2026-03-13T06:25:48.859Z",
+        "window_hours": 24,
+        "filters": {
+          "correlation_id": "fd06b0e3-311e-4d5c-a2b7-31f366bc526e",
+          "target_type": null
+        },
+        "totals": {
+          "simulations_window": 0,
+          "status": {
+            "passed": 0,
+            "failed": 0,
+            "pass_ratio": 0
+          },
+          "policy_gate": {
+            "passed": 0,
+            "blocked": 0
+          }
+        },
+        "breakdown": {
+          "by_mode": {},
+          "by_target_type": {},
+          "by_recommended_action": {},
+          "top_recommended_action": null
+        },
+        "warnings": []
+      },
+      "simulation_latest_failures": []
+    }
+  ],
+  "artifacts": {
+    "json_path": "docs/runbooks/int2-demo-pack.latest.json",
+    "markdown_path": "docs/runbooks/int2-demo-pack.md"
+  }
+}

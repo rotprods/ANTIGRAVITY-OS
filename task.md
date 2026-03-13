@@ -17,10 +17,12 @@ into one execution matrix with strict ownership:
 ## 0.1) Runtime Progress Snapshot (Agent 2)
 - `AG2-C0` ✅ Completed (registry + contracts scaffolded under `registry/**` and `contracts/**`)
 - `AG2-C1` ✅ Completed baseline (goal classification + decomposition + dependency persistence + retry/escalation hooks in orchestration engine)
-- `AG2-C4` ✅ Completed baseline (evaluation engine + score history table + orchestration integration)
-- `AG2-C5` ✅ Completed + hardening pass (`simulation-engine` + `simulation_runs` + policy-gated pre-execution simulation in goals/pipelines + replay support + medium-risk production false-block fix + step trace continuity fix in pipeline_step_runs)
+- `AG2-C3` ✅ Hardened (run/step governor gates + escalation persistence + governance metrics endpoint)
+- `AG2-C4` ✅ Hardened (evaluation engine + score history + runtime metrics by window/org/filter)
+- `AG2-C5` ✅ Hardened (`simulation-engine` + `simulation_runs` + policy-gated simulation + replay + taxonomy/latest_failures APIs)
 - `AG2-C6` ✅ Completed baseline (provider status persistence on dispatch failure/success + inbound/status reconciliation to existing conversations + `message_in` trigger preserved post-persistence + run failure/stuck taxonomy API)
-- `AG2-C7` ✅ Completed baseline (synthetic smoke harness for orchestration/simulation/evaluation without provider dependencies + aggregated taxonomy listing API)
+- `AG2-C7` ✅ Hardened (synthetic smoke harness for orchestration/simulation/evaluation/governance without provider dependencies)
+- `INT-2` ✅ Completed in provider-independent mode (3 workflow pack executed with generated evidence artifacts)
 - New API actions available:
   - `orchestration-engine: plan_goal`
   - `orchestration-engine: execute_goal`
@@ -251,6 +253,7 @@ into one execution matrix with strict ownership:
 
 ## INT-2 — Demo Workflow Pack (3 required)
 - Variables: `V1.1`, `V2.*`
+- Status: ✅ Completed in provider-independent mode (`scripts/run-int2-demo-pack.mjs` + runbook + generated artifacts)
 - Workflows:
   - `INT-2.1` bug -> patch -> test -> review
   - `INT-2.2` feature -> implement -> evaluate
