@@ -7,7 +7,16 @@
 
 import { test, expect } from '@playwright/test'
 
+const HAS_AUTH_CREDS = Boolean(
+  process.env.PLAYWRIGHT_TEST_EMAIL && process.env.PLAYWRIGHT_TEST_PASSWORD
+)
+
 test.describe('Operator closed-loop flow (authenticated)', () => {
+  test.skip(
+    !HAS_AUTH_CREDS,
+    'Requires PLAYWRIGHT_TEST_EMAIL and PLAYWRIGHT_TEST_PASSWORD for authenticated flow.'
+  )
+
   test.beforeEach(async ({ page }) => {
     await page.goto('/control-tower')
     await page.waitForLoadState('networkidle')

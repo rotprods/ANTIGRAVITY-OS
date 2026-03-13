@@ -2,8 +2,16 @@ import { test, expect } from '@playwright/test'
 
 // These tests run with a real authenticated session (storageState from auth.setup.js).
 // They require PLAYWRIGHT_TEST_EMAIL + PLAYWRIGHT_TEST_PASSWORD set in the environment.
+const HAS_AUTH_CREDS = Boolean(
+  process.env.PLAYWRIGHT_TEST_EMAIL && process.env.PLAYWRIGHT_TEST_PASSWORD
+)
 
 test.describe('Dashboard (authenticated)', () => {
+  test.skip(
+    !HAS_AUTH_CREDS,
+    'Requires PLAYWRIGHT_TEST_EMAIL and PLAYWRIGHT_TEST_PASSWORD for authenticated flow.'
+  )
+
   test.beforeEach(async ({ page }) => {
     await page.goto('/control-tower')
     await page.waitForLoadState('networkidle')

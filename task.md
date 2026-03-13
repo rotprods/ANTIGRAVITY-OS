@@ -23,6 +23,9 @@ into one execution matrix with strict ownership:
 - `AG2-C6` ✅ Completed baseline (provider status persistence on dispatch failure/success + inbound/status reconciliation to existing conversations + `message_in` trigger preserved post-persistence + run failure/stuck taxonomy API)
 - `AG2-C7` ✅ Hardened (synthetic smoke harness for orchestration/simulation/evaluation/governance without provider dependencies)
 - `INT-2` ✅ Completed in provider-independent mode (3 workflow pack executed with generated evidence artifacts)
+- `AG1-P0` ✅ Completed (operator trace UX surfaces active in Messaging/Agents/Control Tower)
+- `AG1-P2` ✅ Completed baseline (authenticated happy-path Playwright spec + manual provider smoke runbook)
+- `INT-3` ✅ Completed on unified branch (`lint` + `test` + `build`)
 - New API actions available:
   - `orchestration-engine: plan_goal`
   - `orchestration-engine: execute_goal`
@@ -116,6 +119,7 @@ into one execution matrix with strict ownership:
 
 ## AG1-P0 — UI Continuity + Trace UX (from Sprint S1-07/S1-08/S1-06)
 - Variable: `V1.2.4`
+- Status: ✅ Completed
 - Subvariables:
   - `AG1-P0.1` Messaging status surface (draft/sent/delivered/read/failed with clear badges).
   - `AG1-P0.2` Conversation-level “blocked / pending approval / failed delivery” indicators.
@@ -135,6 +139,7 @@ into one execution matrix with strict ownership:
 
 ## AG1-P2 — E2E Operator Proof
 - Variables: `V1.1`, `V5.4`
+- Status: ✅ Completed baseline
 - Subvariables:
   - `AG1-P2.1` Create/maintain authenticated happy-path E2E spec.
   - `AG1-P2.2` Add manual smoke doc for provider steps not automatable.
@@ -261,6 +266,7 @@ into one execution matrix with strict ownership:
 
 ## INT-3 — Merge Gate
 - Variables: `V5.4`
+- Status: ✅ Completed on unified branch (`npm run lint`, `npm test`, `npm run build`)
 - Required before integration:
   - `eslint` passes
   - targeted tests pass
@@ -269,10 +275,10 @@ into one execution matrix with strict ownership:
 ---
 
 ## 6) Execution Order (Next)
-1. `AG1-P0` + `AG1-P2` UI diagnostics + E2E operator proof
-2. `AG2-C2` provider auth/channel provisioning for full runtime path
-3. `AG2-C6` live outbound -> inbound reconciliation verification
-4. `INT-3` merge gate (`eslint + tests + build`) on unified branch
+1. `AG2-C2` provider auth/channel provisioning for full runtime path
+2. `AG2-C6` live outbound -> inbound reconciliation verification (real provider round-trip)
+3. Provider-backed operator smoke (`docs/smoke-operator-loop.md` section 5 + 6)
+4. Integration deploy gate (Supabase functions + app deploy + post-deploy smoke)
 
 ---
 

@@ -1,5 +1,6 @@
 import { describe, it, expect, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
+import { MemoryRouter } from 'react-router-dom'
 
 const { mockContacts, mockCompanies, mockDeals, mockActivities, mockSignals, mockAgents, mockAgentStats } = vi.hoisted(() => ({
     mockContacts: [
@@ -58,19 +59,27 @@ vi.mock('../hooks/usePipelineRuns', () => ({
 
 import ControlTower from '../components/modules/ControlTower'
 
+function renderControlTower(initialPath = '/control-tower') {
+    return render(
+        <MemoryRouter initialEntries={[initialPath]}>
+            <ControlTower />
+        </MemoryRouter>
+    )
+}
+
 describe('ControlTower', () => {
     it('renders the main header', () => {
-        render(<ControlTower />)
+        renderControlTower()
         expect(screen.getByText('Control Tower')).toBeInTheDocument()
     })
 
     it('shows Operational status when not loading', () => {
-        render(<ControlTower />)
+        renderControlTower()
         expect(screen.getByText('Operational')).toBeInTheDocument()
     })
 
     it('renders KPI labels', () => {
-        render(<ControlTower />)
+        renderControlTower()
         expect(screen.getByText('Contacts')).toBeInTheDocument()
         expect(screen.getByText('Companies')).toBeInTheDocument()
         expect(screen.getByText('Pipeline')).toBeInTheDocument()
@@ -80,20 +89,20 @@ describe('ControlTower', () => {
     })
 
     it('renders pipeline value from totalValue', () => {
-        render(<ControlTower />)
+        renderControlTower()
         // Rendered as €15,000 (toLocaleString in jsdom may use . or , as thousands sep)
         expect(screen.getByText(/15.?000/)).toBeInTheDocument()
     })
 
     it('renders agent network nodes', () => {
-        render(<ControlTower />)
+        renderControlTower()
         // ATLAS appears in agent bar and agent matrix
         expect(screen.getAllByText('ATLAS').length).toBeGreaterThanOrEqual(1)
         expect(screen.getAllByText('HUNTER').length).toBeGreaterThanOrEqual(1)
     })
 
     it('renders agent stats in agent network section', () => {
-        render(<ControlTower />)
+        renderControlTower()
         // Stats appear as "1 online", "1 running", "0 error"
         expect(screen.getAllByText(/1 online/i).length).toBeGreaterThanOrEqual(1)
         expect(screen.getAllByText(/1 running/i).length).toBeGreaterThanOrEqual(1)
@@ -101,35 +110,35 @@ describe('ControlTower', () => {
     })
 
     it('renders signals in latest signals section', () => {
-        render(<ControlTower />)
+        renderControlTower()
         expect(screen.getByText('AI Cost Drop')).toBeInTheDocument()
         expect(screen.getByText('TikTok EU')).toBeInTheDocument()
     })
 
     it('renders agents bar label', () => {
-        render(<ControlTower />)
+        renderControlTower()
         expect(screen.getByText('Agents')).toBeInTheDocument()
     })
 
     it('renders system health section', () => {
-        render(<ControlTower />)
+        renderControlTower()
         expect(screen.getByText('System health')).toBeInTheDocument()
     })
 
     it('renders health score number', () => {
-        render(<ControlTower />)
+        renderControlTower()
         // healthScore = round((min(15000/500,100)*0.5) + ((1/2)*100*0.3) + (min(2*10,100)*0.2))
         // = round(30*0.5 + 50*0.3 + 20*0.2) = round(15 + 15 + 4) = 34
         expect(screen.getByText('34')).toBeInTheDocument()
     })
 
     it('renders latest signals section header', () => {
-        render(<ControlTower />)
+        renderControlTower()
         expect(screen.getByText('Latest signals')).toBeInTheDocument()
     })
 
     it('renders agent network section header', () => {
-        render(<ControlTower />)
+        renderControlTower()
         expect(screen.getByText('Agent network')).toBeInTheDocument()
     })
 })

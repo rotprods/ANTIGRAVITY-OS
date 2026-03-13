@@ -26,7 +26,7 @@ export default defineConfig({
     {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
-      testIgnore: /dashboard\.spec\.js/,
+      testIgnore: /(dashboard|operator-loop)\.spec\.js/,
     },
     // Authenticated tests — depend on setup
     {
@@ -35,7 +35,7 @@ export default defineConfig({
         ...devices['Desktop Chrome'],
         storageState: 'tests/e2e/.auth/user.json',
       },
-      testMatch: /dashboard\.spec\.js/,
+      testMatch: /(dashboard|operator-loop)\.spec\.js/,
       dependencies: ['setup'],
     },
   ],
