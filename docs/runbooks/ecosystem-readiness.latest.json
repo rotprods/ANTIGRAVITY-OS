@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-03-14T01:50:34.259Z",
+  "generated_at": "2026-03-14T05:09:50.589Z",
   "version": "1.0.0",
   "overall_state": "yellow",
   "records": [
@@ -10,9 +10,9 @@
       "state": "degraded",
       "state_reason_code": "governance_advisory_mode",
       "state_reason_text": "No org scope provided; governor_metrics returned advisory defaults.",
-      "last_success_at": "2026-03-14T01:50:34.259Z",
-      "last_checked_at": "2026-03-14T01:50:34.540Z",
-      "correlation_id": "2a860007-e743-4e28-8b82-04d6a670e5ce",
+      "last_success_at": "2026-03-14T05:09:50.589Z",
+      "last_checked_at": "2026-03-14T05:09:52.337Z",
+      "correlation_id": "a21fdc0d-48de-4b7d-a658-77c5dd363565",
       "smoke_case_id": "hard_block_routing",
       "remediation_action": "/control-tower?tab=readiness"
     },
@@ -23,9 +23,9 @@
       "state": "degraded",
       "state_reason_code": "governance_metrics_warning",
       "state_reason_text": "No org scope provided; governor_metrics returned advisory defaults.",
-      "last_success_at": "2026-03-14T01:50:34.259Z",
-      "last_checked_at": "2026-03-14T01:50:34.540Z",
-      "correlation_id": "2a860007-e743-4e28-8b82-04d6a670e5ce",
+      "last_success_at": "2026-03-14T05:09:50.589Z",
+      "last_checked_at": "2026-03-14T05:09:52.337Z",
+      "correlation_id": "a21fdc0d-48de-4b7d-a658-77c5dd363565",
       "smoke_case_id": "governor_runtime",
       "remediation_action": "/control-tower?tab=governance"
     },
@@ -37,7 +37,7 @@
       "state_reason_code": "pipeline_activity_ok",
       "state_reason_text": "Runs=4, completed=4, failed=0.",
       "last_success_at": "2026-03-13T06:25:47.317568+00:00",
-      "last_checked_at": "2026-03-14T01:50:34.540Z",
+      "last_checked_at": "2026-03-14T05:09:52.337Z",
       "correlation_id": "fd06b0e3-311e-4d5c-a2b7-31f366bc526e",
       "smoke_case_id": "hard_block_routing",
       "remediation_action": "/automation"
@@ -49,9 +49,9 @@
       "state": "simulated",
       "state_reason_code": "messaging_synthetic_only",
       "state_reason_text": "Synthetic messaging evidence is active; provider credentials are intentionally excluded in code-first scope.",
-      "last_success_at": "2026-03-13T07:02:29.97687+00:00",
-      "last_checked_at": "2026-03-14T01:50:34.540Z",
-      "correlation_id": "c6-4ce63aea-4e0f-4c07-ae8f-cf6360b89522",
+      "last_success_at": "2026-03-14T02:16:22.847133+00:00",
+      "last_checked_at": "2026-03-14T05:09:52.337Z",
+      "correlation_id": "c6-80896404-6deb-47df-ace2-0dbd078d88ca",
       "smoke_case_id": "ag2_c6_synthetic",
       "remediation_action": "/messaging"
     },
@@ -62,9 +62,9 @@
       "state": "connected",
       "state_reason_code": "connectors_live",
       "state_reason_text": "7 live connector(s) available.",
-      "last_success_at": "2026-03-14T01:48:45.875+00:00",
-      "last_checked_at": "2026-03-14T01:50:34.540Z",
-      "correlation_id": "2a860007-e743-4e28-8b82-04d6a670e5ce",
+      "last_success_at": "2026-03-14T02:16:29.865+00:00",
+      "last_checked_at": "2026-03-14T05:09:52.337Z",
+      "correlation_id": "a21fdc0d-48de-4b7d-a658-77c5dd363565",
       "smoke_case_id": "hard_block_routing",
       "remediation_action": "/automation"
     },
@@ -74,10 +74,10 @@
       "backend_surface": "automation-runner|control-plane:tool_dispatch",
       "state": "connected",
       "state_reason_code": "automation_workflows_available",
-      "state_reason_text": "Workflows=20, active=17, dispatch_total=12, blocked_total=0.",
+      "state_reason_text": "Workflows=20, active=17, dispatch_total=14, blocked_total=0.",
       "last_success_at": "2026-03-14T01:49:43.760804+00:00",
-      "last_checked_at": "2026-03-14T01:50:34.540Z",
-      "correlation_id": "2a860007-e743-4e28-8b82-04d6a670e5ce",
+      "last_checked_at": "2026-03-14T05:09:52.337Z",
+      "correlation_id": "a21fdc0d-48de-4b7d-a658-77c5dd363565",
       "smoke_case_id": "hard_block_routing",
       "remediation_action": "/automation"
     },
@@ -89,8 +89,8 @@
       "state_reason_code": "api_catalog_live_connectors",
       "state_reason_text": "Catalog entries=1000; live connectors=7.",
       "last_success_at": "2026-03-14T01:49:21.167+00:00",
-      "last_checked_at": "2026-03-14T01:50:34.540Z",
-      "correlation_id": "2a860007-e743-4e28-8b82-04d6a670e5ce",
+      "last_checked_at": "2026-03-14T05:09:52.337Z",
+      "correlation_id": "a21fdc0d-48de-4b7d-a658-77c5dd363565",
       "smoke_case_id": "hard_block_routing",
       "remediation_action": "/intelligence"
     },
@@ -102,8 +102,8 @@
       "state_reason_code": "n8n_catalog_synced",
       "state_reason_text": "Template entries=1000; latest sync status=completed.",
       "last_success_at": "2026-03-14T01:50:18.613+00:00",
-      "last_checked_at": "2026-03-14T01:50:34.540Z",
-      "correlation_id": "2a860007-e743-4e28-8b82-04d6a670e5ce",
+      "last_checked_at": "2026-03-14T05:09:52.337Z",
+      "correlation_id": "a21fdc0d-48de-4b7d-a658-77c5dd363565",
       "smoke_case_id": "hard_block_routing",
       "remediation_action": "npm run sync:n8n-templates"
     },
@@ -115,8 +115,8 @@
       "state_reason_code": "marketplace_agents_active",
       "state_reason_text": "Active agents=7 of total=11.",
       "last_success_at": "2026-03-11T16:24:17.968918+00:00",
-      "last_checked_at": "2026-03-14T01:50:34.540Z",
-      "correlation_id": "2a860007-e743-4e28-8b82-04d6a670e5ce",
+      "last_checked_at": "2026-03-14T05:09:52.337Z",
+      "correlation_id": "a21fdc0d-48de-4b7d-a658-77c5dd363565",
       "smoke_case_id": "hard_block_routing",
       "remediation_action": "/marketplace"
     },
@@ -126,10 +126,10 @@
       "backend_surface": "simulation-engine|simulation_runs",
       "state": "connected",
       "state_reason_code": "simulation_runs_available",
-      "state_reason_text": "Simulation runs=22, passed=15, failed=7.",
+      "state_reason_text": "Simulation runs=19, passed=13, failed=6.",
       "last_success_at": "2026-03-14T00:35:55.856138+00:00",
-      "last_checked_at": "2026-03-14T01:50:34.540Z",
-      "correlation_id": "2a860007-e743-4e28-8b82-04d6a670e5ce",
+      "last_checked_at": "2026-03-14T05:09:52.337Z",
+      "correlation_id": "a21fdc0d-48de-4b7d-a658-77c5dd363565",
       "smoke_case_id": "ag2_c6_synthetic",
       "remediation_action": "/simulation"
     },
@@ -140,9 +140,9 @@
       "state": "degraded",
       "state_reason_code": "readiness_partial_warnings",
       "state_reason_text": "No org scope provided; governor_metrics returned advisory defaults.",
-      "last_success_at": "2026-03-14T01:50:34.259Z",
-      "last_checked_at": "2026-03-14T01:50:34.540Z",
-      "correlation_id": "2a860007-e743-4e28-8b82-04d6a670e5ce",
+      "last_success_at": "2026-03-14T05:09:50.589Z",
+      "last_checked_at": "2026-03-14T05:09:52.337Z",
+      "correlation_id": "a21fdc0d-48de-4b7d-a658-77c5dd363565",
       "smoke_case_id": null,
       "remediation_action": "/control-tower?tab=readiness"
     }
@@ -151,19 +151,19 @@
     {
       "smoke_case_id": "hard_block_routing",
       "status": "pass",
-      "checked_at": "2026-03-14T01:50:34.259Z",
-      "evidence_count": 34
+      "checked_at": "2026-03-14T05:09:50.589Z",
+      "evidence_count": 40
     },
     {
       "smoke_case_id": "ag2_c6_synthetic",
       "status": "pass",
-      "checked_at": "2026-03-14T01:50:34.259Z",
-      "evidence_count": 2
+      "checked_at": "2026-03-14T05:09:50.589Z",
+      "evidence_count": 3
     },
     {
       "smoke_case_id": "governor_runtime",
       "status": "pass",
-      "checked_at": "2026-03-14T01:50:34.259Z",
+      "checked_at": "2026-03-14T05:09:50.589Z",
       "evidence_count": 2
     }
   ],
@@ -196,10 +196,10 @@
   "governance_metrics": {
     "org_id": null,
     "window": "last_24h",
-    "dispatch_total": 12,
+    "dispatch_total": 14,
     "blocked_total": 0,
     "approval_pending_total": 0,
-    "high_risk_routed_total": 10,
+    "high_risk_routed_total": 12,
     "tool_bus_trace_coverage": 1
   }
 }
