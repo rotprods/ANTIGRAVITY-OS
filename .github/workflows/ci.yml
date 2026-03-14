@@ -47,20 +47,20 @@ jobs:
           VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
 
       - name: Readiness gate
-        if: ${{ secrets.SUPABASE_URL != '' && secrets.SUPABASE_SERVICE_ROLE_KEY != '' }}
-        run: npm run readiness:gate
+        run: |
+          if [ -z "${SUPABASE_URL}" ] || [ -z "${SUPABASE_SERVICE_ROLE_KEY}" ]; then
+            echo "Readiness gate skipped: SUPABASE_URL/SUPABASE_SERVICE_ROLE_KEY secrets not configured in this repo."
+            exit 0
+          fi
+          npm run readiness:gate
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
-          READINESS_GATE_MODE: ${{ vars.READINESS_GATE_MODE || 'synthetic' }}
+          READINESS_GATE_MODE: ${{ vars.READINESS_GATE_MODE }}
           READINESS_PRODUCTION_CRITICAL_MODULES: ${{ vars.READINESS_PRODUCTION_CRITICAL_MODULES }}
           READINESS_PRODUCTION_NON_CRITICAL_STATES: ${{ vars.READINESS_PRODUCTION_NON_CRITICAL_STATES }}
-          READINESS_PRODUCTION_STRICT_ALL_CONNECTED: ${{ vars.READINESS_PRODUCTION_STRICT_ALL_CONNECTED || 'false' }}
+          READINESS_PRODUCTION_STRICT_ALL_CONNECTED: ${{ vars.READINESS_PRODUCTION_STRICT_ALL_CONNECTED }}
           READINESS_ORG_ID: ${{ vars.READINESS_ORG_ID }}
-
-      - name: Readiness gate skipped
-        if: ${{ secrets.SUPABASE_URL == '' || secrets.SUPABASE_SERVICE_ROLE_KEY == '' }}
-        run: echo "Readiness gate skipped: SUPABASE_URL/SUPABASE_SERVICE_ROLE_KEY secrets not configured in this repo."
 
   security:
     name: Security Checks
