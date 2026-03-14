@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>OCULOPS AI Strategy Advisor Hub</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ffd900",
+                        "background-light": "#f8f8f5",
+                        "background-dark": "#23200f",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"],
+                        "mono": ["JetBrains Mono", "monospace"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .neumorphic-card {
+            background: #ffffff;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03), inset 0 0 0 1px #E5E5E0;
+        }
+        .gold-ring {
+            background: conic-gradient(from 0deg, #ffd900 var(--progress), #f4f2e6 0);
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden">
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-slate-200 dark:border-slate-800 px-10 py-3 bg-white dark:bg-slate-900 sticky top-0 z-50">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-4 text-slate-900 dark:text-white">
+<div class="size-6 text-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-3xl font-bold">radar</span>
+</div>
+<h2 class="text-slate-900 dark:text-white text-lg font-black leading-tight tracking-tighter uppercase">OCULOPS AI</h2>
+</div>
+<div class="h-6 w-px bg-slate-200 dark:bg-slate-700"></div>
+<nav class="flex items-center gap-8">
+<a class="text-slate-900 dark:text-slate-100 text-sm font-semibold leading-normal hover:text-primary transition-colors" href="#">Dashboard</a>
+<a class="text-primary text-sm font-semibold leading-normal" href="#">Strategy</a>
+<a class="text-slate-600 dark:text-slate-400 text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Cortex</a>
+<a class="text-slate-600 dark:text-slate-400 text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Reports</a>
+<a class="text-slate-600 dark:text-slate-400 text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Assets</a>
+</nav>
+</div>
+<div class="flex items-center gap-6">
+<label class="flex flex-col min-w-40 !h-9 max-w-64">
+<div class="flex w-full flex-1 items-stretch rounded-lg h-full border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800">
+<div class="text-slate-400 flex items-center justify-center pl-3">
+<span class="material-symbols-outlined text-sm">search</span>
+</div>
+<input class="form-input flex w-full min-w-0 flex-1 border-none bg-transparent focus:ring-0 text-sm font-medium placeholder:text-slate-400 px-2" placeholder="Search strategy data..." value=""/>
+</div>
+</label>
+<button class="flex min-w-[120px] cursor-pointer items-center justify-center rounded-lg h-9 px-4 bg-primary text-slate-900 text-xs font-bold uppercase tracking-wider shadow-sm hover:opacity-90 transition-opacity">
+                    Executive Access
+                </button>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-8 border border-slate-200" data-alt="Executive user profile avatar" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDEh2yJquKe7v7sXsWBZTwFer4ppajUs3-sq1YtaT55FP2IHu5WGuVZmfwdlddJobCvUpiyfbwrCtls0atHWvB1VkvvA_QpvXx_VPDdL0VHNb_Tr84g0kVbZNZnAYYjfn0nOAKRG-JL9rJFkdx745ngvMKa9xEY9mWdk3KCTgOzKh0RVBW05LXSWFE_ylmWG3vi3uz3ZNFuavg6gp6bspAC9ZOrGq4ILJ83RbR0EgUGg-phHKmy8rr5OpUaCmEDViBIJo2Kr3DFopdM");'></div>
+</div>
+</header>
+<main class="flex flex-1 flex-col p-6 gap-6 max-w-[1600px] mx-auto w-full">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+<span>Executive Hub</span>
+<span class="material-symbols-outlined text-[10px]">chevron_right</span>
+<span class="text-primary">AI Strategy Advisor Hub</span>
+</div>
+<div class="flex justify-between items-end">
+<div>
+<h1 class="text-3xl font-black text-slate-900 dark:text-white tracking-tight">Advisory Command</h1>
+<p class="text-slate-500 text-sm font-medium">Real-time strategic planning and CORTEX-driven insights.</p>
+</div>
+<div class="flex gap-2">
+<button class="flex items-center gap-2 rounded-lg h-10 px-4 bg-white border border-slate-200 text-slate-700 text-xs font-bold uppercase tracking-widest hover:bg-slate-50">
+<span class="material-symbols-outlined text-sm">file_download</span> Export Strategy Brief
+                        </button>
+<button class="flex items-center gap-2 rounded-lg h-10 px-4 bg-slate-900 text-white text-xs font-bold uppercase tracking-widest hover:bg-slate-800">
+<span class="material-symbols-outlined text-sm">share</span> Present to Board
+                        </button>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-4 gap-4">
+<div class="flex items-center gap-3 p-4 bg-white border border-slate-200 rounded-xl">
+<div class="size-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">trending_up</span>
+</div>
+<div>
+<p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Growth Target</p>
+<p class="text-lg font-black text-slate-900 tracking-tight">Long-term Growth</p>
+</div>
+<span class="material-symbols-outlined text-slate-300 ml-auto">expand_more</span>
+</div>
+<div class="flex items-center gap-3 p-4 bg-white border border-slate-200 rounded-xl">
+<div class="size-10 rounded-lg bg-blue-50 flex items-center justify-center text-blue-500">
+<span class="material-symbols-outlined">public</span>
+</div>
+<div>
+<p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Expansion Focus</p>
+<p class="text-lg font-black text-slate-900 tracking-tight">Market Expansion</p>
+</div>
+<span class="material-symbols-outlined text-slate-300 ml-auto">expand_more</span>
+</div>
+<div class="flex items-center gap-3 p-4 bg-white border border-slate-200 rounded-xl">
+<div class="size-10 rounded-lg bg-green-50 flex items-center justify-center text-green-500">
+<span class="material-symbols-outlined">bolt</span>
+</div>
+<div>
+<p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Core KPI</p>
+<p class="text-lg font-black text-slate-900 tracking-tight">Operational Efficiency</p>
+</div>
+<span class="material-symbols-outlined text-slate-300 ml-auto">expand_more</span>
+</div>
+<div class="flex items-center gap-3 p-4 bg-white border border-slate-200 rounded-xl">
+<div class="size-10 rounded-lg bg-red-50 flex items-center justify-center text-red-500">
+<span class="material-symbols-outlined">security</span>
+</div>
+<div>
+<p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Risk Profile</p>
+<p class="text-lg font-black text-slate-900 tracking-tight">Risk Mitigation</p>
+</div>
+<span class="material-symbols-outlined text-slate-300 ml-auto">expand_more</span>
+</div>
+</div>
+<div class="grid grid-cols-12 gap-6 items-start">
+<div class="col-span-8 flex flex-col gap-6">
+<div class="neumorphic-card rounded-xl p-8 min-h-[600px] flex flex-col">
+<div class="flex justify-between items-center mb-8 pb-4 border-b border-slate-100">
+<div class="flex items-center gap-3">
+<div class="size-2 rounded-full bg-primary animate-pulse"></div>
+<h3 class="font-bold text-slate-900 uppercase tracking-widest text-sm">CORTEX Intelligence Output</h3>
+</div>
+<div class="font-mono text-[10px] text-slate-400">
+                                SESSION_ID: CX-294-88A // STATUS: ACTIVE_SYNTHESIS
+                            </div>
+</div>
+<article class="prose max-w-none text-slate-800 space-y-6">
+<h2 class="text-2xl font-black tracking-tight text-slate-900">Strategic Brief: H2 Market Capture Strategy</h2>
+<p class="text-slate-600 leading-relaxed italic border-l-4 border-primary/30 pl-4 py-1">
+                                Analysis based on real-time data ingestion from global tech markets and internal resource mapping.
+                            </p>
+<div class="grid grid-cols-2 gap-8 my-6">
+<div class="space-y-2">
+<h4 class="text-xs font-black uppercase tracking-widest text-slate-400">Macro Trend Integration</h4>
+<p class="text-sm">The pivot toward decentralized edge computing presents a 14.2% capture opportunity in the EMEA region. OCULOPS suggests immediate reallocation of Series C funds toward server-less edge nodes.</p>
+</div>
+<div class="space-y-2">
+<h4 class="text-xs font-black uppercase tracking-widest text-slate-400">Competitive Counter-Analysis</h4>
+<p class="text-sm">Competitor X has shown a 4% decline in retention. CORTEX recommends an aggressive 60-day marketing blitz targeting their high-tier enterprise accounts.</p>
+</div>
+</div>
+<div class="p-6 bg-slate-50 border-y border-slate-200 rounded-lg">
+<h4 class="text-sm font-bold text-slate-900 mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">lightbulb</span> CORTEX Direct Recommendation
+                                </h4>
+<p class="text-sm font-medium mb-4">"Initiate Project 'Oculus-Prime' by Q4. By integrating AI-driven supply chain forecasting now, you can reduce operational overhead by 22% within three fiscal months."</p>
+<div class="flex gap-3">
+<button class="bg-primary px-4 py-2 rounded-lg text-xs font-bold text-slate-900 hover:opacity-90">Approve Strategy</button>
+<button class="bg-white border border-slate-200 px-4 py-2 rounded-lg text-xs font-bold text-slate-600 hover:bg-slate-100">Simulate Outcomes</button>
+</div>
+</div>
+</article>
+<div class="mt-auto pt-8 border-t border-slate-100 flex items-center gap-4">
+<div class="flex-1 bg-slate-50 border border-slate-200 rounded-full flex items-center px-4 py-2">
+<span class="material-symbols-outlined text-slate-400 mr-3">chat_bubble</span>
+<input class="w-full bg-transparent border-none focus:ring-0 text-sm placeholder:text-slate-400" placeholder="Ask CORTEX to refine the strategy or analyze specific data points..." type="text"/>
+</div>
+<button class="size-10 bg-slate-900 text-white rounded-full flex items-center justify-center hover:bg-slate-800">
+<span class="material-symbols-outlined">send</span>
+</button>
+</div>
+</div>
+<div class="neumorphic-card rounded-xl p-6">
+<div class="flex justify-between items-center mb-4">
+<h3 class="font-bold text-slate-900 uppercase tracking-widest text-sm">Resource Projections</h3>
+<div class="flex gap-4">
+<div class="flex items-center gap-2">
+<div class="size-2 rounded-full bg-primary"></div>
+<span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Projected Usage</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="size-2 rounded-full bg-slate-200"></div>
+<span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Baseline</span>
+</div>
+</div>
+</div>
+<div class="h-32 relative flex items-end gap-1">
+<div class="flex-1 bg-slate-100 h-12 rounded-t-sm"></div>
+<div class="flex-1 bg-slate-100 h-16 rounded-t-sm"></div>
+<div class="flex-1 bg-slate-100 h-24 rounded-t-sm"></div>
+<div class="flex-1 bg-slate-100 h-20 rounded-t-sm"></div>
+<div class="flex-1 bg-primary/20 h-28 rounded-t-sm border-t-2 border-primary"></div>
+<div class="flex-1 bg-primary/20 h-32 rounded-t-sm border-t-2 border-primary"></div>
+<div class="flex-1 bg-primary/20 h-24 rounded-t-sm border-t-2 border-primary"></div>
+<div class="flex-1 bg-primary/20 h-16 rounded-t-sm border-t-2 border-primary"></div>
+<div class="flex-1 bg-primary/20 h-28 rounded-t-sm border-t-2 border-primary"></div>
+<div class="flex-1 bg-primary/20 h-36 rounded-t-sm border-t-2 border-primary"></div>
+<div class="flex-1 bg-primary/20 h-40 rounded-t-sm border-t-2 border-primary relative">
+<div class="absolute -top-10 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[10px] font-mono px-2 py-1 rounded">Peak: 92%</div>
+</div>
+<div class="flex-1 bg-primary/20 h-32 rounded-t-sm border-t-2 border-primary"></div>
+<div class="flex-1 bg-primary/20 h-28 rounded-t-sm border-t-2 border-primary"></div>
+<div class="flex-1 bg-primary/20 h-20 rounded-t-sm border-t-2 border-primary"></div>
+<div class="flex-1 bg-primary/20 h-14 rounded-t-sm border-t-2 border-primary"></div>
+</div>
+</div>
+</div>
+<div class="col-span-4 flex flex-col gap-6">
+<div class="bg-slate-900 rounded-xl p-6 text-white overflow-hidden relative shadow-xl">
+<div class="relative z-10">
+<h3 class="font-bold text-primary uppercase tracking-widest text-[10px] mb-2">Strategy Health</h3>
+<div class="flex items-center gap-4 mb-4">
+<div class="text-4xl font-black font-mono">98.4</div>
+<div class="flex flex-col">
+<span class="text-green-400 font-bold text-xs">+2.4%</span>
+<span class="text-slate-400 text-[10px] uppercase tracking-widest">Confidence Index</span>
+</div>
+</div>
+<div class="w-full h-1 bg-slate-800 rounded-full overflow-hidden">
+<div class="w-[98.4%] h-full bg-primary"></div>
+</div>
+</div>
+<div class="absolute -right-4 -bottom-4 opacity-10">
+<span class="material-symbols-outlined text-[120px]">shield</span>
+</div>
+</div>
+<div class="flex flex-col gap-4">
+<h3 class="font-bold text-slate-900 uppercase tracking-widest text-xs flex items-center justify-between">
+                            Recommended Actions
+                            <span class="material-symbols-outlined text-slate-400 text-sm">settings_suggest</span>
+</h3>
+<div class="neumorphic-card rounded-xl p-4 flex gap-4 items-center">
+<div class="relative size-12 flex items-center justify-center shrink-0">
+<div class="absolute inset-0 rounded-full border-4 border-slate-100"></div>
+<div class="absolute inset-0 rounded-full border-4 border-primary border-r-transparent border-b-transparent transform -rotate-45"></div>
+<span class="text-[10px] font-black font-mono">82%</span>
+</div>
+<div class="flex-1">
+<p class="text-sm font-bold text-slate-900 leading-tight">Increase cloud compute spend by 12%</p>
+<div class="flex justify-between items-center mt-1">
+<span class="text-[10px] font-mono text-slate-500">IMPACT: +$2.4M</span>
+<span class="bg-primary/10 text-primary text-[8px] font-black px-1.5 py-0.5 rounded">HIGH PRIORITY</span>
+</div>
+</div>
+</div>
+<div class="neumorphic-card rounded-xl p-4 flex gap-4 items-center">
+<div class="relative size-12 flex items-center justify-center shrink-0">
+<div class="absolute inset-0 rounded-full border-4 border-slate-100"></div>
+<div class="absolute inset-0 rounded-full border-4 border-primary border-r-transparent transform -rotate-12"></div>
+<span class="text-[10px] font-black font-mono">65%</span>
+</div>
+<div class="flex-1">
+<p class="text-sm font-bold text-slate-900 leading-tight">Consolidate Asia-Pacific logistics Hub</p>
+<div class="flex justify-between items-center mt-1">
+<span class="text-[10px] font-mono text-slate-500">SAVINGS: $840K</span>
+<span class="bg-slate-100 text-slate-500 text-[8px] font-black px-1.5 py-0.5 rounded">MEDIUM</span>
+</div>
+</div>
+</div>
+<div class="neumorphic-card rounded-xl p-4 flex gap-4 items-center">
+<div class="relative size-12 flex items-center justify-center shrink-0">
+<div class="absolute inset-0 rounded-full border-4 border-slate-100"></div>
+<div class="absolute inset-0 rounded-full border-4 border-primary border-l-transparent border-b-transparent transform rotate-90"></div>
+<span class="text-[10px] font-black font-mono">45%</span>
+</div>
+<div class="flex-1">
+<p class="text-sm font-bold text-slate-900 leading-tight">Acquire 'NextGen AI' startup assets</p>
+<div class="flex justify-between items-center mt-1">
+<span class="text-[10px] font-mono text-slate-500">MOAT: +34%</span>
+<span class="bg-slate-100 text-slate-500 text-[8px] font-black px-1.5 py-0.5 rounded">STRATEGIC</span>
+</div>
+</div>
+</div>
+<button class="w-full py-3 rounded-lg border border-dashed border-slate-300 text-slate-400 text-[10px] font-bold uppercase tracking-widest hover:border-primary hover:text-primary transition-colors">
+                            View All Suggestions (14)
+                        </button>
+</div>
+<div class="neumorphic-card rounded-xl p-6">
+<h3 class="font-bold text-slate-900 uppercase tracking-widest text-xs mb-4">Market Sentiment</h3>
+<div class="space-y-4">
+<div>
+<div class="flex justify-between text-[10px] font-bold text-slate-500 uppercase mb-1">
+<span>Tech Innovation</span>
+<span class="text-primary">Bullish</span>
+</div>
+<div class="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
+<div class="w-[85%] h-full bg-primary"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between text-[10px] font-bold text-slate-500 uppercase mb-1">
+<span>Regulatory Risk</span>
+<span class="text-slate-900">Moderate</span>
+</div>
+<div class="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
+<div class="w-[42%] h-full bg-slate-900"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<footer class="mt-10 border-t border-slate-200 py-6 px-10 flex justify-between items-center bg-white">
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-slate-400 text-lg">verified_user</span>
+<span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">End-to-End Encryption Active</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-slate-400 text-lg">hub</span>
+<span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Node Status: Tokyo, JP</span>
+</div>
+</div>
+<div class="flex gap-4">
+<a class="text-[10px] font-bold text-slate-400 uppercase tracking-widest hover:text-primary" href="#">Privacy Protocol</a>
+<a class="text-[10px] font-bold text-slate-400 uppercase tracking-widest hover:text-primary" href="#">API Documentation</a>
+<span class="text-[10px] font-bold text-slate-300">© 2024 OCULOPS AI STRATEGY CORP.</span>
+</div>
+</footer>
+</div>
+</body></html>

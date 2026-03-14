@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>OCULOPS Prospector Hub Dashboard</title>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Google Fonts: Inter -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#f9de10",
+                        "background-light": "#f8f8f5",
+                        "background-dark": "#23200f",
+                        "sidebar": "#F5F0E8",
+                        "ivory": "#FAFAF8",
+                        "border-muted": "#E5E5E0",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="flex h-screen overflow-hidden">
+<!-- Sidebar Navigation (240px width) -->
+<aside class="w-60 bg-sidebar border-r border-border-muted flex flex-col h-full">
+<div class="p-6">
+<div class="flex items-center gap-3 mb-10">
+<div class="size-8 bg-primary rounded-lg flex items-center justify-center text-slate-900">
+<span class="material-symbols-outlined text-xl font-bold">visibility</span>
+</div>
+<div>
+<h1 class="text-slate-900 text-lg font-bold leading-none tracking-tight">OCULOPS</h1>
+<p class="text-slate-500 text-[10px] uppercase font-bold tracking-widest mt-1">Prospector Hub</p>
+</div>
+</div>
+<nav class="space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 hover:bg-white/50 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">dashboard</span>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 bg-white text-slate-900 rounded-lg shadow-sm border border-border-muted transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px] text-primary">target</span>
+<span class="text-sm font-bold">Prospector</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 hover:bg-white/50 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">bar_chart</span>
+<span class="text-sm font-medium">Analytics</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 hover:bg-white/50 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">send</span>
+<span class="text-sm font-medium">Campaigns</span>
+</a>
+</nav>
+</div>
+<div class="mt-auto p-6 border-t border-border-muted">
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 hover:bg-white/50 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">settings</span>
+<span class="text-sm font-medium">Settings</span>
+</a>
+<div class="mt-4 flex items-center gap-3 px-3">
+<div class="size-8 rounded-full bg-slate-300" data-alt="User avatar profile picture" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuANiBp8l4HkyezYY0V8aunHxPX7xzP59TmRrS4AYjgu7tJwEw0_jy9p01vVq_fE8X49MoI3y0U2dUQR-yM84fAYWl1zO3pTd1vR1ZcuaGAbdkVsO5q1J5x8iC3-ibyY9rhe6Nz236WOD4r30w1fhLi9d9vfX6VSInlOQ3q7wQX8X8qwzIkuTCcGY8sBjXXHzq4c35cp4BArl5CCn6nQ6kgVdwJWJrbs0ngitUX5Mq8jGlw4Pxo-eUdWMDt1sBKaREwrAqyyJgaK1Vvd");'></div>
+<div class="overflow-hidden">
+<p class="text-xs font-bold text-slate-900 truncate">Alex Sterling</p>
+<p class="text-[10px] text-slate-500 truncate">Growth Lead</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col bg-ivory overflow-y-auto">
+<!-- Header -->
+<header class="h-16 border-b border-border-muted flex items-center justify-between px-8 bg-white/80 backdrop-blur-md sticky top-0 z-10">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-slate-400 text-lg">search</span>
+<input class="border-none focus:ring-0 text-sm bg-transparent w-64 placeholder:text-slate-400" placeholder="Search leads, companies..." type="text"/>
+</div>
+<div class="flex items-center gap-4">
+<button class="size-9 rounded-lg border border-border-muted flex items-center justify-center text-slate-500 hover:bg-slate-50 transition-colors relative">
+<span class="material-symbols-outlined text-[20px]">notifications</span>
+<span class="absolute top-2 right-2 size-2 bg-primary rounded-full border-2 border-white"></span>
+</button>
+<button class="bg-primary hover:bg-yellow-400 text-slate-900 px-4 py-2 rounded-lg text-sm font-bold transition-all shadow-sm flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                        New Prospect
+                    </button>
+</div>
+</header>
+<div class="p-8 space-y-8">
+<!-- Hero Section -->
+<div class="flex flex-col gap-1">
+<h2 class="text-slate-900 text-2xl font-black tracking-tight">Prospector Hub</h2>
+<p class="text-slate-500 text-[13px]">Automated B2B lead generation &amp; qualification</p>
+</div>
+<!-- KPI Cards -->
+<div class="grid grid-cols-3 gap-6">
+<div class="bg-white p-6 rounded-xl border border-primary shadow-[4px_4px_10px_rgba(0,0,0,0.02)]">
+<p class="text-slate-400 text-[11px] font-bold uppercase tracking-wider mb-2">Total Leads</p>
+<div class="flex items-end justify-between">
+<h3 class="text-slate-900 text-3xl font-black">1,245</h3>
+<span class="text-green-600 text-xs font-bold bg-green-50 px-2 py-1 rounded">+12.5%</span>
+</div>
+</div>
+<div class="bg-white p-6 rounded-xl border border-border-muted shadow-[4px_4px_10px_rgba(0,0,0,0.02)]">
+<p class="text-slate-400 text-[11px] font-bold uppercase tracking-wider mb-2">Conv. Rate</p>
+<div class="flex items-end justify-between">
+<h3 class="text-slate-900 text-3xl font-black">3.2%</h3>
+<span class="text-green-600 text-xs font-bold bg-green-50 px-2 py-1 rounded">+0.4%</span>
+</div>
+</div>
+<div class="bg-white p-6 rounded-xl border border-border-muted shadow-[4px_4px_10px_rgba(0,0,0,0.02)]">
+<p class="text-slate-400 text-[11px] font-bold uppercase tracking-wider mb-2">Filter Accuracy</p>
+<div class="flex items-end justify-between">
+<h3 class="text-slate-900 text-3xl font-black">94%</h3>
+<span class="text-slate-400 text-xs font-bold px-2 py-1 rounded">Stable</span>
+</div>
+</div>
+</div>
+<!-- Main Grid: Table & Sidebar -->
+<div class="grid grid-cols-12 gap-6 items-start">
+<!-- Leads Table (8 cols) -->
+<div class="col-span-8 bg-white rounded-xl border border-border-muted shadow-[0_10px_30px_rgba(0,0,0,0.03)] overflow-hidden">
+<div class="px-6 py-4 border-b border-border-muted flex items-center justify-between">
+<h4 class="text-slate-900 text-sm font-bold">Recent Leads</h4>
+<button class="text-slate-400 text-xs font-medium hover:text-slate-900 transition-colors">View All</button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead class="bg-slate-50/50">
+<tr>
+<th class="px-6 py-3 text-[11px] font-bold text-slate-400 uppercase tracking-wider">Company</th>
+<th class="px-6 py-3 text-[11px] font-bold text-slate-400 uppercase tracking-wider">Contact</th>
+<th class="px-6 py-3 text-[11px] font-bold text-slate-400 uppercase tracking-wider">Agent Score</th>
+<th class="px-6 py-3 text-[11px] font-bold text-slate-400 uppercase tracking-wider">Status</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-border-muted">
+<tr class="hover:bg-slate-50/30 transition-colors">
+<td class="px-6 py-4">
+<div class="flex flex-col">
+<span class="text-sm font-bold text-slate-900">Acme Corp</span>
+<span class="text-[11px] text-slate-400">Enterprise SaaS</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="flex flex-col">
+<span class="text-sm font-medium text-slate-700">John Doe</span>
+<span class="text-[11px] text-slate-400 underline cursor-pointer">john@acme.com</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="flex-1 h-1.5 w-16 bg-slate-100 rounded-full overflow-hidden">
+<div class="h-full bg-primary" style="width: 85%"></div>
+</div>
+<span class="text-xs font-bold text-slate-900">85</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-green-50 text-green-700 border border-green-100">Verified</span>
+</td>
+</tr>
+<tr class="hover:bg-slate-50/30 transition-colors">
+<td class="px-6 py-4">
+<div class="flex flex-col">
+<span class="text-sm font-bold text-slate-900">Global Tech</span>
+<span class="text-[11px] text-slate-400">Hardware Mfg</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="flex flex-col">
+<span class="text-sm font-medium text-slate-700">Jane Smith</span>
+<span class="text-[11px] text-slate-400 underline cursor-pointer">jane@global.io</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="flex-1 h-1.5 w-16 bg-slate-100 rounded-full overflow-hidden">
+<div class="h-full bg-primary" style="width: 92%"></div>
+</div>
+<span class="text-xs font-bold text-slate-900">92</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-primary/20 text-slate-900 border border-primary/30">Qualified</span>
+</td>
+</tr>
+<tr class="hover:bg-slate-50/30 transition-colors">
+<td class="px-6 py-4">
+<div class="flex flex-col">
+<span class="text-sm font-bold text-slate-900">Nexus Solutions</span>
+<span class="text-[11px] text-slate-400">Cybersecurity</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="flex flex-col">
+<span class="text-sm font-medium text-slate-700">Mike Ross</span>
+<span class="text-[11px] text-slate-400 underline cursor-pointer">m.ross@nexus.com</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="flex-1 h-1.5 w-16 bg-slate-100 rounded-full overflow-hidden">
+<div class="h-full bg-primary" style="width: 74%"></div>
+</div>
+<span class="text-xs font-bold text-slate-900">74</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-600 border border-slate-200">New</span>
+</td>
+</tr>
+<tr class="hover:bg-slate-50/30 transition-colors">
+<td class="px-6 py-4">
+<div class="flex flex-col">
+<span class="text-sm font-bold text-slate-900">Innovate Ltd</span>
+<span class="text-[11px] text-slate-400">AI Research</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="flex flex-col">
+<span class="text-sm font-medium text-slate-700">Sarah Chen</span>
+<span class="text-[11px] text-slate-400 underline cursor-pointer">s.chen@innovate.co</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="flex-1 h-1.5 w-16 bg-slate-100 rounded-full overflow-hidden">
+<div class="h-full bg-primary" style="width: 98%"></div>
+</div>
+<span class="text-xs font-bold text-slate-900">98</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-primary/20 text-slate-900 border border-primary/30">Qualified</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Agent Activity (4 cols) -->
+<div class="col-span-4 flex flex-col gap-6">
+<!-- Active Agents -->
+<div class="bg-white rounded-xl border border-border-muted shadow-[0_10px_30px_rgba(0,0,0,0.03)] overflow-hidden">
+<div class="px-6 py-4 border-b border-border-muted bg-slate-50/50">
+<h4 class="text-slate-900 text-sm font-bold">Active Agents</h4>
+</div>
+<div class="p-6 space-y-6">
+<!-- Hunter Agent -->
+<div class="space-y-3">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="size-8 rounded-lg bg-primary/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-lg">psychology</span>
+</div>
+<span class="text-xs font-black text-slate-900 tracking-wider">HUNTER v2.4</span>
+</div>
+<span class="text-[10px] font-bold text-green-600 bg-green-50 px-2 py-0.5 rounded">Scraping</span>
+</div>
+<div class="space-y-1">
+<div class="flex justify-between text-[10px] text-slate-500 font-medium">
+<span>Progress</span>
+<span>68%</span>
+</div>
+<div class="h-1.5 bg-slate-100 rounded-full overflow-hidden">
+<div class="h-full bg-primary" style="width: 68%"></div>
+</div>
+</div>
+<p class="text-[10px] text-slate-400 italic">Targeting: FinTech Hub (London)</p>
+</div>
+<!-- Atlas Agent -->
+<div class="space-y-3">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="size-8 rounded-lg bg-slate-100 flex items-center justify-center">
+<span class="material-symbols-outlined text-slate-400 text-lg">analytics</span>
+</div>
+<span class="text-xs font-black text-slate-900 tracking-wider">ATLAS v1.0</span>
+</div>
+<span class="text-[10px] font-bold text-slate-400 bg-slate-50 px-2 py-0.5 rounded">Filtering</span>
+</div>
+<div class="space-y-1">
+<div class="flex justify-between text-[10px] text-slate-500 font-medium">
+<span>Progress</span>
+<span>42%</span>
+</div>
+<div class="h-1.5 bg-slate-100 rounded-full overflow-hidden">
+<div class="h-full bg-primary" style="width: 42%"></div>
+</div>
+</div>
+<p class="text-[10px] text-slate-400 italic">Processing: 412 raw entries</p>
+</div>
+</div>
+</div>
+<!-- System Status -->
+<div class="bg-slate-900 text-white p-6 rounded-xl shadow-lg relative overflow-hidden">
+<div class="relative z-10 flex flex-col gap-4">
+<div class="flex items-center gap-2">
+<div class="size-2 bg-green-400 rounded-full animate-pulse"></div>
+<span class="text-[10px] font-bold uppercase tracking-widest text-slate-400">System Live</span>
+</div>
+<div>
+<p class="text-2xl font-black">2.4k</p>
+<p class="text-[10px] text-slate-400">Queries / hour</p>
+</div>
+<button class="w-full bg-white/10 hover:bg-white/20 text-white py-2 rounded-lg text-[11px] font-bold transition-colors">Manage Resources</button>
+</div>
+<!-- Abstract pattern background -->
+<div class="absolute -right-4 -bottom-4 opacity-10">
+<span class="material-symbols-outlined text-[120px]">hub</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

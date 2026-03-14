@@ -1,0 +1,300 @@
+<html><head><meta charset="utf-8"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@300;400;500;600;700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "primary": "#f9de10",
+          "background-light": "#f8f8f5",
+          "background-dark": "#23200f",
+          "pressed-ivory": "#FAFAF8",
+          "border-neutral": "#E5E5E0",
+        },
+        fontFamily: {
+          "display": ["Inter", "sans-serif"],
+          "mono": ["JetBrains Mono", "monospace"]
+        },
+        borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+      },
+    },
+  }
+</script>
+<style>
+  .neumorphic-card {
+    background: #ffffff;
+    border: 1px solid #E5E5E0;
+    box-shadow: 2px 2px 10px rgba(0,0,0,0.02);
+  }
+  .glass-panel {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+  }
+  .node-connection {
+    background: linear-gradient(90deg, #f9de10 0%, rgba(249, 222, 16, 0.1) 100%);
+  }
+</style>
+</head><body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen flex flex-col">
+<!-- Top Navigation Bar -->
+<header class="flex items-center justify-between border-b border-border-neutral bg-pressed-ivory px-8 py-3 sticky top-0 z-50">
+<div class="flex items-center gap-10">
+<div class="flex items-center gap-3">
+<div class="size-8 bg-primary rounded-lg flex items-center justify-center text-slate-900">
+<span class="material-symbols-outlined text-2xl font-bold">hub</span>
+</div>
+<h2 class="text-slate-900 text-xl font-bold tracking-tight">OCULOPS</h2>
+</div>
+<div class="flex items-center bg-white border border-border-neutral rounded-lg px-3 py-1.5 w-80">
+<span class="material-symbols-outlined text-slate-400 text-xl">search</span>
+<input class="border-none bg-transparent focus:ring-0 text-sm w-full placeholder:text-slate-400" placeholder="Search traces, agents, or payloads..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-8">
+<nav class="flex items-center gap-6">
+<a class="text-slate-500 hover:text-slate-900 text-sm font-medium transition-colors" href="#">Dashboard</a>
+<a class="text-slate-900 text-sm font-semibold border-b-2 border-primary pb-1" href="#">Execution Traces</a>
+<a class="text-slate-500 hover:text-slate-900 text-sm font-medium transition-colors" href="#">Agents</a>
+<a class="text-slate-500 hover:text-slate-900 text-sm font-medium transition-colors" href="#">Settings</a>
+</nav>
+<div class="h-6 w-px bg-border-neutral"></div>
+<div class="flex items-center gap-3">
+<button class="bg-primary text-slate-900 px-4 py-2 rounded-lg text-sm font-bold flex items-center gap-2 hover:bg-primary/90 transition-all">
+<span class="material-symbols-outlined text-lg">rocket_launch</span>
+          Deploy Agent
+        </button>
+<div class="size-9 rounded-full bg-slate-200 border border-border-neutral overflow-hidden" data-alt="User profile avatar">
+<img alt="Profile" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCTud5r3fbZ7JgImsDQI01pX3TqrjkedldfmIyfhKPW9TbDoAsBzgmBBokB9bQNMyL_7oPU1ClTFYBcOAuK1sfq7dPj9XQnc1Jxf9HUFG7TwE0wiGtkscKJPM1QuUt55UcakbVIfUOf7jnxLf5X8AxwwVJOQfnpL8NIfs4fWmbxLAxk9R3bEGWK3IjidKqVB9p1tROhUg4cFbUAxpbkfiv3sebluM2YI5VLaj0pWva8ihLlUtwkvbi-OEqxXVDxgRl6prHsTK4wu1Z7"/>
+</div>
+</div>
+</div>
+</header>
+<main class="flex flex-1 overflow-hidden h-[calc(100vh-64px)]">
+<!-- Main Content Area -->
+<div class="flex-1 flex flex-col min-w-0 bg-background-light">
+<!-- KPI Indicators Bar -->
+<div class="p-6 flex gap-4 border-b border-border-neutral bg-pressed-ivory/50">
+<div class="neumorphic-card flex-1 p-4 rounded-xl flex items-center justify-between">
+<div>
+<p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Duration</p>
+<p class="text-2xl font-bold text-slate-900">4.2s</p>
+</div>
+<div class="size-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">timer</span>
+</div>
+</div>
+<div class="neumorphic-card flex-1 p-4 rounded-xl flex items-center justify-between">
+<div>
+<p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Steps</p>
+<p class="text-2xl font-bold text-slate-900">24</p>
+</div>
+<div class="size-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">steps</span>
+</div>
+</div>
+<div class="neumorphic-card flex-1 p-4 rounded-xl flex items-center justify-between">
+<div>
+<p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Agent Count</p>
+<p class="text-2xl font-bold text-slate-900">3</p>
+</div>
+<div class="size-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">groups</span>
+</div>
+</div>
+<div class="neumorphic-card flex-1 p-4 rounded-xl flex items-center justify-between">
+<div>
+<p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Trace Status</p>
+<p class="text-2xl font-bold text-emerald-600 flex items-center gap-2">
+<span class="size-2 rounded-full bg-emerald-500 animate-pulse"></span>
+              Success
+            </p>
+</div>
+<div class="size-10 rounded-lg bg-emerald-50 flex items-center justify-center text-emerald-600">
+<span class="material-symbols-outlined">check_circle</span>
+</div>
+</div>
+</div>
+<!-- Central Node Graph Workspace -->
+<div class="flex-1 relative overflow-hidden bg-pressed-ivory pattern-grid">
+<!-- Abstract Grid Overlay -->
+<div class="absolute inset-0 opacity-[0.03]" style="background-image: radial-gradient(#000 0.5px, transparent 0.5px); background-size: 24px 24px;"></div>
+<!-- Graph Workspace Header -->
+<div class="absolute top-4 left-4 z-10 glass-panel px-4 py-2 rounded-lg shadow-sm flex items-center gap-4">
+<div class="flex flex-col">
+<h1 class="text-sm font-bold text-slate-900">TR-99284-AX Trace Graph</h1>
+<p class="text-[10px] text-slate-400">Workspace: CORTEX → HUNTER → SCRIBE</p>
+</div>
+<div class="flex gap-2">
+<button class="p-1 hover:bg-slate-100 rounded text-slate-500"><span class="material-symbols-outlined text-xl">zoom_in</span></button>
+<button class="p-1 hover:bg-slate-100 rounded text-slate-500"><span class="material-symbols-outlined text-xl">zoom_out</span></button>
+<button class="p-1 hover:bg-slate-100 rounded text-slate-500"><span class="material-symbols-outlined text-xl">fullscreen</span></button>
+</div>
+</div>
+<!-- Node Visualization -->
+<div class="absolute inset-0 flex items-center justify-center gap-32">
+<!-- Node 1: CORTEX -->
+<div class="relative group">
+<div class="w-48 p-4 rounded-xl bg-white border-2 border-primary shadow-xl z-20 relative">
+<div class="flex items-center justify-between mb-3">
+<span class="px-2 py-0.5 rounded bg-primary/20 text-slate-900 text-[10px] font-bold uppercase">Root</span>
+<span class="material-symbols-outlined text-primary text-sm">psychology</span>
+</div>
+<p class="text-xs font-bold text-slate-900">CORTEX AGENT</p>
+<p class="text-[10px] text-slate-500 mt-1">Intent Analysis: Complete</p>
+<div class="mt-4 h-1 bg-slate-100 rounded-full overflow-hidden">
+<div class="h-full bg-primary w-full"></div>
+</div>
+</div>
+<!-- Connection Line 1 -->
+<div class="absolute top-1/2 left-full w-32 h-0.5 bg-primary/40 -translate-y-1/2">
+<div class="absolute inset-0 bg-primary w-1/3 animate-flow shadow-[0_0_10px_#f9de10]"></div>
+</div>
+</div>
+<!-- Node 2: HUNTER -->
+<div class="relative group">
+<div class="w-48 p-4 rounded-xl bg-white border border-border-neutral shadow-lg z-20 relative hover:border-primary transition-colors">
+<div class="flex items-center justify-between mb-3">
+<span class="px-2 py-0.5 rounded bg-slate-100 text-slate-500 text-[10px] font-bold uppercase">Worker</span>
+<span class="material-symbols-outlined text-slate-400 text-sm">manage_search</span>
+</div>
+<p class="text-xs font-bold text-slate-900">HUNTER AGENT</p>
+<p class="text-[10px] text-slate-500 mt-1">Data Scavenging: 82 items</p>
+<div class="mt-4 h-1 bg-slate-100 rounded-full overflow-hidden">
+<div class="h-full bg-primary w-full"></div>
+</div>
+</div>
+<!-- Connection Line 2 -->
+<div class="absolute top-1/2 left-full w-32 h-0.5 bg-primary/40 -translate-y-1/2"></div>
+</div>
+<!-- Node 3: SCRIBE -->
+<div class="relative group">
+<div class="w-48 p-4 rounded-xl bg-white border border-border-neutral shadow-lg z-20 relative hover:border-primary transition-colors">
+<div class="flex items-center justify-between mb-3">
+<span class="px-2 py-0.5 rounded bg-slate-100 text-slate-500 text-[10px] font-bold uppercase">Output</span>
+<span class="material-symbols-outlined text-slate-400 text-sm">history_edu</span>
+</div>
+<p class="text-xs font-bold text-slate-900">SCRIBE AGENT</p>
+<p class="text-[10px] text-slate-500 mt-1">Synthesis: 1.2k tokens</p>
+<div class="mt-4 h-1 bg-slate-100 rounded-full overflow-hidden">
+<div class="h-full bg-primary w-full"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Trace Timeline Bottom Panel -->
+<div class="h-48 border-t border-border-neutral bg-pressed-ivory p-4">
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-sm font-bold text-slate-900 flex items-center gap-2">
+<span class="material-symbols-outlined text-slate-400">timeline</span>
+            Trace Timeline
+          </h3>
+<span class="text-[10px] font-mono text-slate-400 uppercase tracking-widest">Execution Pulse</span>
+</div>
+<div class="relative h-20 flex items-end gap-1 px-4">
+<!-- Timeline Bars -->
+<div class="flex-1 bg-primary/40 h-[60%] rounded-t hover:h-[70%] transition-all cursor-pointer relative group">
+<div class="absolute -top-6 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 text-[10px] bg-slate-900 text-white px-1.5 py-0.5 rounded">0.4s</div>
+</div>
+<div class="flex-1 bg-primary/60 h-[85%] rounded-t hover:h-[95%] transition-all cursor-pointer relative group"></div>
+<div class="flex-1 bg-primary/40 h-[45%] rounded-t hover:h-[55%] transition-all cursor-pointer relative group"></div>
+<div class="flex-1 bg-primary/20 h-[30%] rounded-t hover:h-[40%] transition-all cursor-pointer relative group"></div>
+<div class="flex-1 bg-primary/80 h-[95%] rounded-t hover:h-[100%] transition-all cursor-pointer relative group"></div>
+<div class="flex-1 bg-primary/40 h-[70%] rounded-t hover:h-[80%] transition-all cursor-pointer relative group"></div>
+<div class="flex-1 bg-primary/40 h-[60%] rounded-t hover:h-[70%] transition-all cursor-pointer relative group"></div>
+<div class="flex-1 bg-primary/60 h-[85%] rounded-t hover:h-[95%] transition-all cursor-pointer relative group"></div>
+<div class="flex-1 bg-primary/40 h-[45%] rounded-t hover:h-[55%] transition-all cursor-pointer relative group"></div>
+<div class="flex-1 bg-primary/20 h-[30%] rounded-t hover:h-[40%] transition-all cursor-pointer relative group"></div>
+<div class="flex-1 bg-primary/80 h-[95%] rounded-t hover:h-[100%] transition-all cursor-pointer relative group"></div>
+<div class="flex-1 bg-primary/40 h-[70%] rounded-t hover:h-[80%] transition-all cursor-pointer relative group"></div>
+<div class="flex-1 bg-primary h-[100%] rounded-t hover:h-[100%] transition-all cursor-pointer relative group"></div>
+<div class="flex-1 bg-primary/40 h-[60%] rounded-t hover:h-[70%] transition-all cursor-pointer relative group"></div>
+<div class="flex-1 bg-primary/60 h-[85%] rounded-t hover:h-[95%] transition-all cursor-pointer relative group"></div>
+<div class="flex-1 bg-primary/40 h-[45%] rounded-t hover:h-[55%] transition-all cursor-pointer relative group"></div>
+<div class="flex-1 bg-primary/20 h-[30%] rounded-t hover:h-[40%] transition-all cursor-pointer relative group"></div>
+<div class="flex-1 bg-primary/80 h-[95%] rounded-t hover:h-[100%] transition-all cursor-pointer relative group"></div>
+<div class="flex-1 bg-primary/40 h-[70%] rounded-t hover:h-[80%] transition-all cursor-pointer relative group"></div>
+<div class="flex-1 bg-primary/40 h-[60%] rounded-t hover:h-[70%] transition-all cursor-pointer relative group"></div>
+<div class="flex-1 bg-primary/60 h-[85%] rounded-t hover:h-[95%] transition-all cursor-pointer relative group"></div>
+<div class="flex-1 bg-primary/40 h-[45%] rounded-t hover:h-[55%] transition-all cursor-pointer relative group"></div>
+<div class="flex-1 bg-primary/20 h-[30%] rounded-t hover:h-[40%] transition-all cursor-pointer relative group"></div>
+<div class="flex-1 bg-primary/80 h-[95%] rounded-t hover:h-[100%] transition-all cursor-pointer relative group"></div>
+</div>
+<div class="flex justify-between text-[10px] text-slate-400 font-mono mt-2 px-2">
+<span>0ms</span>
+<span>1000ms</span>
+<span>2000ms</span>
+<span>3000ms</span>
+<span>4200ms</span>
+</div>
+</div>
+</div>
+<!-- Payload Inspector Panel (Right) -->
+<aside class="w-[420px] border-l border-border-neutral bg-white flex flex-col shadow-2xl">
+<div class="p-4 border-b border-border-neutral bg-pressed-ivory">
+<div class="flex items-center justify-between">
+<h3 class="text-sm font-bold text-slate-900 flex items-center gap-2">
+<span class="material-symbols-outlined text-slate-400">code</span>
+            Payload Inspector
+          </h3>
+<div class="flex gap-2">
+<button class="p-1.5 hover:bg-slate-200 rounded text-slate-500"><span class="material-symbols-outlined text-lg">content_copy</span></button>
+<button class="p-1.5 hover:bg-slate-200 rounded text-slate-500"><span class="material-symbols-outlined text-lg">download</span></button>
+</div>
+</div>
+</div>
+<!-- Panel Navigation Tabs -->
+<div class="flex bg-pressed-ivory px-4 border-b border-border-neutral">
+<button class="px-4 py-2 text-xs font-bold text-slate-900 border-b-2 border-primary">INPUT</button>
+<button class="px-4 py-2 text-xs font-medium text-slate-400 hover:text-slate-600">OUTPUT</button>
+<button class="px-4 py-2 text-xs font-medium text-slate-400 hover:text-slate-600">METADATA</button>
+</div>
+<!-- JSON Viewer -->
+<div class="flex-1 overflow-y-auto p-4 bg-[#FDFDFB] font-mono text-[11px] leading-relaxed">
+<div class="flex gap-4">
+<div class="text-slate-300 text-right select-none">
+            01<br/>02<br/>03<br/>04<br/>05<br/>06<br/>07<br/>08<br/>09<br/>10<br/>11<br/>12<br/>13<br/>14<br/>15<br/>16<br/>17<br/>18<br/>19<br/>20<br/>21<br/>22
+          </div>
+<div class="text-slate-700">
+<span class="text-blue-600">{</span><br/>
+              <span class="text-emerald-700">"trace_id"</span>: <span class="text-amber-700">"TR-99284-AX"</span>,<br/>
+              <span class="text-emerald-700">"timestamp"</span>: <span class="text-amber-700">"2023-11-24T14:20:11.42Z"</span>,<br/>
+              <span class="text-emerald-700">"agent_hierarchy"</span>: <span class="text-blue-600">[</span><br/>
+                <span class="text-amber-700">"CORTEX_PRIMARY"</span>,<br/>
+                <span class="text-amber-700">"HUNTER_V3"</span>,<br/>
+                <span class="text-amber-700">"SCRIBE_CORE"</span><br/>
+              <span class="text-blue-600">]</span>,<br/>
+              <span class="text-emerald-700">"context"</span>: <span class="text-blue-600">{</span><br/>
+                <span class="text-emerald-700">"user_intent"</span>: <span class="text-amber-700">"AUDIT_FINANCIAL_LOGS_Q4"</span>,<br/>
+                <span class="text-emerald-700">"security_clearance"</span>: <span class="text-slate-900 font-bold">"LEVEL_05"</span>,<br/>
+                <span class="text-emerald-700">"sandbox_enabled"</span>: <span class="text-rose-600">true</span>,<br/>
+                <span class="text-emerald-700">"tokens_estimated"</span>: <span class="text-indigo-600">24050</span><br/>
+              <span class="text-blue-600">}</span>,<br/>
+              <span class="text-emerald-700">"status"</span>: <span class="text-emerald-600 font-bold">"COMPLETED"</span>,<br/>
+              <span class="text-emerald-700">"correlation_vectors"</span>: <span class="text-blue-600">[</span><br/>
+                <span class="text-amber-700">"CV_9182_99X"</span>,<br/>
+                <span class="text-amber-700">"CV_0021_84A"</span><br/>
+              <span class="text-blue-600">]</span><br/>
+<span class="text-blue-600">}</span>
+</div>
+</div>
+</div>
+<!-- Quick Actions Footer -->
+<div class="p-4 border-t border-border-neutral bg-pressed-ivory">
+<button class="w-full py-2 bg-slate-900 text-white rounded-lg text-xs font-bold flex items-center justify-center gap-2 hover:bg-slate-800 transition-all">
+<span class="material-symbols-outlined text-sm">terminal</span>
+          Run Simulation
+        </button>
+<button class="w-full mt-2 py-2 border border-border-neutral bg-white text-slate-600 rounded-lg text-xs font-bold hover:bg-slate-50 transition-all">
+          Flag for Review
+        </button>
+</div>
+</aside>
+</main>
+
+```</body></html>

@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>OCULOPS Agent Fleet Management Hub</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ffd900",
+                        "background-light": "#fafaf8",
+                        "background-dark": "#1a1a1a",
+                        "border-light": "#e5e5e0",
+                        "text-main": "#1a1a1a",
+                        "text-secondary": "#6b6b6b"
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .neumorphic-card {
+            background: #ffffff;
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.02), -2px -2px 10px rgba(255,255,255,0.8);
+            border: 1px solid #e5e5e0;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-text-main dark:text-slate-100 font-display min-h-screen">
+<div class="flex h-screen overflow-hidden">
+<!-- Sidebar Navigation -->
+<aside class="w-64 border-r border-border-light bg-white dark:bg-background-dark flex flex-col">
+<div class="p-6 flex items-center gap-3">
+<div class="size-8 bg-primary rounded flex items-center justify-center">
+<span class="material-symbols-outlined text-text-main font-bold">polyline</span>
+</div>
+<h1 class="font-black text-xl tracking-tighter">OCULOPS</h1>
+</div>
+<nav class="flex-1 px-4 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 text-sm font-medium bg-primary/10 text-text-main rounded-lg border-l-4 border-primary" href="#">
+<span class="material-symbols-outlined text-[20px]">dashboard</span>
+                    Fleet Overview
+                </a>
+<a class="flex items-center gap-3 px-3 py-2 text-sm font-medium text-text-secondary hover:bg-background-light rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">memory</span>
+                    Active Agents
+                </a>
+<a class="flex items-center gap-3 px-3 py-2 text-sm font-medium text-text-secondary hover:bg-background-light rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">monitoring</span>
+                    System Health
+                </a>
+<a class="flex items-center gap-3 px-3 py-2 text-sm font-medium text-text-secondary hover:bg-background-light rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">receipt_long</span>
+                    Audit Logs
+                </a>
+<a class="flex items-center gap-3 px-3 py-2 text-sm font-medium text-text-secondary hover:bg-background-light rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">settings</span>
+                    Configuration
+                </a>
+</nav>
+<div class="p-4 border-t border-border-light">
+<div class="flex items-center gap-3 p-2 rounded-lg bg-background-light">
+<div class="size-8 rounded-full bg-slate-200 overflow-hidden">
+<img alt="User" data-alt="User avatar icon for admin profile" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAeoIUppvE8vGSN3YfIFqnRMK9Ausopr9e3YD3mRKAWvNZL-Zf-fHoConpkyajd0-3EaB0uZsIgfqZLzXzuq9SNB3OP-MxX0i2-f9l1VDVSqEElEWSiYwtngX8loM2SrXnc8-gTf7SmXnVo6rtMqFYAv1WtN42hFW1ZCIwj8Oh9OJUBGxkEYSgD1MzXNi57KUCNsSYZN35Ie20KSH3DTvKvnVKho3tLd11Dx78pPSqA_9XsiNIvfLm24dTOpQA8yokDLM-ebBU5FHJl"/>
+</div>
+<div class="flex-1 min-w-0">
+<p class="text-xs font-bold truncate">Admin Hub</p>
+<p class="text-[10px] text-text-secondary">v4.2.0-stable</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 overflow-y-auto bg-background-light flex flex-col">
+<!-- Top Header -->
+<header class="h-16 border-b border-border-light bg-white flex items-center justify-between px-8 sticky top-0 z-10">
+<div class="flex items-center gap-4">
+<h2 class="text-sm font-semibold text-text-secondary uppercase tracking-widest">Fleet Management</h2>
+<span class="text-border-light">|</span>
+<div class="flex items-center gap-2 text-xs font-medium text-green-600 bg-green-50 px-2 py-1 rounded">
+<span class="size-1.5 bg-green-500 rounded-full"></span>
+                        SYSTEM NOMINAL
+                    </div>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative">
+<span class="material-symbols-outlined text-text-secondary absolute left-3 top-1/2 -translate-y-1/2 text-[18px]">search</span>
+<input class="pl-10 pr-4 py-1.5 bg-background-light border-none rounded-lg text-sm w-64 focus:ring-1 focus:ring-primary" placeholder="Search agents or logs..." type="text"/>
+</div>
+<button class="bg-primary text-text-main text-xs font-bold px-4 py-2 rounded-lg hover:shadow-md transition-all uppercase tracking-tight">Deploy New Agent</button>
+</div>
+</header>
+<div class="p-8 space-y-8 max-w-[1400px] mx-auto w-full">
+<!-- KPI Overview Row -->
+<section class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="neumorphic-card p-6 rounded-xl border-l-4 border-primary">
+<p class="text-xs font-bold text-text-secondary uppercase tracking-wider mb-1">Active Agents</p>
+<div class="flex items-baseline gap-2">
+<h3 class="text-3xl font-black text-text-main">7</h3>
+<span class="text-[10px] font-bold text-primary bg-primary/10 px-1.5 rounded">STABLE</span>
+</div>
+<p class="text-[10px] text-text-secondary mt-2">100% of defined fleet capacity</p>
+</div>
+<div class="neumorphic-card p-6 rounded-xl">
+<p class="text-xs font-bold text-text-secondary uppercase tracking-wider mb-1">System Load</p>
+<div class="flex items-baseline gap-2">
+<h3 class="text-3xl font-black text-text-main">12.4%</h3>
+<span class="text-[10px] font-bold text-blue-500 bg-blue-50 px-1.5 rounded">OPTIMAL</span>
+</div>
+<div class="w-full bg-slate-100 h-1 rounded-full mt-3 overflow-hidden">
+<div class="bg-primary h-full" style="width: 12.4%"></div>
+</div>
+</div>
+<div class="neumorphic-card p-6 rounded-xl">
+<p class="text-xs font-bold text-text-secondary uppercase tracking-wider mb-1">Total Executions</p>
+<div class="flex items-baseline gap-2">
+<h3 class="text-3xl font-black text-text-main">2,847</h3>
+<span class="text-[10px] font-bold text-green-600 bg-green-50 px-1.5 rounded">+4.2%</span>
+</div>
+<p class="text-[10px] text-text-secondary mt-2">Last 24-hour cycle performance</p>
+</div>
+</section>
+<div class="grid grid-cols-1 xl:grid-cols-4 gap-8">
+<!-- Agent Grid -->
+<div class="xl:col-span-3">
+<div class="flex items-center justify-between mb-6">
+<h3 class="text-lg font-bold">Fleet Registry</h3>
+<div class="flex gap-2">
+<button class="p-1.5 rounded border border-border-light hover:bg-white"><span class="material-symbols-outlined text-[18px]">grid_view</span></button>
+<button class="p-1.5 rounded border border-border-light hover:bg-white text-text-secondary"><span class="material-symbols-outlined text-[18px]">list</span></button>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+<!-- Agent Card 1 -->
+<div class="neumorphic-card rounded-xl p-0 flex flex-col group overflow-hidden">
+<div class="p-5 flex-1">
+<div class="flex items-start justify-between mb-4">
+<div class="size-10 bg-primary/10 rounded-lg flex items-center justify-center text-primary">
+<span class="material-symbols-outlined font-bold">psychology</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="size-2 rounded-full bg-primary animate-pulse"></span>
+<span class="text-[10px] font-bold text-text-secondary uppercase">Active</span>
+</div>
+</div>
+<h4 class="text-base font-bold text-text-main">CORTEX</h4>
+<p class="text-xs text-text-secondary mb-4 line-clamp-1">Central logic &amp; decision making engine</p>
+<div class="grid grid-cols-2 gap-2 pt-4 border-t border-slate-50">
+<div>
+<p class="text-[10px] text-text-secondary uppercase font-semibold">Uptime</p>
+<p class="text-xs font-bold">99.9%</p>
+</div>
+<div>
+<p class="text-[10px] text-text-secondary uppercase font-semibold">Error</p>
+<p class="text-xs font-bold text-green-600">0.02%</p>
+</div>
+</div>
+</div>
+<div class="bg-background-light px-4 py-2 flex items-center justify-between border-t border-border-light group-hover:bg-primary/5 transition-colors">
+<div class="flex gap-3">
+<button class="text-[11px] font-bold uppercase tracking-tighter hover:text-primary">Deploy</button>
+<button class="text-[11px] font-bold uppercase tracking-tighter hover:text-primary">Configure</button>
+</div>
+<button class="text-[11px] font-bold uppercase tracking-tighter text-red-500 hover:text-red-700">Stop</button>
+</div>
+</div>
+<!-- Agent Card 2 -->
+<div class="neumorphic-card rounded-xl p-0 flex flex-col group overflow-hidden">
+<div class="p-5 flex-1">
+<div class="flex items-start justify-between mb-4">
+<div class="size-10 bg-slate-100 rounded-lg flex items-center justify-center text-slate-400">
+<span class="material-symbols-outlined font-bold">target</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="size-2 rounded-full bg-slate-300"></span>
+<span class="text-[10px] font-bold text-text-secondary uppercase">Idle</span>
+</div>
+</div>
+<h4 class="text-base font-bold text-text-main">HUNTER</h4>
+<p class="text-xs text-text-secondary mb-4 line-clamp-1">Market pattern recognition specialist</p>
+<div class="grid grid-cols-2 gap-2 pt-4 border-t border-slate-50">
+<div>
+<p class="text-[10px] text-text-secondary uppercase font-semibold">Uptime</p>
+<p class="text-xs font-bold">94.2%</p>
+</div>
+<div>
+<p class="text-[10px] text-text-secondary uppercase font-semibold">Error</p>
+<p class="text-xs font-bold">0.14%</p>
+</div>
+</div>
+</div>
+<div class="bg-background-light px-4 py-2 flex items-center justify-between border-t border-border-light group-hover:bg-primary/5 transition-colors">
+<div class="flex gap-3">
+<button class="text-[11px] font-bold uppercase tracking-tighter hover:text-primary">Deploy</button>
+<button class="text-[11px] font-bold uppercase tracking-tighter hover:text-primary">Configure</button>
+</div>
+<button class="text-[11px] font-bold uppercase tracking-tighter text-slate-400 cursor-not-allowed">Stop</button>
+</div>
+</div>
+<!-- Agent Card 3 -->
+<div class="neumorphic-card rounded-xl p-0 flex flex-col group overflow-hidden">
+<div class="p-5 flex-1">
+<div class="flex items-start justify-between mb-4">
+<div class="size-10 bg-primary/10 rounded-lg flex items-center justify-center text-primary">
+<span class="material-symbols-outlined font-bold">edit_note</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="size-2 rounded-full bg-primary"></span>
+<span class="text-[10px] font-bold text-text-secondary uppercase">Active</span>
+</div>
+</div>
+<h4 class="text-base font-bold text-text-main">SCRIBE</h4>
+<p class="text-xs text-text-secondary mb-4 line-clamp-1">Natural language report generation</p>
+<div class="grid grid-cols-2 gap-2 pt-4 border-t border-slate-50">
+<div>
+<p class="text-[10px] text-text-secondary uppercase font-semibold">Uptime</p>
+<p class="text-xs font-bold">100%</p>
+</div>
+<div>
+<p class="text-[10px] text-text-secondary uppercase font-semibold">Error</p>
+<p class="text-xs font-bold text-green-600">0.00%</p>
+</div>
+</div>
+</div>
+<div class="bg-background-light px-4 py-2 flex items-center justify-between border-t border-border-light group-hover:bg-primary/5 transition-colors">
+<div class="flex gap-3">
+<button class="text-[11px] font-bold uppercase tracking-tighter hover:text-primary">Deploy</button>
+<button class="text-[11px] font-bold uppercase tracking-tighter hover:text-primary">Configure</button>
+</div>
+<button class="text-[11px] font-bold uppercase tracking-tighter text-red-500 hover:text-red-700">Stop</button>
+</div>
+</div>
+<!-- Agent Card 4 -->
+<div class="neumorphic-card rounded-xl p-0 flex flex-col group overflow-hidden">
+<div class="p-5 flex-1">
+<div class="flex items-start justify-between mb-4">
+<div class="size-10 bg-primary/10 rounded-lg flex items-center justify-center text-primary">
+<span class="material-symbols-outlined font-bold">shield</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="size-2 rounded-full bg-primary"></span>
+<span class="text-[10px] font-bold text-text-secondary uppercase">Active</span>
+</div>
+</div>
+<h4 class="text-base font-bold text-text-main">SENTINEL</h4>
+<p class="text-xs text-text-secondary mb-4 line-clamp-1">Network traffic &amp; anomaly detection</p>
+<div class="grid grid-cols-2 gap-2 pt-4 border-t border-slate-50">
+<div>
+<p class="text-[10px] text-text-secondary uppercase font-semibold">Uptime</p>
+<p class="text-xs font-bold">99.8%</p>
+</div>
+<div>
+<p class="text-[10px] text-text-secondary uppercase font-semibold">Error</p>
+<p class="text-xs font-bold text-green-600">0.05%</p>
+</div>
+</div>
+</div>
+<div class="bg-background-light px-4 py-2 flex items-center justify-between border-t border-border-light group-hover:bg-primary/5 transition-colors">
+<div class="flex gap-3">
+<button class="text-[11px] font-bold uppercase tracking-tighter hover:text-primary">Deploy</button>
+<button class="text-[11px] font-bold uppercase tracking-tighter hover:text-primary">Configure</button>
+</div>
+<button class="text-[11px] font-bold uppercase tracking-tighter text-red-500 hover:text-red-700">Stop</button>
+</div>
+</div>
+<!-- Agent Card 5 -->
+<div class="neumorphic-card rounded-xl p-0 flex flex-col group overflow-hidden">
+<div class="p-5 flex-1">
+<div class="flex items-start justify-between mb-4">
+<div class="size-10 bg-primary/10 rounded-lg flex items-center justify-center text-primary">
+<span class="material-symbols-outlined font-bold">auto_graph</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="size-2 rounded-full bg-primary"></span>
+<span class="text-[10px] font-bold text-text-secondary uppercase">Active</span>
+</div>
+</div>
+<h4 class="text-base font-bold text-text-main">ORACLE</h4>
+<p class="text-xs text-text-secondary mb-4 line-clamp-1">Predictive resource forecasting</p>
+<div class="grid grid-cols-2 gap-2 pt-4 border-t border-slate-50">
+<div>
+<p class="text-[10px] text-text-secondary uppercase font-semibold">Uptime</p>
+<p class="text-xs font-bold">99.9%</p>
+</div>
+<div>
+<p class="text-[10px] text-text-secondary uppercase font-semibold">Error</p>
+<p class="text-xs font-bold text-green-600">0.01%</p>
+</div>
+</div>
+</div>
+<div class="bg-background-light px-4 py-2 flex items-center justify-between border-t border-border-light group-hover:bg-primary/5 transition-colors">
+<div class="flex gap-3">
+<button class="text-[11px] font-bold uppercase tracking-tighter hover:text-primary">Deploy</button>
+<button class="text-[11px] font-bold uppercase tracking-tighter hover:text-primary">Configure</button>
+</div>
+<button class="text-[11px] font-bold uppercase tracking-tighter text-red-500 hover:text-red-700">Stop</button>
+</div>
+</div>
+<!-- Agent Card 6 -->
+<div class="neumorphic-card rounded-xl p-0 flex flex-col group overflow-hidden">
+<div class="p-5 flex-1">
+<div class="flex items-start justify-between mb-4">
+<div class="size-10 bg-primary/10 rounded-lg flex items-center justify-center text-primary">
+<span class="material-symbols-outlined font-bold">storage</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="size-2 rounded-full bg-primary"></span>
+<span class="text-[10px] font-bold text-text-secondary uppercase">Active</span>
+</div>
+</div>
+<h4 class="text-base font-bold text-text-main">VAULT</h4>
+<p class="text-xs text-text-secondary mb-4 line-clamp-1">Encrypted storage management</p>
+<div class="grid grid-cols-2 gap-2 pt-4 border-t border-slate-50">
+<div>
+<p class="text-[10px] text-text-secondary uppercase font-semibold">Uptime</p>
+<p class="text-xs font-bold">100%</p>
+</div>
+<div>
+<p class="text-[10px] text-text-secondary uppercase font-semibold">Error</p>
+<p class="text-xs font-bold text-green-600">0.00%</p>
+</div>
+</div>
+</div>
+<div class="bg-background-light px-4 py-2 flex items-center justify-between border-t border-border-light group-hover:bg-primary/5 transition-colors">
+<div class="flex gap-3">
+<button class="text-[11px] font-bold uppercase tracking-tighter hover:text-primary">Deploy</button>
+<button class="text-[11px] font-bold uppercase tracking-tighter hover:text-primary">Configure</button>
+</div>
+<button class="text-[11px] font-bold uppercase tracking-tighter text-red-500 hover:text-red-700">Stop</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Sidebar Panels -->
+<div class="xl:col-span-1 space-y-6">
+<!-- System Health / Neural Load -->
+<div class="neumorphic-card rounded-xl p-6">
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-sm font-bold uppercase tracking-wider">Neural Load</h3>
+<span class="text-[10px] font-bold text-text-secondary">LIVE</span>
+</div>
+<div class="h-24 flex items-end gap-1 mb-4">
+<div class="w-full bg-primary/20 h-[30%] rounded-sm"></div>
+<div class="w-full bg-primary/30 h-[45%] rounded-sm"></div>
+<div class="w-full bg-primary/40 h-[35%] rounded-sm"></div>
+<div class="w-full bg-primary/60 h-[60%] rounded-sm"></div>
+<div class="w-full bg-primary/40 h-[40%] rounded-sm"></div>
+<div class="w-full bg-primary/80 h-[85%] rounded-sm"></div>
+<div class="w-full bg-primary h-full rounded-sm"></div>
+<div class="w-full bg-primary/60 h-[55%] rounded-sm"></div>
+<div class="w-full bg-primary/40 h-[30%] rounded-sm"></div>
+<div class="w-full bg-primary/20 h-[15%] rounded-sm"></div>
+</div>
+<div class="space-y-3">
+<div class="flex justify-between items-center text-xs">
+<span class="text-text-secondary">Compute Clusters</span>
+<span class="font-bold">4/4 Online</span>
+</div>
+<div class="flex justify-between items-center text-xs">
+<span class="text-text-secondary">Latency</span>
+<span class="font-bold">12ms</span>
+</div>
+<div class="flex justify-between items-center text-xs">
+<span class="text-text-secondary">Throughput</span>
+<span class="font-bold">1.2 GB/s</span>
+</div>
+</div>
+</div>
+<!-- Recent Activity -->
+<div class="neumorphic-card rounded-xl p-6">
+<h3 class="text-sm font-bold uppercase tracking-wider mb-4">Activity Log</h3>
+<div class="space-y-4">
+<div class="flex gap-3">
+<div class="size-2 bg-primary rounded-full mt-1.5 shadow-[0_0_8px_rgba(255,217,0,0.6)]"></div>
+<div>
+<p class="text-xs font-bold">CORTEX re-initialized</p>
+<p class="text-[10px] text-text-secondary">2 mins ago • Auth: Root</p>
+</div>
+</div>
+<div class="flex gap-3">
+<div class="size-2 bg-slate-300 rounded-full mt-1.5"></div>
+<div>
+<p class="text-xs font-bold">HUNTER entered IDLE state</p>
+<p class="text-[10px] text-text-secondary">14 mins ago • Auto-sleep</p>
+</div>
+</div>
+<div class="flex gap-3">
+<div class="size-2 bg-primary rounded-full mt-1.5 shadow-[0_0_8px_rgba(255,217,0,0.6)]"></div>
+<div>
+<p class="text-xs font-bold">ORACLE forecast complete</p>
+<p class="text-[10px] text-text-secondary">48 mins ago • Task: 8129</p>
+</div>
+</div>
+</div>
+<button class="w-full mt-6 py-2 text-[10px] font-bold uppercase tracking-widest text-text-secondary border border-border-light rounded-lg hover:bg-background-light transition-colors">View All Logs</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>
