@@ -50,9 +50,7 @@ serve(async (req) => {
         .from('agent_studies')
         .insert({
           title,
-          target_entity_id,
-          target_entity_type,
-          created_by_agent: agent_code_name,
+          agent_code_name,
           trace_id,
           quality_status: 'published',
           dedup_key,

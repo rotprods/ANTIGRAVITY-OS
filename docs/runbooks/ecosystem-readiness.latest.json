@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-03-14T05:35:18.457Z",
+  "generated_at": "2026-03-14T10:15:25.842Z",
   "version": "1.0.0",
   "overall_state": "yellow",
   "records": [
@@ -10,8 +10,8 @@
       "state": "degraded",
       "state_reason_code": "governance_advisory_mode",
       "state_reason_text": "No org scope provided; governor_metrics returned advisory defaults.",
-      "last_success_at": "2026-03-14T05:35:18.457Z",
-      "last_checked_at": "2026-03-14T05:35:18.788Z",
+      "last_success_at": "2026-03-14T10:15:25.842Z",
+      "last_checked_at": "2026-03-14T10:15:27.543Z",
       "correlation_id": "a21fdc0d-48de-4b7d-a658-77c5dd363565",
       "smoke_case_id": "hard_block_routing",
       "remediation_action": "/control-tower?tab=readiness"
@@ -23,8 +23,8 @@
       "state": "degraded",
       "state_reason_code": "governance_metrics_warning",
       "state_reason_text": "No org scope provided; governor_metrics returned advisory defaults.",
-      "last_success_at": "2026-03-14T05:35:18.457Z",
-      "last_checked_at": "2026-03-14T05:35:18.788Z",
+      "last_success_at": "2026-03-14T10:15:25.842Z",
+      "last_checked_at": "2026-03-14T10:15:27.543Z",
       "correlation_id": "a21fdc0d-48de-4b7d-a658-77c5dd363565",
       "smoke_case_id": "governor_runtime",
       "remediation_action": "/control-tower?tab=governance"
@@ -33,12 +33,12 @@
       "module_key": "orchestration",
       "route": "/automation",
       "backend_surface": "orchestration-engine:create_run|execute_run|get_run",
-      "state": "connected",
-      "state_reason_code": "pipeline_activity_ok",
-      "state_reason_text": "Runs=4, completed=4, failed=0.",
-      "last_success_at": "2026-03-13T06:25:47.317568+00:00",
-      "last_checked_at": "2026-03-14T05:35:18.788Z",
-      "correlation_id": "fd06b0e3-311e-4d5c-a2b7-31f366bc526e",
+      "state": "simulated",
+      "state_reason_code": "pipeline_activity_missing",
+      "state_reason_text": "No recent pipeline runs in scope; orchestration is running in simulation/advisory mode.",
+      "last_success_at": "2026-03-14T10:15:25.842Z",
+      "last_checked_at": "2026-03-14T10:15:27.543Z",
+      "correlation_id": "a21fdc0d-48de-4b7d-a658-77c5dd363565",
       "smoke_case_id": "hard_block_routing",
       "remediation_action": "/automation"
     },
@@ -50,7 +50,7 @@
       "state_reason_code": "messaging_synthetic_only",
       "state_reason_text": "Synthetic messaging evidence is active; provider credentials are intentionally excluded in code-first scope.",
       "last_success_at": "2026-03-14T05:09:52.291312+00:00",
-      "last_checked_at": "2026-03-14T05:35:18.788Z",
+      "last_checked_at": "2026-03-14T10:15:27.543Z",
       "correlation_id": "c6-6bab9275-88f2-4214-843a-b7406877e76c",
       "smoke_case_id": "ag2_c6_synthetic",
       "remediation_action": "/messaging"
@@ -63,7 +63,7 @@
       "state_reason_code": "connectors_live",
       "state_reason_text": "7 live connector(s) available.",
       "last_success_at": "2026-03-14T02:16:29.865+00:00",
-      "last_checked_at": "2026-03-14T05:35:18.788Z",
+      "last_checked_at": "2026-03-14T10:15:27.543Z",
       "correlation_id": "a21fdc0d-48de-4b7d-a658-77c5dd363565",
       "smoke_case_id": "hard_block_routing",
       "remediation_action": "/automation"
@@ -74,9 +74,9 @@
       "backend_surface": "automation-runner|control-plane:tool_dispatch",
       "state": "connected",
       "state_reason_code": "automation_workflows_available",
-      "state_reason_text": "Workflows=20, active=17, dispatch_total=14, blocked_total=0.",
+      "state_reason_text": "Workflows=20, active=17, dispatch_total=2, blocked_total=0.",
       "last_success_at": "2026-03-14T01:49:43.760804+00:00",
-      "last_checked_at": "2026-03-14T05:35:18.788Z",
+      "last_checked_at": "2026-03-14T10:15:27.543Z",
       "correlation_id": "a21fdc0d-48de-4b7d-a658-77c5dd363565",
       "smoke_case_id": "hard_block_routing",
       "remediation_action": "/automation"
@@ -89,7 +89,7 @@
       "state_reason_code": "api_catalog_live_connectors",
       "state_reason_text": "Catalog entries=1000; live connectors=7.",
       "last_success_at": "2026-03-14T01:49:21.167+00:00",
-      "last_checked_at": "2026-03-14T05:35:18.788Z",
+      "last_checked_at": "2026-03-14T10:15:27.543Z",
       "correlation_id": "a21fdc0d-48de-4b7d-a658-77c5dd363565",
       "smoke_case_id": "hard_block_routing",
       "remediation_action": "/intelligence"
@@ -102,7 +102,7 @@
       "state_reason_code": "n8n_catalog_synced",
       "state_reason_text": "Template entries=1000; latest sync status=completed.",
       "last_success_at": "2026-03-14T01:50:18.613+00:00",
-      "last_checked_at": "2026-03-14T05:35:18.788Z",
+      "last_checked_at": "2026-03-14T10:15:27.543Z",
       "correlation_id": "a21fdc0d-48de-4b7d-a658-77c5dd363565",
       "smoke_case_id": "hard_block_routing",
       "remediation_action": "npm run sync:n8n-templates"
@@ -115,7 +115,7 @@
       "state_reason_code": "marketplace_agents_active",
       "state_reason_text": "Active agents=7 of total=11.",
       "last_success_at": "2026-03-11T16:24:17.968918+00:00",
-      "last_checked_at": "2026-03-14T05:35:18.788Z",
+      "last_checked_at": "2026-03-14T10:15:27.543Z",
       "correlation_id": "a21fdc0d-48de-4b7d-a658-77c5dd363565",
       "smoke_case_id": "hard_block_routing",
       "remediation_action": "/marketplace"
@@ -126,9 +126,9 @@
       "backend_surface": "simulation-engine|simulation_runs",
       "state": "connected",
       "state_reason_code": "simulation_runs_available",
-      "state_reason_text": "Simulation runs=16, passed=11, failed=5.",
+      "state_reason_text": "Simulation runs=1, passed=1, failed=0.",
       "last_success_at": "2026-03-14T00:35:55.856138+00:00",
-      "last_checked_at": "2026-03-14T05:35:18.788Z",
+      "last_checked_at": "2026-03-14T10:15:27.543Z",
       "correlation_id": "a21fdc0d-48de-4b7d-a658-77c5dd363565",
       "smoke_case_id": "ag2_c6_synthetic",
       "remediation_action": "/simulation"
@@ -140,8 +140,8 @@
       "state": "degraded",
       "state_reason_code": "readiness_partial_warnings",
       "state_reason_text": "No org scope provided; governor_metrics returned advisory defaults.",
-      "last_success_at": "2026-03-14T05:35:18.457Z",
-      "last_checked_at": "2026-03-14T05:35:18.788Z",
+      "last_success_at": "2026-03-14T10:15:25.842Z",
+      "last_checked_at": "2026-03-14T10:15:27.543Z",
       "correlation_id": "a21fdc0d-48de-4b7d-a658-77c5dd363565",
       "smoke_case_id": null,
       "remediation_action": "/control-tower?tab=readiness"
@@ -151,19 +151,19 @@
     {
       "smoke_case_id": "hard_block_routing",
       "status": "pass",
-      "checked_at": "2026-03-14T05:35:18.457Z",
-      "evidence_count": 40
+      "checked_at": "2026-03-14T10:15:25.842Z",
+      "evidence_count": 6
     },
     {
       "smoke_case_id": "ag2_c6_synthetic",
       "status": "pass",
-      "checked_at": "2026-03-14T05:35:18.457Z",
+      "checked_at": "2026-03-14T10:15:25.842Z",
       "evidence_count": 4
     },
     {
       "smoke_case_id": "governor_runtime",
       "status": "pass",
-      "checked_at": "2026-03-14T05:35:18.457Z",
+      "checked_at": "2026-03-14T10:15:25.842Z",
       "evidence_count": 2
     }
   ],
@@ -196,10 +196,10 @@
   "governance_metrics": {
     "org_id": null,
     "window": "last_24h",
-    "dispatch_total": 14,
+    "dispatch_total": 2,
     "blocked_total": 0,
     "approval_pending_total": 0,
-    "high_risk_routed_total": 12,
+    "high_risk_routed_total": 2,
     "tool_bus_trace_coverage": 1
   }
 }
