@@ -319,18 +319,26 @@ function Pipeline() {
 
   return (
     <div className="module-page pl fade-in">
-      {/* Header */}
+      {/* Header (Stitch V2) */}
       <div className="module-page-header">
         <div>
-          <h1 className="module-page-title">Pipeline</h1>
+          <h1 className="module-page-title" style={{ fontSize: '24px', fontWeight: 'var(--weight-bold)', letterSpacing: 'var(--tracking-tight)' }}>Pipeline</h1>
           <p className="module-page-subtitle">{deals.length} deals · {closedWon} won · €{(totalValue || 0).toLocaleString()} total</p>
         </div>
-        <div style={{ display: 'flex', gap: 'var(--space-2)' }}>
-          <button className="btn btn-ghost btn-sm" onClick={toggleClosedLost}>
-            {showClosedLost ? <><EyeSlashIcon width={14} height={14} /> Hide lost</> : <><EyeIcon width={14} height={14} /> Show lost</>}
+        <div style={{ display: 'flex', gap: 'var(--space-3)' }}>
+          <button
+            className="btn btn-ghost btn-sm"
+            onClick={toggleClosedLost}
+            style={{ border: '1px solid var(--border-default)', borderRadius: 'var(--radius-md)', padding: '8px 16px' }}
+          >
+            {showClosedLost ? <>Hide lost</> : <>Show lost</>}
           </button>
-          <button className="btn btn-primary btn-sm" onClick={() => setShowForm(v => !v)}>
-            {showForm ? 'Cancel' : <><PlusIcon width={14} height={14} /> New deal</>}
+          <button
+            className="btn btn-primary btn-sm"
+            onClick={() => setShowForm(v => !v)}
+            style={{ borderRadius: 'var(--radius-md)', padding: '8px 16px', display: 'flex', alignItems: 'center', gap: '6px' }}
+          >
+            {showForm ? 'Cancel' : <><PlusIcon width={16} height={16} /> New deal</>}
           </button>
         </div>
       </div>

@@ -237,18 +237,18 @@ function Agents() {
 
   return (
     <div className="module-page ag fade-in">
-      {/* Header */}
+      {/* Header — Stitch V2 */}
       <div className="module-page-header">
         <div>
-          <h1 className="module-page-title">Agents</h1>
-          <p className="module-page-subtitle">Multi-agent orchestration · {stats.online} online · {runningAgents.length} executing</p>
+          <h1 className="module-page-title">AI Agents</h1>
+          <p className="module-page-subtitle">Sophisticated multi-agent orchestration center.</p>
         </div>
         <button className="btn btn-primary btn-sm" onClick={handleCortexCycle} disabled={triggering === 'cortex'}>
-          <PlayIcon width={14} height={14} /> {triggering === 'cortex' ? 'Running...' : 'Run Cortex cycle'}
+          <PlayIcon width={14} height={14} /> {triggering === 'cortex' ? 'Running...' : 'Run Cortex Cycle'}
         </button>
       </div>
 
-      {/* Tabs */}
+      {/* Tabs — Stitch V2 style */}
       <div className="crm-tabs">
         {TAB_CONFIG.map(t => {
           const Icon = t.icon
@@ -273,61 +273,88 @@ function Agents() {
       <div className="ag-content">
         {activeTab === 'network' && (
           <div className="ag-network">
-            {/* Cortex Master */}
+            {/* Cortex Master — Stitch V2 Premium Card */}
             {cortex && (
               <div className="ag-cortex-card">
-                <div className="ag-cortex-info">
-                  <CpuChipIcon width={24} height={24} style={{ color: 'var(--accent-primary)' }} />
-                  <div>
-                    <div className="ag-cortex-name">{cortex.name}</div>
-                    <div className="ag-cortex-desc">{cortex.description}</div>
+                <div className="ag-cortex-top">
+                  <div className="ag-cortex-info">
+                    <div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)' }}>
+                        <span className="ag-cortex-name">CORTEX</span>
+                        <span className={`ag-status-pill ${cortex.status === 'online' ? 'online' : cortex.status === 'running' ? 'running' : 'idle'}`}>
+                          <span className="pulse-dot" />
+                          {cortex.status === 'online' ? 'Online' : cortex.status === 'running' ? 'Running' : 'Idle'}
+                        </span>
+                      </div>
+                    </div>
                   </div>
+                  <button className="btn btn-primary btn-sm" onClick={handleCortexCycle} disabled={triggering === 'cortex'}>
+                    <span>{triggering === 'cortex' ? 'Running...' : 'Ver Mensajes'}</span>
+                    <span style={{ fontSize: 14 }}>→</span>
+                  </button>
                 </div>
                 <div className="ag-cortex-stats">
-                  <span>{cortex.total_runs || 0} runs</span>
-                  <span>Last: {formatTime(cortex.last_run_at)}</span>
+                  <span>
+                    <span className="ag-cortex-stat-label">Total Runs</span>
+                    <span className="ag-cortex-stat-value">{(cortex.total_runs || 0).toLocaleString()}</span>
+                  </span>
+                  <span className="ag-cortex-divider" />
+                  <span>
+                    <span className="ag-cortex-stat-label">Avg Time</span>
+                    <span className="ag-cortex-stat-value">{stats.avgDuration ? `${(stats.avgDuration / 1000).toFixed(1)}s` : '—'}</span>
+                  </span>
+                  <span className="ag-cortex-divider" />
+                  <span>
+                    <span className="ag-cortex-stat-label">Last Run</span>
+                    <span className="ag-cortex-stat-value">{cortex.last_run_at ? formatTime(cortex.last_run_at) : '—'}</span>
+                  </span>
+                </div>
+                <div className="ag-cortex-actions">
+                  {['System Analytics', 'Routing Diagnostics', 'Network Logs', 'Thread Tracing', 'Task Management', 'Security Audit'].map(label => (
+                    <button key={label} className="ag-cortex-action-btn" onClick={() => setTabAndSearch(label === 'Network Logs' ? 'logs' : label === 'Task Management' ? 'queue' : 'network')}>
+                      {label}
+                    </button>
+                  ))}
+                </div>
+                <div className="ag-cortex-progress">
+                  <div className="ag-cortex-progress-fill" style={{ width: `${Math.min(100, (stats.online / Math.max(stats.total, 1)) * 100)}%` }} />
                 </div>
               </div>
             )}
 
-            {/* Agent Grid */}
+            {/* Agent Grid — Stitch V2 Premium Cards */}
             <div className="ag-grid">
-              {subAgents.map(ag => (
-                <div key={ag.id} className="ag-card">
-                  <div className="ag-card-header">
-                    <div className="ag-card-identity">
-                      <div className="ag-card-dot" style={{ background: statusColor(ag.status) }} />
-                      <span className="ag-card-codename" style={{ color: AGENT_COLORS[ag.code_name] || 'var(--accent-primary)' }}>{ag.code_name}</span>
+              {subAgents.map(ag => {
+                const statusClass = ag.status === 'online' ? 'online' : ag.status === 'running' ? 'running' : 'idle'
+                const statusLabel = ag.status === 'online' ? 'Online' : ag.status === 'running' ? 'Running' : 'Idle'
+                return (
+                  <div key={ag.id} className="ag-card">
+                    <div className="ag-card-header">
+                      <span className="ag-card-codename">{ag.code_name}</span>
+                      <span className={`ag-status-pill ${statusClass}`}>
+                        {statusClass === 'online' && <span className="pulse-dot" />}
+                        {statusLabel}
+                      </span>
                     </div>
-                    <button className="btn btn-ghost btn-xs" onClick={() => handleTrigger(ag.code_name, 'cycle')} disabled={triggering === ag.code_name}>
-                      {triggering === ag.code_name ? 'Running...' : 'Trigger'}
-                    </button>
-                  </div>
-                  <div className="ag-card-body">
-                    <div className="ag-card-name">{ag.name}</div>
-                    <div className="ag-card-desc">{ag.description}</div>
-                    <div className="ag-card-caps">
-                      {(ag.capabilities || []).slice(0, 3).map(cap => (
-                        <span key={cap} className="badge badge-default">{cap.replace(/_/g, ' ')}</span>
-                      ))}
-                    </div>
-                    <div className="ag-card-footer">
-                      <span>{ag.total_runs || 0} cycles</span>
-                      <span>Last: {formatTime(ag.last_run_at)}</span>
-                      {agentHealth[ag.code_name] && (
-                        <span style={{
-                          color: agentHealth[ag.code_name].isRunning ? 'var(--color-warning)'
-                            : agentHealth[ag.code_name].healthScore >= 80 ? 'var(--color-success)'
-                            : 'var(--color-danger)',
-                          fontWeight: 'var(--weight-semibold)',
-                        }}>
-                          {agentHealth[ag.code_name].isRunning ? '● RUNNING' : `♥ ${agentHealth[ag.code_name].healthScore}%`}
-                        </span>
-                      )}
+                    <div className="ag-card-body">
+                      <div className="ag-card-caps">
+                        {(ag.capabilities || []).slice(0, 3).map(cap => (
+                          <span key={cap} className="badge badge-default">{cap.replace(/_/g, ' ')}</span>
+                        ))}
+                      </div>
+                      <div className="ag-card-desc">{ag.description}</div>
+                      <button
+                        className="ag-card-action-link"
+                        onClick={() => handleTrigger(ag.code_name, 'cycle')}
+                        disabled={triggering === ag.code_name}
+                      >
+                        {triggering === ag.code_name ? 'RUNNING...' : 'OPERATIONAL LOGIC'}
+                        <span style={{ fontSize: 14 }}>→</span>
+                      </button>
                     </div>
                   </div>
-                </div>
-              ))}
+                )
+              })}
             </div>
           </div>
         )}

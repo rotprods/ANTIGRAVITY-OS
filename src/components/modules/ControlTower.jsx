@@ -237,12 +237,10 @@ function ControlTower() {
     }, [totalValue, agentStats, activeSignals])
 
     const kpis = [
-        { label: 'Contacts', value: (contacts || []).length, icon: UserGroupIcon, target: '100+' },
-        { label: 'Companies', value: (companies || []).length, icon: BuildingOfficeIcon, target: '50+' },
-        { label: 'Pipeline', value: `€${Math.round(totalValue).toLocaleString()}`, icon: CurrencyEuroIcon, target: '€50K' },
-        { label: 'Weighted', value: `€${Math.round(weightedValue).toLocaleString()}`, icon: ArrowTrendingUpIcon, color: 'var(--color-success)', target: '€25K' },
-        { label: 'Activities (7d)', value: recentActivitiesCount, icon: ClockIcon, color: recentActivitiesCount > 0 ? 'var(--color-success)' : 'var(--color-warning)', target: '20+' },
-        { label: 'Active signals', value: (activeSignals || []).length, icon: SignalIcon, color: 'var(--accent-primary)', target: '10+', subtitle: `Avg impact: ${avgSignalImpact}` },
+        { label: 'Pipeline Value', value: `€${Math.round(totalValue).toLocaleString()}`, icon: CurrencyEuroIcon, target: '€50K', accent: true },
+        { label: 'Active Deals', value: (deals || []).length, icon: ArrowTrendingUpIcon, target: '50+' },
+        { label: 'Agents Online', value: `${agentStats?.online || 0}/${agentStats?.total || 0}`, icon: CpuChipIcon, target: 'All' },
+        { label: 'Active Signals', value: (activeSignals || []).length, icon: SignalIcon, color: 'var(--accent-primary)', target: '10+', subtitle: `Avg impact: ${avgSignalImpact}` },
     ]
 
     // AG1-P0: Blocked goal steps (waiting_approval = simulation gate)
@@ -464,18 +462,15 @@ function ControlTower() {
 
     return (
         <div className="module-page ct fade-in">
-            {/* ── Hero Greeting ── */}
+            {/* ── Hero Banner (Stitch V2) ── */}
             <div className="ct-hero">
                 <div className="ct-greeting">
-                    <h1>Control Tower</h1>
-                    <p>System overview and real-time business intelligence</p>
+                    <h1>Performance Analytics</h1>
+                    <p>Real-time overview of key metrics and system intelligence.</p>
                 </div>
                 <div className="ct-status-pill">
                     <div className={`ct-status-dot ${loading ? 'syncing' : 'online'}`} />
-                    <span>{loading ? 'Syncing...' : 'Operational'}</span>
-                    <span style={{ color: 'var(--text-quaternary)', marginLeft: 'var(--space-2)' }}>
-                        {(deals || []).length} deals
-                    </span>
+                    <span>{loading ? 'Syncing...' : 'LIVE'}</span>
                 </div>
             </div>
 

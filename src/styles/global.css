@@ -818,12 +818,13 @@ tr:last-child td {
 
 /* New system */
 .module-page {
-    padding: var(--page-gutter, 32px);
+    padding: 0 var(--page-gutter, 32px) var(--page-gutter, 32px);
     display: flex;
     flex-direction: column;
     gap: var(--space-6);
     height: 100%;
     overflow-y: auto;
+    max-width: var(--content-max-width, 1400px);
 }
 
 .module-page-header {
@@ -831,11 +832,20 @@ tr:last-child td {
     align-items: flex-start;
     justify-content: space-between;
     gap: var(--space-4);
+    position: sticky;
+    top: 0;
+    z-index: var(--z-header, 10);
+    background: color-mix(in srgb, var(--surface-base) 90%, transparent);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    padding: var(--space-6) 0 var(--space-4);
+    border-bottom: 1px solid var(--border-default);
+    margin: 0 0 var(--space-2);
 }
 
 .module-page-title {
-    font-size: var(--text-2xl);
-    font-weight: var(--weight-bold);
+    font-size: 18px;
+    font-weight: var(--weight-semibold);
     color: var(--text-primary);
     letter-spacing: var(--tracking-tight);
 }
