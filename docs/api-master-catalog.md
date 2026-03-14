@@ -2,6 +2,11 @@
 
 > This master catalog contains **1435** public APIs compiled from multiple open sources, including the public-apis registry and our internal verified directory.
 
+> **Actualización 2026-03-14**  
+> - Fuente operativa canónica actual: `public-apis/public-apis` + `public/public-api-catalog/ecosystem-layer.json`  
+> - Conteo vigente de catálogo operativo en sistema: **1.426 APIs** (1.425 listadas + 1 interna)  
+> - Para uso en producto/agents/n8n, usar `docs/APIs_PROYECTO.md` y los reportes `project-apis.*.json`.
+
 
 ## Animals
 

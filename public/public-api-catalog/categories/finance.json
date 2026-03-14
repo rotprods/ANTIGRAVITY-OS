@@ -43,8 +43,8 @@
       "business_fit_score": 65,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "finance-econdb-econdb-com",
@@ -86,8 +86,8 @@
       "business_fit_score": 65,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "finance-fed-treasury-fiscaldata-treasury-gov",
@@ -129,8 +129,8 @@
       "business_fit_score": 65,
       "activation_tier": "adapter_ready",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "finance-indian-mutual-fund-mfapi-in",
@@ -172,8 +172,8 @@
       "business_fit_score": 65,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "finance-portfolio-optimizer-portfoliooptimizer-io",
@@ -215,8 +215,8 @@
       "business_fit_score": 65,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "finance-razorpay-ifsc-razorpay-com",
@@ -258,8 +258,8 @@
       "business_fit_score": 65,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "finance-sec-edgar-data-sec-gov",
@@ -301,8 +301,8 @@
       "business_fit_score": 65,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "finance-wallstreetbets-dashboard-nbshare-io",
@@ -344,8 +344,8 @@
       "business_fit_score": 65,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "finance-aletheia-aletheiaapi-com",
@@ -387,8 +387,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "finance-alpaca-alpaca-markets",
@@ -430,8 +430,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "finance-alpha-vantage-alphavantage-co",
@@ -473,8 +473,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "finance-apilayer-marketstack-marketstack-com",
@@ -516,8 +516,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "finance-bank-data-api-apilayer-com",
@@ -559,8 +559,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "finance-billplz-billplz-com",
@@ -602,8 +602,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "finance-boleto-cloud-boleto-cloud",
@@ -645,8 +645,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "finance-citi-sandbox-developerhub-citi-com",
@@ -688,8 +688,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "finance-finage-finage-co-uk",
@@ -731,8 +731,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "finance-financial-modeling-prep-site-financialmodelingprep-com",
@@ -774,8 +774,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "finance-finnhub-finnhub-io",
@@ -817,8 +817,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "finance-fred-fred-stlouisfed-org",
@@ -860,8 +860,8 @@
       "business_fit_score": 60,
       "activation_tier": "adapter_ready",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "finance-hotstoks-hotstoks-com",
@@ -903,8 +903,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "finance-iex-cloud-iexcloud-io",
@@ -946,8 +946,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "finance-ig-labs-ig-com",
@@ -989,8 +989,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "finance-intrinio-intrinio-com",
@@ -1032,8 +1032,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "finance-klarna-docs-klarna-com",
@@ -1075,8 +1075,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "finance-mercadopago-mercadopago-com-br",
@@ -1118,8 +1118,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "finance-mono-mono-co",
@@ -1161,8 +1161,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "finance-moov-docs-moov-io",
@@ -1204,8 +1204,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "finance-nordigen-nordigen-com",
@@ -1247,8 +1247,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "finance-openfigi-openfigi-com",
@@ -1290,8 +1290,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "finance-plaid-plaid-com",
@@ -1333,8 +1333,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "finance-polygon-polygon-io",
@@ -1376,8 +1376,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "finance-smartapi-smartapi-angelbroking-com",
@@ -1419,8 +1419,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "finance-stockdata-stockdata-org",
@@ -1462,8 +1462,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "finance-styvio-styvio-com",
@@ -1505,8 +1505,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "finance-tax-data-api-apilayer-com",
@@ -1548,8 +1548,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "finance-twelve-data-twelvedata-com",
@@ -1591,8 +1591,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "finance-vat-validation-abstractapi-com",
@@ -1634,8 +1634,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "finance-yahoo-finance-yahoofinanceapi-com",
@@ -1677,8 +1677,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "finance-banco-do-brasil-developers-bb-com-br",
@@ -1720,8 +1720,8 @@
       "business_fit_score": 55,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "finance-front-accounting-apis-frontaccounting-com",
@@ -1763,8 +1763,8 @@
       "business_fit_score": 55,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "finance-tradier-developer-tradier-com",
@@ -1806,8 +1806,8 @@
       "business_fit_score": 55,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "finance-ynab-api-youneedabudget-com",
@@ -1849,8 +1849,8 @@
       "business_fit_score": 55,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "finance-zoho-books-zoho-com",
@@ -1892,8 +1892,8 @@
       "business_fit_score": 55,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "finance-real-time-finance-github-com",
@@ -1935,8 +1935,8 @@
       "business_fit_score": 20,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     }
   ]
 }

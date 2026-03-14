@@ -27,6 +27,9 @@
     "audit:n8n-workflows": "node scripts/audit-n8n-workflows.mjs",
     "bootstrap:n8n-credentials": "node scripts/bootstrap-n8n-credentials.mjs",
     "reconcile:n8n-oculops": "node scripts/reconcile-n8n-oculops.mjs",
+    "n8n:bridge:cloudflare": "node scripts/open-n8n-cloudflare-bridge.mjs",
+    "n8n:bridge:cloudflare:down": "node scripts/close-n8n-cloudflare-bridge.mjs",
+    "inject:n8n-api-context": "node scripts/inject-api-context-automation-bridges.mjs",
     "n8n:install-template": "node scripts/install-n8n-template.mjs",
     "gws": "node scripts/gws.mjs",
     "gws:auth:setup": "node scripts/gws.mjs auth setup",
@@ -65,6 +68,7 @@
     "public-apis:finalize": "node scripts/finalize-public-api-infra.mjs",
     "build:public-api-infra-layer": "node scripts/build-public-api-infra-layer.mjs",
     "build:public-api-ecosystem-layer": "node scripts/build-public-api-ecosystem-layer.mjs",
+    "build:project-apis": "node scripts/build-project-apis.mjs",
     "smoke:public-connectors": "node scripts/smoke-public-connectors.mjs"
   },
   "dependencies": {

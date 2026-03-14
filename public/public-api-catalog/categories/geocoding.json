@@ -39,8 +39,8 @@
       "business_fit_score": 65,
       "activation_tier": "adapter_ready",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "geocoding-adresse-data-gouv-fr-adresse-data-gouv-fr",
@@ -78,8 +78,8 @@
       "business_fit_score": 65,
       "activation_tier": "adapter_ready",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "geocoding-airtel-ip-sys-airtel-lv",
@@ -117,8 +117,8 @@
       "business_fit_score": 65,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "geocoding-bng2latlong-getthedata-com",
@@ -156,8 +156,8 @@
       "business_fit_score": 65,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "geocoding-cartes-io-github-com",
@@ -195,8 +195,8 @@
       "business_fit_score": 65,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "geocoding-citysdk-citysdk-eu",
@@ -234,8 +234,8 @@
       "business_fit_score": 65,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "geocoding-country-country-is",
@@ -273,8 +273,8 @@
       "business_fit_score": 65,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "geocoding-ducks-unlimited-gis-ducks-org",
@@ -312,8 +312,8 @@
       "business_fit_score": 65,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "geocoding-geoapi-api-gouv-fr",
@@ -351,8 +351,8 @@
       "business_fit_score": 65,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "geocoding-geocode-xyz-geocode-xyz",
@@ -390,8 +390,8 @@
       "business_fit_score": 65,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "geocoding-geodata-gov-gr-geodata-gov-gr",
@@ -429,8 +429,8 @@
       "business_fit_score": 65,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "geocoding-geographql-geographql-netlify-app",
@@ -468,8 +468,8 @@
       "business_fit_score": 65,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "geocoding-geojs-geojs-io",
@@ -507,8 +507,8 @@
       "business_fit_score": 65,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "geocoding-geokeo-geokeo-com",
@@ -546,8 +546,8 @@
       "business_fit_score": 65,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "geocoding-geoplugin-geoplugin-com",
@@ -585,8 +585,8 @@
       "business_fit_score": 65,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "geocoding-graph-countries-github-com",
@@ -624,8 +624,8 @@
       "business_fit_score": 65,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "geocoding-hellosalut-fourtonfish-com",
@@ -663,8 +663,8 @@
       "business_fit_score": 65,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "geocoding-hong-kong-geodata-store-geodata-gov-hk",
@@ -702,8 +702,8 @@
       "business_fit_score": 65,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "geocoding-ibge-servicodados-ibge-gov-br",
@@ -741,8 +741,8 @@
       "business_fit_score": 65,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "geocoding-ip-2-country-ip2country-info",
@@ -780,8 +780,8 @@
       "business_fit_score": 65,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "geocoding-ip-address-details-ipinfo-io",
@@ -819,8 +819,8 @@
       "business_fit_score": 65,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "geocoding-ip-vigilante-ipvigilante-com",
@@ -858,8 +858,8 @@
       "business_fit_score": 65,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "geocoding-ipapi-co-ipapi-co",
@@ -897,8 +897,8 @@
       "business_fit_score": 65,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "geocoding-ipgeo-api-techniknews-net",
@@ -936,8 +936,8 @@
       "business_fit_score": 65,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "geocoding-mexico-github-com",
@@ -975,8 +975,8 @@
       "business_fit_score": 65,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "geocoding-nominatim-nominatim-org",
@@ -1014,8 +1014,8 @@
       "business_fit_score": 65,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "geocoding-onwater-onwater-io",
@@ -1053,8 +1053,8 @@
       "business_fit_score": 65,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "geocoding-open-topo-data-opentopodata-org",
@@ -1092,8 +1092,8 @@
       "business_fit_score": 65,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "geocoding-pinball-map-pinballmap-com",
@@ -1131,8 +1131,8 @@
       "business_fit_score": 65,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "geocoding-postali-postali-app",
@@ -1170,8 +1170,8 @@
       "business_fit_score": 65,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "geocoding-postcodes-io-postcodes-io",
@@ -1209,8 +1209,8 @@
       "business_fit_score": 65,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "geocoding-queimadas-inpe-queimadas-dgi-inpe-br",
@@ -1248,8 +1248,8 @@
       "business_fit_score": 65,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "geocoding-rest-countries-restcountries-com",
@@ -1287,8 +1287,8 @@
       "business_fit_score": 65,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "geocoding-rwanda-locations-rapidapi-com",
@@ -1326,8 +1326,8 @@
       "business_fit_score": 65,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "geocoding-slf-github-com",
@@ -1365,8 +1365,8 @@
       "business_fit_score": 65,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "geocoding-viacep-viacep-com-br",
@@ -1404,8 +1404,8 @@
       "business_fit_score": 65,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "geocoding-ziptastic-ziptasticapi-com",
@@ -1443,8 +1443,8 @@
       "business_fit_score": 65,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "geocoding-actinia-grass-gis-actinia-mundialis-de",
@@ -1482,8 +1482,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "geocoding-apiip-apiip-net",
@@ -1521,8 +1521,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "geocoding-apilayer-ipstack-ipstack-com",
@@ -1560,8 +1560,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "geocoding-bigdatacloud-bigdatacloud-com",
@@ -1599,8 +1599,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "geocoding-bing-maps-microsoft-com",
@@ -1638,8 +1638,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "geocoding-countrystatecity-countrystatecity-in",
@@ -1677,8 +1677,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "geocoding-geoapify-geoapify-com",
@@ -1716,8 +1716,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "geocoding-geocod-io-geocod-io",
@@ -1755,8 +1755,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "geocoding-geocodify-com-geocodify-com",
@@ -1794,8 +1794,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "geocoding-geodatasource-geodatasource-com",
@@ -1833,8 +1833,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "geocoding-geodb-cities-geodb-cities-api-wirefreethought-com",
@@ -1872,8 +1872,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "geocoding-google-earth-engine-developers-google-com",
@@ -1911,8 +1911,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "geocoding-google-maps-developers-google-com",
@@ -1950,8 +1950,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "geocoding-here-maps-developer-here-com",
@@ -1989,8 +1989,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "geocoding-hirak-ip-to-country-iplocation-hirak-site",
@@ -2028,8 +2028,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "geocoding-ip-geolocation-abstractapi-com",
@@ -2067,8 +2067,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "geocoding-ip2location-ip2location-com",
@@ -2106,8 +2106,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "geocoding-ip2proxy-ip2location-com",
@@ -2145,8 +2145,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "geocoding-ipapi-com-ipapi-com",
@@ -2184,8 +2184,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "geocoding-ipgeolocation-ipgeolocation-io",
@@ -2223,8 +2223,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "geocoding-ipinfodb-ipinfodb-com",
@@ -2262,8 +2262,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "geocoding-ipstack-ipstack-com",
@@ -2301,8 +2301,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "geocoding-kakao-maps-apis-map-kakao-com",
@@ -2340,8 +2340,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "geocoding-keycdn-ip-location-finder-tools-keycdn-com",
@@ -2379,8 +2379,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "geocoding-locationiq-locationiq-org",
@@ -2418,8 +2418,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "geocoding-longdo-map-map-longdo-com",
@@ -2457,8 +2457,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "geocoding-mapbox-docs-mapbox-com",
@@ -2496,8 +2496,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "geocoding-mapquest-developer-mapquest-com",
@@ -2535,8 +2535,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "geocoding-one-map-singapore-onemap-gov-sg",
@@ -2574,8 +2574,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "geocoding-opencage-opencagedata-com",
@@ -2613,8 +2613,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "geocoding-openrouteservice-org-openrouteservice-org",
@@ -2652,8 +2652,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "geocoding-positionstack-positionstack-com",
@@ -2691,8 +2691,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "geocoding-roadgoat-cities-roadgoat-com",
@@ -2730,8 +2730,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "geocoding-spotsense-spotsense-io",
@@ -2769,8 +2769,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "geocoding-telize-rapidapi-com",
@@ -2808,8 +2808,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "geocoding-tomtom-developer-tomtom-com",
@@ -2847,8 +2847,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "geocoding-uebermaps-uebermaps-com",
@@ -2886,8 +2886,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "geocoding-us-zipcode-smarty-com",
@@ -2925,8 +2925,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "geocoding-utah-agrc-api-mapserv-utah-gov",
@@ -2964,8 +2964,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "geocoding-what3words-what3words-com",
@@ -3003,8 +3003,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "geocoding-yandex-maps-geocoder-yandex-com",
@@ -3042,8 +3042,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "geocoding-zipcodeapi-zipcodeapi-com",
@@ -3081,8 +3081,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "geocoding-cep-la-cep-la",
@@ -3120,8 +3120,8 @@
       "business_fit_score": 25,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "geocoding-geonames-geonames-org",
@@ -3159,8 +3159,8 @@
       "business_fit_score": 25,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "geocoding-ip-api-ip-api-com",
@@ -3198,8 +3198,8 @@
       "business_fit_score": 25,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "geocoding-postcodedata-nl-api-postcodedata-nl",
@@ -3237,8 +3237,8 @@
       "business_fit_score": 25,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "geocoding-zippopotam-us-zippopotam-us",
@@ -3276,8 +3276,8 @@
       "business_fit_score": 25,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "geocoding-battuta-battuta-medunes-net",
@@ -3315,8 +3315,8 @@
       "business_fit_score": 20,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "geocoding-openstreetmap-wiki-openstreetmap-org",
@@ -3354,8 +3354,8 @@
       "business_fit_score": 15,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     }
   ]
 }

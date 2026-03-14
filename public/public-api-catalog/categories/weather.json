@@ -43,8 +43,8 @@
       "business_fit_score": 65,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "weather-hong-kong-obervatory-hko-gov-hk",
@@ -86,8 +86,8 @@
       "business_fit_score": 65,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "weather-metaweather-metaweather-com",
@@ -129,8 +129,8 @@
       "business_fit_score": 65,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "weather-open-meteo-open-meteo-com",
@@ -172,8 +172,8 @@
       "business_fit_score": 65,
       "activation_tier": "adapter_ready",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "weather-opensensemap-api-opensensemap-org",
@@ -215,8 +215,8 @@
       "business_fit_score": 65,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "weather-rainviewer-rainviewer-com",
@@ -258,8 +258,8 @@
       "business_fit_score": 65,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "weather-us-weather-weather-gov",
@@ -301,8 +301,8 @@
       "business_fit_score": 65,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "weather-weather-api-github-com",
@@ -344,8 +344,8 @@
       "business_fit_score": 65,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "weather-aemet-opendata-aemet-es",
@@ -387,8 +387,8 @@
       "business_fit_score": 60,
       "activation_tier": "adapter_ready",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "weather-apilayer-weatherstack-weatherstack-com",
@@ -430,8 +430,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "weather-apixu-apixu-com",
@@ -473,8 +473,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "weather-aqicn-aqicn-org",
@@ -516,8 +516,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "weather-colorfulclouds-open-caiyunapp-com",
@@ -559,8 +559,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "weather-euskalmet-opendata-euskadi-eus",
@@ -602,8 +602,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "weather-hg-weather-hgbrasil-com",
@@ -645,8 +645,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "weather-micro-weather-m3o-com",
@@ -688,8 +688,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "weather-oikolab-docs-oikolab-com",
@@ -731,8 +731,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "weather-openuv-openuv-io",
@@ -774,8 +774,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "weather-openweathermap-openweathermap-org",
@@ -817,8 +817,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "weather-qweather-dev-qweather-com",
@@ -860,8 +860,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "weather-storm-glass-stormglass-io",
@@ -903,8 +903,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "weather-tomorrow-docs-tomorrow-io",
@@ -946,8 +946,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "weather-visual-crossing-visualcrossing-com",
@@ -989,8 +989,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "weather-weatherapi-weatherapi-com",
@@ -1032,8 +1032,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "weather-weatherbit-weatherbit-io",
@@ -1075,8 +1075,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "weather-yandex-weather-yandex-com",
@@ -1118,8 +1118,8 @@
       "business_fit_score": 60,
       "activation_tier": "candidate",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "weather-foreca-developer-foreca-com",
@@ -1161,8 +1161,8 @@
       "business_fit_score": 55,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "weather-meteorologisk-institutt-api-met-no",
@@ -1204,8 +1204,8 @@
       "business_fit_score": 55,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "weather-7timer-7timer-info",
@@ -1247,8 +1247,8 @@
       "business_fit_score": 25,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "weather-odweather-api-oceandrivers-com",
@@ -1290,8 +1290,8 @@
       "business_fit_score": 25,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "weather-accuweather-developer-accuweather-com",
@@ -1333,8 +1333,8 @@
       "business_fit_score": 20,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     }
   ]
 }

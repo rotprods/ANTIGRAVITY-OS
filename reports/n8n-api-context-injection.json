@@ -1,0 +1,343 @@
+{
+  "generated_at": "2026-03-14T01:45:04.898Z",
+  "mode": "apply",
+  "trigger_pack": "/Users/robertoortega/Documents/AI OPS/ANTIGRAVITY-OS/reports/n8n-api-trigger-pack.json",
+  "summary": {
+    "workflows_scanned": 32,
+    "with_launch_n8n_step": 1,
+    "with_event_mapping": 1,
+    "injected_profiles": 1,
+    "updated": 1,
+    "dry_run_would_update": 0,
+    "failed_updates": 0
+  },
+  "rows": [
+    {
+      "id": "718c2797-65e2-4edb-bac5-37c7b3d7c5ea",
+      "name": "CORTEX ORCHESTRATION LOOP",
+      "event_key": "agent.completed",
+      "has_launch_n8n_step": true,
+      "injected": true,
+      "totals": {
+        "matching_entries": 277,
+        "live_connector": 2,
+        "open_direct": 90,
+        "installable_connector": 1,
+        "docs_only": 274,
+        "registration_pending": 184
+      },
+      "updated": true,
+      "dry_run_would_update": false
+    },
+    {
+      "id": "bdcae415-d73a-4208-8884-293f9e21ad4d",
+      "name": "WhatsApp · D'Kebab Food",
+      "event_key": null,
+      "has_launch_n8n_step": false,
+      "injected": false,
+      "totals": null,
+      "updated": false,
+      "dry_run_would_update": false
+    },
+    {
+      "id": "421df509-d528-4fb1-9aa5-f33a036b859c",
+      "name": "WhatsApp · Madrid Studio",
+      "event_key": null,
+      "has_launch_n8n_step": false,
+      "injected": false,
+      "totals": null,
+      "updated": false,
+      "dry_run_would_update": false
+    },
+    {
+      "id": "9352d0f2-7305-4aaf-9348-b46ccedb9883",
+      "name": "WhatsApp · Clínica Dental Dr. José Luis López",
+      "event_key": null,
+      "has_launch_n8n_step": false,
+      "injected": false,
+      "totals": null,
+      "updated": false,
+      "dry_run_would_update": false
+    },
+    {
+      "id": "72af2d76-89e6-4a52-80cf-520beff07897",
+      "name": "Weekly Report Generator",
+      "event_key": null,
+      "has_launch_n8n_step": false,
+      "injected": false,
+      "totals": null,
+      "updated": false,
+      "dry_run_would_update": false
+    },
+    {
+      "id": "020dc2e4-a21a-444c-b149-391d0cb521c7",
+      "name": "Deal Stage Update",
+      "event_key": null,
+      "has_launch_n8n_step": false,
+      "injected": false,
+      "totals": null,
+      "updated": false,
+      "dry_run_would_update": false
+    },
+    {
+      "id": "5a19552c-e125-4c3e-a5ab-f11ec9cedaff",
+      "name": "New Lead Alert",
+      "event_key": null,
+      "has_launch_n8n_step": false,
+      "injected": false,
+      "totals": null,
+      "updated": false,
+      "dry_run_would_update": false
+    },
+    {
+      "id": "e8d00f92-c231-4108-9935-89198c8b654a",
+      "name": "Smoke · run_api high · smoke-route-1773393395339",
+      "event_key": null,
+      "has_launch_n8n_step": false,
+      "injected": false,
+      "totals": null,
+      "updated": false,
+      "dry_run_would_update": false
+    },
+    {
+      "id": "6883c3e4-9429-4011-8c11-5851e0efd00c",
+      "name": "Smoke · run_connector high · smoke-route-1773393395339",
+      "event_key": null,
+      "has_launch_n8n_step": false,
+      "injected": false,
+      "totals": null,
+      "updated": false,
+      "dry_run_would_update": false
+    },
+    {
+      "id": "b8839ce3-ec75-4cd0-920e-b69533795b39",
+      "name": "Smoke · run_api high · smoke-route-1773393357442",
+      "event_key": null,
+      "has_launch_n8n_step": false,
+      "injected": false,
+      "totals": null,
+      "updated": false,
+      "dry_run_would_update": false
+    },
+    {
+      "id": "5d9973f6-4e19-4ca5-afeb-7874f47ddcd4",
+      "name": "Smoke · run_connector high · smoke-route-1773393357442",
+      "event_key": null,
+      "has_launch_n8n_step": false,
+      "injected": false,
+      "totals": null,
+      "updated": false,
+      "dry_run_would_update": false
+    },
+    {
+      "id": "372deeff-ef15-4440-9bc9-155cb5426f00",
+      "name": "Smoke · run_api high · smoke-route-1773393299873",
+      "event_key": null,
+      "has_launch_n8n_step": false,
+      "injected": false,
+      "totals": null,
+      "updated": false,
+      "dry_run_would_update": false
+    },
+    {
+      "id": "4f3cb46d-255d-4a04-a06b-48b11785e6d5",
+      "name": "Smoke · run_connector high · smoke-route-1773393299873",
+      "event_key": null,
+      "has_launch_n8n_step": false,
+      "injected": false,
+      "totals": null,
+      "updated": false,
+      "dry_run_would_update": false
+    },
+    {
+      "id": "18c484bc-07d5-4ea3-a7bd-34ced0ac0c96",
+      "name": "Smoke · run_api high · smoke-route-1773391982154",
+      "event_key": null,
+      "has_launch_n8n_step": false,
+      "injected": false,
+      "totals": null,
+      "updated": false,
+      "dry_run_would_update": false
+    },
+    {
+      "id": "7ea8fdbf-9d36-4436-89b1-71d424e6abc9",
+      "name": "Smoke · run_connector high · smoke-route-1773391982154",
+      "event_key": null,
+      "has_launch_n8n_step": false,
+      "injected": false,
+      "totals": null,
+      "updated": false,
+      "dry_run_would_update": false
+    },
+    {
+      "id": "b8e4d960-3e71-4ded-b2d0-62b122cb6197",
+      "name": "Smoke · run_api high · smoke-route-1773391957732",
+      "event_key": null,
+      "has_launch_n8n_step": false,
+      "injected": false,
+      "totals": null,
+      "updated": false,
+      "dry_run_would_update": false
+    },
+    {
+      "id": "c5eb7bbc-deb4-43fc-b7c8-e0916066d6af",
+      "name": "Smoke · run_connector high · smoke-route-1773391957732",
+      "event_key": null,
+      "has_launch_n8n_step": false,
+      "injected": false,
+      "totals": null,
+      "updated": false,
+      "dry_run_would_update": false
+    },
+    {
+      "id": "7d3bd3c0-5e87-45c8-af60-712b3c51e9e6",
+      "name": "Smoke · run_api high · smoke-route-1773391937530",
+      "event_key": null,
+      "has_launch_n8n_step": false,
+      "injected": false,
+      "totals": null,
+      "updated": false,
+      "dry_run_would_update": false
+    },
+    {
+      "id": "528653ac-eec7-4a09-a97c-9a27f67b1a8b",
+      "name": "Smoke · run_connector high · smoke-route-1773391937530",
+      "event_key": null,
+      "has_launch_n8n_step": false,
+      "injected": false,
+      "totals": null,
+      "updated": false,
+      "dry_run_would_update": false
+    },
+    {
+      "id": "bbfeb3fc-726e-4f4f-8fca-ebe80e3c3ec3",
+      "name": "SOCIAL FOLLOW-UP",
+      "event_key": null,
+      "has_launch_n8n_step": false,
+      "injected": false,
+      "totals": null,
+      "updated": false,
+      "dry_run_would_update": false
+    },
+    {
+      "id": "2f2a4390-52e5-430c-9c79-2c25ae34acc7",
+      "name": "ATLAS GMAIL OUTREACH",
+      "event_key": null,
+      "has_launch_n8n_step": false,
+      "injected": false,
+      "totals": null,
+      "updated": false,
+      "dry_run_would_update": false
+    },
+    {
+      "id": "0da0bdd5-f657-405c-8ad7-b9737e4d7dff",
+      "name": "Gmail · D'Kebab Food",
+      "event_key": null,
+      "has_launch_n8n_step": false,
+      "injected": false,
+      "totals": null,
+      "updated": false,
+      "dry_run_would_update": false
+    },
+    {
+      "id": "cba88adc-67f7-44ff-8873-129f07c15024",
+      "name": "LinkedIn · Madrid Studio",
+      "event_key": null,
+      "has_launch_n8n_step": false,
+      "injected": false,
+      "totals": null,
+      "updated": false,
+      "dry_run_would_update": false
+    },
+    {
+      "id": "ce70b1cf-2345-4d30-b1e0-3e1dd78a00ae",
+      "name": "Gmail · Madrid Studio",
+      "event_key": null,
+      "has_launch_n8n_step": false,
+      "injected": false,
+      "totals": null,
+      "updated": false,
+      "dry_run_would_update": false
+    },
+    {
+      "id": "d4afc6ac-e3eb-45d5-b361-763b6812ddde",
+      "name": "Gmail · Centro Deportivo Municipal La Flota",
+      "event_key": null,
+      "has_launch_n8n_step": false,
+      "injected": false,
+      "totals": null,
+      "updated": false,
+      "dry_run_would_update": false
+    },
+    {
+      "id": "f96d2ac1-d27c-4ee0-b727-5676ed3923ce",
+      "name": "Instagram · Murcia Studio",
+      "event_key": null,
+      "has_launch_n8n_step": false,
+      "injected": false,
+      "totals": null,
+      "updated": false,
+      "dry_run_would_update": false
+    },
+    {
+      "id": "b75ed109-80ae-4f17-ab00-f411fcc7d81f",
+      "name": "Gmail · Murcia Studio",
+      "event_key": null,
+      "has_launch_n8n_step": false,
+      "injected": false,
+      "totals": null,
+      "updated": false,
+      "dry_run_would_update": false
+    },
+    {
+      "id": "c39b9873-65b0-465e-9cc8-e59e249c280c",
+      "name": "Gmail · El Pasaje de Zabalburu",
+      "event_key": null,
+      "has_launch_n8n_step": false,
+      "injected": false,
+      "totals": null,
+      "updated": false,
+      "dry_run_would_update": false
+    },
+    {
+      "id": "a781a1bb-8a49-4d2e-a33d-00b6e9f4f4ad",
+      "name": "Gmail · Bar La Isla",
+      "event_key": null,
+      "has_launch_n8n_step": false,
+      "injected": false,
+      "totals": null,
+      "updated": false,
+      "dry_run_would_update": false
+    },
+    {
+      "id": "dcd2009b-c563-4d9a-856a-68506914d1f3",
+      "name": "Instagram · Clínica Dental Dr. José Luis López",
+      "event_key": null,
+      "has_launch_n8n_step": false,
+      "injected": false,
+      "totals": null,
+      "updated": false,
+      "dry_run_would_update": false
+    },
+    {
+      "id": "84ff4fb3-ba15-4369-adeb-fc42411fb909",
+      "name": "LinkedIn · Clínica Dental Dr. José Luis López",
+      "event_key": null,
+      "has_launch_n8n_step": false,
+      "injected": false,
+      "totals": null,
+      "updated": false,
+      "dry_run_would_update": false
+    },
+    {
+      "id": "0c3b9365-5064-4c6d-a23e-df0d4ce99992",
+      "name": "Gmail · Clínica Dental Dr. José Luis López",
+      "event_key": null,
+      "has_launch_n8n_step": false,
+      "injected": false,
+      "totals": null,
+      "updated": false,
+      "dry_run_would_update": false
+    }
+  ]
+}

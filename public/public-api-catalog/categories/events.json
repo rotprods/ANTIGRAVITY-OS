@@ -31,8 +31,8 @@
       "business_fit_score": 30,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "events-ticketmaster-developer-ticketmaster-com",
@@ -62,8 +62,8 @@
       "business_fit_score": 30,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "events-eventbrite-eventbrite-com",
@@ -93,8 +93,8 @@
       "business_fit_score": 5,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     }
   ]
 }

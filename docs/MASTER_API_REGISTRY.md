@@ -2,6 +2,14 @@
 
 > **Objetivo**: Documento de referencia para activar progresivamente TODAS las APIs que componen la red de inteligencia del OS. Cada API tiene los pasos exactos para obtener las keys, configurar el `.env`, y activar la edge function correspondiente.
 
+> **Actualización 2026-03-14**: Este documento se mantiene como vista ejecutiva/manual.  
+> El registro canónico operativo ahora vive en:
+> - `public/public-api-catalog/ecosystem-layer.json`
+> - `docs/APIs_PROYECTO.md`
+> - `reports/project-apis.usable-now.json`
+> - `reports/project-apis.pending-registration.json`
+> - `reports/n8n-api-trigger-pack.json`
+
 ---
 
 ## 📊 Estado Actual del Sistema

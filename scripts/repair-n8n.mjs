@@ -1,6 +1,7 @@
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { normalizeN8nApiBase } from '../src/lib/n8nApiConfig.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -188,7 +189,7 @@ async function repairLive(env) {
     throw new Error('N8N_API_URL and N8N_API_KEY are required for --live')
   }
 
-  const baseUrl = env.N8N_API_URL.replace(/\/$/, '')
+  const baseUrl = normalizeN8nApiBase(env.N8N_API_URL)
   const list = await fetchJson(`${baseUrl}/workflows?limit=200`, env.N8N_API_KEY)
   const changed = []
 
@@ -209,7 +210,7 @@ async function exportLiveWorkflows(env) {
     throw new Error('N8N_API_URL and N8N_API_KEY are required for --export-live')
   }
 
-  const baseUrl = env.N8N_API_URL.replace(/\/$/, '')
+  const baseUrl = normalizeN8nApiBase(env.N8N_API_URL)
   const list = await fetchJson(`${baseUrl}/workflows?limit=200`, env.N8N_API_KEY)
   const exported = []
 

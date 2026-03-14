@@ -8,6 +8,17 @@ Provide agents with a one-stop guide to ingest, catalog, and execute against the
 - **Run live actions safely.**
 - **Document expectations for future agents and automations.**
 
+## Current Project State (2026-03-14)
+
+- Public API ecosystem layer is active and synced:
+  - `public/public-api-catalog/ecosystem-layer.json`
+  - `docs/runbooks/public-api-ecosystem-architecture.md`
+  - `docs/APIs_PROYECTO.md`
+- n8n trigger injection is active through bridge reconciliation:
+  - `reports/n8n-api-trigger-pack.json`
+  - `docs/runbooks/public-api-injection-n8n.md`
+- Google APIs should be treated as a high-priority registration track inside the same ecosystem model (`api_catalog_integration_map` + `api_catalog_registration_backlog`), not as an isolated integration track.
+
 ## 1. Collecting the Knowledge
 
 1. **Discovery Service**
@@ -89,6 +100,10 @@ Provide agents with a one-stop guide to ingest, catalog, and execute against the
 
 ## 5. Next Actions for Agents
 
-1. Harvest the latest discovery JSON → persist in Supabase table `google_api_discovery`.
-2. Build a connector template for `cloudasset` and expose it via UI/mini-app.
-3. Script an entry in `docs/MASTER_API_REGISTRY.md` and announce the capability via `docs/session-log.md`.
+1. Harvest latest discovery JSON and map it into `api_catalog_integration_map` using the same schema as public APIs.
+2. Prioritize Google surfaces into registration backlog with direct registration/docs URL:
+   - Gmail, Drive, Sheets, Calendar, Places, Analytics, YouTube.
+3. Build/extend connector templates for approved Google surfaces and expose them via the existing connector path (`api-proxy` + `run_connector`).
+4. Reconcile n8n bridges after each Google activation to propagate API injection packs:
+   - `npm run build:project-apis`
+   - `npm run reconcile-n8n-oculops -- --apply --recent-hours 72`

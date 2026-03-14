@@ -3,6 +3,7 @@
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { normalizeN8nApiBase } from '../src/lib/n8nApiConfig.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -57,10 +58,6 @@ async function loadEnvFile() {
   } catch {
     // .env optional
   }
-}
-
-function normalizeApiBase(url) {
-  return String(url || '').replace(/\/$/, '')
 }
 
 async function fetchJson(url, headers = {}) {
@@ -150,7 +147,7 @@ async function main() {
     return
   }
 
-  const apiBase = normalizeApiBase(process.env.N8N_API_URL)
+  const apiBase = normalizeN8nApiBase(process.env.N8N_API_URL)
   const apiKey = process.env.N8N_API_KEY
 
   if (!apiBase || !apiKey) {

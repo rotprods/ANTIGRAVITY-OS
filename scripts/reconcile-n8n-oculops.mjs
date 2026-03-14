@@ -4,11 +4,15 @@ import fs from 'node:fs/promises'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { createClient } from '@supabase/supabase-js'
+import { buildN8nApiTriggerPack, loadJsonFileIfExists } from '../src/lib/publicApiN8nInjection.js'
+import { normalizeN8nApiBase, resolveN8nWebhookBase } from '../src/lib/n8nApiConfig.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 const ROOT_DIR = path.resolve(__dirname, '..')
 const DEFAULT_REPORT = path.join(ROOT_DIR, 'reports/n8n-oculops-reconcile.json')
+const DEFAULT_ECOSYSTEM_LAYER_PATH = path.join(ROOT_DIR, 'public/public-api-catalog/ecosystem-layer.json')
+const DEFAULT_N8N_TRIGGER_PACK_PATH = path.join(ROOT_DIR, 'reports/n8n-api-trigger-pack.json')
 
 function parseArgs(argv) {
   const args = {
@@ -81,20 +85,6 @@ function normalizeError(error) {
     }
   }
   return String(error)
-}
-
-function getWebhookBase() {
-  const explicit = String(process.env.N8N_WEBHOOK_URL || '').trim()
-  if (explicit) {
-    return explicit.replace(/\/+$/, '').replace(/\/[^/]*$/, '')
-  }
-
-  const api = String(process.env.N8N_API_URL || '').trim().replace(/\/+$/, '')
-  if (api.includes('/api/v1')) {
-    return api.replace(/\/api\/v1$/, '/webhook')
-  }
-
-  return ''
 }
 
 function classifyTriggers(nodes = []) {
@@ -274,6 +264,8 @@ async function upsertAutomationBridge({
   eventKey,
   webhookUrl,
   webhookPath,
+  apiInjection,
+  apiBase,
 }) {
   const existing = existingBridgesByWorkflowId.get(String(workflow.id)) || null
   const agentCodeName = inferAgentCodeName(eventKey)
@@ -298,8 +290,9 @@ async function upsertAutomationBridge({
           workflowTemplate: String(workflow.id),
           workflowTemplateLabel: workflow.name,
           workflowTemplateUrl: `https://n8n.io/workflows/${workflow.id}`,
-          workflowTemplateDownloadUrl: `${process.env.N8N_API_URL?.replace(/\/$/, '') || ''}/workflows/${workflow.id}`,
+          workflowTemplateDownloadUrl: apiBase ? `${apiBase}/workflows/${workflow.id}` : '',
           workflowTemplateSource: 'n8n_live_bridge',
+          apiInjection: apiInjection || null,
         },
       },
     ],
@@ -310,6 +303,14 @@ async function upsertAutomationBridge({
       n8n_workflow_name: workflow.name,
       n8n_webhook_path: webhookPath,
       n8n_webhook_url: webhookUrl,
+      api_injection: apiInjection
+        ? {
+            generated_at: apiInjection.generated_at || null,
+            event_key: apiInjection.event_key || eventKey,
+            module_targets: apiInjection.module_targets || [],
+            totals: apiInjection.totals || {},
+          }
+        : null,
     },
     is_active: true,
   }
@@ -340,7 +341,7 @@ async function main() {
   const args = parseArgs(process.argv.slice(2))
   await loadEnvFile()
 
-  const apiBase = String(process.env.N8N_API_URL || '').replace(/\/$/, '')
+  const apiBase = normalizeN8nApiBase(process.env.N8N_API_URL)
   const apiKey = process.env.N8N_API_KEY
   if (!apiBase || !apiKey) {
     console.error('N8N_API_URL and N8N_API_KEY are required')
@@ -348,7 +349,19 @@ async function main() {
     return
   }
 
-  const webhookBase = getWebhookBase()
+  const webhookBase = resolveN8nWebhookBase({
+    apiUrl: process.env.N8N_API_URL,
+    explicitWebhookUrl: process.env.N8N_WEBHOOK_URL,
+  })
+  const ecosystemLayer = await loadJsonFileIfExists(DEFAULT_ECOSYSTEM_LAYER_PATH)
+  const triggerPackFile = await loadJsonFileIfExists(DEFAULT_N8N_TRIGGER_PACK_PATH)
+  const computedTriggerPack = ecosystemLayer
+    ? buildN8nApiTriggerPack(ecosystemLayer, {
+        generatedAt: new Date().toISOString(),
+        source: 'reconcile-n8n-oculops',
+      })
+    : null
+  const triggerPack = triggerPackFile || computedTriggerPack
   const headers = {
     'X-N8N-API-KEY': apiKey,
     Accept: 'application/json',
@@ -467,6 +480,20 @@ async function main() {
       const eventKey = inferEventKey(detail.name)
       if (eventKey) {
         const webhookUrl = `${webhookBase}/${webhookPath}`
+        const eventPack = triggerPack?.event_packs?.[eventKey] || null
+        const apiInjection = eventPack
+          ? {
+              generated_at: triggerPack.generated_at || null,
+              source: triggerPack.source || null,
+              event_key: eventKey,
+              module_targets: eventPack.module_targets || [],
+              totals: eventPack.totals || {},
+              live_connector_entries: eventPack.live_connector_entries || [],
+              open_direct_entries: eventPack.open_direct_entries || [],
+              installable_entries: eventPack.installable_entries || [],
+              registration_backlog_entries: eventPack.registration_backlog_entries || [],
+            }
+          : null
         try {
           const result = await upsertAutomationBridge({
             supabase,
@@ -475,6 +502,8 @@ async function main() {
             eventKey,
             webhookUrl,
             webhookPath,
+            apiInjection,
+            apiBase,
           })
           bridge = result.mode
           bridgeEvent = eventKey

@@ -65,6 +65,13 @@ async function main() {
       args: ['run', 'build:public-api-ecosystem-layer'],
       required: true,
     })
+
+    steps.push({
+      name: 'Build Project APIs Pack',
+      command: 'npm',
+      args: ['run', 'build:project-apis'],
+      required: true,
+    })
   }
 
   steps.push({

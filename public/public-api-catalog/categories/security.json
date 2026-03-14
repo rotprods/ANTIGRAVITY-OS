@@ -31,8 +31,8 @@
       "business_fit_score": 35,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "security-emailrep-docs-emailrep-io",
@@ -65,8 +65,8 @@
       "business_fit_score": 35,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "security-mozilla-http-scanner-github-com",
@@ -96,8 +96,8 @@
       "business_fit_score": 35,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "security-mozilla-tls-scanner-github-com",
@@ -127,8 +127,8 @@
       "business_fit_score": 35,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "security-national-vulnerability-database-nvd-nist-gov",
@@ -158,8 +158,8 @@
       "business_fit_score": 35,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "security-phishstats-phishstats-info",
@@ -189,8 +189,8 @@
       "business_fit_score": 35,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "security-uk-police-data-police-uk",
@@ -220,8 +220,8 @@
       "business_fit_score": 35,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "security-virushee-api-virushee-com",
@@ -251,8 +251,8 @@
       "business_fit_score": 35,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "security-censys-search-censys-io",
@@ -282,8 +282,8 @@
       "business_fit_score": 30,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "security-complete-criminal-checks-completecriminalchecks-com",
@@ -313,8 +313,8 @@
       "business_fit_score": 30,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "security-crxcavator-crxcavator-io",
@@ -344,8 +344,8 @@
       "business_fit_score": 30,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "security-fullhunt-api-docs-fullhunt-io",
@@ -375,8 +375,8 @@
       "business_fit_score": 30,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "security-gitguardian-api-gitguardian-com",
@@ -406,8 +406,8 @@
       "business_fit_score": 30,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "security-greynoise-docs-greynoise-io",
@@ -437,8 +437,8 @@
       "business_fit_score": 30,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "security-hackerone-api-hackerone-com",
@@ -468,8 +468,8 @@
       "business_fit_score": 30,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "security-haveibeenpwned-haveibeenpwned-com",
@@ -499,8 +499,8 @@
       "business_fit_score": 30,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "security-pulsedive-pulsedive-com",
@@ -530,8 +530,8 @@
       "business_fit_score": 30,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "security-shodan-developer-shodan-io",
@@ -561,8 +561,8 @@
       "business_fit_score": 30,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "security-spyse-spyse-dev-readme-io",
@@ -592,8 +592,8 @@
       "business_fit_score": 30,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "security-threat-jammer-threatjammer-com",
@@ -623,8 +623,8 @@
       "business_fit_score": 30,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "security-dehash-lt-github-com",
@@ -654,8 +654,8 @@
       "business_fit_score": 15,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "security-escape-github-com",
@@ -685,8 +685,8 @@
       "business_fit_score": 15,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "security-filterlists-filterlists-com",
@@ -716,8 +716,8 @@
       "business_fit_score": 15,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "security-hashable-hashable-space",
@@ -747,8 +747,8 @@
       "business_fit_score": 15,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "security-microsoft-security-response-center-msrc-msrc-microsoft-com",
@@ -778,8 +778,8 @@
       "business_fit_score": 15,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "security-passwordinator-github-com",
@@ -809,8 +809,8 @@
       "business_fit_score": 15,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "security-application-environment-verification-github-com",
@@ -840,8 +840,8 @@
       "business_fit_score": 10,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "security-binaryedge-docs-binaryedge-io",
@@ -871,8 +871,8 @@
       "business_fit_score": 10,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "security-botd-github-com",
@@ -902,8 +902,8 @@
       "business_fit_score": 10,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "security-bugcrowd-docs-bugcrowd-com",
@@ -936,8 +936,8 @@
       "business_fit_score": 10,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "security-fingerprintjs-pro-dev-fingerprintjs-com",
@@ -967,8 +967,8 @@
       "business_fit_score": 10,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "security-fraudlabs-pro-fraudlabspro-com",
@@ -998,8 +998,8 @@
       "business_fit_score": 10,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "security-intelligence-x-github-com",
@@ -1029,8 +1029,8 @@
       "business_fit_score": 10,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "security-loginradius-loginradius-com",
@@ -1060,8 +1060,8 @@
       "business_fit_score": 10,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "security-privacy-com-privacy-com",
@@ -1091,8 +1091,8 @@
       "business_fit_score": 10,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "security-securitytrails-securitytrails-com",
@@ -1122,8 +1122,8 @@
       "business_fit_score": 10,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "security-vuldb-vuldb-com",
@@ -1153,8 +1153,8 @@
       "business_fit_score": 10,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     },
     {
       "slug": "security-bitwarden-bitwarden-com",
@@ -1184,8 +1184,8 @@
       "business_fit_score": 5,
       "activation_tier": "catalog_only",
       "is_listed": true,
-      "first_seen_at": "2026-03-14T00:28:14.431Z",
-      "last_seen_at": "2026-03-14T00:28:14.431Z"
+      "first_seen_at": "2026-03-14T01:44:18.075Z",
+      "last_seen_at": "2026-03-14T01:44:18.075Z"
     }
   ]
 }
