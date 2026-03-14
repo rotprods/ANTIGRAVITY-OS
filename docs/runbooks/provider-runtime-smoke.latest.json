@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-03-13T06:48:31.900Z",
+  "generated_at": "2026-03-14T05:32:00.273Z",
   "flags": {
     "strict": false,
-    "bootstrapWhatsApp": true,
-    "syncGmail": true
+    "bootstrapWhatsApp": false,
+    "syncGmail": false
   },
   "runtime": {
-    "generated_at": "2026-03-13T06:48:31.902Z",
+    "generated_at": "2026-03-14T05:32:00.136Z",
     "providers": {
       "gmail": {
         "provider": "gmail",
@@ -71,26 +71,40 @@
     }
   },
   "channels_summary": {
-    "total": 0,
-    "active": 0,
+    "total": 1,
+    "active": 1,
     "connecting": 0,
     "disconnected": 0,
-    "by_type": {}
+    "by_type": {
+      "email": 1
+    }
   },
-  "channels": [],
+  "channels": [
+    {
+      "id": "1003d3c7-12e0-4b3f-a53e-833d454a02d9",
+      "type": "email",
+      "provider": "synthetic_gmail",
+      "status": "active",
+      "is_default": true,
+      "email_address": "synthetic-harness@oculops.local",
+      "phone_number": null,
+      "last_error": null,
+      "updated_at": "2026-03-13T08:49:24.514926+00:00"
+    }
+  ],
   "actions": {
     "whatsapp_bootstrap": {
-      "attempted": true,
+      "attempted": false,
       "created_or_updated": false,
       "channel_id": null,
-      "error": "whatsapp runtime is not outbound-ready"
+      "error": null
     },
     "gmail_sync": {
-      "attempted": true,
+      "attempted": false,
       "ok": false,
       "synced": null,
       "history_id": null,
-      "error": "no active gmail channel or runtime not ready for sync"
+      "error": null
     }
   },
   "artifacts": {

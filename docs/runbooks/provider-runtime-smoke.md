@@ -1,6 +1,6 @@
 # Provider Runtime Smoke
 
-Generated at: 2026-03-13T06:48:31.900Z
+Generated at: 2026-03-14T05:32:00.273Z
 Strict mode: off
 
 ## Summary
@@ -9,7 +9,7 @@ Strict mode: off
 - Outbound ready (whatsapp): false
 - Inbound ready (gmail): true
 - Inbound ready (whatsapp): false
-- Active channels: 0
+- Active channels: 1
 
 ## Missing Required
 
@@ -18,9 +18,9 @@ Strict mode: off
 
 ## Actions
 
-- WhatsApp bootstrap attempted: true
+- WhatsApp bootstrap attempted: false
 - WhatsApp bootstrap created_or_updated: false
-- Gmail sync attempted: true
+- Gmail sync attempted: false
 - Gmail sync ok: false
 
 ## Artifacts

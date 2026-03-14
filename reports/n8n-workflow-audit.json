@@ -1,181 +1,189 @@
 {
   "summary": {
-    "generatedAt": "2026-03-14T00:15:52.773Z",
-    "totalWorkflowsInN8n": 27,
-    "auditedWorkflows": 27,
+    "generatedAt": "2026-03-14T05:32:17.730Z",
+    "totalWorkflowsInN8n": 200,
+    "auditedWorkflows": 200,
     "recentHours": 48,
-    "runnableNow": 19,
-    "activatableNow": 16,
-    "activeNow": 14,
-    "blockedByCredentials": 7,
-    "blockedByCommunityNodes": 7,
+    "runnableNow": 39,
+    "activatableNow": 14,
+    "activeNow": 2,
+    "blockedByCredentials": 161,
+    "blockedByCommunityNodes": 3,
     "missingCredentialTypes": [
-      "perplexityApi",
-      "blotatoApi",
+      "youTubeOAuth2Api",
+      "googleSheetsOAuth2Api",
+      "slackApi",
+      "erpNextApi",
+      "googlePalmApi",
+      "microsoftOutlookOAuth2Api",
+      "whatsAppApi",
+      "airtableTokenApi",
+      "notionApi",
+      "zendeskApi",
+      "googleCalendarOAuth2Api",
+      "openAiApi",
+      "n8nApi",
+      "googleSheetsTriggerOAuth2Api",
+      "slackOAuth2Api",
+      "hubspotOAuth2Api",
+      "httpBasicAuth",
+      "httpHeaderAuth",
+      "googleDriveOAuth2Api",
+      "stravaOAuth2Api",
+      "twitterOAuth1Api",
+      "googleDocsOAuth2Api",
+      "githubApi",
+      "httpCustomAuth",
       "openRouterApi",
-      "postizApi"
+      "wooCommerceApi",
+      "gumroadApi",
+      "httpBearerAuth",
+      "postgres",
+      "qdrantApi",
+      "strapiApi",
+      "googleCloudNaturalLanguageOAuth2Api",
+      "zoomOAuth2Api",
+      "clickUpOAuth2Api",
+      "anthropicApi",
+      "ollamaApi",
+      "googleAdsOAuth2Api",
+      "nocoDbApiToken",
+      "redis",
+      "groqApi",
+      "microsoftExcelOAuth2Api",
+      "discordBotApi",
+      "googleApi",
+      "googleOAuth2Api",
+      "imap",
+      "mindeeInvoiceApi",
+      "onfleetApi",
+      "shopifyApi",
+      "gongApi",
+      "salesforceOAuth2Api",
+      "s3",
+      "httpQueryAuth",
+      "pipedriveApi",
+      "pushoverApi",
+      "openWeatherMapApi",
+      "twilioApi",
+      "hubspotDeveloperApi",
+      "serpApi",
+      "kafka",
+      "vonageApi",
+      "googlePerspectiveOAuth2Api",
+      "shopifyAccessTokenApi",
+      "mauticOAuth2Api",
+      "mattermostApi",
+      "mySql",
+      "rocketchatApi",
+      "mindeeReceiptApi",
+      "contentfulApi",
+      "helpScoutOAuth2Api",
+      "bannerbearApi",
+      "baserowApi",
+      "sendGridApi",
+      "yourlsApi",
+      "quickbaseApi",
+      "getResponseApi",
+      "clickUpApi",
+      "airtableApi",
+      "mailchimpApi",
+      "linkedInOAuth2Api",
+      "serviceNowBasicApi",
+      "hubspotApi",
+      "twitterOAuth2Api",
+      "azureOpenAiApi",
+      "nasaApi",
+      "jiraSoftwareCloudApi",
+      "facebookLeadAdsOAuth2Api",
+      "klickTippApi",
+      "facebookGraphAppApi",
+      "deepSeekApi",
+      "sshPassword",
+      "agileCrmApi",
+      "dropcontactApi",
+      "aws",
+      "jotFormApi"
     ],
     "missingCommunityNodePackages": [
-      "@blotato/n8n-nodes-blotato",
-      "n8n-nodes-postiz"
+      "n8n-nodes-exif-data",
+      "n8n-nodes-klicktipp"
     ]
   },
   "details": [
     {
-      "id": "4AUtQfEwx9VuH6uW",
-      "name": "My workflow",
-      "active": false,
-      "updatedAt": "2026-03-13T23:21:33.708Z",
+      "id": "1asjQ7scTKX04jU3",
+      "name": "������ Master Multi-Agent Full Cycle (Daily 7AM)",
+      "active": true,
+      "updatedAt": "2026-03-14T05:16:34.111Z",
       "triggers": [
-        "manual"
+        "schedule"
       ],
-      "nodeCount": 2,
+      "nodeCount": 11,
       "requiredCredentialTypes": [
-        "openAiApi"
+        "smtp"
       ],
       "missingCredentialTypes": [],
       "customNodePackages": [],
       "customNodeTypes": [],
       "requiresCommunityNodes": false,
       "runnableNow": true,
+      "activatableNow": true
+    },
+    {
+      "id": "1lsbgQXEPhhiZgvw",
+      "name": "[Youtube] Set Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:17:09.277Z",
+      "triggers": [
+        "manual"
+      ],
+      "nodeCount": 7,
+      "requiredCredentialTypes": [
+        "youTubeOAuth2Api",
+        "telegramApi"
+      ],
+      "missingCredentialTypes": [
+        "youTubeOAuth2Api"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
       "activatableNow": false
     },
     {
-      "id": "uPSDrhgXNz4UtYNL",
-      "name": "Automate video creation with Veo3 and auto-post to Instagram, TikTok via Blotato - vide",
-      "active": true,
-      "updatedAt": "2026-03-13T06:58:23.045Z",
+      "id": "1VauvNhXGeZZ31jw",
+      "name": "[Xml] Xml Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:17:09.238Z",
       "triggers": [
-        "schedule"
+        "webhook"
+      ],
+      "nodeCount": 4,
+      "requiredCredentialTypes": [],
+      "missingCredentialTypes": [],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": true,
+      "activatableNow": true
+    },
+    {
+      "id": "25hZJjy6mbM23K4j",
+      "name": "[Webhook] Unique QRcode coupon assignment and validation for Lead Generation system",
+      "active": false,
+      "updatedAt": "2026-03-14T01:17:08.303Z",
+      "triggers": [
+        "webhook"
       ],
       "nodeCount": 29,
       "requiredCredentialTypes": [
         "googleSheetsOAuth2Api",
-        "openAiApi",
-        "httpHeaderAuth"
-      ],
-      "missingCredentialTypes": [],
-      "customNodePackages": [],
-      "customNodeTypes": [],
-      "requiresCommunityNodes": false,
-      "runnableNow": true,
-      "activatableNow": true
-    },
-    {
-      "id": "w1zjD0xMsGXsFzXg",
-      "name": "Create Video with Google Veo3 and Upload to Youtube",
-      "active": false,
-      "updatedAt": "2026-03-13T06:58:22.902Z",
-      "triggers": [
-        "manual",
-        "schedule"
-      ],
-      "nodeCount": 23,
-      "requiredCredentialTypes": [],
-      "missingCredentialTypes": [],
-      "customNodePackages": [],
-      "customNodeTypes": [],
-      "requiresCommunityNodes": false,
-      "runnableNow": true,
-      "activatableNow": true
-    },
-    {
-      "id": "atz5X3DYUeN8x6mX",
-      "name": "💥 Viral TikTok Video Machine: Auto-Create UGC with VEED Avatars -vide",
-      "active": false,
-      "updatedAt": "2026-03-13T06:58:22.693Z",
-      "triggers": [],
-      "nodeCount": 35,
-      "requiredCredentialTypes": [
-        "telegramApi",
-        "perplexityApi",
-        "openAiApi",
-        "googleSheetsOAuth2Api",
-        "blotatoApi"
+        "smtp"
       ],
       "missingCredentialTypes": [
-        "perplexityApi",
-        "blotatoApi"
-      ],
-      "customNodePackages": [
-        "@blotato/n8n-nodes-blotato"
-      ],
-      "customNodeTypes": [
-        "@blotato/n8n-nodes-blotato.blotato"
-      ],
-      "requiresCommunityNodes": true,
-      "runnableNow": false,
-      "activatableNow": false
-    },
-    {
-      "id": "8vac8DPRTi5P7JdX",
-      "name": "💥 Generate AI viral videos with NanoBanana & VEO3, shared on socials via Blotato - vide",
-      "active": false,
-      "updatedAt": "2026-03-13T06:58:22.443Z",
-      "triggers": [],
-      "nodeCount": 47,
-      "requiredCredentialTypes": [
-        "blotatoApi",
-        "googleSheetsOAuth2Api",
-        "openAiApi",
-        "telegramApi",
-        "httpHeaderAuth",
-        "googleDriveOAuth2Api"
-      ],
-      "missingCredentialTypes": [
-        "blotatoApi"
-      ],
-      "customNodePackages": [
-        "@blotato/n8n-nodes-blotato"
-      ],
-      "customNodeTypes": [
-        "@blotato/n8n-nodes-blotato.blotato"
-      ],
-      "requiresCommunityNodes": true,
-      "runnableNow": false,
-      "activatableNow": false
-    },
-    {
-      "id": "IQB6I9mXuF34dhuS",
-      "name": "💥 Generate AI Videos with Seedance & Blotato and Upload to TikTok, YouTube & Instagram - version II - vide",
-      "active": false,
-      "updatedAt": "2026-03-13T06:58:22.275Z",
-      "triggers": [
-        "schedule"
-      ],
-      "nodeCount": 40,
-      "requiredCredentialTypes": [
-        "googleSheetsOAuth2Api",
-        "openAiApi",
-        "httpHeaderAuth",
-        "blotatoApi"
-      ],
-      "missingCredentialTypes": [
-        "blotatoApi"
-      ],
-      "customNodePackages": [
-        "@blotato/n8n-nodes-blotato"
-      ],
-      "customNodeTypes": [
-        "@blotato/n8n-nodes-blotato.blotato"
-      ],
-      "requiresCommunityNodes": true,
-      "runnableNow": false,
-      "activatableNow": false
-    },
-    {
-      "id": "DkqoOmkeSgRgy4o3",
-      "name": "Use skills In n8n agent node",
-      "active": false,
-      "updatedAt": "2026-03-13T06:58:22.077Z",
-      "triggers": [],
-      "nodeCount": 21,
-      "requiredCredentialTypes": [
-        "githubApi",
-        "openRouterApi"
-      ],
-      "missingCredentialTypes": [
-        "openRouterApi"
+        "googleSheetsOAuth2Api"
       ],
       "customNodePackages": [],
       "customNodeTypes": [],
@@ -184,152 +192,10 @@
       "activatableNow": false
     },
     {
-      "id": "5IOOWvQ4UP4d5X0K",
-      "name": "n8n Basics",
+      "id": "5wYc5nBCFG2YAe0g",
+      "name": "[Webhook] Validate Seatable Webhooks with HMAC SHA256 Authentication",
       "active": false,
-      "updatedAt": "2026-03-13T06:58:21.931Z",
-      "triggers": [
-        "schedule",
-        "manual"
-      ],
-      "nodeCount": 25,
-      "requiredCredentialTypes": [
-        "gmailOAuth2"
-      ],
-      "missingCredentialTypes": [],
-      "customNodePackages": [],
-      "customNodeTypes": [],
-      "requiresCommunityNodes": false,
-      "runnableNow": true,
-      "activatableNow": true
-    },
-    {
-      "id": "9o84jdBGlA6IQ4Sh",
-      "name": "💥 Generate AI Viral Videos with VEO 3 and Upload to TikTok ",
-      "active": false,
-      "updatedAt": "2026-03-13T06:58:21.319Z",
-      "triggers": [
-        "schedule"
-      ],
-      "nodeCount": 24,
-      "requiredCredentialTypes": [
-        "googleSheetsOAuth2Api",
-        "openAiApi",
-        "httpHeaderAuth",
-        "blotatoApi"
-      ],
-      "missingCredentialTypes": [
-        "blotatoApi"
-      ],
-      "customNodePackages": [
-        "@blotato/n8n-nodes-blotato"
-      ],
-      "customNodeTypes": [
-        "@blotato/n8n-nodes-blotato.blotato"
-      ],
-      "requiresCommunityNodes": true,
-      "runnableNow": false,
-      "activatableNow": false
-    },
-    {
-      "id": "BW4CdXZhSEshfC7W",
-      "name": "Analyze contract risk from PDFs with OpenAI, Supabase and Slack alerts",
-      "active": false,
-      "updatedAt": "2026-03-13T06:58:20.701Z",
-      "triggers": [
-        "manual"
-      ],
-      "nodeCount": 31,
-      "requiredCredentialTypes": [
-        "openAiApi"
-      ],
-      "missingCredentialTypes": [],
-      "customNodePackages": [],
-      "customNodeTypes": [],
-      "requiresCommunityNodes": false,
-      "runnableNow": true,
-      "activatableNow": false
-    },
-    {
-      "id": "bmfRyG1Or1PXjiKE",
-      "name": "Claude Canva Files → Blotato",
-      "active": false,
-      "updatedAt": "2026-03-13T06:58:20.467Z",
-      "triggers": [
-        "webhook"
-      ],
-      "nodeCount": 15,
-      "requiredCredentialTypes": [],
-      "missingCredentialTypes": [],
-      "customNodePackages": [
-        "@blotato/n8n-nodes-blotato"
-      ],
-      "customNodeTypes": [
-        "@blotato/n8n-nodes-blotato.blotato"
-      ],
-      "requiresCommunityNodes": true,
-      "runnableNow": false,
-      "activatableNow": false
-    },
-    {
-      "id": "zFu72IiAMJXM1eLw",
-      "name": "💥 Generate AI videos and carousels with Blotato and publish to Instagram & TikTok",
-      "active": false,
-      "updatedAt": "2026-03-13T06:58:20.255Z",
-      "triggers": [],
-      "nodeCount": 13,
-      "requiredCredentialTypes": [
-        "blotatoApi",
-        "openAiApi",
-        "telegramApi"
-      ],
-      "missingCredentialTypes": [
-        "blotatoApi"
-      ],
-      "customNodePackages": [
-        "@blotato/n8n-nodes-blotato"
-      ],
-      "customNodeTypes": [
-        "@blotato/n8n-nodes-blotato.blotatoTool"
-      ],
-      "requiresCommunityNodes": true,
-      "runnableNow": false,
-      "activatableNow": false
-    },
-    {
-      "id": "RvGMut9HRR7PQPc3",
-      "name": "Automated Long Video Creator",
-      "active": false,
-      "updatedAt": "2026-03-13T06:57:40.822Z",
-      "triggers": [
-        "manual"
-      ],
-      "nodeCount": 35,
-      "requiredCredentialTypes": [
-        "googleDriveOAuth2Api",
-        "httpHeaderAuth",
-        "postizApi",
-        "googleSheetsOAuth2Api",
-        "httpBearerAuth"
-      ],
-      "missingCredentialTypes": [
-        "postizApi"
-      ],
-      "customNodePackages": [
-        "n8n-nodes-postiz"
-      ],
-      "customNodeTypes": [
-        "n8n-nodes-postiz.postiz"
-      ],
-      "requiresCommunityNodes": true,
-      "runnableNow": false,
-      "activatableNow": false
-    },
-    {
-      "id": "mzW6Gywl0JhIo2Ld",
-      "name": "OCULOPS — Lead to CRM Pipeline",
-      "active": true,
-      "updatedAt": "2026-03-12T16:02:12.857Z",
+      "updatedAt": "2026-03-14T01:17:08.219Z",
       "triggers": [
         "webhook"
       ],
@@ -343,226 +209,669 @@
       "activatableNow": true
     },
     {
-      "id": "Cb3QWkIdcEExqXHN",
-      "name": "OCULOPS — Drip Outreach Sequence",
-      "active": true,
-      "updatedAt": "2026-03-12T16:02:12.117Z",
-      "triggers": [
-        "schedule"
-      ],
-      "nodeCount": 6,
-      "requiredCredentialTypes": [],
-      "missingCredentialTypes": [],
-      "customNodePackages": [],
-      "customNodeTypes": [],
-      "requiresCommunityNodes": false,
-      "runnableNow": true,
-      "activatableNow": true
-    },
-    {
-      "id": "B3POqt2YaDDL9apO",
-      "name": "OCULOPS — Lead to CRM Pipeline",
-      "active": true,
-      "updatedAt": "2026-03-12T16:02:11.512Z",
-      "triggers": [
-        "webhook"
-      ],
-      "nodeCount": 5,
-      "requiredCredentialTypes": [],
-      "missingCredentialTypes": [],
-      "customNodePackages": [],
-      "customNodeTypes": [],
-      "requiresCommunityNodes": false,
-      "runnableNow": true,
-      "activatableNow": true
-    },
-    {
-      "id": "xx7yig8aOh7TgzJF",
-      "name": "🎯 Speed-to-Lead — Instant Lead Response Pipeline",
-      "active": true,
-      "updatedAt": "2026-03-12T14:48:52.029Z",
-      "triggers": [
-        "webhook"
-      ],
-      "nodeCount": 5,
-      "requiredCredentialTypes": [],
-      "missingCredentialTypes": [],
-      "customNodePackages": [],
-      "customNodeTypes": [],
-      "requiresCommunityNodes": false,
-      "runnableNow": true,
-      "activatableNow": true
-    },
-    {
-      "id": "t09HSa4rUgqw3YBj",
-      "name": "🔄 Master Multi-Agent Full Cycle (Daily 7AM)",
-      "active": true,
-      "updatedAt": "2026-03-12T14:48:51.589Z",
-      "triggers": [
-        "schedule"
-      ],
-      "nodeCount": 11,
-      "requiredCredentialTypes": [
-        "gmailOAuth2"
-      ],
-      "missingCredentialTypes": [],
-      "customNodePackages": [],
-      "customNodeTypes": [],
-      "requiresCommunityNodes": false,
-      "runnableNow": true,
-      "activatableNow": true
-    },
-    {
-      "id": "nEcKl1IBscyiupYX",
-      "name": "FORGE — Content Generation (On Webhook)",
-      "active": true,
-      "updatedAt": "2026-03-12T14:48:50.982Z",
-      "triggers": [
-        "webhook"
-      ],
-      "nodeCount": 3,
-      "requiredCredentialTypes": [],
-      "missingCredentialTypes": [],
-      "customNodePackages": [],
-      "customNodeTypes": [],
-      "requiresCommunityNodes": false,
-      "runnableNow": true,
-      "activatableNow": true
-    },
-    {
-      "id": "jlorHoQTi8WYIzpR",
-      "name": "STRATEGIST — Decision Evaluation (On Webhook)",
-      "active": true,
-      "updatedAt": "2026-03-12T14:48:50.448Z",
-      "triggers": [
-        "webhook"
-      ],
-      "nodeCount": 3,
-      "requiredCredentialTypes": [],
-      "missingCredentialTypes": [],
-      "customNodePackages": [],
-      "customNodeTypes": [],
-      "requiresCommunityNodes": false,
-      "runnableNow": true,
-      "activatableNow": true
-    },
-    {
-      "id": "fytMConk15YogJzE",
-      "name": "HERALD — Daily Telegram Briefing (8AM)",
-      "active": true,
-      "updatedAt": "2026-03-12T14:48:50.030Z",
-      "triggers": [
-        "schedule"
-      ],
-      "nodeCount": 3,
-      "requiredCredentialTypes": [],
-      "missingCredentialTypes": [],
-      "customNodePackages": [],
-      "customNodeTypes": [],
-      "requiresCommunityNodes": false,
-      "runnableNow": true,
-      "activatableNow": true
-    },
-    {
-      "id": "EB8LpcVZ3A5KNq04",
-      "name": "SCRIBE — Weekly Intelligence Email Report",
-      "active": true,
-      "updatedAt": "2026-03-12T14:48:49.559Z",
-      "triggers": [
-        "schedule"
-      ],
-      "nodeCount": 5,
-      "requiredCredentialTypes": [
-        "gmailOAuth2"
-      ],
-      "missingCredentialTypes": [],
-      "customNodePackages": [],
-      "customNodeTypes": [],
-      "requiresCommunityNodes": false,
-      "runnableNow": true,
-      "activatableNow": true
-    },
-    {
-      "id": "Aj2QYpoK9gPF4ss3",
-      "name": "📧 OUTREACH — Gmail Sender (Approved Emails)",
-      "active": true,
-      "updatedAt": "2026-03-12T14:48:48.986Z",
-      "triggers": [
-        "schedule"
-      ],
-      "nodeCount": 9,
-      "requiredCredentialTypes": [
-        "gmailOAuth2"
-      ],
-      "missingCredentialTypes": [],
-      "customNodePackages": [],
-      "customNodeTypes": [],
-      "requiresCommunityNodes": false,
-      "runnableNow": true,
-      "activatableNow": true
-    },
-    {
-      "id": "3MjuRbcZNCfCgSdF",
-      "name": "CORTEX — Full Orchestration Cycle (Every Hour)",
-      "active": true,
-      "updatedAt": "2026-03-12T14:48:48.617Z",
-      "triggers": [
-        "schedule"
-      ],
-      "nodeCount": 6,
-      "requiredCredentialTypes": [],
-      "missingCredentialTypes": [],
-      "customNodePackages": [],
-      "customNodeTypes": [],
-      "requiresCommunityNodes": false,
-      "runnableNow": true,
-      "activatableNow": true
-    },
-    {
-      "id": "0DZ85XMTdbaprhn6",
-      "name": "🔭 HUNTER — Daily Lead Prospection (Autopilot)",
-      "active": true,
-      "updatedAt": "2026-03-12T14:48:48.192Z",
-      "triggers": [
-        "schedule"
-      ],
-      "nodeCount": 3,
-      "requiredCredentialTypes": [
-        "gmailOAuth2"
-      ],
-      "missingCredentialTypes": [],
-      "customNodePackages": [],
-      "customNodeTypes": [],
-      "requiresCommunityNodes": false,
-      "runnableNow": true,
-      "activatableNow": true
-    },
-    {
-      "id": "p8JXWxdpyJ7BM96U",
-      "name": "ARCHITECT OS - Auto Handoff",
-      "active": true,
-      "updatedAt": "2026-03-12T14:37:46.333Z",
-      "triggers": [
-        "webhook"
-      ],
-      "nodeCount": 6,
-      "requiredCredentialTypes": [
-        "gmailOAuth2"
-      ],
-      "missingCredentialTypes": [],
-      "customNodePackages": [],
-      "customNodeTypes": [],
-      "requiresCommunityNodes": false,
-      "runnableNow": true,
-      "activatableNow": true
-    },
-    {
-      "id": "JO8SZ6BKp3z8hBI6",
-      "name": "Transformador de Fotos a Lujo",
+      "id": "34ythZScEsPfqhif",
+      "name": "[Webhook] Set Workflow",
       "active": false,
-      "updatedAt": "2026-03-12T13:10:59.598Z",
+      "updatedAt": "2026-03-14T01:17:07.712Z",
+      "triggers": [
+        "webhook"
+      ],
+      "nodeCount": 23,
+      "requiredCredentialTypes": [
+        "slackApi"
+      ],
+      "missingCredentialTypes": [
+        "slackApi"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "4AaNgvJKu9JBoJ3O",
+      "name": "[Webhook] Stickynote Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:17:07.425Z",
+      "triggers": [
+        "webhook"
+      ],
+      "nodeCount": 39,
+      "requiredCredentialTypes": [
+        "erpNextApi",
+        "googlePalmApi",
+        "microsoftOutlookOAuth2Api",
+        "whatsAppApi"
+      ],
+      "missingCredentialTypes": [
+        "erpNextApi",
+        "googlePalmApi",
+        "microsoftOutlookOAuth2Api",
+        "whatsAppApi"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "2oBWGiXaA7ddPwtp",
+      "name": "[Webhook] Webhook Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:17:07.041Z",
+      "triggers": [
+        "webhook"
+      ],
+      "nodeCount": 14,
+      "requiredCredentialTypes": [
+        "airtableTokenApi",
+        "googleSheetsOAuth2Api",
+        "notionApi"
+      ],
+      "missingCredentialTypes": [
+        "airtableTokenApi",
+        "googleSheetsOAuth2Api",
+        "notionApi"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "2Etb13cJ7SUy6eDv",
+      "name": "[Webhook] Stickynote Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:17:06.780Z",
+      "triggers": [
+        "webhook"
+      ],
+      "nodeCount": 33,
+      "requiredCredentialTypes": [
+        "zendeskApi",
+        "airtableTokenApi",
+        "googleSheetsOAuth2Api",
+        "googleCalendarOAuth2Api"
+      ],
+      "missingCredentialTypes": [
+        "zendeskApi",
+        "airtableTokenApi",
+        "googleSheetsOAuth2Api",
+        "googleCalendarOAuth2Api"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "4RXDs6s9SDn6X5Ne",
+      "name": "[Webhook] Manualtrigger Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:17:06.647Z",
+      "triggers": [
+        "manual",
+        "webhook",
+        "schedule"
+      ],
+      "nodeCount": 34,
+      "requiredCredentialTypes": [
+        "openAiApi",
+        "n8nApi"
+      ],
+      "missingCredentialTypes": [
+        "openAiApi",
+        "n8nApi"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "0UJNbk6E9CWQEox8",
+      "name": "[Webhook] Respondtowebhook Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:17:06.307Z",
+      "triggers": [
+        "webhook"
+      ],
+      "nodeCount": 20,
+      "requiredCredentialTypes": [
+        "openAiApi",
+        "slackApi"
+      ],
+      "missingCredentialTypes": [
+        "openAiApi",
+        "slackApi"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "304uUgFa0BCBkKfZ",
+      "name": "[Webhook] Slack Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:17:06.147Z",
+      "triggers": [
+        "webhook"
+      ],
+      "nodeCount": 34,
+      "requiredCredentialTypes": [
+        "slackApi"
+      ],
+      "missingCredentialTypes": [
+        "slackApi"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "35PAovqF9Hmyf68r",
+      "name": "[Wait] Namesilo Bulk Domain Availability [Template]",
+      "active": false,
+      "updatedAt": "2026-03-14T01:17:05.300Z",
+      "triggers": [
+        "manual"
+      ],
+      "nodeCount": 10,
+      "requiredCredentialTypes": [],
+      "missingCredentialTypes": [],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": true,
+      "activatableNow": false
+    },
+    {
+      "id": "2ngRMT1iLQdKhiYP",
+      "name": "[Wait] N_01_Simple_Lead_Tracker_Automation_v4",
+      "active": false,
+      "updatedAt": "2026-03-14T01:17:05.175Z",
       "triggers": [],
+      "nodeCount": 15,
+      "requiredCredentialTypes": [
+        "googleSheetsTriggerOAuth2Api",
+        "slackOAuth2Api",
+        "gmailOAuth2",
+        "hubspotOAuth2Api"
+      ],
+      "missingCredentialTypes": [
+        "googleSheetsTriggerOAuth2Api",
+        "slackOAuth2Api",
+        "hubspotOAuth2Api"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "47LwhLvCKa7m27le",
+      "name": "[Wait] spy tool",
+      "active": false,
+      "updatedAt": "2026-03-14T01:17:05.088Z",
+      "triggers": [],
+      "nodeCount": 14,
+      "requiredCredentialTypes": [
+        "openAiApi",
+        "gmailOAuth2",
+        "httpBasicAuth",
+        "httpHeaderAuth"
+      ],
+      "missingCredentialTypes": [
+        "openAiApi",
+        "httpBasicAuth",
+        "httpHeaderAuth"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "0cySdEOWhDt59Q11",
+      "name": "[Wait] Flux Dev Image Generation Fal.ai",
+      "active": false,
+      "updatedAt": "2026-03-14T01:17:03.979Z",
+      "triggers": [
+        "manual"
+      ],
       "nodeCount": 12,
+      "requiredCredentialTypes": [
+        "httpHeaderAuth",
+        "googleDriveOAuth2Api"
+      ],
+      "missingCredentialTypes": [
+        "httpHeaderAuth",
+        "googleDriveOAuth2Api"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "5KGTCNyKDFzud2ju",
+      "name": "[Wait] Create Animated Stories using GPT-4o-mini, Midjourney, Kling and Creatomate API",
+      "active": false,
+      "updatedAt": "2026-03-14T01:17:03.813Z",
+      "triggers": [
+        "manual"
+      ],
+      "nodeCount": 51,
+      "requiredCredentialTypes": [],
+      "missingCredentialTypes": [],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": true,
+      "activatableNow": false
+    },
+    {
+      "id": "5m5cLZV1qzmzNYUI",
+      "name": "[Wait] Stickynote Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:17:03.019Z",
+      "triggers": [],
+      "nodeCount": 15,
+      "requiredCredentialTypes": [
+        "googleSheetsOAuth2Api"
+      ],
+      "missingCredentialTypes": [
+        "googleSheetsOAuth2Api"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "0KlhXrm61LRmBYro",
+      "name": "[Wait] Executeworkflowtrigger Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:17:02.681Z",
+      "triggers": [],
+      "nodeCount": 25,
+      "requiredCredentialTypes": [
+        "notionApi"
+      ],
+      "missingCredentialTypes": [
+        "notionApi"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "4LL2wKcpxj4MfRzP",
+      "name": "[Wait] Manualtrigger Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:17:02.502Z",
+      "triggers": [
+        "manual"
+      ],
+      "nodeCount": 88,
+      "requiredCredentialTypes": [
+        "googleSheetsOAuth2Api"
+      ],
+      "missingCredentialTypes": [
+        "googleSheetsOAuth2Api"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "3MTFXcTrI52gzxCG",
+      "name": "[Wait] Lmopenai Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:17:01.693Z",
+      "triggers": [],
+      "nodeCount": 26,
+      "requiredCredentialTypes": [
+        "openAiApi",
+        "httpHeaderAuth",
+        "gmailOAuth2",
+        "googleSheetsOAuth2Api"
+      ],
+      "missingCredentialTypes": [
+        "openAiApi",
+        "httpHeaderAuth",
+        "googleSheetsOAuth2Api"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "3Hc8vR9YKBDv863W",
+      "name": "[Wait] Httprequest Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:17:01.525Z",
+      "triggers": [
+        "webhook"
+      ],
+      "nodeCount": 29,
+      "requiredCredentialTypes": [],
+      "missingCredentialTypes": [],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": true,
+      "activatableNow": true
+    },
+    {
+      "id": "1AdvejTs5Oj1kgu5",
+      "name": "[Twitter] Receive updates when a new activity gets created and tweet about it",
+      "active": false,
+      "updatedAt": "2026-03-14T01:17:00.980Z",
+      "triggers": [],
+      "nodeCount": 3,
+      "requiredCredentialTypes": [
+        "stravaOAuth2Api",
+        "twitterOAuth1Api"
+      ],
+      "missingCredentialTypes": [
+        "stravaOAuth2Api",
+        "twitterOAuth1Api"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "0AthZZjvpivfokwG",
+      "name": "[Telegram] 🐋🤖 DeepSeek AI Agent + Telegram + LONG TERM Memory 🧠",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:59.155Z",
+      "triggers": [
+        "webhook"
+      ],
+      "nodeCount": 23,
+      "requiredCredentialTypes": [
+        "telegramApi",
+        "googleDocsOAuth2Api",
+        "openAiApi"
+      ],
+      "missingCredentialTypes": [
+        "googleDocsOAuth2Api",
+        "openAiApi"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "5e8V4t9QHteJB6LE",
+      "name": "[Telegram] FetchGithubIssues",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:59.071Z",
+      "triggers": [
+        "schedule"
+      ],
+      "nodeCount": 10,
+      "requiredCredentialTypes": [
+        "telegramApi",
+        "githubApi"
+      ],
+      "missingCredentialTypes": [
+        "githubApi"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "5Ht7PmQNYlBkPpYw",
+      "name": "[Telegram] 🌐 Confluence Page AI Powered Chatbot",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:58.904Z",
+      "triggers": [
+        "manual"
+      ],
+      "nodeCount": 17,
+      "requiredCredentialTypes": [
+        "httpHeaderAuth",
+        "openAiApi",
+        "telegramApi"
+      ],
+      "missingCredentialTypes": [
+        "httpHeaderAuth",
+        "openAiApi"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "0MB7o7DpnbnUsPUg",
+      "name": "[Telegram] Auto-create and publish AI social videos with Telegram, GPT-4 and Blotato",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:58.730Z",
+      "triggers": [],
+      "nodeCount": 42,
+      "requiredCredentialTypes": [
+        "telegramApi",
+        "httpBasicAuth",
+        "httpHeaderAuth",
+        "openAiApi",
+        "httpCustomAuth",
+        "googleSheetsOAuth2Api"
+      ],
+      "missingCredentialTypes": [
+        "httpBasicAuth",
+        "httpHeaderAuth",
+        "openAiApi",
+        "httpCustomAuth",
+        "googleSheetsOAuth2Api"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "2I62DzKxmh5BQrXq",
+      "name": "[Telegram] Telegram-bot AI Da Nang",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:58.519Z",
+      "triggers": [],
+      "nodeCount": 24,
+      "requiredCredentialTypes": [
+        "telegramApi",
+        "googleSheetsOAuth2Api",
+        "openRouterApi"
+      ],
+      "missingCredentialTypes": [
+        "googleSheetsOAuth2Api",
+        "openRouterApi"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "1dt5EFtw8Iq1mBD7",
+      "name": "[Telegram] Save new Files received on Telegram to Google Drive",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:58.477Z",
+      "triggers": [],
+      "nodeCount": 4,
+      "requiredCredentialTypes": [
+        "telegramApi",
+        "googleDriveOAuth2Api"
+      ],
+      "missingCredentialTypes": [
+        "googleDriveOAuth2Api"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "367MoiCCZNb6V7pi",
+      "name": "[Telegram] AI-Driven WooCommerce Product Importer with SEO",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:58.437Z",
+      "triggers": [
+        "manual"
+      ],
+      "nodeCount": 17,
+      "requiredCredentialTypes": [
+        "openRouterApi",
+        "googleSheetsOAuth2Api",
+        "wooCommerceApi",
+        "telegramApi"
+      ],
+      "missingCredentialTypes": [
+        "openRouterApi",
+        "googleSheetsOAuth2Api",
+        "wooCommerceApi"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "5F52IxLXFE7KDMG7",
+      "name": "[Telegram] 2. Add Beehiiv newsletter subscribers from Gumroad sales",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:58.393Z",
+      "triggers": [],
+      "nodeCount": 10,
+      "requiredCredentialTypes": [
+        "gumroadApi",
+        "googleSheetsOAuth2Api",
+        "httpBearerAuth",
+        "httpHeaderAuth",
+        "telegramApi"
+      ],
+      "missingCredentialTypes": [
+        "gumroadApi",
+        "googleSheetsOAuth2Api",
+        "httpBearerAuth",
+        "httpHeaderAuth"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "37uSadg3SBaYIFTi",
+      "name": "[Telegram] HR & IT Helpdesk Chatbot with Audio Transcription",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:57.669Z",
+      "triggers": [
+        "manual"
+      ],
+      "nodeCount": 27,
+      "requiredCredentialTypes": [
+        "postgres",
+        "openAiApi",
+        "telegramApi"
+      ],
+      "missingCredentialTypes": [
+        "postgres",
+        "openAiApi"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "2k2UZctfD5oX6ziN",
+      "name": "[Telegram] Stickynote Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:55.949Z",
+      "triggers": [],
+      "nodeCount": 24,
+      "requiredCredentialTypes": [],
+      "missingCredentialTypes": [],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": true,
+      "activatableNow": false
+    },
+    {
+      "id": "0Xs9VR0uncWPeLA3",
+      "name": "[Telegram] AI Phone Agent with RetellAI",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:55.692Z",
+      "triggers": [
+        "webhook",
+        "manual"
+      ],
+      "nodeCount": 36,
+      "requiredCredentialTypes": [
+        "openAiApi",
+        "qdrantApi",
+        "telegramApi",
+        "googleCalendarOAuth2Api",
+        "httpHeaderAuth",
+        "googleDriveOAuth2Api"
+      ],
+      "missingCredentialTypes": [
+        "openAiApi",
+        "qdrantApi",
+        "googleCalendarOAuth2Api",
+        "httpHeaderAuth",
+        "googleDriveOAuth2Api"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "2cpU2UI2b7ZkLtJd",
+      "name": "[Telegram] N8N Español - BOT",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:55.609Z",
+      "triggers": [],
+      "nodeCount": 6,
       "requiredCredentialTypes": [
         "telegramApi"
       ],
@@ -572,6 +881,3522 @@
       "requiresCommunityNodes": false,
       "runnableNow": true,
       "activatableNow": false
+    },
+    {
+      "id": "44O7McbGkeAtwJ9i",
+      "name": "[Telegram] Httprequest Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:55.568Z",
+      "triggers": [
+        "webhook"
+      ],
+      "nodeCount": 35,
+      "requiredCredentialTypes": [
+        "httpHeaderAuth",
+        "googlePalmApi",
+        "telegramApi",
+        "gmailOAuth2"
+      ],
+      "missingCredentialTypes": [
+        "httpHeaderAuth",
+        "googlePalmApi"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "2QJHICgRnVh5x7ZW",
+      "name": "[Strapi] Production Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:54.229Z",
+      "triggers": [
+        "webhook"
+      ],
+      "nodeCount": 15,
+      "requiredCredentialTypes": [
+        "strapiApi",
+        "twitterOAuth1Api",
+        "googleCloudNaturalLanguageOAuth2Api"
+      ],
+      "missingCredentialTypes": [
+        "strapiApi",
+        "twitterOAuth1Api",
+        "googleCloudNaturalLanguageOAuth2Api"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "5RcLFfOBxaCMexSG",
+      "name": "[Stopanderror] Zoom AI Meeting Assistant",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:54.020Z",
+      "triggers": [
+        "manual"
+      ],
+      "nodeCount": 25,
+      "requiredCredentialTypes": [
+        "zoomOAuth2Api",
+        "smtp",
+        "microsoftOutlookOAuth2Api",
+        "clickUpOAuth2Api",
+        "anthropicApi"
+      ],
+      "missingCredentialTypes": [
+        "zoomOAuth2Api",
+        "microsoftOutlookOAuth2Api",
+        "clickUpOAuth2Api",
+        "anthropicApi"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "0SZZm07cyd04YNH7",
+      "name": "[Stopanderror] Load Prompts from Github Repo and auto populate n8n expressions",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:53.805Z",
+      "triggers": [
+        "manual"
+      ],
+      "nodeCount": 18,
+      "requiredCredentialTypes": [
+        "githubApi",
+        "ollamaApi"
+      ],
+      "missingCredentialTypes": [
+        "githubApi",
+        "ollamaApi"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "11K4hjUuChKlNKfU",
+      "name": "[Stopanderror] Load Prompts from Github Repo and auto populate n8n expressions",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:53.678Z",
+      "triggers": [
+        "manual"
+      ],
+      "nodeCount": 18,
+      "requiredCredentialTypes": [
+        "githubApi",
+        "ollamaApi"
+      ],
+      "missingCredentialTypes": [
+        "githubApi",
+        "ollamaApi"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "1ioGFwgpXNsJQOsd",
+      "name": "[Stickynote] OpenSea Analytics Agent Tool",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:53.009Z",
+      "triggers": [],
+      "nodeCount": 12,
+      "requiredCredentialTypes": [
+        "openAiApi",
+        "httpHeaderAuth"
+      ],
+      "missingCredentialTypes": [
+        "openAiApi",
+        "httpHeaderAuth"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "09gvMctzgyLQfsg2",
+      "name": "[Stickynote] Build Custom AI Agent with LangChain & Gemini (Self-Hosted)",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:52.968Z",
+      "triggers": [
+        "manual"
+      ],
+      "nodeCount": 11,
+      "requiredCredentialTypes": [
+        "googlePalmApi"
+      ],
+      "missingCredentialTypes": [
+        "googlePalmApi"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "5cX96oghxRqmL5LD",
+      "name": "[Stickynote] SearchApi AI Agent",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:52.727Z",
+      "triggers": [
+        "manual"
+      ],
+      "nodeCount": 8,
+      "requiredCredentialTypes": [],
+      "missingCredentialTypes": [],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": true,
+      "activatableNow": false
+    },
+    {
+      "id": "2Nr2TAcb8SKqg7nw",
+      "name": "[Stickynote] Stickynote Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:51.586Z",
+      "triggers": [
+        "manual"
+      ],
+      "nodeCount": 11,
+      "requiredCredentialTypes": [
+        "ollamaApi"
+      ],
+      "missingCredentialTypes": [
+        "ollamaApi"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "5hXbgQ228pdLvqE0",
+      "name": "[Stickynote] Automated Image Metadata Tagging (Community Node)",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:51.469Z",
+      "triggers": [],
+      "nodeCount": 8,
+      "requiredCredentialTypes": [
+        "googleDriveOAuth2Api",
+        "openAiApi"
+      ],
+      "missingCredentialTypes": [
+        "googleDriveOAuth2Api",
+        "openAiApi"
+      ],
+      "customNodePackages": [
+        "n8n-nodes-exif-data"
+      ],
+      "customNodeTypes": [
+        "n8n-nodes-exif-data.exifData"
+      ],
+      "requiresCommunityNodes": true,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "4nxgM4fE5TVpW7QY",
+      "name": "[Stickynote] Gmailtrigger Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:51.188Z",
+      "triggers": [],
+      "nodeCount": 14,
+      "requiredCredentialTypes": [
+        "gmailOAuth2",
+        "openAiApi"
+      ],
+      "missingCredentialTypes": [
+        "openAiApi"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "1udQYSIcXiYWN8gY",
+      "name": "[Splitout] Gmail to Vector Embeddings with PGVector and Ollama",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:49.509Z",
+      "triggers": [
+        "manual"
+      ],
+      "nodeCount": 21,
+      "requiredCredentialTypes": [],
+      "missingCredentialTypes": [],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": true,
+      "activatableNow": false
+    },
+    {
+      "id": "04Q58wSYdmPAxAPI",
+      "name": "[Splitout] Generate New Keywords with Search Volumes⚒️⚒️🟢🟢",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:49.060Z",
+      "triggers": [],
+      "nodeCount": 11,
+      "requiredCredentialTypes": [
+        "googleAdsOAuth2Api",
+        "googleSheetsOAuth2Api"
+      ],
+      "missingCredentialTypes": [
+        "googleAdsOAuth2Api",
+        "googleSheetsOAuth2Api"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "4AR8aOCTm24NM6Z3",
+      "name": "[Splitout] Find Top Keywords",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:48.851Z",
+      "triggers": [
+        "manual",
+        "schedule"
+      ],
+      "nodeCount": 35,
+      "requiredCredentialTypes": [
+        "nocoDbApiToken",
+        "httpHeaderAuth",
+        "httpBasicAuth"
+      ],
+      "missingCredentialTypes": [
+        "nocoDbApiToken",
+        "httpHeaderAuth",
+        "httpBasicAuth"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "2OFz7zpq7YxSQkAn",
+      "name": "[Splitout] Printify Automation - Update Title and Description - AlexK1919",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:48.611Z",
+      "triggers": [
+        "manual"
+      ],
+      "nodeCount": 26,
+      "requiredCredentialTypes": [
+        "httpHeaderAuth",
+        "googleSheetsTriggerOAuth2Api",
+        "googleSheetsOAuth2Api",
+        "openAiApi"
+      ],
+      "missingCredentialTypes": [
+        "httpHeaderAuth",
+        "googleSheetsTriggerOAuth2Api",
+        "googleSheetsOAuth2Api",
+        "openAiApi"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "2uodeLdw2GntSj42",
+      "name": "[Splitout] If Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:47.568Z",
+      "triggers": [
+        "webhook"
+      ],
+      "nodeCount": 40,
+      "requiredCredentialTypes": [
+        "redis",
+        "groqApi",
+        "googleSheetsOAuth2Api"
+      ],
+      "missingCredentialTypes": [
+        "redis",
+        "groqApi",
+        "googleSheetsOAuth2Api"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "0sAMcffXEUjQvxEO",
+      "name": "[Splitout] Filter Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:45.949Z",
+      "triggers": [
+        "schedule"
+      ],
+      "nodeCount": 20,
+      "requiredCredentialTypes": [
+        "googleSheetsOAuth2Api",
+        "gmailOAuth2",
+        "googleDriveOAuth2Api"
+      ],
+      "missingCredentialTypes": [
+        "googleSheetsOAuth2Api",
+        "googleDriveOAuth2Api"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "1Q3whs6PMaqSI91P",
+      "name": "[Splitout] Scheduletrigger Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:45.829Z",
+      "triggers": [
+        "schedule"
+      ],
+      "nodeCount": 33,
+      "requiredCredentialTypes": [
+        "microsoftExcelOAuth2Api",
+        "openAiApi",
+        "microsoftOutlookOAuth2Api"
+      ],
+      "missingCredentialTypes": [
+        "microsoftExcelOAuth2Api",
+        "openAiApi",
+        "microsoftOutlookOAuth2Api"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "2EN7aT0wYPsEjWmz",
+      "name": "[Splitout] Set Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:45.791Z",
+      "triggers": [],
+      "nodeCount": 40,
+      "requiredCredentialTypes": [
+        "n8nApi"
+      ],
+      "missingCredentialTypes": [
+        "n8nApi"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "27wOonrRKevieh0a",
+      "name": "[Splitout] Textclassifier Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:45.697Z",
+      "triggers": [
+        "schedule"
+      ],
+      "nodeCount": 31,
+      "requiredCredentialTypes": [
+        "discordBotApi",
+        "openAiApi"
+      ],
+      "missingCredentialTypes": [
+        "discordBotApi",
+        "openAiApi"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "5kynsf32daysxKGE",
+      "name": "[Splitout] Manualtrigger Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:45.409Z",
+      "triggers": [
+        "manual",
+        "schedule"
+      ],
+      "nodeCount": 24,
+      "requiredCredentialTypes": [],
+      "missingCredentialTypes": [],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": true,
+      "activatableNow": true
+    },
+    {
+      "id": "4QDjySnTknCvTpbi",
+      "name": "[Splitout] Code Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:45.025Z",
+      "triggers": [
+        "manual"
+      ],
+      "nodeCount": 19,
+      "requiredCredentialTypes": [
+        "ollamaApi"
+      ],
+      "missingCredentialTypes": [
+        "ollamaApi"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "07y9ksC2BbPpuUzA",
+      "name": "[Splitout] Splitout Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:44.594Z",
+      "triggers": [
+        "schedule"
+      ],
+      "nodeCount": 18,
+      "requiredCredentialTypes": [
+        "googleApi",
+        "httpHeaderAuth",
+        "googleOAuth2Api",
+        "googleSheetsOAuth2Api"
+      ],
+      "missingCredentialTypes": [
+        "googleApi",
+        "httpHeaderAuth",
+        "googleOAuth2Api",
+        "googleSheetsOAuth2Api"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "0695GqkVc9EQEJ6x",
+      "name": "[Splitout] Googledrive Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:44.209Z",
+      "triggers": [],
+      "nodeCount": 40,
+      "requiredCredentialTypes": [
+        "googleDriveOAuth2Api",
+        "googleSheetsOAuth2Api",
+        "openAiApi"
+      ],
+      "missingCredentialTypes": [
+        "googleDriveOAuth2Api",
+        "googleSheetsOAuth2Api",
+        "openAiApi"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "1ctCaybXC8A9Lc9h",
+      "name": "[Splitout] Scheduletrigger Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:42.833Z",
+      "triggers": [
+        "schedule"
+      ],
+      "nodeCount": 22,
+      "requiredCredentialTypes": [
+        "hubspotOAuth2Api"
+      ],
+      "missingCredentialTypes": [
+        "hubspotOAuth2Api"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "2XWn2lLp8jctCNIn",
+      "name": "[Slack] My workflow 6",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:42.543Z",
+      "triggers": [
+        "webhook"
+      ],
+      "nodeCount": 11,
+      "requiredCredentialTypes": [],
+      "missingCredentialTypes": [],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": true,
+      "activatableNow": true
+    },
+    {
+      "id": "55Ln68iliiKyvmmy",
+      "name": "[Slack] New invoice email notification",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:42.328Z",
+      "triggers": [
+        "manual"
+      ],
+      "nodeCount": 7,
+      "requiredCredentialTypes": [
+        "imap",
+        "mindeeInvoiceApi",
+        "slackApi",
+        "smtp"
+      ],
+      "missingCredentialTypes": [
+        "imap",
+        "mindeeInvoiceApi",
+        "slackApi"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "3b3z8u1RjLq6Hw8v",
+      "name": "[Slack] Onfleet Driver signup message in Slack",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:41.957Z",
+      "triggers": [],
+      "nodeCount": 3,
+      "requiredCredentialTypes": [
+        "onfleetApi",
+        "slackApi"
+      ],
+      "missingCredentialTypes": [
+        "onfleetApi",
+        "slackApi"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "5gSidRPXwZ5uriYE",
+      "name": "[Shopify] Shopifytrigger Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:41.708Z",
+      "triggers": [],
+      "nodeCount": 2,
+      "requiredCredentialTypes": [
+        "shopifyApi"
+      ],
+      "missingCredentialTypes": [
+        "shopifyApi"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "414ApODZBrfIa1xX",
+      "name": "[Shopify] Shopifytrigger Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:41.506Z",
+      "triggers": [],
+      "nodeCount": 9,
+      "requiredCredentialTypes": [
+        "shopifyApi",
+        "hubspotOAuth2Api"
+      ],
+      "missingCredentialTypes": [
+        "shopifyApi",
+        "hubspotOAuth2Api"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "2daebr28kBahqAbN",
+      "name": "[Schedule] Retry Execution Hourly",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:40.552Z",
+      "triggers": [
+        "manual",
+        "schedule"
+      ],
+      "nodeCount": 13,
+      "requiredCredentialTypes": [
+        "n8nApi"
+      ],
+      "missingCredentialTypes": [
+        "n8nApi"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "4FWk8vSr00FIaG0X",
+      "name": "[Schedule] Manualtrigger Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:39.967Z",
+      "triggers": [
+        "manual",
+        "schedule"
+      ],
+      "nodeCount": 12,
+      "requiredCredentialTypes": [
+        "gongApi",
+        "salesforceOAuth2Api"
+      ],
+      "missingCredentialTypes": [
+        "gongApi",
+        "salesforceOAuth2Api"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "0s7NwWcw13qSvlce",
+      "name": "[Schedule] Lmchatopenai Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:39.567Z",
+      "triggers": [
+        "schedule"
+      ],
+      "nodeCount": 16,
+      "requiredCredentialTypes": [
+        "openAiApi",
+        "telegramApi"
+      ],
+      "missingCredentialTypes": [
+        "openAiApi"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "1SfoeaB9ERtFwgQV",
+      "name": "[Rssfeedread] Crypto News & Sentiment",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:38.988Z",
+      "triggers": [],
+      "nodeCount": 31,
+      "requiredCredentialTypes": [
+        "openAiApi",
+        "telegramApi"
+      ],
+      "missingCredentialTypes": [
+        "openAiApi"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "4a1xwjbBPrzoxXlu",
+      "name": "[Respondtowebhook] Generate audio from text using OpenAI - text-to-speech Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:38.504Z",
+      "triggers": [
+        "webhook"
+      ],
+      "nodeCount": 5,
+      "requiredCredentialTypes": [
+        "openAiApi"
+      ],
+      "missingCredentialTypes": [
+        "openAiApi"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "1YU1t3jWlOMztOJd",
+      "name": "[Respondtowebhook] Generate audio from text using OpenAI - text-to-speech Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:38.427Z",
+      "triggers": [
+        "webhook"
+      ],
+      "nodeCount": 5,
+      "requiredCredentialTypes": [
+        "openAiApi"
+      ],
+      "missingCredentialTypes": [
+        "openAiApi"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "3ZwV3RZm2vVB6YLK",
+      "name": "[Respondtowebhook] Set Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:38.349Z",
+      "triggers": [],
+      "nodeCount": 19,
+      "requiredCredentialTypes": [
+        "s3",
+        "httpHeaderAuth"
+      ],
+      "missingCredentialTypes": [
+        "s3",
+        "httpHeaderAuth"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "4qEWWFZ4lXVk5hPP",
+      "name": "[Redis] Manualtrigger Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:37.662Z",
+      "triggers": [
+        "manual",
+        "schedule"
+      ],
+      "nodeCount": 23,
+      "requiredCredentialTypes": [
+        "httpHeaderAuth"
+      ],
+      "missingCredentialTypes": [
+        "httpHeaderAuth"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "1Yl57q6nlbVXQkt6",
+      "name": "[Postgres] Suspicious_login_detection",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:36.836Z",
+      "triggers": [
+        "webhook",
+        "manual"
+      ],
+      "nodeCount": 43,
+      "requiredCredentialTypes": [
+        "postgres",
+        "httpQueryAuth",
+        "gmailOAuth2",
+        "slackApi",
+        "httpHeaderAuth"
+      ],
+      "missingCredentialTypes": [
+        "postgres",
+        "httpQueryAuth",
+        "slackApi",
+        "httpHeaderAuth"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "2yFC2lC0GwL4xuuQ",
+      "name": "[Pipedrive] Production Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:36.297Z",
+      "triggers": [],
+      "nodeCount": 12,
+      "requiredCredentialTypes": [
+        "pipedriveApi",
+        "httpQueryAuth"
+      ],
+      "missingCredentialTypes": [
+        "pipedriveApi",
+        "httpQueryAuth"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "5HsOiJfChfGk1pfm",
+      "name": "[Openweathermap] Send daily weather updates via a push notification",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:36.140Z",
+      "triggers": [],
+      "nodeCount": 4,
+      "requiredCredentialTypes": [
+        "pushoverApi",
+        "openWeatherMapApi"
+      ],
+      "missingCredentialTypes": [
+        "pushoverApi",
+        "openWeatherMapApi"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "3tB0yf2BsY1cJHbv",
+      "name": "[Openweathermap] Creating your first workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:35.935Z",
+      "triggers": [],
+      "nodeCount": 6,
+      "requiredCredentialTypes": [
+        "openWeatherMapApi",
+        "twilioApi"
+      ],
+      "missingCredentialTypes": [
+        "openWeatherMapApi",
+        "twilioApi"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "0fTHyYfDyaOfF7nX",
+      "name": "[Notion] Production Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:35.146Z",
+      "triggers": [
+        "webhook"
+      ],
+      "nodeCount": 24,
+      "requiredCredentialTypes": [
+        "notionApi",
+        "httpBasicAuth"
+      ],
+      "missingCredentialTypes": [
+        "notionApi",
+        "httpBasicAuth"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "1JLJ7PgHxe4E66HP",
+      "name": "[Noop] Extract personal data with a self-hosted LLM Mistral NeMo",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:34.979Z",
+      "triggers": [
+        "manual"
+      ],
+      "nodeCount": 15,
+      "requiredCredentialTypes": [
+        "ollamaApi"
+      ],
+      "missingCredentialTypes": [
+        "ollamaApi"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "31bVXuelYCYBhrRS",
+      "name": "[Noop] Extract personal data with a self-hosted LLM Mistral NeMo",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:34.938Z",
+      "triggers": [
+        "manual"
+      ],
+      "nodeCount": 15,
+      "requiredCredentialTypes": [
+        "ollamaApi"
+      ],
+      "missingCredentialTypes": [
+        "ollamaApi"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "4rubngIhjGLjzL8L",
+      "name": "[Noop] Execute a command that gives the hard disk memory used on the host machine",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:34.896Z",
+      "triggers": [],
+      "nodeCount": 6,
+      "requiredCredentialTypes": [
+        "twilioApi"
+      ],
+      "missingCredentialTypes": [
+        "twilioApi"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "637s2Ty9uWkuy3gA",
+      "name": "[Noop] Noop Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:34.609Z",
+      "triggers": [],
+      "nodeCount": 12,
+      "requiredCredentialTypes": [
+        "httpHeaderAuth",
+        "hubspotOAuth2Api",
+        "hubspotDeveloperApi"
+      ],
+      "missingCredentialTypes": [
+        "httpHeaderAuth",
+        "hubspotOAuth2Api",
+        "hubspotDeveloperApi"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "51EsfaE2O16G7Wij",
+      "name": "[Noop] Stickynote Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:34.570Z",
+      "triggers": [
+        "webhook"
+      ],
+      "nodeCount": 14,
+      "requiredCredentialTypes": [
+        "openAiApi",
+        "serpApi",
+        "slackApi"
+      ],
+      "missingCredentialTypes": [
+        "openAiApi",
+        "serpApi",
+        "slackApi"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "29Cm5JQMkE6CcU6G",
+      "name": "[Noop] Receive messages from a topic and send an SMS",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:34.446Z",
+      "triggers": [],
+      "nodeCount": 5,
+      "requiredCredentialTypes": [
+        "kafka",
+        "vonageApi"
+      ],
+      "missingCredentialTypes": [
+        "kafka",
+        "vonageApi"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "3N5GdS6Jz8YoJxsZ",
+      "name": "[Noop] Telegramtrigger Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:34.208Z",
+      "triggers": [],
+      "nodeCount": 6,
+      "requiredCredentialTypes": [
+        "telegramApi",
+        "googlePerspectiveOAuth2Api"
+      ],
+      "missingCredentialTypes": [
+        "googlePerspectiveOAuth2Api"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "3JCpGh9IEs3cJ2WE",
+      "name": "[Noop] Plex Automatic Throttler",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:34.167Z",
+      "triggers": [
+        "webhook"
+      ],
+      "nodeCount": 22,
+      "requiredCredentialTypes": [],
+      "missingCredentialTypes": [],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": true,
+      "activatableNow": true
+    },
+    {
+      "id": "3buNVPdiNgJCSMg5",
+      "name": "[Microsoftoutlook] send file to kindle through telegram bot",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:33.477Z",
+      "triggers": [],
+      "nodeCount": 9,
+      "requiredCredentialTypes": [],
+      "missingCredentialTypes": [],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": true,
+      "activatableNow": false
+    },
+    {
+      "id": "2FwbfDj4k6vccJaB",
+      "name": "[Microsoftexcel] Manualtrigger Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:33.275Z",
+      "triggers": [
+        "manual"
+      ],
+      "nodeCount": 13,
+      "requiredCredentialTypes": [
+        "salesforceOAuth2Api",
+        "microsoftExcelOAuth2Api"
+      ],
+      "missingCredentialTypes": [
+        "salesforceOAuth2Api",
+        "microsoftExcelOAuth2Api"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "3KZ2h54McshZCNsu",
+      "name": "[Mautic] Shopify + Mautic",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:33.229Z",
+      "triggers": [
+        "webhook"
+      ],
+      "nodeCount": 26,
+      "requiredCredentialTypes": [
+        "shopifyAccessTokenApi",
+        "mauticOAuth2Api",
+        "httpHeaderAuth"
+      ],
+      "missingCredentialTypes": [
+        "shopifyAccessTokenApi",
+        "mauticOAuth2Api",
+        "httpHeaderAuth"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "4IjSO9g5ExrmFjK0",
+      "name": "[Mautic] Production Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:33.068Z",
+      "triggers": [
+        "webhook"
+      ],
+      "nodeCount": 18,
+      "requiredCredentialTypes": [
+        "mauticOAuth2Api"
+      ],
+      "missingCredentialTypes": [
+        "mauticOAuth2Api"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "4ht9O8HY3Kg5Sssx",
+      "name": "[Mattermost] StatsInstagram",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:32.587Z",
+      "triggers": [],
+      "nodeCount": 6,
+      "requiredCredentialTypes": [
+        "mattermostApi",
+        "googleSheetsOAuth2Api"
+      ],
+      "missingCredentialTypes": [
+        "mattermostApi",
+        "googleSheetsOAuth2Api"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "24UG6Jl4YU4rbgOB",
+      "name": "[Manual] Import CSV from URL to Excel",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:31.573Z",
+      "triggers": [
+        "manual"
+      ],
+      "nodeCount": 5,
+      "requiredCredentialTypes": [],
+      "missingCredentialTypes": [],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": true,
+      "activatableNow": false
+    },
+    {
+      "id": "2kdqP705O2xL32sP",
+      "name": "[Manual] How to automatically import CSV files into postgres",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:31.287Z",
+      "triggers": [
+        "manual"
+      ],
+      "nodeCount": 5,
+      "requiredCredentialTypes": [
+        "postgres"
+      ],
+      "missingCredentialTypes": [
+        "postgres"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "0zvODvXOFm99Hs2y",
+      "name": "[Manual] Compare 2 SQL datasets",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:30.888Z",
+      "triggers": [
+        "manual"
+      ],
+      "nodeCount": 6,
+      "requiredCredentialTypes": [
+        "mySql"
+      ],
+      "missingCredentialTypes": [
+        "mySql"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "1G9oPhLCjnqXGfqt",
+      "name": "[Manual] dub.co URL Shortener",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:30.110Z",
+      "triggers": [
+        "manual"
+      ],
+      "nodeCount": 12,
+      "requiredCredentialTypes": [],
+      "missingCredentialTypes": [],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": true,
+      "activatableNow": false
+    },
+    {
+      "id": "0VHLkFv8ofEThvyy",
+      "name": "[Manual] The Easiest Way to Send SMS Worldwide",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:29.987Z",
+      "triggers": [
+        "manual"
+      ],
+      "nodeCount": 5,
+      "requiredCredentialTypes": [
+        "httpBasicAuth",
+        "httpHeaderAuth"
+      ],
+      "missingCredentialTypes": [
+        "httpBasicAuth",
+        "httpHeaderAuth"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "5XVtJdOu9g6Fbbdd",
+      "name": "[Manual] Email verification with Icypeas (single)",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:29.486Z",
+      "triggers": [
+        "manual"
+      ],
+      "nodeCount": 6,
+      "requiredCredentialTypes": [
+        "httpHeaderAuth"
+      ],
+      "missingCredentialTypes": [
+        "httpHeaderAuth"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "4Cq1GMn12AVwQaiz",
+      "name": "[Manual] Build an OpenAI Assistant with Google Drive Integration",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:28.795Z",
+      "triggers": [
+        "manual"
+      ],
+      "nodeCount": 13,
+      "requiredCredentialTypes": [
+        "googleDriveOAuth2Api",
+        "openAiApi"
+      ],
+      "missingCredentialTypes": [
+        "googleDriveOAuth2Api",
+        "openAiApi"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "3RkUSYhHvVqMuA7r",
+      "name": "[Manual] Scrape Today's Github Trend 13 Top Repositories",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:28.752Z",
+      "triggers": [
+        "manual"
+      ],
+      "nodeCount": 7,
+      "requiredCredentialTypes": [],
+      "missingCredentialTypes": [],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": true,
+      "activatableNow": false
+    },
+    {
+      "id": "0kfNbPTRCtL77SIV",
+      "name": "[Manual] Fine-tuning with OpenAI models",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:28.711Z",
+      "triggers": [
+        "manual"
+      ],
+      "nodeCount": 9,
+      "requiredCredentialTypes": [
+        "googleDriveOAuth2Api",
+        "openAiApi",
+        "httpHeaderAuth"
+      ],
+      "missingCredentialTypes": [
+        "googleDriveOAuth2Api",
+        "openAiApi",
+        "httpHeaderAuth"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "56VCFbtG9b4gFd1I",
+      "name": "[Manual] Google Trend Data Extract, Summarization with Bright Data & Google Gemini",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:28.382Z",
+      "triggers": [
+        "manual"
+      ],
+      "nodeCount": 16,
+      "requiredCredentialTypes": [
+        "googlePalmApi",
+        "httpHeaderAuth",
+        "gmailOAuth2"
+      ],
+      "missingCredentialTypes": [
+        "googlePalmApi",
+        "httpHeaderAuth"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "2T1AAKQdouM1pbcp",
+      "name": "[Manual] Post a message to a channel in RocketChat",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:27.603Z",
+      "triggers": [
+        "manual"
+      ],
+      "nodeCount": 3,
+      "requiredCredentialTypes": [
+        "rocketchatApi"
+      ],
+      "missingCredentialTypes": [
+        "rocketchatApi"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "1BlCIJjPQnfOAUQl",
+      "name": "[Manual] Extract information from an image of a receipt",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:27.036Z",
+      "triggers": [
+        "manual"
+      ],
+      "nodeCount": 4,
+      "requiredCredentialTypes": [
+        "mindeeReceiptApi"
+      ],
+      "missingCredentialTypes": [
+        "mindeeReceiptApi"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "35D4cOkOUP5WLMkS",
+      "name": "[Manual] Prepare CSV files with GPT-4",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:26.829Z",
+      "triggers": [
+        "manual"
+      ],
+      "nodeCount": 12,
+      "requiredCredentialTypes": [
+        "openAiApi"
+      ],
+      "missingCredentialTypes": [
+        "openAiApi"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "0AvgH1Y57oQzzLrx",
+      "name": "[Manual] Manualtrigger Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:26.330Z",
+      "triggers": [
+        "manual"
+      ],
+      "nodeCount": 3,
+      "requiredCredentialTypes": [
+        "contentfulApi"
+      ],
+      "missingCredentialTypes": [
+        "contentfulApi"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "08kPeBQUE3MG1HFb",
+      "name": "[Manual] Manualtrigger Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:25.242Z",
+      "triggers": [
+        "manual"
+      ],
+      "nodeCount": 3,
+      "requiredCredentialTypes": [
+        "helpScoutOAuth2Api"
+      ],
+      "missingCredentialTypes": [
+        "helpScoutOAuth2Api"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "2UPXpybDbT5nuMD1",
+      "name": "[Manual] Manualtrigger Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:24.604Z",
+      "triggers": [
+        "manual"
+      ],
+      "nodeCount": 3,
+      "requiredCredentialTypes": [
+        "bannerbearApi"
+      ],
+      "missingCredentialTypes": [
+        "bannerbearApi"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "2pDNsmmZwRm7ETyB",
+      "name": "[Manual] A workflow with the Twilio node",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:23.526Z",
+      "triggers": [
+        "manual"
+      ],
+      "nodeCount": 3,
+      "requiredCredentialTypes": [
+        "twilioApi"
+      ],
+      "missingCredentialTypes": [
+        "twilioApi"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "2k6ukk3aRhsVAGrt",
+      "name": "[Manual] Manualtrigger Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:22.201Z",
+      "triggers": [
+        "manual"
+      ],
+      "nodeCount": 16,
+      "requiredCredentialTypes": [],
+      "missingCredentialTypes": [],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": true,
+      "activatableNow": false
+    },
+    {
+      "id": "5ChPZIY2Yf8jtsEV",
+      "name": "[Manual] Manualtrigger Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:21.762Z",
+      "triggers": [
+        "manual"
+      ],
+      "nodeCount": 5,
+      "requiredCredentialTypes": [
+        "httpQueryAuth"
+      ],
+      "missingCredentialTypes": [
+        "httpQueryAuth"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "3Neq7MmtTBFPzsoB",
+      "name": "[Manual] Manualtrigger Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:21.229Z",
+      "triggers": [
+        "manual"
+      ],
+      "nodeCount": 13,
+      "requiredCredentialTypes": [
+        "openAiApi",
+        "httpHeaderAuth"
+      ],
+      "missingCredentialTypes": [
+        "openAiApi",
+        "httpHeaderAuth"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "0DL8Ykvqm2spGwpV",
+      "name": "[Manual] Manualtrigger Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:20.287Z",
+      "triggers": [
+        "manual"
+      ],
+      "nodeCount": 7,
+      "requiredCredentialTypes": [],
+      "missingCredentialTypes": [],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": true,
+      "activatableNow": false
+    },
+    {
+      "id": "4Bh4Mf7EXoVRv78J",
+      "name": "[Manual] Manualtrigger Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:19.519Z",
+      "triggers": [
+        "manual"
+      ],
+      "nodeCount": 9,
+      "requiredCredentialTypes": [
+        "baserowApi",
+        "sendGridApi"
+      ],
+      "missingCredentialTypes": [
+        "baserowApi",
+        "sendGridApi"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "5zoRfRYMIhJmEDqp",
+      "name": "[Manual] Manualtrigger Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:19.317Z",
+      "triggers": [
+        "manual"
+      ],
+      "nodeCount": 14,
+      "requiredCredentialTypes": [],
+      "missingCredentialTypes": [],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": true,
+      "activatableNow": false
+    },
+    {
+      "id": "2MuMx8mW3QOLyHoX",
+      "name": "[Manual] Manualtrigger Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:19.276Z",
+      "triggers": [
+        "manual"
+      ],
+      "nodeCount": 18,
+      "requiredCredentialTypes": [],
+      "missingCredentialTypes": [],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": true,
+      "activatableNow": false
+    },
+    {
+      "id": "3c2FHeymZKgITJP1",
+      "name": "[Manual] Create a short URL and get the statistics of the URL",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:18.735Z",
+      "triggers": [
+        "manual"
+      ],
+      "nodeCount": 4,
+      "requiredCredentialTypes": [
+        "yourlsApi"
+      ],
+      "missingCredentialTypes": [
+        "yourlsApi"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "581OcfaKYvenupwy",
+      "name": "[Manual] Create, update and get records in Quick Base",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:18.195Z",
+      "triggers": [
+        "manual"
+      ],
+      "nodeCount": 7,
+      "requiredCredentialTypes": [
+        "quickbaseApi"
+      ],
+      "missingCredentialTypes": [
+        "quickbaseApi"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "0FZyWEwDR5UnZcoh",
+      "name": "[Manual] Production Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:17.243Z",
+      "triggers": [
+        "manual"
+      ],
+      "nodeCount": 9,
+      "requiredCredentialTypes": [
+        "smtp"
+      ],
+      "missingCredentialTypes": [],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": true,
+      "activatableNow": false
+    },
+    {
+      "id": "1arZqmLPyZ3gkdRM",
+      "name": "[Manual] Get all the contacts from GetResponse and update them",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:16.948Z",
+      "triggers": [
+        "manual"
+      ],
+      "nodeCount": 6,
+      "requiredCredentialTypes": [
+        "getResponseApi"
+      ],
+      "missingCredentialTypes": [
+        "getResponseApi"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "5sg3KBaDi758WvLP",
+      "name": "[Manual] Manualtrigger Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:16.867Z",
+      "triggers": [
+        "manual"
+      ],
+      "nodeCount": 7,
+      "requiredCredentialTypes": [],
+      "missingCredentialTypes": [],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": true,
+      "activatableNow": false
+    },
+    {
+      "id": "0mqisuxi3NgrqFmG",
+      "name": "[Manual] Standup Bot - Read Config",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:16.579Z",
+      "triggers": [
+        "manual"
+      ],
+      "nodeCount": 4,
+      "requiredCredentialTypes": [],
+      "missingCredentialTypes": [],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": true,
+      "activatableNow": false
+    },
+    {
+      "id": "3JShxdu9SbMpx9PW",
+      "name": "[Manual] Create a task in ClickUp",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:16.105Z",
+      "triggers": [
+        "manual"
+      ],
+      "nodeCount": 3,
+      "requiredCredentialTypes": [
+        "clickUpApi"
+      ],
+      "missingCredentialTypes": [
+        "clickUpApi"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "1nLLAbnHvMLoxEEo",
+      "name": "[Mailchimp] Create entry in Mailchimp from Airtable",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:15.338Z",
+      "triggers": [],
+      "nodeCount": 4,
+      "requiredCredentialTypes": [
+        "airtableApi",
+        "mailchimpApi"
+      ],
+      "missingCredentialTypes": [
+        "airtableApi",
+        "mailchimpApi"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "00c1AjWOwrygV8vO",
+      "name": "[Linkedin] Linkedin Automation",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:15.018Z",
+      "triggers": [
+        "schedule"
+      ],
+      "nodeCount": 15,
+      "requiredCredentialTypes": [
+        "airtableTokenApi",
+        "telegramApi",
+        "linkedInOAuth2Api"
+      ],
+      "missingCredentialTypes": [
+        "airtableTokenApi",
+        "linkedInOAuth2Api"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "3jK8x0V1N33iQoIU",
+      "name": "[Linkedin] Manualtrigger Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:14.508Z",
+      "triggers": [
+        "manual"
+      ],
+      "nodeCount": 8,
+      "requiredCredentialTypes": [
+        "gmailOAuth2",
+        "openAiApi",
+        "linkedInOAuth2Api"
+      ],
+      "missingCredentialTypes": [
+        "openAiApi",
+        "linkedInOAuth2Api"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "1lcHpwG3YW8JRVCQ",
+      "name": "[Limit] Selenium Ultimate Scraper Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:14.253Z",
+      "triggers": [
+        "webhook"
+      ],
+      "nodeCount": 63,
+      "requiredCredentialTypes": [
+        "openAiApi"
+      ],
+      "missingCredentialTypes": [
+        "openAiApi"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "1TBFaxhpcx0LFlzj",
+      "name": "[Limit] Extract And Decode Google News RSS URLs to Clean Article Links",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:13.790Z",
+      "triggers": [
+        "manual"
+      ],
+      "nodeCount": 20,
+      "requiredCredentialTypes": [],
+      "missingCredentialTypes": [],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": true,
+      "activatableNow": false
+    },
+    {
+      "id": "4wif47pV5iOH3vOg",
+      "name": "[Limit] Scheduletrigger Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:13.748Z",
+      "triggers": [
+        "schedule"
+      ],
+      "nodeCount": 30,
+      "requiredCredentialTypes": [
+        "n8nApi",
+        "googleDriveOAuth2Api",
+        "gmailOAuth2",
+        "discordBotApi"
+      ],
+      "missingCredentialTypes": [
+        "n8nApi",
+        "googleDriveOAuth2Api",
+        "discordBotApi"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "5sI1SyW863YqrrbW",
+      "name": "[Limit] Set Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:13.669Z",
+      "triggers": [
+        "webhook"
+      ],
+      "nodeCount": 29,
+      "requiredCredentialTypes": [
+        "slackApi",
+        "serviceNowBasicApi"
+      ],
+      "missingCredentialTypes": [
+        "slackApi",
+        "serviceNowBasicApi"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "2Gb7FXPgsj4tXI8S",
+      "name": "[Hubspot] Cron Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:12.406Z",
+      "triggers": [],
+      "nodeCount": 8,
+      "requiredCredentialTypes": [
+        "pipedriveApi",
+        "hubspotApi"
+      ],
+      "missingCredentialTypes": [
+        "pipedriveApi",
+        "hubspotApi"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "5D7ngApIwwPZxH8j",
+      "name": "[Http] Search news using Perplexity AI and post to X (Twitter)",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:12.186Z",
+      "triggers": [
+        "schedule"
+      ],
+      "nodeCount": 5,
+      "requiredCredentialTypes": [
+        "twitterOAuth2Api"
+      ],
+      "missingCredentialTypes": [
+        "twitterOAuth2Api"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "2hKYFuPWMIZbwqis",
+      "name": "[Http] upload-post images",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:12.106Z",
+      "triggers": [
+        "manual"
+      ],
+      "nodeCount": 10,
+      "requiredCredentialTypes": [],
+      "missingCredentialTypes": [],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": true,
+      "activatableNow": false
+    },
+    {
+      "id": "2dE03i9gZnE4nvCN",
+      "name": "[Http] Scheduletrigger Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:12.023Z",
+      "triggers": [
+        "schedule"
+      ],
+      "nodeCount": 4,
+      "requiredCredentialTypes": [
+        "twilioApi"
+      ],
+      "missingCredentialTypes": [
+        "twilioApi"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "0y59ykfAspNdMZHK",
+      "name": "[Http] My workflow 4",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:11.979Z",
+      "triggers": [
+        "webhook"
+      ],
+      "nodeCount": 6,
+      "requiredCredentialTypes": [],
+      "missingCredentialTypes": [],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": true,
+      "activatableNow": true
+    },
+    {
+      "id": "1O0TLn48IR5XckqS",
+      "name": "[Http] [2/2] KNN classifier (lands dataset)",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:11.160Z",
+      "triggers": [],
+      "nodeCount": 18,
+      "requiredCredentialTypes": [
+        "httpHeaderAuth",
+        "qdrantApi"
+      ],
+      "missingCredentialTypes": [
+        "httpHeaderAuth",
+        "qdrantApi"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "14YztvFT1RsRLVs0",
+      "name": "[Http] Summarize emails with A.I. then send to messenger",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:10.768Z",
+      "triggers": [
+        "manual"
+      ],
+      "nodeCount": 8,
+      "requiredCredentialTypes": [
+        "imap",
+        "httpHeaderAuth"
+      ],
+      "missingCredentialTypes": [
+        "imap",
+        "httpHeaderAuth"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "4EcD0gsIJYJLaq9R",
+      "name": "[Http] Stickynote Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:10.726Z",
+      "triggers": [],
+      "nodeCount": 10,
+      "requiredCredentialTypes": [
+        "openAiApi"
+      ],
+      "missingCredentialTypes": [
+        "openAiApi"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "1RRuS47zptAx5VEu",
+      "name": "[Http] Gratitude Jar Reminder",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:10.602Z",
+      "triggers": [
+        "schedule"
+      ],
+      "nodeCount": 9,
+      "requiredCredentialTypes": [
+        "azureOpenAiApi",
+        "httpHeaderAuth"
+      ],
+      "missingCredentialTypes": [
+        "azureOpenAiApi",
+        "httpHeaderAuth"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "1i75yJLUnAiFLJCR",
+      "name": "[Http] Push Multiple Files to Github Repo via Github REST API",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:10.561Z",
+      "triggers": [
+        "manual"
+      ],
+      "nodeCount": 10,
+      "requiredCredentialTypes": [],
+      "missingCredentialTypes": [],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": true,
+      "activatableNow": false
+    },
+    {
+      "id": "0gwcAXp4Gl2o2NWK",
+      "name": "[Http] Receive updates from Telegram and send an image of a cocktail",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:08.754Z",
+      "triggers": [],
+      "nodeCount": 4,
+      "requiredCredentialTypes": [
+        "telegramApi"
+      ],
+      "missingCredentialTypes": [],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": true,
+      "activatableNow": false
+    },
+    {
+      "id": "559wb8D9mMDB8KvG",
+      "name": "[Http] Automated PDF to HTML Conversion",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:08.205Z",
+      "triggers": [],
+      "nodeCount": 7,
+      "requiredCredentialTypes": [
+        "googleDriveOAuth2Api",
+        "httpHeaderAuth"
+      ],
+      "missingCredentialTypes": [
+        "googleDriveOAuth2Api",
+        "httpHeaderAuth"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "5fkFPm4ptzFBgvEz",
+      "name": "[Http] Httprequest Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:08.043Z",
+      "triggers": [
+        "manual"
+      ],
+      "nodeCount": 8,
+      "requiredCredentialTypes": [
+        "httpHeaderAuth"
+      ],
+      "missingCredentialTypes": [
+        "httpHeaderAuth"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "0qjOOH16tOOwT2ZB",
+      "name": "[Http] Httprequest Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:07.523Z",
+      "triggers": [],
+      "nodeCount": 10,
+      "requiredCredentialTypes": [],
+      "missingCredentialTypes": [],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": true,
+      "activatableNow": false
+    },
+    {
+      "id": "5F1aLiJZw6sE5PGO",
+      "name": "[Http] Webhook Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:06.400Z",
+      "triggers": [
+        "webhook"
+      ],
+      "nodeCount": 8,
+      "requiredCredentialTypes": [],
+      "missingCredentialTypes": [],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": true,
+      "activatableNow": true
+    },
+    {
+      "id": "2P1mUuSf7VnSLRdE",
+      "name": "[Http] Httprequest Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:05.855Z",
+      "triggers": [
+        "manual"
+      ],
+      "nodeCount": 8,
+      "requiredCredentialTypes": [
+        "googleSheetsOAuth2Api"
+      ],
+      "missingCredentialTypes": [
+        "googleSheetsOAuth2Api"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "0bcTCwu5ygNPcZCM",
+      "name": "[Http] Httprequest Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:05.719Z",
+      "triggers": [],
+      "nodeCount": 6,
+      "requiredCredentialTypes": [
+        "githubApi",
+        "pipedriveApi"
+      ],
+      "missingCredentialTypes": [
+        "githubApi",
+        "pipedriveApi"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "3VL4bxvd0DCaeajY",
+      "name": "[Http] Production Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:05.593Z",
+      "triggers": [
+        "manual"
+      ],
+      "nodeCount": 16,
+      "requiredCredentialTypes": [
+        "googleSheetsOAuth2Api",
+        "gmailOAuth2"
+      ],
+      "missingCredentialTypes": [
+        "googleSheetsOAuth2Api"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "4x440CkVVh4YBK7O",
+      "name": "[Helpscout] Receive updates when a customer is created in HelpScout",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:04.783Z",
+      "triggers": [],
+      "nodeCount": 2,
+      "requiredCredentialTypes": [
+        "helpScoutOAuth2Api"
+      ],
+      "missingCredentialTypes": [
+        "helpScoutOAuth2Api"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "0VqFDmPLOjdG91cC",
+      "name": "[Googlecalendar] Calendar_scheduling",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:02.398Z",
+      "triggers": [],
+      "nodeCount": 22,
+      "requiredCredentialTypes": [
+        "gmailOAuth2",
+        "openAiApi",
+        "googleCalendarOAuth2Api"
+      ],
+      "missingCredentialTypes": [
+        "openAiApi",
+        "googleCalendarOAuth2Api"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "1A9GCUGiSBlqo52a",
+      "name": "[Googlecalendar] Scheduletrigger Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:02.148Z",
+      "triggers": [
+        "schedule"
+      ],
+      "nodeCount": 23,
+      "requiredCredentialTypes": [
+        "googleCalendarOAuth2Api",
+        "gmailOAuth2",
+        "openAiApi"
+      ],
+      "missingCredentialTypes": [
+        "googleCalendarOAuth2Api",
+        "openAiApi"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "5QgDQEGgiC6jF7bs",
+      "name": "[Gmail] Stickynote Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:01.367Z",
+      "triggers": [],
+      "nodeCount": 11,
+      "requiredCredentialTypes": [
+        "openAiApi",
+        "gmailOAuth2",
+        "googleCalendarOAuth2Api"
+      ],
+      "missingCredentialTypes": [
+        "openAiApi",
+        "googleCalendarOAuth2Api"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "1v4yTG9iTDOtudCq",
+      "name": "[Github] [OPS] Restore workflows from GitHub to n8n",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:01.063Z",
+      "triggers": [
+        "manual"
+      ],
+      "nodeCount": 18,
+      "requiredCredentialTypes": [
+        "githubApi",
+        "n8nApi"
+      ],
+      "missingCredentialTypes": [
+        "githubApi",
+        "n8nApi"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "4DInO0mXfLHTB5eE",
+      "name": "[Github] Extranet Releases",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:00.983Z",
+      "triggers": [],
+      "nodeCount": 3,
+      "requiredCredentialTypes": [
+        "slackApi",
+        "githubApi"
+      ],
+      "missingCredentialTypes": [
+        "slackApi",
+        "githubApi"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "35ddujX47z0Ovsho",
+      "name": "[Github] Notion Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:00.766Z",
+      "triggers": [],
+      "nodeCount": 12,
+      "requiredCredentialTypes": [
+        "notionApi",
+        "githubApi"
+      ],
+      "missingCredentialTypes": [
+        "notionApi",
+        "githubApi"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "1o4zx3ZO7sP0Ssxf",
+      "name": "[Github] Github Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:00.724Z",
+      "triggers": [],
+      "nodeCount": 7,
+      "requiredCredentialTypes": [],
+      "missingCredentialTypes": [],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": true,
+      "activatableNow": false
+    },
+    {
+      "id": "2H0s8G588MKweOWY",
+      "name": "[Functionitem] Production Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:16:00.161Z",
+      "triggers": [
+        "webhook"
+      ],
+      "nodeCount": 9,
+      "requiredCredentialTypes": [
+        "httpBasicAuth",
+        "telegramApi"
+      ],
+      "missingCredentialTypes": [
+        "httpBasicAuth"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "3AGphjkrFeoRRHvm",
+      "name": "[Form] Automate Your Customer Service With WhatsApp Business Cloud & Asana",
+      "active": false,
+      "updatedAt": "2026-03-14T01:15:59.856Z",
+      "triggers": [],
+      "nodeCount": 8,
+      "requiredCredentialTypes": [],
+      "missingCredentialTypes": [],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": true,
+      "activatableNow": false
+    },
+    {
+      "id": "4tRZ9IXqxkIued7h",
+      "name": "[Form] 🤓 Conversion Rate Optimizer",
+      "active": false,
+      "updatedAt": "2026-03-14T01:15:59.779Z",
+      "triggers": [],
+      "nodeCount": 4,
+      "requiredCredentialTypes": [
+        "openAiApi"
+      ],
+      "missingCredentialTypes": [
+        "openAiApi"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "4f6dIVMjCSuOJqno",
+      "name": "[Form] Dynamic credentials using expressions",
+      "active": false,
+      "updatedAt": "2026-03-14T01:15:59.004Z",
+      "triggers": [],
+      "nodeCount": 7,
+      "requiredCredentialTypes": [
+        "nasaApi"
+      ],
+      "missingCredentialTypes": [
+        "nasaApi"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "3WzVMFHKS27L3Ycg",
+      "name": "[Filter] Monitor_security_advisories",
+      "active": false,
+      "updatedAt": "2026-03-14T01:15:58.828Z",
+      "triggers": [
+        "manual",
+        "schedule"
+      ],
+      "nodeCount": 18,
+      "requiredCredentialTypes": [
+        "jiraSoftwareCloudApi",
+        "gmailOAuth2"
+      ],
+      "missingCredentialTypes": [
+        "jiraSoftwareCloudApi"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "3GMJe0aGPqh3Nhwp",
+      "name": "[Facebookleadads] Stickynote Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:15:57.902Z",
+      "triggers": [],
+      "nodeCount": 4,
+      "requiredCredentialTypes": [
+        "facebookLeadAdsOAuth2Api",
+        "klickTippApi"
+      ],
+      "missingCredentialTypes": [
+        "facebookLeadAdsOAuth2Api",
+        "klickTippApi"
+      ],
+      "customNodePackages": [
+        "n8n-nodes-klicktipp"
+      ],
+      "customNodeTypes": [
+        "n8n-nodes-klicktipp.klicktipp"
+      ],
+      "requiresCommunityNodes": true,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "4Usub0U1yYaaoEx2",
+      "name": "[Facebook] Receive a Mattermost message when a user updates their profile on Facebook",
+      "active": false,
+      "updatedAt": "2026-03-14T01:15:57.846Z",
+      "triggers": [],
+      "nodeCount": 3,
+      "requiredCredentialTypes": [
+        "facebookGraphAppApi",
+        "mattermostApi"
+      ],
+      "missingCredentialTypes": [
+        "facebookGraphAppApi",
+        "mattermostApi"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "2sXLfmwaCCXsBtHH",
+      "name": "[Extractfromfile] Attachments Gmail to drive and google sheets",
+      "active": false,
+      "updatedAt": "2026-03-14T01:15:57.668Z",
+      "triggers": [],
+      "nodeCount": 17,
+      "requiredCredentialTypes": [
+        "gmailOAuth2",
+        "googleDriveOAuth2Api",
+        "openAiApi",
+        "googleSheetsOAuth2Api"
+      ],
+      "missingCredentialTypes": [
+        "googleDriveOAuth2Api",
+        "openAiApi",
+        "googleSheetsOAuth2Api"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "0DCi9GzGNi1p1jGg",
+      "name": "[Extractfromfile] Automated Resume Review System Using OpenAI + Google Sheets",
+      "active": false,
+      "updatedAt": "2026-03-14T01:15:57.544Z",
+      "triggers": [],
+      "nodeCount": 18,
+      "requiredCredentialTypes": [
+        "googleSheetsOAuth2Api",
+        "googleDriveOAuth2Api",
+        "openAiApi"
+      ],
+      "missingCredentialTypes": [
+        "googleSheetsOAuth2Api",
+        "googleDriveOAuth2Api",
+        "openAiApi"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "1G3WgpCazA9knr9B",
+      "name": "[Extractfromfile] Manualtrigger Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:15:57.031Z",
+      "triggers": [
+        "manual"
+      ],
+      "nodeCount": 11,
+      "requiredCredentialTypes": [
+        "googleDriveOAuth2Api",
+        "anthropicApi",
+        "googlePalmApi"
+      ],
+      "missingCredentialTypes": [
+        "googleDriveOAuth2Api",
+        "anthropicApi",
+        "googlePalmApi"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "3gAjddxUz5aZBn8e",
+      "name": "[Extractfromfile] Extractfromfile Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:15:56.986Z",
+      "triggers": [],
+      "nodeCount": 23,
+      "requiredCredentialTypes": [
+        "openAiApi",
+        "airtableTokenApi"
+      ],
+      "missingCredentialTypes": [
+        "openAiApi",
+        "airtableTokenApi"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "1OkPRxuskt0XSAVI",
+      "name": "[Executeworkflow] 🤖Contact Agent",
+      "active": false,
+      "updatedAt": "2026-03-14T01:15:56.679Z",
+      "triggers": [],
+      "nodeCount": 8,
+      "requiredCredentialTypes": [
+        "openAiApi",
+        "airtableTokenApi"
+      ],
+      "missingCredentialTypes": [
+        "openAiApi",
+        "airtableTokenApi"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "1sInPtS5lfqsAA8v",
+      "name": "[Executeworkflow] Stickynote Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:15:56.506Z",
+      "triggers": [],
+      "nodeCount": 18,
+      "requiredCredentialTypes": [
+        "openAiApi",
+        "slackApi"
+      ],
+      "missingCredentialTypes": [
+        "openAiApi",
+        "slackApi"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "558R7kvAu0joXk4l",
+      "name": "[Error] Log errors and avoid sending too many emails",
+      "active": false,
+      "updatedAt": "2026-03-14T01:15:55.990Z",
+      "triggers": [
+        "manual"
+      ],
+      "nodeCount": 16,
+      "requiredCredentialTypes": [
+        "postgres",
+        "smtp",
+        "pushoverApi"
+      ],
+      "missingCredentialTypes": [
+        "postgres",
+        "pushoverApi"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "5RjaMRVSTcy20GmR",
+      "name": "[Emailreadimap] Effortless Email Management with AI",
+      "active": false,
+      "updatedAt": "2026-03-14T01:15:55.189Z",
+      "triggers": [
+        "manual"
+      ],
+      "nodeCount": 31,
+      "requiredCredentialTypes": [
+        "imap",
+        "smtp",
+        "qdrantApi",
+        "openAiApi",
+        "gmailOAuth2",
+        "httpHeaderAuth",
+        "googleDriveOAuth2Api",
+        "deepSeekApi"
+      ],
+      "missingCredentialTypes": [
+        "imap",
+        "qdrantApi",
+        "openAiApi",
+        "httpHeaderAuth",
+        "googleDriveOAuth2Api",
+        "deepSeekApi"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "0bQkqqobHsPojaZ2",
+      "name": "[Emailreadimap] Emailreadimap Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:15:54.973Z",
+      "triggers": [
+        "manual"
+      ],
+      "nodeCount": 2,
+      "requiredCredentialTypes": [
+        "imap"
+      ],
+      "missingCredentialTypes": [
+        "imap"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "5x7vOjL3XgkRLBaB",
+      "name": "[Code] Automated Work Attendance with Location Triggers",
+      "active": false,
+      "updatedAt": "2026-03-14T01:15:52.639Z",
+      "triggers": [
+        "webhook"
+      ],
+      "nodeCount": 10,
+      "requiredCredentialTypes": [
+        "googleDriveOAuth2Api",
+        "googleSheetsOAuth2Api"
+      ],
+      "missingCredentialTypes": [
+        "googleDriveOAuth2Api",
+        "googleSheetsOAuth2Api"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "3caNyIGbSUKFa6jk",
+      "name": "[Code] OCR receipts from Google Drive",
+      "active": false,
+      "updatedAt": "2026-03-14T01:15:51.867Z",
+      "triggers": [
+        "manual"
+      ],
+      "nodeCount": 10,
+      "requiredCredentialTypes": [
+        "httpHeaderAuth",
+        "googleDriveOAuth2Api",
+        "googleSheetsOAuth2Api"
+      ],
+      "missingCredentialTypes": [
+        "httpHeaderAuth",
+        "googleDriveOAuth2Api",
+        "googleSheetsOAuth2Api"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "2ltMF98uvtoLFnrC",
+      "name": "[Code] PUQ Docker NextCloud deploy",
+      "active": false,
+      "updatedAt": "2026-03-14T01:15:51.709Z",
+      "triggers": [
+        "webhook"
+      ],
+      "nodeCount": 44,
+      "requiredCredentialTypes": [
+        "httpBasicAuth",
+        "sshPassword"
+      ],
+      "missingCredentialTypes": [
+        "httpBasicAuth",
+        "sshPassword"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "5Y6dujjX4BVMMpxP",
+      "name": "[Code] News Extraction",
+      "active": false,
+      "updatedAt": "2026-03-14T01:15:50.556Z",
+      "triggers": [
+        "schedule"
+      ],
+      "nodeCount": 36,
+      "requiredCredentialTypes": [
+        "openAiApi",
+        "nocoDbApiToken"
+      ],
+      "missingCredentialTypes": [
+        "openAiApi",
+        "nocoDbApiToken"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "1lEXJw38R7YxKEZP",
+      "name": "[Code] Manualtrigger Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:15:50.386Z",
+      "triggers": [
+        "manual"
+      ],
+      "nodeCount": 14,
+      "requiredCredentialTypes": [
+        "googlePalmApi"
+      ],
+      "missingCredentialTypes": [
+        "googlePalmApi"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "5YZOtXvEyxKaTgZb",
+      "name": "[Code] Convert image from jpg/png to webp",
+      "active": false,
+      "updatedAt": "2026-03-14T01:15:50.269Z",
+      "triggers": [
+        "manual"
+      ],
+      "nodeCount": 12,
+      "requiredCredentialTypes": [
+        "googleSheetsOAuth2Api",
+        "googleDriveOAuth2Api"
+      ],
+      "missingCredentialTypes": [
+        "googleSheetsOAuth2Api",
+        "googleDriveOAuth2Api"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "1zcRKqZUAPlOSwox",
+      "name": "[Code] INSEE Enrichment for Agile CRM",
+      "active": false,
+      "updatedAt": "2026-03-14T01:15:50.059Z",
+      "triggers": [
+        "manual",
+        "schedule"
+      ],
+      "nodeCount": 14,
+      "requiredCredentialTypes": [
+        "agileCrmApi"
+      ],
+      "missingCredentialTypes": [
+        "agileCrmApi"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "0ozP8XA28bNsSh1j",
+      "name": "[Code] Bitrix24 Task Form Widget Application Workflow example with Webhook Integration",
+      "active": false,
+      "updatedAt": "2026-03-14T01:15:49.596Z",
+      "triggers": [
+        "webhook"
+      ],
+      "nodeCount": 21,
+      "requiredCredentialTypes": [],
+      "missingCredentialTypes": [],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": true,
+      "activatableNow": true
+    },
+    {
+      "id": "4iUiRnSlnukNu9cf",
+      "name": "[Code] Scheduletrigger Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:15:48.349Z",
+      "triggers": [
+        "schedule"
+      ],
+      "nodeCount": 12,
+      "requiredCredentialTypes": [],
+      "missingCredentialTypes": [],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": true,
+      "activatableNow": true
+    },
+    {
+      "id": "1rILlaY7ufnP4I69",
+      "name": "[Code] Formtrigger Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:15:48.130Z",
+      "triggers": [],
+      "nodeCount": 19,
+      "requiredCredentialTypes": [
+        "openAiApi",
+        "gmailOAuth2"
+      ],
+      "missingCredentialTypes": [
+        "openAiApi"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "33basUS8jmTqWwmZ",
+      "name": "[Code] Luma AI Dream Machine - Simple v1 - AK",
+      "active": false,
+      "updatedAt": "2026-03-14T01:15:47.778Z",
+      "triggers": [
+        "manual"
+      ],
+      "nodeCount": 8,
+      "requiredCredentialTypes": [
+        "httpHeaderAuth",
+        "airtableTokenApi"
+      ],
+      "missingCredentialTypes": [
+        "httpHeaderAuth",
+        "airtableTokenApi"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "11q83frRmcQAC4XM",
+      "name": "[Code] Httprequest Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:15:47.551Z",
+      "triggers": [
+        "schedule"
+      ],
+      "nodeCount": 27,
+      "requiredCredentialTypes": [
+        "notionApi"
+      ],
+      "missingCredentialTypes": [
+        "notionApi"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "4C3RNgGLbr7chY8f",
+      "name": "[Code] Stravatrigger Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:15:47.503Z",
+      "triggers": [],
+      "nodeCount": 15,
+      "requiredCredentialTypes": [
+        "stravaOAuth2Api",
+        "googlePalmApi",
+        "gmailOAuth2",
+        "smtp",
+        "whatsAppApi"
+      ],
+      "missingCredentialTypes": [
+        "stravaOAuth2Api",
+        "googlePalmApi",
+        "whatsAppApi"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "2d14T9r4t573N9zD",
+      "name": "[Code] Memorybufferwindow Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:15:47.458Z",
+      "triggers": [],
+      "nodeCount": 24,
+      "requiredCredentialTypes": [
+        "openAiApi",
+        "microsoftOutlookOAuth2Api"
+      ],
+      "missingCredentialTypes": [
+        "openAiApi",
+        "microsoftOutlookOAuth2Api"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "39n82rQ9wo7SOuat",
+      "name": "[Code] Stickynote Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:15:47.308Z",
+      "triggers": [
+        "webhook"
+      ],
+      "nodeCount": 17,
+      "requiredCredentialTypes": [],
+      "missingCredentialTypes": [],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": true,
+      "activatableNow": true
+    },
+    {
+      "id": "3pXBQQXBrzwYOfNy",
+      "name": "[Code] Scheduletrigger Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:15:47.058Z",
+      "triggers": [
+        "schedule"
+      ],
+      "nodeCount": 33,
+      "requiredCredentialTypes": [
+        "airtableTokenApi",
+        "gmailOAuth2",
+        "groqApi",
+        "openAiApi"
+      ],
+      "missingCredentialTypes": [
+        "airtableTokenApi",
+        "groqApi",
+        "openAiApi"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "1FUc4AB3wHKAltKl",
+      "name": "[Code] Stickynote Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:15:46.822Z",
+      "triggers": [
+        "schedule"
+      ],
+      "nodeCount": 34,
+      "requiredCredentialTypes": [
+        "googleDriveOAuth2Api",
+        "n8nApi"
+      ],
+      "missingCredentialTypes": [
+        "googleDriveOAuth2Api",
+        "n8nApi"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "03wIeA8jEbeBmmvv",
+      "name": "[Code] Httprequest Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:15:45.742Z",
+      "triggers": [
+        "schedule"
+      ],
+      "nodeCount": 7,
+      "requiredCredentialTypes": [],
+      "missingCredentialTypes": [],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": true,
+      "activatableNow": true
+    },
+    {
+      "id": "1pHhn2vQsoOFqt4U",
+      "name": "[Code] Googlesheets Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:15:45.380Z",
+      "triggers": [
+        "schedule"
+      ],
+      "nodeCount": 33,
+      "requiredCredentialTypes": [
+        "googleSheetsOAuth2Api",
+        "gmailOAuth2"
+      ],
+      "missingCredentialTypes": [
+        "googleSheetsOAuth2Api"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "3DmORSyvCSve9R5i",
+      "name": "[Code] Set Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:15:45.336Z",
+      "triggers": [
+        "schedule"
+      ],
+      "nodeCount": 12,
+      "requiredCredentialTypes": [
+        "gmailOAuth2",
+        "googleCalendarOAuth2Api"
+      ],
+      "missingCredentialTypes": [
+        "googleCalendarOAuth2Api"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "3Ms7viuYbAL8U1kR",
+      "name": "[Code] Webhook Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:15:45.032Z",
+      "triggers": [
+        "webhook"
+      ],
+      "nodeCount": 15,
+      "requiredCredentialTypes": [
+        "discordBotApi"
+      ],
+      "missingCredentialTypes": [
+        "discordBotApi"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "5HGjrNDqSXzfHZYN",
+      "name": "[Code] Manualtrigger Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:15:44.902Z",
+      "triggers": [
+        "manual"
+      ],
+      "nodeCount": 8,
+      "requiredCredentialTypes": [],
+      "missingCredentialTypes": [],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": true,
+      "activatableNow": false
+    },
+    {
+      "id": "0uZqunAW8Q1nkkXl",
+      "name": "[Calendly] Notion Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:15:43.642Z",
+      "triggers": [],
+      "nodeCount": 4,
+      "requiredCredentialTypes": [
+        "notionApi",
+        "dropcontactApi"
+      ],
+      "missingCredentialTypes": [
+        "notionApi",
+        "dropcontactApi"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "2LI2ASSl0vuarEvA",
+      "name": "[Bannerbear] Formtrigger Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:15:43.208Z",
+      "triggers": [],
+      "nodeCount": 16,
+      "requiredCredentialTypes": [
+        "httpQueryAuth",
+        "bannerbearApi",
+        "discordBotApi",
+        "openAiApi"
+      ],
+      "missingCredentialTypes": [
+        "httpQueryAuth",
+        "bannerbearApi",
+        "discordBotApi",
+        "openAiApi"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "4eNTk3URN9S9mMR9",
+      "name": "[Awss3] Googlesheets Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:15:42.924Z",
+      "triggers": [],
+      "nodeCount": 9,
+      "requiredCredentialTypes": [
+        "googleSheetsOAuth2Api",
+        "aws",
+        "googleDriveOAuth2Api"
+      ],
+      "missingCredentialTypes": [
+        "googleSheetsOAuth2Api",
+        "aws",
+        "googleDriveOAuth2Api"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "2Jjt0V3Iu7voxfBB",
+      "name": "[Automation] Lmchatopenai Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:15:42.578Z",
+      "triggers": [
+        "manual"
+      ],
+      "nodeCount": 6,
+      "requiredCredentialTypes": [
+        "openAiApi",
+        "serpApi"
+      ],
+      "missingCredentialTypes": [
+        "openAiApi",
+        "serpApi"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "30X7xoeRXyf6yACa",
+      "name": "[Aggregate] Klicktipp Workflow",
+      "active": false,
+      "updatedAt": "2026-03-14T01:15:41.201Z",
+      "triggers": [],
+      "nodeCount": 15,
+      "requiredCredentialTypes": [
+        "klickTippApi",
+        "jotFormApi"
+      ],
+      "missingCredentialTypes": [
+        "klickTippApi",
+        "jotFormApi"
+      ],
+      "customNodePackages": [
+        "n8n-nodes-klicktipp"
+      ],
+      "customNodeTypes": [
+        "n8n-nodes-klicktipp.klicktipp"
+      ],
+      "requiresCommunityNodes": true,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "5gBFDfMwbcafygfe",
+      "name": "[TEST] Telegram AI-bot",
+      "active": false,
+      "updatedAt": "2026-03-14T01:15:01.660Z",
+      "triggers": [],
+      "nodeCount": 17,
+      "requiredCredentialTypes": [
+        "telegramApi",
+        "openAiApi"
+      ],
+      "missingCredentialTypes": [
+        "openAiApi"
+      ],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": false,
+      "activatableNow": false
+    },
+    {
+      "id": "3y32B5al3bPTZKqn",
+      "name": "������ Speed-to-Lead — Instant Lead Response Pipeline",
+      "active": true,
+      "updatedAt": "2026-03-14T00:52:00.924Z",
+      "triggers": [
+        "webhook"
+      ],
+      "nodeCount": 5,
+      "requiredCredentialTypes": [],
+      "missingCredentialTypes": [],
+      "customNodePackages": [],
+      "customNodeTypes": [],
+      "requiresCommunityNodes": false,
+      "runnableNow": true,
+      "activatableNow": true
     }
   ]
 }
