@@ -70,22 +70,20 @@ function renderControlTower(initialPath = '/control-tower') {
 describe('ControlTower', () => {
     it('renders the main header', () => {
         renderControlTower()
-        expect(screen.getByText('Control Tower')).toBeInTheDocument()
+        expect(screen.getByText('Performance Analytics')).toBeInTheDocument()
     })
 
-    it('shows Operational status when not loading', () => {
+    it('shows LIVE status badge when not loading', () => {
         renderControlTower()
-        expect(screen.getByText('Operational')).toBeInTheDocument()
+        expect(screen.getByText('LIVE')).toBeInTheDocument()
     })
 
     it('renders KPI labels', () => {
         renderControlTower()
-        expect(screen.getByText('Contacts')).toBeInTheDocument()
-        expect(screen.getByText('Companies')).toBeInTheDocument()
-        expect(screen.getByText('Pipeline')).toBeInTheDocument()
-        expect(screen.getByText('Weighted')).toBeInTheDocument()
-        expect(screen.getByText('Activities (7d)')).toBeInTheDocument()
-        expect(screen.getByText('Active signals')).toBeInTheDocument()
+        expect(screen.getByText('Pipeline Value')).toBeInTheDocument()
+        expect(screen.getByText('Active Deals')).toBeInTheDocument()
+        expect(screen.getByText('Agents Online')).toBeInTheDocument()
+        expect(screen.getByText('Active Signals')).toBeInTheDocument()
     })
 
     it('renders pipeline value from totalValue', () => {
