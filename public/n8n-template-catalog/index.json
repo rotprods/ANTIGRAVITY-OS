@@ -1,82 +1,82 @@
 {
-  "generated_at": "2026-03-13T07:50:19.692Z",
+  "generated_at": "2026-03-14T01:45:22.747Z",
   "source": "n8n/template-catalog",
   "sync_run": {
     "source_url": "https://api.n8n.io/templates/workflows",
-    "total_workflows": 8753,
-    "synced_at": "2026-03-13T07:50:19.692Z",
+    "total_workflows": 8795,
+    "synced_at": "2026-03-14T01:45:22.747Z",
     "category_count": 31
   },
   "stats": {
-    "total": 8753,
-    "installable": 7643,
-    "installReady": 4254,
-    "priority": 3389,
+    "total": 8795,
+    "installable": 7681,
+    "installReady": 4286,
+    "priority": 3395,
     "moduleCounts": {
-      "automation": 8454,
-      "knowledge": 4547,
-      "watchtower": 759,
-      "prospector": 1311,
-      "world_monitor": 791,
-      "finance": 272
+      "automation": 8496,
+      "knowledge": 4572,
+      "world_monitor": 796,
+      "watchtower": 763,
+      "prospector": 1321,
+      "finance": 275
     },
     "agentCounts": {
-      "cortex": 3731,
-      "scribe": 846,
-      "oracle": 547,
-      "herald": 1383,
-      "atlas": 827,
-      "sentinel": 763,
-      "outreach": 2070,
+      "atlas": 831,
+      "cortex": 3750,
+      "oracle": 551,
+      "scribe": 851,
+      "herald": 1391,
+      "outreach": 2082,
+      "sentinel": 767,
       "forge": 621,
-      "hunter": 928,
-      "strategist": 413
+      "hunter": 933,
+      "strategist": 414
     }
   },
   "shards": [
     {
       "bucket": "b0",
-      "count": 377,
+      "count": 379,
       "path": "./shards/b0.json"
     },
     {
       "bucket": "b1",
-      "count": 364,
+      "count": 366,
       "path": "./shards/b1.json"
     },
     {
       "bucket": "b10",
-      "count": 367,
+      "count": 369,
       "path": "./shards/b10.json"
     },
     {
       "bucket": "b11",
-      "count": 366,
+      "count": 369,
       "path": "./shards/b11.json"
     },
     {
       "bucket": "b12",
-      "count": 355,
+      "count": 356,
       "path": "./shards/b12.json"
     },
     {
       "bucket": "b13",
-      "count": 368,
+      "count": 369,
       "path": "./shards/b13.json"
     },
     {
       "bucket": "b14",
-      "count": 352,
+      "count": 354,
       "path": "./shards/b14.json"
     },
     {
       "bucket": "b15",
-      "count": 357,
+      "count": 359,
       "path": "./shards/b15.json"
     },
     {
       "bucket": "b16",
-      "count": 374,
+      "count": 377,
       "path": "./shards/b16.json"
     },
     {
@@ -91,17 +91,17 @@
     },
     {
       "bucket": "b19",
-      "count": 365,
+      "count": 366,
       "path": "./shards/b19.json"
     },
     {
       "bucket": "b2",
-      "count": 366,
+      "count": 369,
       "path": "./shards/b2.json"
     },
     {
       "bucket": "b20",
-      "count": 363,
+      "count": 365,
       "path": "./shards/b20.json"
     },
     {
@@ -111,47 +111,47 @@
     },
     {
       "bucket": "b22",
-      "count": 342,
+      "count": 343,
       "path": "./shards/b22.json"
     },
     {
       "bucket": "b23",
-      "count": 360,
+      "count": 362,
       "path": "./shards/b23.json"
     },
     {
       "bucket": "b3",
-      "count": 369,
+      "count": 371,
       "path": "./shards/b3.json"
     },
     {
       "bucket": "b4",
-      "count": 366,
+      "count": 367,
       "path": "./shards/b4.json"
     },
     {
       "bucket": "b5",
-      "count": 363,
+      "count": 364,
       "path": "./shards/b5.json"
     },
     {
       "bucket": "b6",
-      "count": 372,
+      "count": 374,
       "path": "./shards/b6.json"
     },
     {
       "bucket": "b7",
-      "count": 357,
+      "count": 360,
       "path": "./shards/b7.json"
     },
     {
       "bucket": "b8",
-      "count": 372,
+      "count": 374,
       "path": "./shards/b8.json"
     },
     {
       "bucket": "b9",
-      "count": 365,
+      "count": 369,
       "path": "./shards/b9.json"
     }
   ]
