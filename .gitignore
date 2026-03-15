@@ -17,6 +17,9 @@ dist-ssr
 .env.*
 .env.backup
 .env*.backup
+!.env.example
+!supabase/.env.deploy.example
+!oculops-chain/.env.example
 ANTIGRAVITY_OS_MASTER_SNAPSHOT*.md
 release/
 .gitnexus/
