@@ -1,24 +1,13 @@
 {
-  "generatedAt": "2026-03-15T23:23:37.319Z",
+  "generatedAt": "2026-03-15T23:24:05.356Z",
   "project": "OCULOPS",
   "git": {
-    "branch": "HEAD",
-    "sha": "6222374",
+    "branch": "main",
+    "sha": "509f857",
     "ahead": 0,
     "behind": 0,
-    "dirty": true,
-    "changedFiles": [
-      "M  docs/OCULOPS_CONVERGENCE_MASTER.md",
-      "UU ops/control-tower.md",
-      "UU ops/control-tower.snapshot.json",
-      "M  ops/workstreams.json",
-      "A  reports/n8n-cloudflare-bridge.json",
-      "M  supabase/functions/_shared/whatsapp.ts",
-      "R  supabase/migrations/20260308102000_public_api_catalog_activation.sql -> supabase/migrations/20260310110500_public_api_catalog_activation.sql",
-      "M  supabase/migrations/20260310140000_event_dispatcher_webhook.sql",
-      "M  supabase/migrations/20260310150000_knowledge_pgvector.sql",
-      "M  supabase/migrations/20260316160000_welcome_email_webhook.sql"
-    ]
+    "dirty": false,
+    "changedFiles": []
   },
   "readiness": {
     "overallState": "green",
@@ -276,13 +265,12 @@
   ],
   "warnings": [
     "n8n workflows bloqueados por credenciales: 161",
-    "n8n reconcile con workflows bloqueados: 29",
-    "Working tree con cambios locales: 10 archivo(s)"
+    "n8n reconcile con workflows bloqueados: 29"
   ],
   "github": {
-    "enabled": false,
-    "reason": "GITHUB_TOKEN or GITHUB_REPOSITORY missing",
-    "openPullRequests": null,
-    "openIssues": null
+    "enabled": true,
+    "reason": null,
+    "openPullRequests": 0,
+    "openIssues": 0
   }
 }

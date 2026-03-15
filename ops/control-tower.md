@@ -1,7 +1,7 @@
 # Control Tower
 
-Last updated: 2026-03-15T23:23:37.319Z
-Branch: `HEAD` · SHA: `6222374`
+Last updated: 2026-03-15T23:24:05.356Z
+Branch: `main` · SHA: `509f857`
 
 ## System Pulse
 
@@ -11,7 +11,7 @@ Branch: `HEAD` · SHA: `6222374`
 | Public API connectors live | 7/11 | missing keys: 4 |
 | n8n runnable workflows | 39/200 | blocked credentials: 161 |
 | n8n reconcile runnable | 166/198 | blocked: 29 |
-| Git sync | ahead 0 / behind 0 | dirty files: 10 |
+| Git sync | ahead 0 / behind 0 | dirty files: 0 |
 
 ## Workstreams
 
@@ -38,24 +38,15 @@ Branch: `HEAD` · SHA: `6222374`
 
 - n8n workflows bloqueados por credenciales: 161
 - n8n reconcile con workflows bloqueados: 29
-- Working tree con cambios locales: 10 archivo(s)
 
 ## Pending Local Changes
 
-- `M  docs/OCULOPS_CONVERGENCE_MASTER.md`
-- `UU ops/control-tower.md`
-- `UU ops/control-tower.snapshot.json`
-- `M  ops/workstreams.json`
-- `A  reports/n8n-cloudflare-bridge.json`
-- `M  supabase/functions/_shared/whatsapp.ts`
-- `R  supabase/migrations/20260308102000_public_api_catalog_activation.sql -> supabase/migrations/20260310110500_public_api_catalog_activation.sql`
-- `M  supabase/migrations/20260310140000_event_dispatcher_webhook.sql`
-- `M  supabase/migrations/20260310150000_knowledge_pgvector.sql`
-- `M  supabase/migrations/20260316160000_welcome_email_webhook.sql`
+- Working tree clean
 
 ## GitHub Signals
 
-- Not available in current context (GITHUB_TOKEN or GITHUB_REPOSITORY missing)
+- Open pull requests: 0
+- Open issues: 0
 
 ## Usage Rules
 
