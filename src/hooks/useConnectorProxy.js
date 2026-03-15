@@ -1,5 +1,6 @@
 import { useState, useCallback, useRef } from 'react'
 import { supabase } from '../lib/supabase'
+import { dispatchGovernedTool } from '../lib/controlPlane'
 
 const BASE = import.meta.env.VITE_SUPABASE_URL
 
@@ -10,7 +11,11 @@ async function getToken() {
 }
 
 export function useConnectorProxy(defaults = {}, options = {}) {
-  const { cacheTTL = 0 } = options
+  const {
+    cacheTTL = 0,
+    sourceAgent = 'copilot',
+    useGovernance = true,
+  } = options
   const [data, setData] = useState(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
@@ -43,6 +48,8 @@ export function useConnectorProxy(defaults = {}, options = {}) {
       body: payload.body || defaults.body || undefined,
       healthcheck: Boolean(payload.healthcheck),
     }
+    const riskClass = payload.riskClass || payload.risk_class || defaults.riskClass || defaults.risk_class || (requestPayload.healthcheck ? 'low' : 'medium')
+    const shouldGovern = payload.governed ?? defaults.governed ?? useGovernance
 
     const cacheKey = JSON.stringify(requestPayload)
     if (cacheTTL > 0) {
@@ -58,19 +65,39 @@ export function useConnectorProxy(defaults = {}, options = {}) {
       const token = await getToken()
       if (!BASE) throw new Error('Supabase URL not configured')
 
-      const response = await fetch(`${BASE}/functions/v1/api-proxy`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          ...(token ? { Authorization: `Bearer ${token}` } : {}),
-        },
-        body: JSON.stringify(requestPayload),
-      })
-
-      const result = await response.json().catch(() => ({ error: `HTTP ${response.status}` }))
-      if (!response.ok || result?.ok === false) {
-        throw new Error(result?.error || `HTTP ${response.status}`)
-      }
+      const result = shouldGovern
+        ? await dispatchGovernedTool({
+          sourceAgent,
+          source: payload.source || defaults.source || 'connector_proxy_ui',
+          targetRef: 'api-proxy',
+          riskClass,
+          toolCodeName: 'api-proxy',
+          functionName: 'api-proxy',
+          payload: {
+            ...requestPayload,
+            risk_class: riskClass,
+          },
+          context: {
+            connector_id: connectorId,
+            endpoint_name: endpointName,
+            healthcheck: requestPayload.healthcheck,
+          },
+          userId: token ? undefined : null,
+        })
+        : await fetch(`${BASE}/functions/v1/api-proxy`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          },
+          body: JSON.stringify(requestPayload),
+        }).then(async (response) => {
+          const responseResult = await response.json().catch(() => ({ error: `HTTP ${response.status}` }))
+          if (!response.ok || responseResult?.ok === false) {
+            throw new Error(responseResult?.error || `HTTP ${response.status}`)
+          }
+          return responseResult
+        })
 
       setData(result)
       if (cacheTTL > 0) {
@@ -96,7 +123,7 @@ export function useConnectorProxy(defaults = {}, options = {}) {
     } finally {
       setLoading(false)
     }
-  }, [cacheTTL, defaults.body, defaults.connectorId, defaults.endpointName, defaults.params])
+  }, [cacheTTL, defaults.body, defaults.connectorId, defaults.endpointName, defaults.governed, defaults.params, defaults.riskClass, defaults.risk_class, defaults.source, sourceAgent, useGovernance])
 
   return { data, loading, error, history, execute }
 }

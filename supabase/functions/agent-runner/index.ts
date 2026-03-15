@@ -3,6 +3,8 @@ import { runBrain } from "../_shared/agent-brain-v2.ts";
 import { checkRateLimit, errorResponse, handleCors, jsonResponse, readJson, requireBearerAuth } from "../_shared/http.ts";
 import { admin } from "../_shared/supabase.ts";
 
+const SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") || "";
+
 // ═══════════════════════════════════════════════════════════════════════════════
 // AGENT-RUNNER — Generic runtime for vault-imported agents
 //
@@ -27,11 +29,21 @@ Deno.serve(async (req: Request) => {
   }
 
   // ── Auth ──
-  const { userId, error: authError } = await requireBearerAuth(req);
-  if (authError) return authError;
+  const authHeader = req.headers.get("Authorization") || "";
+  const bearerToken = authHeader.replace(/^Bearer\s+/i, "");
+  const isServiceRoleInvocation = Boolean(SERVICE_ROLE_KEY) && bearerToken === SERVICE_ROLE_KEY;
+
+  let userId: string | null = null;
+  if (isServiceRoleInvocation) {
+    userId = "service-role";
+  } else {
+    const auth = await requireBearerAuth(req);
+    if (auth.error) return auth.error;
+    userId = auth.userId || null;
+  }
 
   // ── Rate limit: 10 agent runs/min per user ──
-  if (!checkRateLimit(userId!, 10, 60_000)) {
+  if (!checkRateLimit(userId || "anonymous", 10, 60_000)) {
     return errorResponse("Rate limit exceeded — max 10 agent runs per minute", 429);
   }
 

@@ -30,6 +30,7 @@ function createOfflineQuery() {
         upsert: () => { mode = 'write'; return builder; },
         delete: () => { mode = 'write'; return builder; },
         eq: () => builder,
+        like: () => builder,
         is: () => builder,
         or: () => builder,
         in: () => builder,

@@ -44,3 +44,8 @@ credentials.json
 .claude/
 docker_logs.txt
 design/
+
+# Temp files and Nested Projects
+tmp/
+tmp-*.png
+AIOPS/

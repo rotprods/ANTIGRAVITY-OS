@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { callSupabaseFunction, subscribeDebouncedToTable, supabase } from '../lib/supabase'
+import { subscribeDebouncedToTable, supabase } from '../lib/supabase'
+import { dispatchGovernedTool } from '../lib/controlPlane'
 
 const OUTREACH_STATUSES = ['staged', 'approved', 'sent', 'replied', 'skipped']
 
@@ -53,8 +54,18 @@ export function useOutreachQueue(initialStatus = 'staged') {
         setError(null)
 
         try {
-            const result = await callSupabaseFunction('agent-outreach', {
-                body: { action, ...payload },
+            const result = await dispatchGovernedTool({
+                sourceAgent: 'outreach',
+                source: 'outreach_queue_ui',
+                targetRef: 'agent-outreach',
+                riskClass: action === 'send' ? 'high' : 'medium',
+                toolCodeName: 'agent-outreach',
+                payload: { action, ...payload },
+                context: {
+                    action,
+                    queue_item_id: payload.id || null,
+                    niche: payload.niche || null,
+                },
             })
             await loadQueue()
             return result

@@ -6,6 +6,7 @@
 import { useState } from 'react'
 import { useAppStore } from '../../stores/useAppStore'
 import { useLeads } from '../../hooks/useLeads'
+import { dispatchGovernedTool } from '../../lib/controlPlane'
 
 const SCRIPTS = {
     dm: `Hola [Nombre],
@@ -113,21 +114,23 @@ function GTM() {
         toast('CORTEX SCAN INITIATED...', 'info');
 
         try {
-            const url = import.meta.env.VITE_SUPABASE_URL + '/functions/v1/agent-cortex';
-            const key = import.meta.env.VITE_SUPABASE_ANON_KEY;
-
-            const res = await fetch(url, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${key}` },
-                body: JSON.stringify({
+            const data = await dispatchGovernedTool({
+                sourceAgent: 'cortex',
+                source: 'gtm_ui',
+                targetRef: 'agent-cortex',
+                riskClass: 'medium',
+                toolCodeName: 'agent-cortex',
+                payload: {
                     action: 'query_public_data',
                     query: `Find company information, description, or news for the company: "${target}" using a public Wikipedia or Knowledge Graph API.`
-                })
+                },
+                context: {
+                    target,
+                    enrichment_type: 'company_public_data',
+                },
             });
 
-            const data = await res.json();
-
-            const summary = data?.output?.summary || data?.summary || '';
+            const summary = data?.result?.summary || data?.output?.summary || data?.summary || '';
             if (summary) {
                 setForm(f => ({
                     ...f,

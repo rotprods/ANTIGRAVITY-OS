@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { callSupabaseFunction, subscribeDebouncedToTable, supabase } from '../lib/supabase'
+import { subscribeDebouncedToTable, supabase } from '../lib/supabase'
+import { dispatchGovernedTool } from '../lib/controlPlane'
 
 const APPROVAL_STATUSES = ['pending', 'approved', 'rejected', 'expired']
 
@@ -67,12 +68,21 @@ export function useApprovals(initialStatus = 'pending') {
         setError(null)
 
         try {
-            const result = await callSupabaseFunction('agent-outreach', {
-                body: {
+            const result = await dispatchGovernedTool({
+                sourceAgent: 'outreach',
+                source: 'approvals_ui',
+                targetRef: 'agent-outreach',
+                riskClass: 'high',
+                toolCodeName: 'agent-outreach',
+                payload: {
                     action: 'resolve_approval',
                     approval_id: approvalId,
                     decision,
                     comment,
+                },
+                context: {
+                    approval_id: approvalId,
+                    decision,
                 },
             })
             await loadApprovals()

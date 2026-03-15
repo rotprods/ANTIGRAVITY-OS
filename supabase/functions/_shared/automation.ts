@@ -864,11 +864,45 @@ async function executeAgentStep(step: JsonRecord, workflow: JsonRecord, context:
     throw new Error("run_agent requires agentCodeName");
   }
 
-  return await callEdgeFunction(`agent-${agentCodeName}`, mergeRecords({
+  const correlationId = getFirstCompact(
+    asRecord(context.trace).correlation_id,
+    context.correlation_id,
+    asRecord(context.metadata).correlation_id,
+  ) || null;
+  const orgId = getFirstCompact(
+    workflow.org_id,
+    context.org_id,
+    asRecord(context.trace).org_id,
+  ) || null;
+  const workflowAgentCodeName = resolveWorkflowAgentCodeName(step, workflow, context) || "copilot";
+  const dispatchPayload = mergeRecords({
     action: compact(config.action) || "cycle",
   }, config.payload, context, {
     user_id: compact(workflow.user_id) || compact(context.user_id) || null,
-  }), authHeader || null);
+  });
+
+  const controlPlaneDispatch = await callEdgeFunction("control-plane", {
+    action: "tool_dispatch",
+    org_id: orgId,
+    user_id: compact(workflow.user_id) || compact(context.user_id) || null,
+    source_agent: workflowAgentCodeName,
+    source: "automation_workflow",
+    target_type: "agent_action",
+    target_ref: `agent-${agentCodeName}`,
+    risk_class: "medium",
+    correlation_id: correlationId,
+    context: {
+      workflow_id: workflow.id,
+      workflow_name: workflow.name,
+      workflow_step_id: compact(step.id) || null,
+      requested_agent: agentCodeName,
+      governed_agent_dispatch: true,
+    },
+    tool_code_name: `agent-${agentCodeName}`,
+    payload: dispatchPayload,
+  }, authHeader || null);
+
+  return extractControlPlaneDispatchResult(controlPlaneDispatch, correlationId);
 }
 
 async function executeNotifyStep(step: JsonRecord, workflow: JsonRecord, context: JsonRecord) {

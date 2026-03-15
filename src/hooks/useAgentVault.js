@@ -5,6 +5,7 @@
 
 import { useState, useEffect, useMemo, useCallback } from 'react'
 import { supabase, isSupabaseConfigured } from '../lib/supabase'
+import { dispatchGovernedTool } from '../lib/controlPlane'
 
 // Business role mapping: which vault namespaces map to OCULOPS agents
 export const ROLE_CAPABILITY_MAP = {
@@ -100,14 +101,23 @@ export function useAgentVault() {
     setAgents(prev => prev.map(a => a.id === id ? { ...a, is_active: !currentState } : a))
   }, [])
 
-  // ── Run agent via agent-runner ──
+  // ── Run agent via control-plane -> agent-runner ──
   const runAgent = useCallback(async (codeName, goal, context = {}) => {
     setRunningAgent(codeName)
     try {
-      const { data, error: err } = await supabase.functions.invoke('agent-runner', {
-        body: { agent: codeName, goal, context },
+      const data = await dispatchGovernedTool({
+        sourceAgent: 'copilot',
+        source: 'agent_vault_ui',
+        targetRef: 'agent-runner',
+        riskClass: 'medium',
+        toolCodeName: 'agent-runner',
+        functionName: 'agent-runner',
+        payload: { agent: codeName, goal, context },
+        context: {
+          requested_agent: codeName,
+          goal: goal || null,
+        },
       })
-      if (err) throw err
       // Update local stats
       setAgents(prev => prev.map(a =>
         a.code_name === codeName

@@ -6,6 +6,18 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../../lib/supabase'
+import { useAppStore } from '../../stores/useAppStore'
+import {
+    getRuntimeHealth,
+    getRuntimeLogsTail,
+    getRuntimeOpenClaw,
+    getRuntimePm2,
+    getRuntimeSnapshot,
+    loadRuntimeConfig,
+    probeRuntimeStack,
+    saveRuntimeConfig,
+    sendRuntimeClawbot,
+} from '../../lib/runtimeClient'
 import {
     N8N_AI_STACK_SERVICES,
     N8N_AIRDROP_INTEL,
@@ -35,29 +47,6 @@ async function fetchSystemSnapshot(serviceKey, view = 'system') {
         if (!res.ok) return null
         return await res.json()
     } catch { return null }
-}
-
-function normalizeBaseUrl(value) {
-    const raw = String(value || '').trim()
-    return raw.endsWith('/') ? raw.slice(0, -1) : raw
-}
-
-function buildEndpoint(baseUrl, healthPath) {
-    const path = healthPath.startsWith('/') ? healthPath : `/${healthPath}`
-    return `${baseUrl}${path}`
-}
-
-async function fetchServiceProbe(endpoint) {
-    const controller = new AbortController()
-    const timeout = setTimeout(() => controller.abort(), 4000)
-    try {
-        const response = await fetch(endpoint, { method: 'GET', signal: controller.signal })
-        return { online: response.ok, statusCode: response.status }
-    } catch {
-        return { online: false, statusCode: null }
-    } finally {
-        clearTimeout(timeout)
-    }
 }
 
 function asRecord(value) {
@@ -102,7 +91,18 @@ function StatusDot({ status }) {
 
 export default function CommandCenter() {
     const navigate = useNavigate()
+    const toast = useAppStore((state) => state.toast)
     const [serviceKey, setServiceKey] = useState('')
+    const [runtimeConfig, setRuntimeConfig] = useState(() => loadRuntimeConfig())
+    const [runtimeHealth, setRuntimeHealth] = useState(null)
+    const [runtimeSnapshot, setRuntimeSnapshot] = useState(null)
+    const [runtimeOpenClaw, setRuntimeOpenClaw] = useState(null)
+    const [runtimeLogs, setRuntimeLogs] = useState([])
+    const [runtimeLogSource, setRuntimeLogSource] = useState('openclaw')
+    const [runtimeActionBusy, setRuntimeActionBusy] = useState(false)
+    const [runtimeActionResult, setRuntimeActionResult] = useState(null)
+    const [clawbotAgent, setClawbotAgent] = useState('orchestrator')
+    const [clawbotMessage, setClawbotMessage] = useState('Dame un brief corto del estado de OCULOPS y los procesos mas importantes.')
     const [bridgeStatus, setBridgeStatus] = useState(null)
     const [systemSnapshot, setSystemSnapshot] = useState(null)
     const [commandLog, setCommandLog] = useState([])
@@ -115,24 +115,34 @@ export default function CommandCenter() {
     const refreshRef = useRef(null)
     const stackRefreshRef = useRef(null)
 
-    // Load service key from localStorage
+    // Load persisted keys/config
     useEffect(() => {
         const saved = localStorage.getItem('td_service_key')
         if (saved) setServiceKey(saved)
+        setRuntimeConfig(loadRuntimeConfig())
     }, [])
 
-    // Fetch bridge status & snapshot
+    // Fetch bridge status + runtime snapshot
     const refresh = useCallback(async () => {
-        if (!serviceKey) return
         setLoading(true)
-        const [bridge, snapshot] = await Promise.all([
-            fetchBridgeStatus(serviceKey),
-            fetchSystemSnapshot(serviceKey, 'system'),
+
+        const [bridge, snapshot, health, runtimeSnap, openClaw, logTail] = await Promise.allSettled([
+            serviceKey ? fetchBridgeStatus(serviceKey) : Promise.resolve(null),
+            serviceKey ? fetchSystemSnapshot(serviceKey, 'system') : Promise.resolve(null),
+            getRuntimeHealth(runtimeConfig),
+            getRuntimeSnapshot(runtimeConfig),
+            getRuntimeOpenClaw(runtimeConfig),
+            getRuntimeLogsTail(runtimeLogSource, 8, runtimeConfig),
         ])
-        setBridgeStatus(bridge)
-        setSystemSnapshot(snapshot)
+
+        setBridgeStatus(bridge.status === 'fulfilled' ? bridge.value : null)
+        setSystemSnapshot(snapshot.status === 'fulfilled' ? snapshot.value : null)
+        setRuntimeHealth(health.status === 'fulfilled' ? health.value : null)
+        setRuntimeSnapshot(runtimeSnap.status === 'fulfilled' ? runtimeSnap.value : null)
+        setRuntimeOpenClaw(openClaw.status === 'fulfilled' ? openClaw.value : null)
+        setRuntimeLogs(logTail.status === 'fulfilled' ? (logTail.value?.lines || []) : [])
         setLoading(false)
-    }, [serviceKey])
+    }, [runtimeConfig, runtimeLogSource, serviceKey])
 
     useEffect(() => {
         refresh()
@@ -141,22 +151,10 @@ export default function CommandCenter() {
     }, [refresh])
 
     const refreshStack = useCallback(async () => {
-        const statuses = await Promise.all(
-            N8N_AI_STACK_SERVICES.map(async (service) => {
-                const baseUrl = normalizeBaseUrl(import.meta.env[service.envKey] || service.defaultBaseUrl)
-                const endpoint = buildEndpoint(baseUrl, service.healthPath)
-                const probe = await fetchServiceProbe(endpoint)
-                return {
-                    ...service,
-                    baseUrl,
-                    endpoint,
-                    ...probe,
-                }
-            })
-        )
+        const statuses = await probeRuntimeStack(runtimeConfig)
         setStackStatus(statuses)
         setStackRefreshedAt(new Date().toISOString())
-    }, [])
+    }, [runtimeConfig])
 
     useEffect(() => {
         refreshStack()
@@ -194,12 +192,105 @@ export default function CommandCenter() {
 
     const saveKey = () => {
         localStorage.setItem('td_service_key', serviceKey)
+        const nextConfig = saveRuntimeConfig(runtimeConfig)
+        setRuntimeConfig(nextConfig)
         refresh()
+        refreshStack()
     }
+
+    const runRuntimeRefresh = useCallback(async () => {
+        setRuntimeActionBusy(true)
+        try {
+            const [snapshot, stack, pm2] = await Promise.all([
+                refresh(),
+                refreshStack(),
+                getRuntimePm2(runtimeConfig),
+            ])
+            setRuntimeSnapshot((current) => ({
+                ...(current || {}),
+                pm2: Array.isArray(pm2) ? pm2 : current?.pm2 || [],
+            }))
+            setRuntimeActionResult({
+                type: 'refresh',
+                label: 'Runtime refresh completed',
+                detail: `Stack refreshed at ${new Date().toLocaleTimeString()}`,
+            })
+            toast('Runtime refreshed', 'success')
+            return { snapshot, stack, pm2 }
+        } catch (error) {
+            toast(error.message || 'Runtime refresh failed', 'warning')
+            setRuntimeActionResult({
+                type: 'refresh',
+                label: 'Runtime refresh failed',
+                detail: error.message || 'Unknown error',
+            })
+            return null
+        } finally {
+            setRuntimeActionBusy(false)
+        }
+    }, [refresh, refreshStack, runtimeConfig, toast])
+
+    const loadRuntimeLogSource = useCallback(async (source) => {
+        setRuntimeActionBusy(true)
+        setRuntimeLogSource(source)
+        try {
+            const response = await getRuntimeLogsTail(source, 20, runtimeConfig)
+            setRuntimeLogs(response?.lines || [])
+            setRuntimeActionResult({
+                type: 'logs',
+                label: 'Live logs loaded',
+                detail: source,
+            })
+            toast(`Logs loaded: ${source}`, 'success')
+        } catch (error) {
+            toast(error.message || 'Could not load logs', 'warning')
+            setRuntimeActionResult({
+                type: 'logs',
+                label: 'Log tail failed',
+                detail: error.message || source,
+            })
+        } finally {
+            setRuntimeActionBusy(false)
+        }
+    }, [runtimeConfig, toast])
+
+    const runClawbot = useCallback(async () => {
+        if (!clawbotMessage.trim()) {
+            toast('Escribe un mensaje para OpenClaw', 'warning')
+            return
+        }
+        setRuntimeActionBusy(true)
+        try {
+            const result = await sendRuntimeClawbot({ agent: clawbotAgent, message: clawbotMessage.trim() }, runtimeConfig)
+            setRuntimeActionResult({
+                type: 'clawbot',
+                label: `${clawbotAgent} responded`,
+                detail: result?.text || 'No text returned',
+                meta: result,
+            })
+            toast(`${clawbotAgent} respondio`, 'success')
+            await loadRuntimeLogSource('openclaw')
+        } catch (error) {
+            toast(error.message || 'OpenClaw action failed', 'warning')
+            setRuntimeActionResult({
+                type: 'clawbot',
+                label: 'OpenClaw action failed',
+                detail: error.message || 'Unknown error',
+            })
+        } finally {
+            setRuntimeActionBusy(false)
+        }
+    }, [clawbotAgent, clawbotMessage, loadRuntimeLogSource, runtimeConfig, toast])
 
     const clients = bridgeStatus?.connectedClients || []
     const health = bridgeStatus?.systemHealth || systemSnapshot || {}
     const onlineStackCount = useMemo(() => stackStatus.filter(service => service.online).length, [stackStatus])
+    const stackServiceTotal = stackStatus.length || N8N_AI_STACK_SERVICES.length
+    const runtimeReadiness = runtimeSnapshot?.readiness?.global_status || runtimeSnapshot?.readiness?.overall || 'UNKNOWN'
+    const runtimePm2 = runtimeSnapshot?.pm2 || []
+    const runtimeGovernanceCount = runtimeSnapshot?.governance?.recentDecisions?.length || 0
+    const runtimeAgents = runtimeOpenClaw?.agents || []
+    const runtimeChannels = runtimeOpenClaw?.channels || {}
 
     const tabs = [
         { id: 'overview', label: 'OVERVIEW' },
@@ -242,7 +333,7 @@ export default function CommandCenter() {
                     <div className="mono text-xs" style={{ borderLeft: '1px solid var(--border-subtle)', paddingLeft: 16 }}>
                         <span style={{ color: 'var(--text-tertiary)' }}>AI STACK:</span>
                         <span style={{ color: onlineStackCount > 0 ? 'var(--color-success)' : 'var(--text-tertiary)', fontWeight: 'bold', marginLeft: 8 }}>
-                            {onlineStackCount}/{N8N_AI_STACK_SERVICES.length}
+                            {onlineStackCount}/{stackServiceTotal}
                         </span>
                     </div>
                     <div className={`status-dot ${clients.length > 0 ? 'active' : ''}`}></div>
@@ -317,6 +408,50 @@ export default function CommandCenter() {
                                     </span>
                                 </div>
                             ))}
+                        </div>
+                    </div>
+                )}
+
+                {activeTab === 'overview' && (
+                    <div style={{ display: 'grid', gridTemplateColumns: '1.1fr 0.9fr', gap: 16, marginBottom: 16 }}>
+                        <div style={{ border: '1px solid var(--border-default)', background: 'var(--surface-raised)' }}>
+                            <div className="mono text-xs font-bold" style={{ padding: '12px 16px', background: 'var(--border-subtle)', borderBottom: '1px solid var(--border-default)', color: 'var(--accent-primary)' }}>
+                                OCULOPS runtime
+                            </div>
+                            <div style={{ padding: 16, display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 12 }}>
+                                {[
+                                    { label: 'Gateway', value: runtimeHealth?.status === 'ok' ? 'ONLINE' : 'OFFLINE', color: runtimeHealth?.status === 'ok' ? 'var(--color-success)' : 'var(--color-danger)' },
+                                    { label: 'Readiness', value: runtimeReadiness, color: 'var(--accent-primary)' },
+                                    { label: 'PM2 online', value: runtimePm2.filter(proc => proc.status === 'online').length, color: 'var(--color-success)' },
+                                    { label: 'Governance', value: runtimeGovernanceCount, color: 'var(--text-primary)' },
+                                    { label: 'OpenClaw agents', value: runtimeAgents.length, color: 'var(--accent-primary)' },
+                                    { label: 'Channels enabled', value: Object.values(runtimeChannels).filter(Boolean).length, color: 'var(--color-warning)' },
+                                ].map((item) => (
+                                    <div key={item.label} style={{ border: '1px solid var(--border-subtle)', padding: 12 }}>
+                                        <div className="mono text-xs text-tertiary" style={{ marginBottom: 6 }}>{item.label}</div>
+                                        <div className="mono" style={{ fontSize: 22, fontWeight: 800, color: item.color }}>{item.value}</div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        <div style={{ border: '1px solid var(--border-default)', background: 'var(--surface-raised)' }}>
+                            <div className="mono text-xs font-bold" style={{ padding: '12px 16px', background: 'var(--border-subtle)', borderBottom: '1px solid var(--border-default)', color: 'var(--accent-primary)' }}>
+                                OpenClaw live feed
+                            </div>
+                            <div className="mono text-xs text-tertiary" style={{ padding: '8px 12px', borderBottom: '1px solid var(--border-subtle)' }}>
+                                SOURCE: {runtimeLogSource.toUpperCase()}
+                            </div>
+                            <div style={{ padding: 12, display: 'flex', flexDirection: 'column', gap: 8, maxHeight: 260, overflowY: 'auto' }}>
+                                {(runtimeLogs || []).map((line, index) => (
+                                    <div key={`${line}-${index}`} className="mono" style={{ fontSize: 10, color: 'var(--text-tertiary)', borderBottom: '1px solid var(--border-subtle)', paddingBottom: 8, whiteSpace: 'pre-wrap' }}>
+                                        {line}
+                                    </div>
+                                ))}
+                                {(!runtimeLogs || runtimeLogs.length === 0) && (
+                                    <div className="mono text-xs text-tertiary" style={{ padding: 24, textAlign: 'center' }}>NO RUNTIME LOGS YET</div>
+                                )}
+                            </div>
                         </div>
                     </div>
                 )}
@@ -419,6 +554,114 @@ export default function CommandCenter() {
                         </div>
 
                         <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+                            <div style={{ border: '1px solid var(--border-default)', background: 'var(--surface-raised)' }}>
+                                <div className="mono text-xs font-bold" style={{ padding: '12px 16px', background: 'var(--border-subtle)', borderBottom: '1px solid var(--border-default)', color: 'var(--accent-primary)' }}>
+                                    Runtime actions
+                                </div>
+                                <div style={{ padding: 14, display: 'flex', flexDirection: 'column', gap: 12 }}>
+                                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                                        <button
+                                            onClick={runRuntimeRefresh}
+                                            className="mono text-xs"
+                                            disabled={runtimeActionBusy}
+                                            style={{ padding: '8px 10px', background: 'var(--accent-primary)', color: '#000', border: 'none', cursor: 'pointer', fontWeight: 700, opacity: runtimeActionBusy ? 0.6 : 1 }}
+                                        >
+                                            REFRESH RUNTIME
+                                        </button>
+                                        <button
+                                            onClick={() => loadRuntimeLogSource('openclaw')}
+                                            className="mono text-xs"
+                                            disabled={runtimeActionBusy}
+                                            style={{ padding: '8px 10px', background: 'transparent', color: 'var(--text-primary)', border: '1px solid var(--border-default)', cursor: 'pointer', opacity: runtimeActionBusy ? 0.6 : 1 }}
+                                        >
+                                            OPENCLAW LOG
+                                        </button>
+                                        <button
+                                            onClick={() => loadRuntimeLogSource('audit')}
+                                            className="mono text-xs"
+                                            disabled={runtimeActionBusy}
+                                            style={{ padding: '8px 10px', background: 'transparent', color: 'var(--text-primary)', border: '1px solid var(--border-default)', cursor: 'pointer', opacity: runtimeActionBusy ? 0.6 : 1 }}
+                                        >
+                                            AUDIT LOG
+                                        </button>
+                                    </div>
+
+                                    <div style={{ border: '1px solid var(--border-subtle)', padding: 12, display: 'flex', flexDirection: 'column', gap: 10 }}>
+                                        <div className="mono text-xs font-bold" style={{ color: 'var(--text-primary)' }}>OpenClaw poke</div>
+                                        <div style={{ display: 'grid', gap: 8 }}>
+                                            <select
+                                                value={clawbotAgent}
+                                                onChange={(e) => setClawbotAgent(e.target.value)}
+                                                className="mono text-xs"
+                                                style={{ background: 'var(--surface-inset)', border: '1px solid var(--border-default)', color: 'var(--text-primary)', padding: '8px 12px', outline: 'none' }}
+                                            >
+                                                {['orchestrator', 'main', 'architect', 'coder', 'qa', 'claw'].map((agent) => (
+                                                    <option key={agent} value={agent}>{agent}</option>
+                                                ))}
+                                            </select>
+                                            <textarea
+                                                value={clawbotMessage}
+                                                onChange={(e) => setClawbotMessage(e.target.value)}
+                                                rows={4}
+                                                className="mono text-xs"
+                                                style={{ background: 'var(--surface-inset)', border: '1px solid var(--border-default)', color: 'var(--text-primary)', padding: '10px 12px', outline: 'none', resize: 'vertical' }}
+                                            />
+                                            <button
+                                                onClick={runClawbot}
+                                                className="mono text-xs"
+                                                disabled={runtimeActionBusy}
+                                                style={{ padding: '8px 10px', background: 'var(--color-success)', color: '#000', border: 'none', cursor: 'pointer', fontWeight: 700, opacity: runtimeActionBusy ? 0.6 : 1 }}
+                                            >
+                                                SEND TO OPENCLAW
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div style={{ border: '1px solid var(--border-subtle)', padding: 12 }}>
+                                        <div className="mono text-xs font-bold" style={{ color: 'var(--text-primary)', marginBottom: 8 }}>Action result</div>
+                                        <div className="mono text-xs text-tertiary" style={{ whiteSpace: 'pre-wrap' }}>
+                                            {runtimeActionResult?.label || 'No runtime action executed yet.'}
+                                        </div>
+                                        {runtimeActionResult?.detail && (
+                                            <div className="mono text-xs" style={{ color: 'var(--accent-primary)', marginTop: 8, whiteSpace: 'pre-wrap' }}>
+                                                {runtimeActionResult.detail}
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div style={{ border: '1px solid var(--border-default)', background: 'var(--surface-raised)' }}>
+                                <div className="mono text-xs font-bold" style={{ padding: '12px 16px', background: 'var(--border-subtle)', borderBottom: '1px solid var(--border-default)', color: 'var(--accent-primary)' }}>
+                                    PM2 live processes
+                                </div>
+                                <div style={{ padding: 10, display: 'flex', flexDirection: 'column', gap: 8, maxHeight: 260, overflowY: 'auto' }}>
+                                    {runtimePm2.map((proc) => (
+                                        <div key={proc.name} style={{ border: '1px solid var(--border-subtle)', padding: 10, display: 'grid', gridTemplateColumns: '1fr auto', gap: 10, alignItems: 'center' }}>
+                                            <div>
+                                                <div className="mono text-xs font-bold" style={{ color: 'var(--text-primary)' }}>{proc.name}</div>
+                                                <div className="mono text-xs text-tertiary">
+                                                    {proc.status || 'unknown'} · CPU {proc.cpu ?? 0}% · MEM {proc.memory_mb ?? proc.memory ?? 0} MB
+                                                </div>
+                                            </div>
+                                            <button
+                                                onClick={() => loadRuntimeLogSource(`pm2:${proc.name}`)}
+                                                className="mono text-xs"
+                                                disabled={runtimeActionBusy}
+                                                style={{ padding: '6px 8px', background: 'transparent', color: 'var(--text-primary)', border: '1px solid var(--border-default)', cursor: 'pointer', opacity: runtimeActionBusy ? 0.6 : 1 }}
+                                            >
+                                                TAIL LOG
+                                            </button>
+                                        </div>
+                                    ))}
+                                    {runtimePm2.length === 0 && (
+                                        <div className="mono text-xs text-tertiary" style={{ padding: 24, textAlign: 'center' }}>
+                                            NO PM2 DATA IN SNAPSHOT
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+
                             <div style={{ border: '1px solid var(--border-default)', background: 'var(--surface-raised)' }}>
                                 <div className="mono text-xs font-bold" style={{ padding: '12px 16px', background: 'var(--border-subtle)', borderBottom: '1px solid var(--border-default)', color: 'var(--accent-primary)' }}>
                                     Airdrop telemetry
@@ -573,14 +816,58 @@ export default function CommandCenter() {
                                             className="mono text-xs"
                                             style={{ flex: 1, background: 'var(--surface-inset)', border: '1px solid var(--border-default)', color: 'var(--text-primary)', padding: '8px 12px', outline: 'none' }}
                                         />
-                                        <button
-                                            onClick={saveKey}
-                                            className="mono text-xs"
-                                            style={{ padding: '8px 16px', background: 'var(--accent-primary)', color: '#000', border: 'none', fontWeight: 700, cursor: 'pointer' }}
-                                        >
-                                            SAVE
-                                        </button>
                                     </div>
+                                </div>
+
+                                <div style={{ borderTop: '1px solid var(--border-subtle)', paddingTop: 20 }}>
+                                    <div className="mono text-xs font-bold" style={{ color: 'var(--text-primary)', marginBottom: 12 }}>OCULOPS RUNTIME</div>
+                                    <div style={{ display: 'grid', gap: 12 }}>
+                                        {[
+                                            { key: 'gatewayBase', label: 'Gateway base URL', placeholder: 'http://127.0.0.1:38793' },
+                                            { key: 'dashboardBase', label: 'Dashboard API URL', placeholder: 'http://127.0.0.1:38791' },
+                                            { key: 'hubBase', label: 'Integration Hub URL', placeholder: 'http://127.0.0.1:38792' },
+                                            { key: 'omniBase', label: 'OMNICENTER URL', placeholder: 'http://127.0.0.1:40000' },
+                                            { key: 'n8nBase', label: 'n8n URL', placeholder: 'http://127.0.0.1:5680' },
+                                        ].map((field) => (
+                                            <label key={field.key} style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                                                <span className="mono text-xs text-tertiary">{field.label}</span>
+                                                <input
+                                                    type="text"
+                                                    value={runtimeConfig[field.key] || ''}
+                                                    onChange={(e) => setRuntimeConfig((current) => ({ ...current, [field.key]: e.target.value }))}
+                                                    placeholder={field.placeholder}
+                                                    className="mono text-xs"
+                                                    style={{ background: 'var(--surface-inset)', border: '1px solid var(--border-default)', color: 'var(--text-primary)', padding: '8px 12px', outline: 'none' }}
+                                                />
+                                            </label>
+                                        ))}
+
+                                        <label style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                                            <span className="mono text-xs text-tertiary">Gateway token</span>
+                                            <input
+                                                type="password"
+                                                value={runtimeConfig.gatewayToken || ''}
+                                                onChange={(e) => setRuntimeConfig((current) => ({ ...current, gatewayToken: e.target.value }))}
+                                                placeholder="OCULOPS_GATEWAY_TOKEN"
+                                                className="mono text-xs"
+                                                style={{ background: 'var(--surface-inset)', border: '1px solid var(--border-default)', color: 'var(--text-primary)', padding: '8px 12px', outline: 'none' }}
+                                            />
+                                        </label>
+
+                                        <div className="mono text-xs text-tertiary">
+                                            These values are stored in your browser for the live Command Center runtime bridge.
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                                    <button
+                                        onClick={saveKey}
+                                        className="mono text-xs"
+                                        style={{ padding: '10px 18px', background: 'var(--accent-primary)', color: '#000', border: 'none', fontWeight: 700, cursor: 'pointer' }}
+                                    >
+                                        SAVE COMMAND CENTER CONFIG
+                                    </button>
                                 </div>
 
                                 <div style={{ borderTop: '1px solid var(--border-subtle)', paddingTop: 20 }}>

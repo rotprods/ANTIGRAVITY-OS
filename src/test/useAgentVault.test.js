@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { renderHook, act, waitFor } from '@testing-library/react'
 
-const { mockAgentDefs, mockSupabase } = vi.hoisted(() => {
+const { mockAgentDefs, mockDispatchGovernedTool, mockSupabase } = vi.hoisted(() => {
     const mockAgentDefs = [
         { id: '1', code_name: 'atlas-scraper', display_name: 'Atlas Scraper', namespace: 'research', description: 'Research scraper', is_active: true, total_runs: 10, tags: [] },
         { id: '2', code_name: 'data-pipeline', display_name: 'Data Pipeline', namespace: 'data', description: 'Data processing', is_active: true, total_runs: 5, tags: [] },
@@ -22,15 +22,22 @@ const { mockAgentDefs, mockSupabase } = vi.hoisted(() => {
 
     const mockSupabase = {
         from: vi.fn(() => createQueryBuilder(mockAgentDefs)),
-        functions: { invoke: vi.fn(async () => ({ data: { success: true }, error: null })) },
     }
 
-    return { mockAgentDefs, mockSupabase }
+    return {
+        mockAgentDefs,
+        mockDispatchGovernedTool: vi.fn(async () => ({ success: true })),
+        mockSupabase,
+    }
 })
 
 vi.mock('../lib/supabase', () => ({
     supabase: mockSupabase,
     isSupabaseConfigured: true,
+}))
+
+vi.mock('../lib/controlPlane', () => ({
+    dispatchGovernedTool: mockDispatchGovernedTool,
 }))
 
 import { useAgentVault, ROLE_CAPABILITY_MAP } from '../hooks/useAgentVault'
@@ -50,6 +57,7 @@ describe('useAgentVault', () => {
     beforeEach(() => {
         vi.clearAllMocks()
         mockSupabase.from.mockImplementation(() => createQueryBuilder(mockAgentDefs))
+        mockDispatchGovernedTool.mockResolvedValue({ success: true })
     })
 
     afterEach(() => {
@@ -148,6 +156,33 @@ describe('useAgentVault', () => {
         expect(result.current.namespaces).toContain('data')
         expect(result.current.namespaces).toContain('product')
         expect(result.current.namespaces).toContain('security')
+    })
+
+    it('runs agents through control-plane agent-runner', async () => {
+        const { result } = renderHook(() => useAgentVault())
+        await waitFor(() => expect(result.current.loading).toBe(false))
+
+        await act(async () => {
+            await result.current.runAgent('atlas-scraper', 'Find prospects', { niche: 'restaurants' })
+        })
+
+        expect(mockDispatchGovernedTool).toHaveBeenCalledWith({
+            sourceAgent: 'copilot',
+            source: 'agent_vault_ui',
+            targetRef: 'agent-runner',
+            riskClass: 'medium',
+            toolCodeName: 'agent-runner',
+            functionName: 'agent-runner',
+            payload: {
+                agent: 'atlas-scraper',
+                goal: 'Find prospects',
+                context: { niche: 'restaurants' },
+            },
+            context: {
+                requested_agent: 'atlas-scraper',
+                goal: 'Find prospects',
+            },
+        })
     })
 })
 

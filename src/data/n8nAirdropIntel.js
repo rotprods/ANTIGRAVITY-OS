@@ -58,7 +58,7 @@ export const N8N_AI_STACK_SERVICES = [
     key: 'n8n',
     label: 'n8n',
     envKey: 'VITE_N8N_BASE_URL',
-    defaultBaseUrl: 'http://localhost:5678',
+    defaultBaseUrl: 'http://127.0.0.1:5680',
     healthPath: '/healthz',
     role: 'Workflow conductor',
   },

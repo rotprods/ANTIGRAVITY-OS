@@ -1,6 +1,7 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 
 import { handleCors, jsonResponse, errorResponse, readJson } from "../_shared/http.ts";
+import { handleControlPlaneAction } from "../_shared/orchestrator-core.ts";
 import { admin } from "../_shared/supabase.ts";
 
 /**
@@ -22,7 +23,6 @@ import { admin } from "../_shared/supabase.ts";
  */
 
 const TD_SERVICE_KEY = Deno.env.get("TD_SERVICE_KEY") || "";
-const SUPABASE_URL = Deno.env.get("SUPABASE_URL") || "";
 const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") || "";
 
 // Rate limiting: track commands per client
@@ -38,6 +38,12 @@ const ALLOWED_COMMANDS = new Set([
   "create_alert",
   "approve_decision",
 ]);
+
+function asRecord(value: unknown) {
+  return typeof value === "object" && value !== null && !Array.isArray(value)
+    ? value as Record<string, unknown>
+    : {};
+}
 
 function validateServiceKey(req: Request): boolean {
   if (!TD_SERVICE_KEY) return false;
@@ -83,19 +89,28 @@ async function handleTriggerAgent(params: Record<string, unknown>) {
   const action = String(params.action || "cycle");
 
   if (!codeName) return { ok: false, error: "Missing code_name" };
+  if (!SUPABASE_SERVICE_ROLE_KEY) return { ok: false, error: "Missing service role key" };
 
-  const url = `${SUPABASE_URL}/functions/v1/agent-${codeName}`;
-  const res = await fetch(url, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${SUPABASE_SERVICE_ROLE_KEY}`,
+  const controlPlaneResult = await handleControlPlaneAction({
+    action: "tool_dispatch",
+    source_agent: codeName,
+    target_type: "agent_action",
+    target_ref: `agent-${codeName}`,
+    risk_class: "medium",
+    context: {
+      command: "trigger_agent",
+      code_name: codeName,
     },
-    body: JSON.stringify({ action, ...params }),
-  });
+    tool_code_name: `agent-${codeName}`,
+    payload: { action, ...params },
+  }, `Bearer ${SUPABASE_SERVICE_ROLE_KEY}`);
 
-  const data = await res.json();
-  return { ok: res.ok, status: res.status, data };
+  const dispatchResult = asRecord(asRecord(controlPlaneResult.data).dispatch_result);
+  return {
+    ok: controlPlaneResult.ok === true && dispatchResult.ok !== false,
+    status: dispatchResult.status || (controlPlaneResult.ok ? 200 : 500),
+    data: Object.keys(dispatchResult).length > 0 ? dispatchResult : controlPlaneResult,
+  };
 }
 
 async function handleRunCortexCycle() {

@@ -7,6 +7,7 @@ import { useState, useCallback, useEffect, Fragment } from 'react'
 import { supabase } from '../../lib/supabase'
 import { PaperAirplaneIcon } from '@heroicons/react/24/outline'
 import ModulePage from '../ui/ModulePage'
+import { getRuntimeRegistries, loadRuntimeConfig, runRuntimeHeraldBriefing } from '../../lib/runtimeClient'
 import './HeraldAgent.css'
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL
@@ -19,36 +20,75 @@ function HeraldAgent() {
     const [sending, setSending] = useState(false)
     const [lastResult, setLastResult] = useState(null)
     const [activeTab, setActiveTab] = useState('overview')
+    const [runtimeConfig, setRuntimeConfig] = useState(() => loadRuntimeConfig())
+    const [registryMeta, setRegistryMeta] = useState(null)
     const heraldReady = Boolean(supabase && SUPABASE_URL && SUPABASE_ANON_KEY)
+    const governedRuntimeReady = Boolean(runtimeConfig?.gatewayBase && runtimeConfig?.gatewayToken)
+    const moduleReady = governedRuntimeReady || heraldReady
 
     const fetchAgent = useCallback(async () => {
-        if (!supabase) { setAgent(null); return }
+        if (!supabase || !heraldReady) { setAgent(null); return }
         const { data } = await supabase.from('agent_registry').select('*').eq('code_name', 'herald').single()
         setAgent(data)
-    }, [])
+    }, [heraldReady])
 
     const fetchBriefingData = useCallback(async () => {
-        if (!supabase) { setBriefingData(null); return }
+        if (!supabase || !heraldReady) { setBriefingData(null); return }
         const { data } = await supabase.rpc('get_daily_briefing_data')
         setBriefingData(data)
-    }, [])
+    }, [heraldReady])
+
+    const fetchRegistryMeta = useCallback(async () => {
+        if (!governedRuntimeReady) { setRegistryMeta(null); return }
+        try {
+            const data = await getRuntimeRegistries(runtimeConfig)
+            setRegistryMeta(data)
+        } catch {
+            setRegistryMeta(null)
+        }
+    }, [governedRuntimeReady, runtimeConfig])
 
     useEffect(() => {
-        if (!supabase) { setLoading(false); return }
-        Promise.all([fetchAgent(), fetchBriefingData()]).finally(() => setLoading(false))
-        const interval = setInterval(() => { fetchAgent(); fetchBriefingData() }, 30000)
+        if (!moduleReady) { setLoading(false); return }
+        Promise.all([fetchAgent(), fetchBriefingData(), fetchRegistryMeta()]).finally(() => setLoading(false))
+        const interval = setInterval(() => {
+            setRuntimeConfig(loadRuntimeConfig())
+            fetchAgent()
+            fetchBriefingData()
+            fetchRegistryMeta()
+        }, 30000)
         return () => clearInterval(interval)
-    }, [fetchAgent, fetchBriefingData])
+    }, [fetchAgent, fetchBriefingData, fetchRegistryMeta, moduleReady])
 
-    const triggerBriefing = useCallback(async () => {
-        if (!heraldReady) { setLastResult({ success: false, error: 'Supabase edge functions offline' }); return }
+    const triggerBriefing = useCallback(async ({ dryRun, approval } = { dryRun: true, approval: null }) => {
         setSending(true); setLastResult(null)
         try {
-            const resp = await fetch(`${SUPABASE_URL}/functions/v1/agent-herald`, { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${SUPABASE_ANON_KEY}` }, body: JSON.stringify({ action: 'daily_briefing' }) })
-            setLastResult(await resp.json()); await fetchAgent()
+            if (governedRuntimeReady) {
+                const result = await runRuntimeHeraldBriefing({ dryRun, approval }, runtimeConfig)
+                setLastResult({ success: result?.status === 'completed', governed: true, ...result })
+            } else if (heraldReady) {
+                const resp = await fetch(`${SUPABASE_URL}/functions/v1/agent-herald`, { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${SUPABASE_ANON_KEY}` }, body: JSON.stringify({ action: 'daily_briefing', dryRun }) })
+                setLastResult(await resp.json())
+            } else {
+                setLastResult({ success: false, error: 'No governed runtime token or Supabase fallback configured.' })
+            }
+            await fetchAgent()
         } catch (err) { setLastResult({ success: false, error: err.message }) }
         setSending(false)
-    }, [fetchAgent, heraldReady])
+    }, [fetchAgent, governedRuntimeReady, heraldReady, runtimeConfig])
+
+    const triggerApprovedSend = useCallback(async () => {
+        const reason = window.prompt('Approval reason for live Telegram delivery')
+        if (!reason) return
+        await triggerBriefing({
+            dryRun: false,
+            approval: {
+                approved: true,
+                approvedBy: 'roberto',
+                reason,
+            },
+        })
+    }, [triggerBriefing])
 
     const formatTime = (iso) => {
         if (!iso) return '--:--'
@@ -57,10 +97,10 @@ function HeraldAgent() {
 
     if (loading) return <div className="lab-panel-empty">Loading Herald agent...</div>
 
-    if (!heraldReady) return (
+    if (!moduleReady) return (
         <ModulePage title="Herald" subtitle="Telegram bot orchestrator">
             <div className="lab-panel"><div className="lab-panel-header" style={{ color: 'var(--color-danger)' }}>Module offline</div>
-                <div className="lab-panel-empty">Configure VITE_SUPABASE_URL to activate this module.</div>
+                <div className="lab-panel-empty">Configure either the governed runtime token or Supabase credentials to activate this module.</div>
             </div>
         </ModulePage>
     )
@@ -75,7 +115,17 @@ function HeraldAgent() {
         <ModulePage
             title="Herald"
             subtitle="Telegram orchestrator — daily operation briefings"
-            actions={<button className="btn btn-primary" onClick={triggerBriefing} disabled={sending}><PaperAirplaneIcon style={{ width: 16, height: 16 }} />{sending ? 'Sending...' : 'Send briefing'}</button>}
+            actions={
+                <div style={{ display: 'flex', gap: 'var(--space-2)', flexWrap: 'wrap' }}>
+                    <button className="btn btn-secondary" onClick={() => triggerBriefing({ dryRun: true, approval: null })} disabled={sending}>
+                        {sending ? 'Running...' : 'Run preview'}
+                    </button>
+                    <button className="btn btn-primary" onClick={triggerApprovedSend} disabled={sending || !governedRuntimeReady}>
+                        <PaperAirplaneIcon style={{ width: 16, height: 16 }} />
+                        {sending ? 'Sending...' : 'Send approved'}
+                    </button>
+                </div>
+            }
         >
             <div className="lab-content">
                 {/* Agent status */}
@@ -83,7 +133,7 @@ function HeraldAgent() {
                     <div className="kpi-strip-cell"><span className="mono text-xs text-tertiary">Status</span><span className="mono text-lg font-bold" style={{ color: agent?.status === 'online' ? 'var(--color-success)' : 'var(--color-danger)' }}>{agent?.status === 'online' ? 'Online' : 'Offline'}</span></div>
                     <div className="kpi-strip-cell"><span className="mono text-xs text-tertiary">Total runs</span><span className="mono text-lg font-bold">{agent?.total_runs || 0}</span></div>
                     <div className="kpi-strip-cell"><span className="mono text-xs text-tertiary">Last run</span><span className="mono font-bold" style={{ fontSize: 13 }}>{formatTime(agent?.last_run_at)}</span></div>
-                    <div className="kpi-strip-cell"><span className="mono text-xs text-tertiary">Next scheduled</span><span className="mono text-lg font-bold" style={{ color: 'var(--color-info)' }}>08:00 AM</span></div>
+                    <div className="kpi-strip-cell"><span className="mono text-xs text-tertiary">Execution path</span><span className="mono text-lg font-bold" style={{ color: governedRuntimeReady ? 'var(--color-success)' : 'var(--color-warning)' }}>{governedRuntimeReady ? 'Governed runtime' : 'Legacy fallback'}</span></div>
                 </div>
 
                 {/* Result banner */}
@@ -92,7 +142,11 @@ function HeraldAgent() {
                         <div className="herald-result-header">{lastResult.success ? 'Briefing sent successfully' : 'Briefing failed'}</div>
                         <div className="mono text-xs ct-section-body">
                             {lastResult.success ? (
-                                <>Telegram: {String(lastResult.telegram_sent)} · Pipeline: ${lastResult.briefing_data?.pipeline_total?.toLocaleString()} · Deals: {lastResult.briefing_data?.deal_count}</>
+                                lastResult.governed ? (
+                                    <>Delivery: {lastResult.delivery} · Briefing mode: {lastResult.briefing_mode} · Workflow active: {String(lastResult.workflow_status?.active)}</>
+                                ) : (
+                                    <>Telegram: {String(lastResult.telegram_sent)} · Pipeline: ${lastResult.briefing_data?.pipeline_total?.toLocaleString()} · Deals: {lastResult.briefing_data?.deal_count}</>
+                                )
                             ) : lastResult.error}
                         </div>
                     </div>
@@ -135,11 +189,19 @@ function HeraldAgent() {
                         </div>
                     </div>
                 )}
+                {activeTab === 'overview' && !briefingData && (
+                    <div className="lab-panel">
+                        <div className="lab-panel-header">Governed runtime mode</div>
+                        <div className="lab-panel-empty">
+                            Runtime preview and approved send are available. Supabase briefing metrics are not loaded in this mode.
+                        </div>
+                    </div>
+                )}
 
                 {/* Preview */}
-                {activeTab === 'preview' && briefingData && (
+                {activeTab === 'preview' && (briefingData || lastResult?.briefing) && (
                     <div className="herald-payload">
-                        <pre>{`Herald Briefing — ${briefingData.date}
+                        <pre>{lastResult?.governed && lastResult?.briefing ? lastResult.briefing : `Herald Briefing — ${briefingData.date}
 
 Pipeline
   Total: $${briefingData.pipeline_total?.toLocaleString()} (${briefingData.pipeline_change_pct >= 0 ? '+' : ''}${briefingData.pipeline_change_pct}% vs yesterday)
@@ -169,11 +231,12 @@ System
                                     { label: 'Bot target', value: '@aiopsinternalbot' },
                                     { label: 'Channel', value: 'Private' },
                                     { label: 'Schedule', value: '08:00 AM daily' },
-                                    { label: 'Runtime', value: 'agent-herald v3' },
-                                    { label: 'Workflow', value: 'Herald 8AM dispatch' },
-                                    { label: 'Model', value: agent?.model || 'System default' },
+                                    { label: 'Runtime', value: governedRuntimeReady ? 'governed-herald-slice v1' : 'agent-herald legacy fallback' },
+                                    { label: 'Workflow', value: lastResult?.workflow_status?.name || 'HERALD — Daily Telegram Briefing (8AM)' },
+                                    { label: 'Model', value: lastResult?.briefing_mode || agent?.model || 'System default' },
                                     { label: 'Cycle', value: `${agent?.cycle_minutes || 1440} min` },
-                                    { label: 'Parent', value: 'Cortex OS' },
+                                    { label: 'Parent', value: 'CloudBot Governor' },
+                                    { label: 'Registry pack', value: registryMeta?.workflow_registry?.source || 'unknown' },
                                 ].map((row, i) => (
                                     <Fragment key={i}>
                                         <div>{row.label}</div>

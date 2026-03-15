@@ -13,6 +13,7 @@ import { Analytics as VercelAnalytics } from '@vercel/analytics/react'
 import { SpeedInsights } from '@vercel/speed-insights/react'
 import CopilotPanel from './components/ui/CopilotPanel'
 import { AgentVaultProvider } from './contexts/AgentVaultContext'
+import { isSupabaseConfigured } from './lib/supabase'
 
 // Lightweight ambient background
 function AmbientBackground() {
@@ -92,6 +93,7 @@ function AppContent() {
   const { session, loading: authLoading } = useAuth()
   const { currentOrg, loading: orgLoading } = useOrg()
   const [copilotOpen, setCopilotOpen] = useState(false)
+  const isOfflineDevMode = import.meta.env.DEV && !isSupabaseConfigured
 
   // Track if user explicitly completed/skipped onboarding this session.
   // Use a ref so it doesn't cause re-renders, and localStorage so it survives
@@ -137,8 +139,8 @@ function AppContent() {
 
   const content = (() => {
     if (isLoading)       return <LoadingOS />
-    if (!session)        return <Auth />
-    if (needsOnboarding) return <OnboardingSetup onComplete={markOnboardingDone} />
+    if (!session && !isOfflineDevMode) return <Auth />
+    if (needsOnboarding && !isOfflineDevMode) return <OnboardingSetup onComplete={markOnboardingDone} />
     return null
   })()
 
@@ -203,6 +205,16 @@ function AppContent() {
         flex: 1, marginLeft: 240, height: '100%', overflow: 'hidden',
         display: 'flex', flexDirection: 'column', position: 'relative', zIndex: 2,
       }}>
+        {isOfflineDevMode && (
+          <div className="mono text-xs" style={{
+            padding: '8px 14px',
+            borderBottom: '1px solid var(--border-default)',
+            background: 'rgba(255, 215, 0, 0.08)',
+            color: 'var(--accent-primary)',
+          }}>
+            OFFLINE DEV MODE ACTIVE · Supabase auth bypassed for local runtime testing
+          </div>
+        )}
         <div style={{ flex: 1, overflowY: 'auto' }}>
           <Suspense fallback={<RouteAwareSkeleton />}>
             <Routes>

@@ -319,10 +319,16 @@ async function invokeEdgeFunction(functionName: string, payload: JsonRecord, aut
     throw new Error("Supabase runtime env is not configured");
   }
 
-  const authValue = compact(authHeader).startsWith("Bearer ")
-    ? compact(authHeader)
+  const explicitAuthHeader = compact(authHeader);
+  const bearerToken = explicitAuthHeader.startsWith("Bearer ")
+    ? explicitAuthHeader.replace(/^Bearer\s+/i, "")
+    : "";
+  const useServiceRoleForApiKey = Boolean(SERVICE_KEY) && bearerToken === SERVICE_KEY;
+
+  const authValue = explicitAuthHeader.startsWith("Bearer ")
+    ? explicitAuthHeader
     : (ANON_KEY ? `Bearer ${ANON_KEY}` : (SERVICE_KEY ? `Bearer ${SERVICE_KEY}` : ""));
-  const apiKey = ANON_KEY || SERVICE_KEY || "";
+  const apiKey = useServiceRoleForApiKey ? (SERVICE_KEY || "") : (ANON_KEY || SERVICE_KEY || "");
   if (!authValue || !apiKey) {
     throw new Error("Supabase auth keys are not configured for tool bus invocation");
   }

@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { renderHook, act, waitFor } from '@testing-library/react'
 
-const { mockQueryResult, mockQueryBuilder, mockCallSupabaseFunction, mockSubscribeToTable } = vi.hoisted(() => {
+const { mockQueryResult, mockQueryBuilder, mockDispatchGovernedTool, mockSubscribeToTable } = vi.hoisted(() => {
     const mockQueryResult = { data: [], error: null }
     const mockQueryBuilder = {
         select: vi.fn().mockReturnThis(),
@@ -11,15 +11,18 @@ const { mockQueryResult, mockQueryBuilder, mockCallSupabaseFunction, mockSubscri
     return {
         mockQueryResult,
         mockQueryBuilder,
-        mockCallSupabaseFunction: vi.fn(),
+        mockDispatchGovernedTool: vi.fn(),
         mockSubscribeToTable: vi.fn(() => ({ unsubscribe: vi.fn() })),
     }
 })
 
 vi.mock('../lib/supabase', () => ({
     supabase: { from: vi.fn(() => mockQueryBuilder) },
-    callSupabaseFunction: mockCallSupabaseFunction,
     subscribeDebouncedToTable: mockSubscribeToTable,
+}))
+
+vi.mock('../lib/controlPlane', () => ({
+    dispatchGovernedTool: mockDispatchGovernedTool,
 }))
 
 import { useOutreachQueue } from '../hooks/useOutreachQueue'
@@ -35,7 +38,7 @@ describe('useOutreachQueue', () => {
         vi.clearAllMocks()
         mockQueryResult.data = mockRows
         mockQueryResult.error = null
-        mockCallSupabaseFunction.mockResolvedValue({ ok: true })
+        mockDispatchGovernedTool.mockResolvedValue({ ok: true })
     })
 
     it('loads queue rows and computes stats', async () => {
@@ -56,7 +59,7 @@ describe('useOutreachQueue', () => {
         expect(mockSubscribeToTable).toHaveBeenCalledWith('outreach_queue', expect.any(Function))
     })
 
-    it('approveItem calls the outreach function and reloads', async () => {
+    it('approveItem calls control-plane and reloads', async () => {
         const { result } = renderHook(() => useOutreachQueue())
         await waitFor(() => expect(result.current.loading).toBe(false))
 
@@ -64,8 +67,18 @@ describe('useOutreachQueue', () => {
             await result.current.approveItem('q1')
         })
 
-        expect(mockCallSupabaseFunction).toHaveBeenCalledWith('agent-outreach', {
-            body: { action: 'approve', id: 'q1' },
+        expect(mockDispatchGovernedTool).toHaveBeenCalledWith({
+            sourceAgent: 'outreach',
+            source: 'outreach_queue_ui',
+            targetRef: 'agent-outreach',
+            riskClass: 'medium',
+            toolCodeName: 'agent-outreach',
+            payload: { action: 'approve', id: 'q1' },
+            context: {
+                action: 'approve',
+                queue_item_id: 'q1',
+                niche: null,
+            },
         })
         expect(mockQueryBuilder.order).toHaveBeenCalledTimes(2)
     })
