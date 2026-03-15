@@ -94,7 +94,7 @@ jobs:
 
       - name: Check for .env files in repo
         run: |
-          ENV_FILES=$(git ls-files '*.env' '.env*' '**/.env' '**/.env.*' 2>/dev/null || true)
+          ENV_FILES=$(git ls-files '*.env' '.env*' '**/.env' '**/.env.*' 2>/dev/null | grep -E -v '\.example$' || true)
           if [ -n "$ENV_FILES" ]; then
             echo "::error::Found .env files tracked in git:"
             echo "$ENV_FILES"
