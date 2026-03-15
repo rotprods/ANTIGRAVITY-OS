@@ -19,6 +19,17 @@ Eres mi agente de release para OCULOPS. Quiero cerrar producción de forma compl
 4. No expongas secretos en salida.
 5. Si hay claves inválidas, indícalo con nombre de variable exacta y continúa con lo demás.
 
+## Ruta rápida recomendada (automatizada)
+```bash
+cd "/Users/robertoortega/Documents/AI OPS/ANTIGRAVITY-OS"
+npm run cutover:mac
+```
+
+Si quieres evitar redeploy web al final:
+```bash
+bash scripts/finalize-mac-cutover.sh --with-n8n-bridge --skip-vercel
+```
+
 ## Variables que debes validar al inicio
 - `SUPABASE_URL`
 - `SUPABASE_SERVICE_ROLE_KEY`
@@ -29,7 +40,7 @@ Eres mi agente de release para OCULOPS. Quiero cerrar producción de forma compl
 - `THE_GUARDIAN_API_KEY` (o `GUARDIAN_API_KEY`)
 - `FRED_API_KEY`
 
-## Ejecución obligatoria (orden exacto)
+## Ejecución manual (fallback, orden exacto)
 1. Validación base
 ```bash
 cd "/Users/robertoortega/Documents/AI OPS/ANTIGRAVITY-OS"

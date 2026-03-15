@@ -2,6 +2,12 @@
 
 Este flujo deja ANTIGRAVITY listo para activar conectores públicos con un único comando.
 
+Atajo completo en Mac Mini (incluye bridge n8n + readiness + deploy):
+
+```bash
+npm run cutover:mac
+```
+
 ## 1) Variables mínimas en `.env`
 
 Base:

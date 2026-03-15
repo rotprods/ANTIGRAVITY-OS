@@ -29,6 +29,7 @@
     "reconcile:n8n-oculops": "node scripts/reconcile-n8n-oculops.mjs",
     "n8n:bridge:cloudflare": "node scripts/open-n8n-cloudflare-bridge.mjs",
     "n8n:bridge:cloudflare:down": "node scripts/close-n8n-cloudflare-bridge.mjs",
+    "cutover:mac": "bash scripts/finalize-mac-cutover.sh --with-n8n-bridge",
     "inject:n8n-api-context": "node scripts/inject-api-context-automation-bridges.mjs",
     "n8n:install-template": "node scripts/install-n8n-template.mjs",
     "gws": "node scripts/gws.mjs",
