@@ -222,6 +222,53 @@ describe('variable-runtime-v2', () => {
     expect(result.diagnostics.tie_break_count).toBe(0)
   })
 
+  it('selects scoped definitions deterministically by workflow and scope precedence', async () => {
+    const definitions = [
+      {
+        variable_key: 'mode',
+        scope: 'global',
+        owner_ref: 'platform',
+        default_value: 'shadow',
+        validation_rules: { required: true },
+        updated_at: '2026-03-14T09:00:00.000Z',
+      },
+      {
+        variable_key: 'mode',
+        scope: 'org',
+        owner_ref: 'org-default',
+        default_value: 'dry_run',
+        validation_rules: { required: true },
+        updated_at: '2026-03-14T10:00:00.000Z',
+      },
+      {
+        variable_key: 'mode',
+        scope: 'workflow',
+        owner_ref: 'wf-main',
+        default_value: 'replay',
+        validation_rules: { required: true },
+        updated_at: '2026-03-14T11:00:00.000Z',
+      },
+    ]
+
+    const workflowScoped = await buildDeterministicVariableResolution({
+      definitions,
+      bindings: [],
+      workflowId: 'wf-main',
+      nowIso: '2026-03-14T12:00:00.000Z',
+    })
+    expect(workflowScoped.value_map.mode).toBe('replay')
+    expect(workflowScoped.bindings[0].precedence_level).toBe('workflow')
+
+    const fallbackScoped = await buildDeterministicVariableResolution({
+      definitions,
+      bindings: [],
+      workflowId: 'wf-other',
+      nowIso: '2026-03-14T12:00:00.000Z',
+    })
+    expect(fallbackScoped.value_map.mode).toBe('dry_run')
+    expect(fallbackScoped.bindings[0].precedence_level).toBe('org')
+  })
+
   it('evaluates constraint severity and blocking behavior', () => {
     const constraints = [
       {

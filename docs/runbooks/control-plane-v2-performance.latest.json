@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-03-15T15:33:42.950Z",
+  "generated_at": "2026-03-15T15:38:21.050Z",
   "gates": {
     "snapshot_build_p95_target_ms": 120,
     "plan_build_p95_target_ms": 220
@@ -7,14 +7,14 @@
   "snapshot_build": {
     "variables": 1000,
     "iterations": 40,
-    "p95_ms": 12.98,
-    "avg_ms": 7.968
+    "p95_ms": 40.888,
+    "avg_ms": 17.873
   },
   "plan_build": {
     "dag_nodes": 150,
     "iterations": 80,
-    "p95_ms": 0.118,
-    "avg_ms": 0.057
+    "p95_ms": 0.106,
+    "avg_ms": 0.081
   },
   "pass": {
     "snapshot_build": true,
