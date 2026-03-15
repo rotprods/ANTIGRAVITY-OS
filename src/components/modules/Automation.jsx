@@ -4,6 +4,7 @@
 // ═══════════════════════════════════════════════════
 
 import { useMemo, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useAppStore } from '../../stores/useAppStore'
 import { useApiCatalog } from '../../hooks/useApiCatalog'
 import { useN8nTemplateCatalog } from '../../hooks/useN8nTemplateCatalog'
@@ -73,7 +74,12 @@ function workflowSupportsLiveSend(wf) {
     return (wf.steps || []).some(s => s?.type === 'compose_message' && ['email', 'whatsapp'].includes(s?.config?.channel))
 }
 
+function isInternalRemediationPath(value) {
+    return typeof value === 'string' && value.startsWith('/')
+}
+
 function Automation() {
+    const navigate = useNavigate()
     const { toast } = useAppStore()
     const { installedApps } = useApiCatalog()
     const { workflows, runs, loading, runningWorkflowId, addWorkflow, toggleWorkflow, removeWorkflow, runWorkflow, loadRuns, activeCount, totalRuns } = useAutomation()
@@ -225,8 +231,39 @@ function Automation() {
                                 </span>
                             ))}
                         </div>
-                        <div className="mono text-xs text-tertiary">
-                            {(variableReadiness || automationReadiness || connectorReadiness || n8nReadiness)?.state_reason_text || 'Readiness snapshot loaded from control-plane.'}
+                        <div style={{ display: 'grid', gap: 'var(--space-2)' }}>
+                            {[automationReadiness, connectorReadiness, n8nReadiness, variableReadiness].filter(Boolean).map((record) => (
+                                <div
+                                    key={`detail-${record.module_key}`}
+                                    style={{
+                                        border: '1px solid var(--border-subtle)',
+                                        borderRadius: 'var(--radius-xs)',
+                                        padding: 'var(--space-2) var(--space-3)',
+                                        display: 'flex',
+                                        justifyContent: 'space-between',
+                                        gap: 'var(--space-3)',
+                                        flexWrap: 'wrap',
+                                    }}
+                                >
+                                    <div>
+                                        <div className="mono text-xs text-secondary">
+                                            {record.module_key} · code: {record.state_reason_code || 'n/a'}
+                                        </div>
+                                        <div className="mono text-xs text-tertiary" style={{ marginTop: 2 }}>
+                                            {record.state_reason_text || 'Readiness snapshot loaded from control-plane.'}
+                                        </div>
+                                    </div>
+                                    {record.remediation_action && (
+                                        isInternalRemediationPath(record.remediation_action)
+                                            ? (
+                                                <button className="btn btn-ghost btn-xs" onClick={() => navigate(record.remediation_action)}>
+                                                    fix
+                                                </button>
+                                            )
+                                            : <span className="mono text-xs text-secondary">next: {record.remediation_action}</span>
+                                    )}
+                                </div>
+                            ))}
                         </div>
                     </div>
                 )}

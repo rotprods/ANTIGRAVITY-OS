@@ -4,6 +4,7 @@
 // ═══════════════════════════════════════════════════
 
 import { useState, useMemo } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useAgentVault } from '../../hooks/useAgentVault'
 import { useEcosystemReadiness } from '../../hooks/useEcosystemReadiness'
 import {
@@ -20,6 +21,10 @@ const READINESS_TONE = {
   degraded: { badge: 'badge-warning', color: 'var(--color-warning)' },
   offline: { badge: 'badge-danger', color: 'var(--color-danger)' },
   planned: { badge: 'badge-default', color: 'var(--text-tertiary)' },
+}
+
+function isInternalRemediationPath(value) {
+  return typeof value === 'string' && value.startsWith('/')
 }
 
 function AgentCard({ agent, onToggle, onRun, running }) {
@@ -230,6 +235,7 @@ function RunModal({ agent, onClose, onSubmit, loading, result }) {
 }
 
 export default function Marketplace() {
+  const navigate = useNavigate()
   const {
     agents, allAgents, namespaces, loading, error,
     filters, setNamespace, setSearch, toggleActive,
@@ -349,13 +355,28 @@ export default function Marketplace() {
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: 'var(--text-xs)', fontWeight: 'var(--weight-semibold)', color: 'var(--text-primary)' }}>
               Marketplace route status
             </div>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 'var(--text-2xs)', color: 'var(--text-secondary)', marginTop: 4 }}>
+              code: {marketplaceReadiness.state_reason_code || 'n/a'}
+            </div>
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: 'var(--text-2xs)', color: 'var(--text-tertiary)', marginTop: 4 }}>
               {marketplaceReadiness.state_reason_text}
             </div>
+            {marketplaceReadiness.remediation_action && (
+              <div style={{ fontFamily: 'var(--font-mono)', fontSize: 'var(--text-2xs)', color: 'var(--text-secondary)', marginTop: 4 }}>
+                next: {marketplaceReadiness.remediation_action}
+              </div>
+            )}
           </div>
-          <span className={`badge ${READINESS_TONE[marketplaceReadiness.state]?.badge || 'badge-default'}`}>
-            {marketplaceReadiness.state}
-          </span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}>
+            <span className={`badge ${READINESS_TONE[marketplaceReadiness.state]?.badge || 'badge-default'}`}>
+              {marketplaceReadiness.state}
+            </span>
+            {isInternalRemediationPath(marketplaceReadiness?.remediation_action) && (
+              <button className="btn btn-ghost btn-xs" onClick={() => navigate(marketplaceReadiness.remediation_action)}>
+                fix
+              </button>
+            )}
+          </div>
         </div>
       )}
 

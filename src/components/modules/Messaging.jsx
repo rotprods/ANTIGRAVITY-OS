@@ -105,6 +105,10 @@ function StatusChip({ status }) {
     return <span className={`msg-status-chip ${chip.cls}`}>{chip.label}</span>
 }
 
+function isInternalRemediationPath(value) {
+    return typeof value === 'string' && value.startsWith('/')
+}
+
 function Messaging() {
     const location = useLocation()
     const navigate = useNavigate()
@@ -232,12 +236,25 @@ function Messaging() {
                     }}>
                         <div>
                             <div className="mono text-xs font-bold" style={{ marginBottom: 4 }}>Messaging route status</div>
+                            <div className="mono text-xs text-secondary" style={{ marginBottom: 4 }}>
+                                code: {messagingReadiness.state_reason_code || 'n/a'}
+                            </div>
                             <div className="mono text-xs text-tertiary">{messagingReadiness.state_reason_text}</div>
+                            {messagingReadiness.remediation_action && (
+                                <div className="mono text-xs text-secondary" style={{ marginTop: 6 }}>
+                                    next: {messagingReadiness.remediation_action}
+                                </div>
+                            )}
                         </div>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}>
                             <span className={`badge ${READINESS_TONE[messagingReadiness.state]?.badge || 'badge-default'}`}>
                                 {messagingReadiness.state}
                             </span>
+                            {isInternalRemediationPath(messagingReadiness?.remediation_action) && (
+                                <button className="btn btn-ghost btn-xs" onClick={() => navigate(messagingReadiness.remediation_action)}>
+                                    fix
+                                </button>
+                            )}
                             {messagingReadiness?.correlation_id && (
                                 <button className="btn btn-ghost btn-xs" onClick={() => openTrace(messagingReadiness.correlation_id)}>
                                     trace
