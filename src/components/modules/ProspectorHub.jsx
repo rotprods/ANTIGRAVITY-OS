@@ -7,6 +7,7 @@ import { useGeoSearch } from '../../hooks/useGeoSearch'
 import { useAtlasCRM } from '../../hooks/useAtlasCRM'
 import { useEdgeFunction } from '../../hooks/useEdgeFunction'
 import { useConnectorInfrastructure } from '../../hooks/useConnectorInfrastructure'
+import { useReadiness } from '../../hooks/useReadiness'
 
 import FlightDeck from './FlightDeck'
 import './ProspectorHub.css'
@@ -140,6 +141,7 @@ const PIPELINE_STEPS = [
 function PipelineTab() {
     const { data, loading, error, execute } = useEdgeFunction('lead-enrichment-pipeline')
     const [form, setForm] = useState({ company: '', url: '', location: '' })
+    const { isOnline } = useReadiness()
 
     const steps = data?.steps || []
     const score = data?.score
@@ -185,7 +187,8 @@ function PipelineTab() {
                 <button
                     className="btn btn-primary mono text-xs mt-4 ph-scanner-btn"
                     onClick={handleRun}
-                    disabled={loading || (!form.company && !form.url)}
+                    disabled={loading || (!form.company && !form.url) || !isOnline}
+                    title={!isOnline ? "Bridge offline" : ""}
                 >
                     {loading ? 'Enriching...' : 'Run Pipeline'}
                 </button>
@@ -272,6 +275,7 @@ function ProspectorHub() {
     const [selectedLead, setSelectedLead] = useState(null)
     const [flightIntel, setFlightIntel] = useState(null)
     const [activeEnrichmentConnectorId, setActiveEnrichmentConnectorId] = useState(null)
+    const { isOnline } = useReadiness()
 
     const activeLeads = byStatus.active || []
     const selected = leads.find(l => l.id === selectedLead)
@@ -525,7 +529,7 @@ function ProspectorHub() {
                                     <label className="mono ph-scanner-label">Radius (m)</label>
                                     <input className="input mono text-xs ph-scanner-input" type="number" value={form.radius} onChange={e => setForm(f => ({ ...f, radius: parseInt(e.target.value) }))} />
                                 </div>
-                                <button className="btn btn-primary mono text-xs mt-4 ph-scanner-btn" onClick={handleScan} disabled={scanning}>
+                                <button className="btn btn-primary mono text-xs mt-4 ph-scanner-btn" onClick={handleScan} disabled={scanning || !isOnline} title={!isOnline ? "Bridge offline" : ""}>
                                     {scanning ? 'Scanning...' : 'Run Scan'}
                                 </button>
                             </div>
@@ -576,15 +580,15 @@ function ProspectorHub() {
                                 <div className="mono text-xs mb-3 text-tertiary ph-lead-detail-meta">Location: <span className="text-secondary">{selected.address || '—'}</span></div>
                                 <div className="mono text-xs mb-3 text-tertiary ph-lead-detail-meta">Rating: <span className="text-secondary">{selected.rating || '—'}</span></div>
                                 <div className="mono text-xs mb-6 text-tertiary ph-lead-detail-meta">Website: <span className="text-secondary">{selected.website || '—'}</span></div>
-                                <button className="btn btn-primary mono text-xs mb-6 ph-lead-detail-btn" onClick={() => aiQualify(selected.id)} disabled={qualifying === selected.id}>
+                                <button className="btn btn-primary mono text-xs mb-6 ph-lead-detail-btn" onClick={() => aiQualify(selected.id)} disabled={qualifying === selected.id || !isOnline} title={!isOnline ? "Bridge offline" : ""}>
                                     {qualifying === selected.id ? 'Qualifying...' : 'Run AI Qualification'}
                                 </button>
                                 <div className="mono font-bold text-primary mb-3 ph-cortex-title">Connector Enrichment</div>
                                 <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginBottom: '12px' }}>
-                                    <button className="btn btn-ghost mono text-xs" onClick={() => runProspectorEnrichment('address')} disabled={Boolean(runningConnectorId)}>Address enrich</button>
-                                    <button className="btn btn-ghost mono text-xs" onClick={() => runProspectorEnrichment('route')} disabled={Boolean(runningConnectorId) || !(selected.lat && selected.lng)}>Route check</button>
-                                    <button className="btn btn-ghost mono text-xs" onClick={() => runProspectorEnrichment('email')} disabled={Boolean(runningConnectorId) || !selected.email}>Email validate</button>
-                                    <button className="btn btn-ghost mono text-xs" onClick={() => runProspectorEnrichment('website')} disabled={Boolean(runningConnectorId) || !selected.website}>Website preview</button>
+                                    <button className="btn btn-ghost mono text-xs" onClick={() => runProspectorEnrichment('address')} disabled={Boolean(runningConnectorId) || !isOnline} title={!isOnline ? "Bridge offline" : ""}>Address enrich</button>
+                                    <button className="btn btn-ghost mono text-xs" onClick={() => runProspectorEnrichment('route')} disabled={Boolean(runningConnectorId) || !(selected.lat && selected.lng) || !isOnline} title={!isOnline ? "Bridge offline" : ""}>Route check</button>
+                                    <button className="btn btn-ghost mono text-xs" onClick={() => runProspectorEnrichment('email')} disabled={Boolean(runningConnectorId) || !selected.email || !isOnline} title={!isOnline ? "Bridge offline" : ""}>Email validate</button>
+                                    <button className="btn btn-ghost mono text-xs" onClick={() => runProspectorEnrichment('website')} disabled={Boolean(runningConnectorId) || !selected.website || !isOnline} title={!isOnline ? "Bridge offline" : ""}>Website preview</button>
                                 </div>
                                 {(selectedConnectorResult || selectedConnectorError) && (
                                     <pre className="mono text-xs ph-cortex-record" style={{ maxHeight: '140px', overflow: 'auto', marginBottom: '12px' }}>

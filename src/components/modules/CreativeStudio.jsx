@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo } from 'react'
 import { useGenerativeMedia } from '../../hooks/useGenerativeMedia'
 import { useCreativeAssets } from '../../hooks/useCreativeAssets'
 import { useCreativeBriefs } from '../../hooks/useCreativeBriefs'
+import { useReadiness } from '../../hooks/useReadiness'
 import './CreativeStudio.css'
 
 const PLATFORM_TEMPLATES = {
@@ -21,6 +22,7 @@ function SocialOpsTab({ generateCopy }) {
   const [output, setOutput] = useState(null)
   const [generating, setGenerating] = useState(false)
   const [error, setSocialError] = useState(null)
+  const { isOnline } = useReadiness()
 
   const tpl = PLATFORM_TEMPLATES[platform]
 
@@ -121,7 +123,8 @@ function SocialOpsTab({ generateCopy }) {
           <button
             className={`btn btn-primary mono cs-execute-btn${generating ? ' cs-execute-btn--working' : ''}`}
             onClick={handleGenerate}
-            disabled={generating || !brief.product.trim()}
+            disabled={generating || !brief.product.trim() || !isOnline}
+            title={!isOnline ? "Bridge offline" : ""}
           >
             {generating ? 'Generating...' : 'Generate Copy'}
           </button>
@@ -281,6 +284,7 @@ function CreativeStudio() {
   const [prompt, setPrompt] = useState('')
   const [modelTarget, setModelTarget] = useState('banana') // 'banana' | 'veo3' | 'forge'
   const [gallery, setGallery] = useState([])
+  const { isOnline } = useReadiness()
 
   // Sync gallery from DB — runs on load and whenever dbAssets updates (realtime)
   useEffect(() => {
@@ -444,7 +448,8 @@ function CreativeStudio() {
                 <button
                   className={`btn btn-primary mono cs-execute-btn ${isWorking ? 'cs-execute-btn--working' : ''}`}
                   onClick={handleDeploy}
-                  disabled={isWorking || !prompt.trim()}
+                  disabled={isWorking || !prompt.trim() || !isOnline}
+                  title={!isOnline ? "Bridge offline" : ""}
                 >
                   {isWorking ? 'Generating...' : 'Generate'}
                 </button>

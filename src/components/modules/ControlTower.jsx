@@ -17,6 +17,7 @@ import { usePipelineRuns } from '../../hooks/usePipelineRuns'
 import { useGoals } from '../../hooks/useGoals'
 import { useAlerts } from '../../hooks/useAlerts'
 import { useEcosystemReadiness } from '../../hooks/useEcosystemReadiness'
+import { useReadiness } from '../../hooks/useReadiness'
 import { supabase } from '../../lib/supabase'
 import {
     CurrencyEuroIcon,
@@ -88,57 +89,8 @@ export default function ControlTower() {
     } = useEcosystemReadiness({ windowHours: 24 })
     
     const [traceEvents, setTraceEvents] = useState([])
-    // Bridge Status (Mac Mini tunnel)
-    const [bridgeStatus, setBridgeStatus] = useState('checking') // checking, online, offline
-
-    useEffect(() => {
-        let isSubscribed = true
-        let retryCount = 0
-        const MAX_RETRIES = 5
-
-        async function checkBridge() {
-            try {
-                // Call local dashboard api endpoint
-                const res = await fetch('http://127.0.0.1:38791/health')
-                
-                if (!isSubscribed) return
-
-                if (!res.ok) {
-                    throw new Error('Health probe failed')
-                }
-                
-                const data = await res.json()
-                
-                if (data && data.status === 'ok') {
-                    setBridgeStatus('online')
-                    retryCount = 0
-                } else {
-                    setBridgeStatus('offline')
-                }
-            } catch (err) {
-                if (!isSubscribed) return
-                
-                console.warn('Bridge check failed:', err)
-                setBridgeStatus('offline')
-                
-                // Retry with exponential backoff if offline
-                if (retryCount < MAX_RETRIES) {
-                    retryCount++
-                    const delay = Math.min(1000 * Math.pow(2, retryCount), 30000)
-                    setTimeout(checkBridge, delay)
-                }
-            }
-        }
-
-        checkBridge()
-        // Poll every 60 seconds
-        const interval = setInterval(checkBridge, 60000)
-        
-        return () => {
-            isSubscribed = false
-            clearInterval(interval)
-        }
-    }, [])
+    // Bridge Status (Mac Mini tunnel) via shared hook
+    const { bridgeStatus } = useReadiness()
     const correlationFilter = useMemo(() => {
         const params = new URLSearchParams(location.search)
         const value = (params.get('corr') || '').trim()
