@@ -42,7 +42,6 @@ function Execution() {
 
   const totalDone = tasks.filter(t => t.status === 'done').length
   const totalInProgress = tasks.filter(t => t.status === 'in_progress').length
-  const totalPending = tasks.filter(t => t.status === 'pending').length
 
   if (loading) return <ModuleSkeleton variant="table" rows={5} />
 

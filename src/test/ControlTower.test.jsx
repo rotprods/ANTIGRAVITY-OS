@@ -56,6 +56,25 @@ vi.mock('../hooks/usePipelineRuns', () => ({
     usePipelineRuns: () => ({ runs: [], stats: { total: 0, running: 0, completed: 0, failed: 0 }, loading: false }),
     default: () => ({ runs: [], stats: { total: 0, running: 0, completed: 0, failed: 0 }, loading: false }),
 }))
+vi.mock('../hooks/useEcosystemReadiness', () => ({
+    useEcosystemReadiness: () => ({
+        readiness: {
+            generated_at: new Date().toISOString(),
+            records: [
+                {
+                    module_key: 'variable_control_plane_v2',
+                    state: 'simulated',
+                    state_reason_text: 'Synthetic validation active.',
+                },
+            ],
+        },
+        loading: false,
+        refresh: vi.fn(),
+        runTrace: null,
+        getRunTrace: vi.fn(),
+        clearRunTrace: vi.fn(),
+    }),
+}))
 
 import ControlTower from '../components/modules/ControlTower'
 
@@ -70,41 +89,27 @@ function renderControlTower(initialPath = '/control-tower') {
 describe('ControlTower', () => {
     it('renders the main header', () => {
         renderControlTower()
-        expect(screen.getByText('Performance Analytics')).toBeInTheDocument()
+        expect(screen.getByText('ANTIGRAVITY OS')).toBeInTheDocument()
+        expect(screen.getByText('Higgsfield Edition')).toBeInTheDocument()
     })
 
-    it('shows LIVE status badge when not loading', () => {
+    it('shows advisor section with live status badge', () => {
         renderControlTower()
-        expect(screen.getByText('LIVE')).toBeInTheDocument()
+        expect(screen.getByText('Strategy Advisor & Gates')).toBeInTheDocument()
+        expect(screen.getByText('Live')).toBeInTheDocument()
     })
 
     it('renders KPI labels', () => {
         renderControlTower()
+        expect(screen.getByText('Health Score')).toBeInTheDocument()
         expect(screen.getByText('Pipeline Value')).toBeInTheDocument()
-        expect(screen.getByText('Active Deals')).toBeInTheDocument()
-        expect(screen.getByText('Agents Online')).toBeInTheDocument()
-        expect(screen.getByText('Active Signals')).toBeInTheDocument()
+        expect(screen.getByText('Active Agents')).toBeInTheDocument()
+        expect(screen.getByText('Action Center')).toBeInTheDocument()
     })
 
-    it('renders pipeline value from totalValue', () => {
+    it('renders pipeline value summary', () => {
         renderControlTower()
-        // Rendered as €15,000 (toLocaleString in jsdom may use . or , as thousands sep)
-        expect(screen.getByText(/15.?000/)).toBeInTheDocument()
-    })
-
-    it('renders agent network nodes', () => {
-        renderControlTower()
-        // ATLAS appears in agent bar and agent matrix
-        expect(screen.getAllByText('ATLAS').length).toBeGreaterThanOrEqual(1)
-        expect(screen.getAllByText('HUNTER').length).toBeGreaterThanOrEqual(1)
-    })
-
-    it('renders agent stats in agent network section', () => {
-        renderControlTower()
-        // Stats appear as "1 online", "1 running", "0 error"
-        expect(screen.getAllByText(/1 online/i).length).toBeGreaterThanOrEqual(1)
-        expect(screen.getAllByText(/1 running/i).length).toBeGreaterThanOrEqual(1)
-        expect(screen.getAllByText(/0 error/i).length).toBeGreaterThanOrEqual(1)
+        expect(screen.getByText('€15.0k')).toBeInTheDocument()
     })
 
     it('renders signals in latest signals section', () => {
@@ -113,30 +118,22 @@ describe('ControlTower', () => {
         expect(screen.getByText('TikTok EU')).toBeInTheDocument()
     })
 
-    it('renders agents bar label', () => {
+    it('renders intel feed section', () => {
         renderControlTower()
-        expect(screen.getByText('Agents')).toBeInTheDocument()
+        expect(screen.getByText('Intel Feed')).toBeInTheDocument()
     })
 
-    it('renders system health section', () => {
+    it('renders readiness panel with variable status', () => {
         renderControlTower()
-        expect(screen.getByText('System health')).toBeInTheDocument()
+        expect(screen.getByText('Readiness State')).toBeInTheDocument()
+        expect(screen.getByText('V2 Variables:')).toBeInTheDocument()
+        expect(screen.getByText('simulated')).toBeInTheDocument()
     })
 
     it('renders health score number', () => {
         renderControlTower()
         // healthScore = round((min(15000/500,100)*0.5) + ((1/2)*100*0.3) + (min(2*10,100)*0.2))
         // = round(30*0.5 + 50*0.3 + 20*0.2) = round(15 + 15 + 4) = 34
-        expect(screen.getByText('34')).toBeInTheDocument()
-    })
-
-    it('renders latest signals section header', () => {
-        renderControlTower()
-        expect(screen.getByText('Latest signals')).toBeInTheDocument()
-    })
-
-    it('renders agent network section header', () => {
-        renderControlTower()
-        expect(screen.getByText('Agent network')).toBeInTheDocument()
+        expect(screen.getByText('34%')).toBeInTheDocument()
     })
 })

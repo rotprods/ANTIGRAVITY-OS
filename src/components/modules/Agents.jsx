@@ -67,12 +67,6 @@ function stripHtml(value) {
   return String(value || '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim()
 }
 
-function statusColor(status) {
-  if (status === 'online') return 'var(--color-success)'
-  if (status === 'running') return 'var(--color-warning)'
-  return 'var(--color-danger)'
-}
-
 function outreachBadge(status) {
   if (status === 'approved' || status === 'sent') return 'success'
   if (status === 'skipped') return 'danger'
@@ -94,7 +88,7 @@ function Agents() {
   const { items: outreachItems, stats: outreachStats, statusFilter: outreachFilter, setStatusFilter: setOutreachFilter, loading: outreachLoading, error: outreachError, busyKey: outreachBusyKey, approveItem, sendItem, skipItem, batchApprove, reload: reloadOutreach } = useOutreachQueue()
   const { items: approvalItems, stats: approvalStats, statusFilter: approvalFilter, setStatusFilter: setApprovalFilter, loading: approvalLoading, error: approvalError, busyKey: approvalBusyKey, approveRequest, rejectRequest, reload: reloadApprovals } = useApprovals()
   const { filteredAgents: vaultAgents, namespaces: vaultNamespaces, loading: vaultLoading, error: vaultError, filters: vaultFilters, setNamespace: setVaultNamespace, setSearch: setVaultSearch, setRole: setVaultRole, suggestRole, toggleActive: toggleVaultAgent, runAgent: runVaultAgent, runningAgent: vaultRunning, totalAgents: vaultTotal, activeCount: vaultActive, } = useAgentVault()
-  const { agentHealth, runningAgents } = useAgentState()
+  const { runningAgents } = useAgentState()
   const { goals } = useGoals()
 
   const [triggering, setTriggering] = useState(null)
