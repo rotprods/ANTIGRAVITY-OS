@@ -88,6 +88,57 @@ export default function ControlTower() {
     } = useEcosystemReadiness({ windowHours: 24 })
     
     const [traceEvents, setTraceEvents] = useState([])
+    // Bridge Status (Mac Mini tunnel)
+    const [bridgeStatus, setBridgeStatus] = useState('checking') // checking, online, offline
+
+    useEffect(() => {
+        let isSubscribed = true
+        let retryCount = 0
+        const MAX_RETRIES = 5
+
+        async function checkBridge() {
+            try {
+                // Call local dashboard api endpoint
+                const res = await fetch('http://127.0.0.1:38791/health')
+                
+                if (!isSubscribed) return
+
+                if (!res.ok) {
+                    throw new Error('Health probe failed')
+                }
+                
+                const data = await res.json()
+                
+                if (data && data.status === 'ok') {
+                    setBridgeStatus('online')
+                    retryCount = 0
+                } else {
+                    setBridgeStatus('offline')
+                }
+            } catch (err) {
+                if (!isSubscribed) return
+                
+                console.warn('Bridge check failed:', err)
+                setBridgeStatus('offline')
+                
+                // Retry with exponential backoff if offline
+                if (retryCount < MAX_RETRIES) {
+                    retryCount++
+                    const delay = Math.min(1000 * Math.pow(2, retryCount), 30000)
+                    setTimeout(checkBridge, delay)
+                }
+            }
+        }
+
+        checkBridge()
+        // Poll every 60 seconds
+        const interval = setInterval(checkBridge, 60000)
+        
+        return () => {
+            isSubscribed = false
+            clearInterval(interval)
+        }
+    }, [])
     const correlationFilter = useMemo(() => {
         const params = new URLSearchParams(location.search)
         const value = (params.get('corr') || '').trim()
@@ -184,7 +235,12 @@ export default function ControlTower() {
                         <RocketLaunchIcon width={20} height={20} />
                     </div>
                     <div className="hf-title">
-                        <h1>ANTIGRAVITY OS</h1>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)' }}>
+                            <h1>ANTIGRAVITY OS</h1>
+                            <div className={`badge ${bridgeStatus === 'online' ? 'badge-success' : bridgeStatus === 'checking' ? 'badge-primary' : 'badge-danger'}`} style={{ fontSize: 'var(--text-xs)' }}>
+                                {bridgeStatus === 'online' ? 'Bridge Online' : bridgeStatus === 'checking' ? 'Checking Bridge...' : 'Bridge Offline'}
+                            </div>
+                        </div>
                         <p>Higgsfield Edition</p>
                     </div>
                 </div>
