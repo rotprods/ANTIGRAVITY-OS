@@ -86,7 +86,7 @@ export function getControlPlaneV2Flags(): ControlPlaneV2Flags {
   const simulationRequired = readEnvFlag("VARIABLE_SIMULATION_REQUIRED_IN_PROD", true);
   // Compatibility fallback: in some hosted runtimes, CONTROL_PLANE_V2_ENABLED may be shadowed.
   // CONTROL_PLANE_V2_FORCE_ENABLED allows explicit override without changing action contracts.
-  const v2Enabled = readEnvFlag("CONTROL_PLANE_V2_ENABLED", false) ||
+  const v2Enabled = readEnvFlag("CONTROL_PLANE_V2_ENABLED", true) ||
     readEnvFlag("CONTROL_PLANE_V2_FORCE_ENABLED", false);
   return {
     control_plane_v2_enabled: v2Enabled,
@@ -134,11 +134,13 @@ function withOrgScope<T>(query: T, orgId: string | null): T {
 
 function normalizeDefinition(raw: JsonRecord): Partial<VariableDefinition> & JsonRecord {
   const validationRules = asRecord(raw.validation_rules);
+  const scope = compact(raw.scope || "org").toLowerCase();
+  const normalizedScope = ["global", "org", "agent", "workflow", "run_override"].includes(scope) ? scope : "org";
   return {
     variable_key: compact(raw.variable_key || raw.key),
     variable_family: compact(raw.variable_family || raw.family || "runtime"),
     value_type: compact(raw.value_type || "json"),
-    scope: compact(raw.scope || "org"),
+    scope: normalizedScope,
     owner_ref: compact(raw.owner_ref || raw.owner || "control-plane"),
     lifecycle_state: compact(raw.lifecycle_state || "active"),
     default_value: raw.default_value,
@@ -150,9 +152,13 @@ function normalizeDefinition(raw: JsonRecord): Partial<VariableDefinition> & Jso
 }
 
 function normalizeBinding(raw: JsonRecord): RuntimeVariableBinding {
+  const precedence = compact(raw.precedence_level || raw.scope || "org").toLowerCase();
+  const normalizedPrecedence = ["run_override", "workflow", "agent", "org", "global"].includes(precedence)
+    ? precedence
+    : "org";
   return {
     variable_key: compact(raw.variable_key || raw.key),
-    precedence_level: compact(raw.precedence_level || raw.scope || "org") as RuntimeVariableBinding["precedence_level"],
+    precedence_level: normalizedPrecedence as RuntimeVariableBinding["precedence_level"],
     source_ref: compact(raw.source_ref || raw.source || ""),
     value: raw.value,
     effective_from: compact(raw.effective_from) || null,
@@ -185,7 +191,8 @@ async function loadVariableDefinitions(input: {
     admin
       .from("control_plane_variables")
       .select("*")
-      .order("variable_key", { ascending: true }),
+      .order("variable_key", { ascending: true })
+      .order("updated_at", { ascending: false }),
     input.orgId,
   );
   if (!input.includeInactive) query = query.eq("lifecycle_state", "active");
@@ -554,52 +561,46 @@ export async function variableRegistryUpsert(input: {
 
   const now = nowIso();
   let definitionRow: JsonRecord | null = null;
-  if (hasDefinition && orgId) {
-    const { data, error } = await admin
-      .from("control_plane_variables")
-      .upsert({
-        org_id: orgId,
-        variable_key: compact(definitionInput.variable_key),
-        variable_family: compact(definitionInput.variable_family || "runtime"),
-        value_type: compact(definitionInput.value_type || "json"),
-        scope: compact(definitionInput.scope || "org"),
-        owner_ref: compact(definitionInput.owner_ref || "control-plane"),
-        lifecycle_state: compact(definitionInput.lifecycle_state || "active"),
-        default_value: definitionInput.default_value ?? null,
-        validation_rules: asRecord(definitionInput.validation_rules),
-        sensitivity: compact(definitionInput.sensitivity || "internal"),
-        is_required: definitionInput.is_required === true,
-        updated_at: now,
-      }, { onConflict: "org_id,variable_key" })
-      .select("*")
-      .single();
-    if (error) throw error;
-    definitionRow = asRecord(data);
-  } else if (hasDefinition) {
-    const key = compact(definitionInput.variable_key);
-    const { data: existing, error: existingError } = await admin
+  if (hasDefinition) {
+    const variableKey = compact(definitionInput.variable_key);
+    const requestedScope = compact(definitionInput.scope || "").toLowerCase();
+    const variableScope = requestedScope
+      ? (requestedScope === "org" && !orgId ? "global" : requestedScope)
+      : (orgId ? "org" : "global");
+    const ownerRef = compact(definitionInput.owner_ref || "control-plane");
+
+    let existingDefinitionQuery = admin
       .from("control_plane_variables")
       .select("*")
-      .eq("variable_key", key)
-      .is("org_id", null)
+      .eq("variable_key", variableKey)
+      .eq("scope", variableScope)
+      .eq("owner_ref", ownerRef)
+      .limit(1)
       .maybeSingle();
-    if (existingError) throw existingError;
-    if (existing) {
+    if (orgId) existingDefinitionQuery = existingDefinitionQuery.eq("org_id", orgId);
+    else existingDefinitionQuery = existingDefinitionQuery.is("org_id", null);
+
+    const { data: existingDefinition, error: existingDefinitionError } = await existingDefinitionQuery;
+    if (existingDefinitionError) throw existingDefinitionError;
+
+    const definitionPatch = {
+      variable_family: compact(definitionInput.variable_family || "runtime"),
+      value_type: compact(definitionInput.value_type || "json"),
+      scope: variableScope,
+      owner_ref: ownerRef,
+      lifecycle_state: compact(definitionInput.lifecycle_state || "active"),
+      default_value: definitionInput.default_value ?? null,
+      validation_rules: asRecord(definitionInput.validation_rules),
+      sensitivity: compact(definitionInput.sensitivity || "internal"),
+      is_required: definitionInput.is_required === true,
+      updated_at: now,
+    };
+
+    if (existingDefinition) {
       const { data, error } = await admin
         .from("control_plane_variables")
-        .update({
-          variable_family: compact(definitionInput.variable_family || "runtime"),
-          value_type: compact(definitionInput.value_type || "json"),
-          scope: compact(definitionInput.scope || "global"),
-          owner_ref: compact(definitionInput.owner_ref || "control-plane"),
-          lifecycle_state: compact(definitionInput.lifecycle_state || "active"),
-          default_value: definitionInput.default_value ?? null,
-          validation_rules: asRecord(definitionInput.validation_rules),
-          sensitivity: compact(definitionInput.sensitivity || "internal"),
-          is_required: definitionInput.is_required === true,
-          updated_at: now,
-        })
-        .eq("id", existing.id)
+        .update(definitionPatch)
+        .eq("id", existingDefinition.id)
         .select("*")
         .single();
       if (error) throw error;
@@ -608,17 +609,9 @@ export async function variableRegistryUpsert(input: {
       const { data, error } = await admin
         .from("control_plane_variables")
         .insert({
-          org_id: null,
-          variable_key: key,
-          variable_family: compact(definitionInput.variable_family || "runtime"),
-          value_type: compact(definitionInput.value_type || "json"),
-          scope: "global",
-          owner_ref: compact(definitionInput.owner_ref || "control-plane"),
-          lifecycle_state: compact(definitionInput.lifecycle_state || "active"),
-          default_value: definitionInput.default_value ?? null,
-          validation_rules: asRecord(definitionInput.validation_rules),
-          sensitivity: compact(definitionInput.sensitivity || "internal"),
-          is_required: definitionInput.is_required === true,
+          org_id: orgId,
+          variable_key: variableKey,
+          ...definitionPatch,
         })
         .select("*")
         .single();

@@ -45,6 +45,13 @@ export interface ConstraintEvaluationResult {
   constraint_status: "passed" | "failed_blocking" | "failed_advisory";
 }
 
+interface NormalizedDefinition extends Partial<VariableDefinition>, JsonRecord {
+  variable_key: string;
+  scope: VariablePrecedenceLevel;
+  owner_ref: string;
+  updated_at: string;
+}
+
 const PRECEDENCE_RANK: Record<VariablePrecedenceLevel, number> = {
   run_override: 5,
   workflow: 4,
@@ -140,6 +147,75 @@ function normalizeBinding(input: RuntimeVariableBinding): RuntimeVariableBinding
   };
 }
 
+function normalizeDefinition(
+  input: Partial<VariableDefinition> & JsonRecord,
+): NormalizedDefinition | null {
+  const variableKey = normalizeKey(input.variable_key);
+  if (!variableKey) return null;
+  return {
+    ...input,
+    variable_key: variableKey,
+    scope: normalizePrecedenceLevel(input.scope),
+    owner_ref: normalizeSourceRef(input.owner_ref),
+    updated_at: compact(input.updated_at),
+  };
+}
+
+function definitionMatchesContext(
+  definition: NormalizedDefinition,
+  input: {
+    workflowId?: string | null;
+    agentId?: string | null;
+  },
+) {
+  if (definition.scope === "workflow") {
+    if (!compact(input.workflowId)) return definition.owner_ref.length === 0;
+    return definition.owner_ref.length === 0 || definition.owner_ref === compact(input.workflowId);
+  }
+  if (definition.scope === "agent") {
+    if (!compact(input.agentId)) return definition.owner_ref.length === 0;
+    return definition.owner_ref.length === 0 || definition.owner_ref === compact(input.agentId);
+  }
+  return true;
+}
+
+function compareDefinitions(a: NormalizedDefinition, b: NormalizedDefinition) {
+  const precedenceDiff = PRECEDENCE_RANK[b.scope] - PRECEDENCE_RANK[a.scope];
+  if (precedenceDiff !== 0) return precedenceDiff;
+  const updatedDiff = asEpoch(b.updated_at) - asEpoch(a.updated_at);
+  if (updatedDiff !== 0) return updatedDiff;
+  return a.owner_ref.localeCompare(b.owner_ref);
+}
+
+function resolveEffectiveDefinitions(
+  input: {
+    definitions: Array<Partial<VariableDefinition> & JsonRecord>;
+    workflowId?: string | null;
+    agentId?: string | null;
+  },
+) {
+  const grouped = new Map<string, NormalizedDefinition[]>();
+  for (const raw of input.definitions) {
+    const normalized = normalizeDefinition(raw);
+    if (!normalized) continue;
+    if (!definitionMatchesContext(normalized, { workflowId: input.workflowId, agentId: input.agentId })) continue;
+    const list = grouped.get(normalized.variable_key) || [];
+    list.push(normalized);
+    grouped.set(normalized.variable_key, list);
+  }
+
+  const resolved: NormalizedDefinition[] = [];
+  for (const [key, list] of grouped.entries()) {
+    const sorted = [...list].sort(compareDefinitions);
+    resolved.push({
+      ...sorted[0],
+      variable_key: key,
+    });
+  }
+
+  return resolved.sort((a, b) => a.variable_key.localeCompare(b.variable_key));
+}
+
 function isRequiredVariable(definition: Partial<VariableDefinition> & JsonRecord) {
   const validation = asRecord(definition.validation_rules);
   const requiredFlag = validation.required === true || validation.is_required === true || definition.is_required === true;
@@ -202,13 +278,11 @@ export async function buildDeterministicVariableResolution(input: {
   agentId?: string | null;
   nowIso?: string;
 }): Promise<VariableResolutionResult> {
-  const definitions = [...input.definitions]
-    .map((definition) => ({
-      ...definition,
-      variable_key: normalizeKey(definition.variable_key),
-    }))
-    .filter((definition) => definition.variable_key)
-    .sort((a, b) => a.variable_key.localeCompare(b.variable_key));
+  const definitions = resolveEffectiveDefinitions({
+    definitions: input.definitions,
+    workflowId: input.workflowId,
+    agentId: input.agentId,
+  });
 
   const nowEpoch = asEpoch(input.nowIso) > 0 ? asEpoch(input.nowIso) : Date.now();
   const bindingPool = input.bindings
@@ -237,7 +311,7 @@ export async function buildDeterministicVariableResolution(input: {
   let tieBreakCount = 0;
 
   for (const definition of definitions) {
-    const key = normalizeKey(definition.variable_key);
+    const key = definition.variable_key;
     if (!key) continue;
 
     const candidates: ResolutionCandidate[] = [];
@@ -245,12 +319,12 @@ export async function buildDeterministicVariableResolution(input: {
     if (defaultValue !== undefined) {
       candidates.push({
         variable_key: key,
-        precedence_level: "global",
-        source_ref: "default",
+        precedence_level: definition.scope,
+        source_ref: definition.owner_ref || "default",
         value: defaultValue,
         effective_from: null,
         effective_to: null,
-        updated_at: compact(definition.updated_at) || undefined,
+        updated_at: definition.updated_at || undefined,
         _updated_epoch: asEpoch(definition.updated_at),
       });
     }
