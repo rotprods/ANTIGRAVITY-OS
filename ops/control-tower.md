@@ -1,7 +1,7 @@
 # Control Tower
 
-Last updated: 2026-03-16T00:54:15.905Z
-Branch: `main` · SHA: `89f9ae6`
+Last updated: 2026-03-16T00:56:13.461Z
+Branch: `main` · SHA: `bf33df8`
 
 ## System Pulse
 
@@ -11,7 +11,7 @@ Branch: `main` · SHA: `89f9ae6`
 | Public API connectors live | 7/11 | missing keys: 4 |
 | n8n runnable workflows | 39/200 | blocked credentials: 161 |
 | n8n reconcile runnable | 166/198 | blocked: 29 |
-| Git sync | ahead 2 / behind 0 | dirty files: 0 |
+| Git sync | ahead 0 / behind 0 | dirty files: 0 |
 
 ## Workstreams
 
@@ -45,7 +45,8 @@ Branch: `main` · SHA: `89f9ae6`
 
 ## GitHub Signals
 
-- Not available in current context (GITHUB_TOKEN or GITHUB_REPOSITORY missing)
+- Open pull requests: 0
+- Open issues: 0
 
 ## Usage Rules
 

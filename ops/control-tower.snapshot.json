@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-03-16T00:54:15.905Z",
+  "generatedAt": "2026-03-16T00:56:13.461Z",
   "project": "OCULOPS",
   "git": {
     "branch": "main",
-    "sha": "89f9ae6",
-    "ahead": 2,
+    "sha": "bf33df8",
+    "ahead": 0,
     "behind": 0,
     "dirty": false,
     "changedFiles": []
@@ -268,9 +268,9 @@
     "n8n reconcile con workflows bloqueados: 29"
   ],
   "github": {
-    "enabled": false,
-    "reason": "GITHUB_TOKEN or GITHUB_REPOSITORY missing",
-    "openPullRequests": null,
-    "openIssues": null
+    "enabled": true,
+    "reason": null,
+    "openPullRequests": 0,
+    "openIssues": 0
   }
 }
