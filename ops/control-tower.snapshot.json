@@ -1,16 +1,13 @@
 {
-  "generatedAt": "2026-03-16T00:08:19.464Z",
+  "generatedAt": "2026-03-16T00:08:35.678Z",
   "project": "OCULOPS",
   "git": {
     "branch": "main",
-    "sha": "ece6f42",
-    "ahead": 2,
-    "behind": 2,
-    "dirty": true,
-    "changedFiles": [
-      "UU ops/control-tower.md",
-      "UU ops/control-tower.snapshot.json"
-    ]
+    "sha": "b3e649d",
+    "ahead": 0,
+    "behind": 0,
+    "dirty": false,
+    "changedFiles": []
   },
   "readiness": {
     "overallState": "green",
@@ -264,18 +261,16 @@
     }
   },
   "blockers": [
-    "Public API connectors con credenciales pendientes: 4",
-    "Repo behind origin/main por 2 commit(s)"
+    "Public API connectors con credenciales pendientes: 4"
   ],
   "warnings": [
     "n8n workflows bloqueados por credenciales: 161",
-    "n8n reconcile con workflows bloqueados: 29",
-    "Working tree con cambios locales: 2 archivo(s)"
+    "n8n reconcile con workflows bloqueados: 29"
   ],
   "github": {
-    "enabled": false,
-    "reason": "GITHUB_TOKEN or GITHUB_REPOSITORY missing",
-    "openPullRequests": null,
-    "openIssues": null
+    "enabled": true,
+    "reason": null,
+    "openPullRequests": 0,
+    "openIssues": 0
   }
 }
